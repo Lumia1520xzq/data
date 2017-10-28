@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jdd.lkcz.game.modules.mycatuic.dao.MycatUicBehaviorRecordDao">
+	
+	<sql id="uicBehaviorRecordColumns">
+		t.id,
+		t.user_id,
+		t.behavior_event_id,
+		t.channel_id,
+		t.parent_channel_id,
+		t.behavior_name,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="uicBehaviorRecordWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="uicBehaviorRecordJoins">
+	</sql>
+	
+	<select id="get" resultType="UicBehaviorRecord">
+		SELECT <include refid="uicBehaviorRecordColumns"/> FROM uic_behavior_record t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="UicBehaviorRecord">
+		SELECT <include refid="uicBehaviorRecordColumns"/> FROM uic_behavior_record t <include refid="uicBehaviorRecordJoins"/>
+		WHERE <include refid="uicBehaviorRecordWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM uic_behavior_record t WHERE <include refid="uicBehaviorRecordWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uic_behavior_record (
+			id, 
+			user_id, 
+			behavior_event_id, 
+			channel_id, 
+			parent_channel_id, 
+			behavior_name, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{behaviorEventId}, 
+			#{channelId}, 
+			#{parentChannelId}, 
+			#{behaviorName}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uic_behavior_record SET
+			user_id = #{userId}, 
+			behavior_event_id = #{behaviorEventId}, 
+			channel_id = #{channelId}, 
+			parent_channel_id = #{parentChannelId}, 
+			behavior_name = #{behaviorName}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE uic_behavior_record SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jdd.lkcz.game.modules.mycatuic.dao.MycatUicBuryingPointDao">
+
+	<sql id="uicBuryingPointColumns">
+		t.id,
+		t.user_id,
+		t.burying_type,
+		t.channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag,
+		t.game_type
+	</sql>
+
+	<sql id="uicBuryingPointWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="uicBuryingPointJoins">
+	</sql>
+	
+	<select id="get" resultType="UicBuryingPoint">
+		SELECT
+		<include refid="uicBuryingPointColumns" />
+		FROM uic_burying_point t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="UicBuryingPoint">
+		SELECT
+		<include refid="uicBuryingPointColumns" />
+		FROM uic_burying_point t
+		<include refid="uicBuryingPointJoins" />
+		WHERE
+		<include refid="uicBuryingPointWhere" />
+		ORDER BY update_time desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM uic_burying_point WHERE
+		<include refid="uicBuryingPointWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uic_burying_point (
+			id, 
+			user_id, 
+			burying_type, 
+			channel_id, 
+			create_time, 
+			delete_flag, 
+			game_type 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{buryingType}, 
+			#{channelId}, 
+			#{createTime}, 
+			#{deleteFlag}, 
+			#{gameType} 
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE uic_burying_point SET
+			user_id = #{userId}, 
+			burying_type = #{buryingType}, 
+			channel_id = #{channelId}, 
+			delete_flag = #{deleteFlag}, 
+			game_type = #{gameType} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE uic_burying_point SET delete_flag = 1 WHERE ID
+		= #{id}
+	</delete>
+</mapper>
+
