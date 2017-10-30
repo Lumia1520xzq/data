@@ -4,7 +4,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.jdd.lkcz.game.modules.mycatuic.dao.MycatUicBuryingPointDao">
+<mapper namespace="com.wf.data.dao.mycat.MycatUicBuryingPointDao">
 
 	<select id="getUserLastPlayGame" resultType="UicBuryingPoint">
 		SELECT max(create_time) create_time,game_type FROM uic_burying_point

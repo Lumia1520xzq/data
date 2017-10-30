@@ -63,20 +63,20 @@
 
 	<bean id="uicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="multipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.uic.dao.entity.mysql" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mysql" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/uic/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mysql/**/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="uicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="uicSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.uic.dao.mysql" />
+		<property name="basePackage" value="com.wf.data.dao.mysql" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 	<bean id="uicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="uicSqlSessionFactory" />
 	</bean>
-	<!--<bean id="uicCommon" class="com.wf.uic.modules.uic.dao.UicCommonDao">-->
+	<!--<bean id="uicCommon" class="com.wf.dataa.modules.data.dao.UicCommonDao">-->
 	<!--<property name="sqlSessionTemplate" ref="uicSqlSessionTemplate" />-->
 	<!--</bean>-->
 	<bean id="uicActionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

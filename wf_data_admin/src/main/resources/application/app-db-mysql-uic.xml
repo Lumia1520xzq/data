@@ -24,14 +24,14 @@
 	</bean>
 	<bean id="uicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="uicDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.uic.dao.entity" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.entity" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/uic/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mysql/**/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="uicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="uicSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.uic.dao" />
+		<property name="basePackage" value="com.wf.data.dao" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 	<bean id="uicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">

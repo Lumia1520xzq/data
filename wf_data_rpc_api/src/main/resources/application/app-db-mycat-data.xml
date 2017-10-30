@@ -5,7 +5,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<bean id="mycatUicDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<bean id="mycatWriteDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}" />
 		<property name="url" value="${jdbc.mycatuic.url}" />
 		<property name="username" value="${jdbc.mycatuic.username}" />
@@ -22,24 +22,54 @@
 		<property name="testOnReturn" value="true" />
 		<property name="filters" value="stat" />
 	</bean>
+	<bean id="mycatReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.mycatuic.url}" />
+		<property name="username" value="${jdbc.mycatuic.username}" />
+		<property name="password" value="${jdbc.mycatuic.password}" />
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="500" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT USER()" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="filters" value="stat" />
+	</bean>
+
+	<bean id="multipleDataSource-mycat" class="com.wf.core.db.MultipleDataSource">
+		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="mycatWriteDataSource" />
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="mycatWriteDataSource" key="dataSourceWriteMycat" />
+				<entry value-ref="mycatReadDataSource" key="dataSourceReadMycat" />
+			</map>
+		</property>
+	</bean>
+
 	<bean id="mycatUicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="mycatUicDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.uic.dao.entity.mycat" />
+		<property name="dataSource" ref="multipleDataSource-mycat" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mycat" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/mycatdata/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mycatdata/**/*Mapper*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mycatUicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="mycatUicSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.uic.dao.mycat" />
+		<property name="basePackage" value="com.wf.data.dao.mycat" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
-	<bean id="mycatUicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="mycatUicSqlSessionFactory" />
-	</bean>
+	<!--<bean id="mycatUicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">-->
+		<!--<constructor-arg ref="mycatUicSqlSessionFactory" />-->
+	<!--</bean>-->
 	<bean id="mycatUicTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="mycatUicDataSource" />
+		<property name="dataSource" ref="multipleDataSource-mycat" />
 	</bean>
+
 	<tx:annotation-driven transaction-manager="mycatUicTransactionManager" proxy-target-class="true" />
 
 </beans>

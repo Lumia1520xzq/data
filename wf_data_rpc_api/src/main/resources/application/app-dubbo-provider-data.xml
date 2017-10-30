@@ -7,35 +7,21 @@
  	 http://code.alibabatech.com/schema/dubbo
  	 http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
     <!-- 提供方方应用名，用于计算依赖关系，不是匹配条件，不要与消费一样 -->
-    <dubbo:application name="wf_uic_rpc_api"/>
+    <dubbo:application name="wf_data_rpc_api"/>
     <dubbo:registry id="registry" address="${dubbo.zookeeper}" client="zkclient" timeout="100000"/>
-    <dubbo:protocol name="dubbo" accepts="200" port="${dubbo.api.port}"  />
+    <dubbo:protocol name="dubbo" accepts="200" port="${dubbo.api.port}"/>
 
     <dubbo:consumer timeout="100000"/>
     <!--<dubbo:monitor protocol="registry"></dubbo:monitor>-->
 
     <!--  用户信息 -->
-    <bean id="userRpcService" class="com.wf.uic.rpc.impl.UserRpcServiceImpl"/>
-    <dubbo:service interface="com.wf.uic.rpc.UserRpcService" ref="userRpcService" registry="registry" delay="-1"  />
+    <bean id="buryingRpcService" class="com.wf.data.rpc.impl.BuryingRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.BuryingRpcService" ref="buryingRpcService" registry="registry"
+                   delay="-1"/>
 
-    <!--  用户验证信息 -->
-    <bean id="userLoginRpcService" class="com.wf.uic.rpc.impl.UserLoginRpcServiceImpl"/>
-    <dubbo:service interface="com.wf.uic.rpc.UserLoginRpcService" ref="userLoginRpcService" registry="registry" delay="-1"  />
+    <bean id="uicBehaviorRecordRpcService" class="com.wf.data.rpc.impl.BehaviorRecordRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.BehaviorRecordRpcService"
+                   ref="uicBehaviorRecordRpcService" registry="registry" delay="-1"/>
 
-    <!-- 用户收货信息 -->
-    <bean id="userReceiverRpcService" class="com.wf.uic.rpc.impl.UserReceiverRpcServiceImpl"/>
-    <dubbo:service interface="com.wf.uic.rpc.UserReceiverRpcService" ref="userReceiverRpcService" registry="registry" delay="-1"  />
-
-    <!--  用户日志信息 -->
-    <bean id="userLogRpcService" class="com.wf.uic.rpc.impl.UserLogRpcServiceImpl"/>
-    <dubbo:service interface="com.wf.uic.rpc.UserLogRpcService" ref="userLogRpcService" registry="registry" delay="-1"  />
-
-    <!--  用户福利信息 -->
-    <bean id="userWealRpcService" class="com.wf.uic.rpc.impl.UserWealRpcServiceImpl"/>
-    <dubbo:service interface="com.wf.uic.rpc.UserWealRpcService" ref="userWealRpcService" registry="registry" delay="-1"  />
-
-    <!--  用户分组 -->
-    <bean id="userGroupRpcService" class="com.wf.uic.rpc.impl.UicUserGroupRpcServiceImpl"/>
-    <dubbo:service interface="com.wf.uic.rpc.UserGroupRpcService" ref="userGroupRpcService" registry="registry" delay="-1"  />
 
 </beans>

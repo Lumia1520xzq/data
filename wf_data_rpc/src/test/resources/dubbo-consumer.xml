@@ -10,17 +10,5 @@
     <dubbo:application name="uic-consumer-test"/>
     <dubbo:registry address="zookeeper://10.33.85.200:2181?backup=10.33.85.201:2181,10.33.85.202:2181"/>
 
-    <dubbo:reference id="userWealRpcService" interface="com.wf.uic.rpc.UserWealRpcService"/>
-
-    <dubbo:reference id="userRpcService2" interface="com.wf.uic.rpc.UserRpcService"></dubbo:reference>
-
-    <dubbo:reference id="userReceiverRpcService" interface="com.wf.uic.rpc.UserReceiverRpcService"/>
-
-    <dubbo:reference id="userLogRpcService" interface="com.wf.uic.rpc.UserLogRpcService"/>
-
-    <dubbo:reference id="userLoginRpcService" interface="com.wf.uic.rpc.UserLoginRpcService"/>
-
-    <dubbo:reference id="userGroupRpcService" interface="com.wf.uic.rpc.UserGroupRpcService"/>
-
 
 </beans>

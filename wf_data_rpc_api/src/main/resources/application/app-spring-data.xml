@@ -12,8 +12,8 @@
 
     <import resource="classpath*:wf/spring-redis.xml"/>
     <import resource="classpath*:wf/spring-idg.xml"/>
-    <import resource="classpath*:wf/spring-common.xml"/>
-    <import resource="classpath*:wf/spring-jms.xml"/>
+    <!--<import resource="classpath*:wf/spring-common.xml"/>-->
+    <!--<import resource="classpath*:wf/spring-jms.xml"/>-->
 
 
     <import resource="app-disconf-data.xml"/>
@@ -24,14 +24,14 @@
 
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
-    <context:component-scan base-package="com.wf.uic" use-default-filters="false">
+    <context:component-scan base-package="com.wf.data" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
-    <context:component-scan base-package="com.wf.uic.dao" use-default-filters="false">
+    <context:component-scan base-package="com.wf.data.dao" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-    <context:component-scan base-package="com.wf.uic.service.biz" use-default-filters="false">
+    <context:component-scan base-package="com.wf.data.service.biz" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
@@ -42,7 +42,7 @@
 
     <aop:config>
         <aop:pointcut id="transactionPointCut"
-                      expression="execution(* com.wf.uic..*.*(..))"/>
+                      expression="execution(* com.wf.data..*.*(..))"/>
         <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="transactionPointCut"
                      order="1"/>
     </aop:config>
