@@ -22,7 +22,6 @@
 		<property name="testOnReturn" value="true" />
 		<property name="filters" value="stat" />
 	</bean>
-
 	<bean id="uicReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}" />
 		<property name="url" value="${jdbc.uic.read.url}" />
@@ -41,8 +40,7 @@
 		<property name="filters" value="stat" />
 	</bean>
 
-
-	<bean id="multipleDataSource" class="com.wf.core.db.MultipleDataSource">
+	<bean id="multipleDataSource-mysql" class="com.wf.core.db.MultipleDataSource">
 		<!-- 默认数据库是写的数据库 -->
 		<property name="defaultTargetDataSource" ref="uicWriteDataSource" />
 		<property name="targetDataSources">
@@ -53,36 +51,25 @@
 		</property>
 	</bean>
 
-	<bean id="jdbcTemplate"
-		  class="org.springframework.jdbc.core.JdbcTemplate" abstract="false" lazy-init="false" autowire="default">
-		<property name="dataSource">
-			<ref bean="multipleDataSource" />
-		</property>
-	</bean>
 
-
-	<bean id="uicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="multipleDataSource" />
+	<bean id="sqlSessionFactory-mysql" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="multipleDataSource-mysql" />
 		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mysql" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/mysql/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mysql/**/*Mapper*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
-	<bean id="uicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactoryBeanName" value="uicSqlSessionFactory" />
+	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory-mysql" />
 		<property name="basePackage" value="com.wf.data.dao.mysql" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
-	<bean id="uicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="uicSqlSessionFactory" />
-	</bean>
-	<!--<bean id="uicCommon" class="com.wf.dataa.modules.data.dao.UicCommonDao">-->
-	<!--<property name="sqlSessionTemplate" ref="uicSqlSessionTemplate" />-->
+	<!--<bean id="uicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">-->
+		<!--<constructor-arg ref="sqlSessionFactory" />-->
 	<!--</bean>-->
-	<bean id="uicActionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="multipleDataSource" />
+	<bean id="tractionManager-mysql" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="multipleDataSource-mysql" />
 	</bean>
-	<tx:annotation-driven transaction-manager="uicActionManager" proxy-target-class="true" order="2" />
 
-
+	<!--<tx:annotation-driven transaction-manager="tractionManager-mysql" proxy-target-class="true" />-->
 </beans>
