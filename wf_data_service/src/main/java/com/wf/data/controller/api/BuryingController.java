@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BuryingController extends DataBaseController {
     @Autowired
     private MycatUicBuryingPointService uicBuryingPointService;
-    @Resource
-    private ChannelRpcService channelRpcService;
     /**
      * 设置埋点
      * GameTypeContents
@@ -32,8 +30,8 @@ public class BuryingController extends DataBaseController {
      * @param request
      * @return
      */
-    @RequestMapping("buryingPoint")
-    public Object buryingPoint(@Valid@RequestBody UicBuryingPointRequest request) {
+    @RequestMapping("point")
+    public Object point(@Valid@RequestBody UicBuryingPointRequest request) {
         Long userId = null;
 
         try {

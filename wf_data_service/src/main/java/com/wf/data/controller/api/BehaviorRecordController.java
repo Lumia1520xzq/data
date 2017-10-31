@@ -25,7 +25,7 @@ public class BehaviorRecordController extends DataBaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("behaviorRecord")
+	@RequestMapping("point")
 	public Object behaviorRecord(@Valid@RequestBody BehaviorRequest request) {
 		Long userId = null;
 		try {
