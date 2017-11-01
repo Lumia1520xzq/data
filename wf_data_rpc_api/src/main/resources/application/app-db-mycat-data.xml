@@ -55,7 +55,7 @@
 		<property name="dataSource" ref="multipleDataSource-mycat" />
 		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mycat" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/mycat/**/*Mapper*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mycat/**/**.xml" />
 		<property name="configLocation" value="classpath*:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mycatUicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
