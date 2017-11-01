@@ -30,55 +30,47 @@ public class DataBaseController extends BaseController {
     private static final int EXPIRE_INTERVAL = 300;
 
     /**
-     * 获取渠道ID
-     * @return 渠道ID
+     * 获取当前渠道
+     *
+     * @return
      */
-    public Long getChannelId() {
-        String channel = super.getAppChannel();
-        if (StringUtils.isBlank(channel)) {
+    protected Long getChannelId() {
+        String shopChannel = getAppChannel();
+        if (StringUtils.isBlank(shopChannel)) {
             //默认多多互娱
             return ChannelConstants.JDD_CHANNEL;
         }
-        channel = channel.split("#")[0];
-        if (!NumberUtils.isDigits(channel)) {
+        shopChannel = shopChannel.split("#")[0];
+        if (!NumberUtils.isDigits(shopChannel)) {
             throw new ChannelErrorException();
         }
-        ChannelInfoDto channelInfo = (ChannelInfoDto) ehcacheManager.get(DataCacheKey.CHANNEL_INFO.key(channel));
-        if (channelInfo == null) {
-            channelInfo = channelRpcService.get(Long.parseLong(channel));
-            if (channelInfo == null || channelInfo.getEnable() == DataConstants.NO) {
-                throw new ChannelErrorException();
-            }
-            ehcacheManager.set(DataCacheKey.CHANNEL_INFO.key(channel), channelInfo, EXPIRE_INTERVAL);
-        }
-        return Long.parseLong(channel);
+        ChannelInfoDto channelInfoDto = getChannelById(Long.parseLong(shopChannel));
+        return channelInfoDto.getId();
     }
 
     /**
-     * 获取父级渠道Id,没有父级，显示自己Id
-     * @return 渠道ID
-     */
-    protected Long getParentChannelId() {
-        return this.getParentChannelId(this.getChannelId());
-    }
-
-    /**
-     * 获取父级渠道Id,没有父级，显示自己Id
-     * @return 渠道ID
+     * 获取上级渠道
+     *
+     * @param channelId
+     * @return
      */
     protected Long getParentChannelId(final Long channelId) {
-        if (channelId == null) {
-            return null;
-        }
-        ChannelInfoDto channelInfo = (ChannelInfoDto) ehcacheManager.get(channelId.toString());
-        if (channelInfo == null) {
-            channelInfo = channelRpcService.getParentChannel(channelId);
-            if (channelInfo == null) {
-                return channelId;
-            }
-            ehcacheManager.set(channelId.toString(), channelInfo, EXPIRE_INTERVAL);
-        }
+        ChannelInfoDto channelInfo = getChannelById(channelId);
         return channelInfo.getParentId() == null ? channelId : channelInfo.getParentId();
+    }
+
+
+    private ChannelInfoDto getChannelById(Long channelId) {
+        //判断渠道是否存在
+        ChannelInfoDto channelInfoDto = (ChannelInfoDto) ehcacheManager.get(DataCacheKey.CHANNEL_INFO.key(channelId));
+        if (channelInfoDto == null) {
+            channelInfoDto = channelRpcService.get(channelId);
+            if (channelInfoDto == null || channelInfoDto.getEnable() == DataConstants.NO) {
+                throw new ChannelErrorException();
+            }
+            ehcacheManager.set(DataCacheKey.CHANNEL_INFO.key(channelId), channelInfoDto, EXPIRE_INTERVAL);
+        }
+        return channelInfoDto;
     }
 
     /**
