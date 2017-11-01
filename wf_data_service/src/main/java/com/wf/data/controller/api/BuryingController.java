@@ -1,10 +1,7 @@
 package com.wf.data.controller.api;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 
-import com.wf.base.rpc.ChannelRpcService;
-import com.wf.core.web.base.BaseController;
 import com.wf.data.common.DataBaseController;
 import com.wf.data.controller.request.UicBuryingPointRequest;
 import com.wf.data.dao.entity.mycat.UicBuryingPoint;
