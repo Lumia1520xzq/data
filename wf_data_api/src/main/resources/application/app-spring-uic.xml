@@ -31,5 +31,4 @@
 	</context:component-scan>
 
 	<bean class="com.wf.core.utils.core.SpringContextHolder" />
-	<!--<bean id="idGeneratorHander" class="com.wf.core.idg.IDGeneratorHanderImpl" />-->
 </beans>

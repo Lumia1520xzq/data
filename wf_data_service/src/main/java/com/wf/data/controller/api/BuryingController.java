@@ -32,7 +32,7 @@ public class BuryingController extends DataBaseController {
         Long userId = null;
 
         try {
-            userId = getUserId();
+            userId = getUserIdNoError();
         } catch (Exception e) {
         }
 

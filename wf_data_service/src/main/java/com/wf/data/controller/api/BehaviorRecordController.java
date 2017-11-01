@@ -29,7 +29,7 @@ public class BehaviorRecordController extends DataBaseController {
 	public Object behaviorRecord(@Valid@RequestBody BehaviorRequest request) {
 		Long userId = null;
 		try {
-			userId = getUserId();
+			userId = getUserIdNoError();
 		} catch (Exception e) {
 		}
 		UicBehaviorRecord uicBehaviorRecord = new UicBehaviorRecord();

@@ -32,7 +32,6 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                 <value>classpath*:application-public.properties</value>
                 <value>classpath*:zoo.properties</value>
                 <value>classpath*:dubbo.properties</value>
-                <value>classpath*:prop-mq-rabbitmq.properties</value>
             </list>
         </property>
     </bean>

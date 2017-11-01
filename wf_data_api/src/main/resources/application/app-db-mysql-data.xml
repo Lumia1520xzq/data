@@ -57,7 +57,7 @@
 		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mysql" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mysql/**/*Mapper*.xml" />
-		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+		<property name="configLocation" value="classpath*:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory-mysql" />
