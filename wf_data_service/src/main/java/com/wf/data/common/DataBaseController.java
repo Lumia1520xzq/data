@@ -7,23 +7,27 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.BaseController;
 import com.wf.data.common.constants.ChannelConstants;
+import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UicCacheKey;
 import com.wf.uic.rpc.UserLoginRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
-
 /**
  * @author zk
  */
-public abstract class DataBaseController extends BaseController {
-    @Resource
+public class DataBaseController extends BaseController {
+
+    @Autowired
     private ChannelRpcService channelRpcService;
-    @Resource
+    @Autowired
     private UserLoginRpcService userLoginRpcService;
     @Autowired
     private EhcacheManager ehcacheManager;
+    /**
+     * 删除过期数据间隔，单位秒
+     */
+    private static final int EXPIRE_INTERVAL = 300;
 
     /**
      * 获取渠道ID
@@ -39,9 +43,13 @@ public abstract class DataBaseController extends BaseController {
         if (!NumberUtils.isDigits(channel)) {
             throw new ChannelErrorException();
         }
-        ChannelInfoDto channelInfo = channelRpcService.get(Long.parseLong(channel));
-        if (channelInfo == null || channelInfo.getEnable() == DataConstants.NO) {
-            throw new ChannelErrorException();
+        ChannelInfoDto channelInfo = (ChannelInfoDto) ehcacheManager.get(DataCacheKey.CHANNEL_INFO.key(channel));
+        if (channelInfo == null) {
+            channelInfo = channelRpcService.get(Long.parseLong(channel));
+            if (channelInfo == null || channelInfo.getEnable() == DataConstants.NO) {
+                throw new ChannelErrorException();
+            }
+            ehcacheManager.set(DataCacheKey.CHANNEL_INFO.key(channel), channelInfo, EXPIRE_INTERVAL);
         }
         return Long.parseLong(channel);
     }
@@ -62,9 +70,13 @@ public abstract class DataBaseController extends BaseController {
         if (channelId == null) {
             return null;
         }
-        ChannelInfoDto channelInfo = channelRpcService.getParentChannel(channelId);;
+        ChannelInfoDto channelInfo = (ChannelInfoDto) ehcacheManager.get(channelId.toString());
         if (channelInfo == null) {
-            throw new ChannelErrorException();
+            channelInfo = channelRpcService.getParentChannel(channelId);
+            if (channelInfo == null) {
+                return channelId;
+            }
+            ehcacheManager.set(channelId.toString(), channelInfo, EXPIRE_INTERVAL);
         }
         return channelInfo.getParentId() == null ? channelId : channelInfo.getParentId();
     }
@@ -75,18 +87,13 @@ public abstract class DataBaseController extends BaseController {
      */
     protected Long getUserId() {
         String token = super.getToken();
-        Long userId;
-        Object ehcacheVal = ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
-        if(ehcacheVal != null){
-            userId = (Long)ehcacheVal;
-        }else{
-            userId =  userLoginRpcService.getUserId(token);
-            if(userId != null){
-                ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token),userId,3600);
-            }
-        }
+        Long userId = (Long) ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
         if (userId == null) {
-            throw new LbmOAuthException();
+            userId = userLoginRpcService.getUserId(token);
+            if (userId == null) {
+                throw new LbmOAuthException();
+            }
+            ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token), userId, EXPIRE_INTERVAL);
         }
         return userId;
     }
@@ -109,7 +116,13 @@ public abstract class DataBaseController extends BaseController {
      * @return
      */
     private Long getUserInfoNoError(String token) {
-        Long userId = userLoginRpcService.getUserId(token);
+        Long userId = (Long) ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
+        if (userId == null) {
+            userId = userLoginRpcService.getUserId(token);
+            if (userId != null) {
+                ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token), userId, EXPIRE_INTERVAL);
+            }
+        }
         return userId;
     }
 
