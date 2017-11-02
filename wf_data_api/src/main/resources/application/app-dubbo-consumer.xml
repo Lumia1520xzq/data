@@ -7,13 +7,12 @@
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 
-    <dubbo:application name="uic-consumer-api"/>
+    <dubbo:application name="data-consumer-api"/>
     <dubbo:registry id="registry" address="${dubbo.zookeeper}" client="zkclient" timeout="100000"/>
     <!--<dubbo:protocol name="dubbo" accepts="200" port="${dubbo.api.port}"  />-->
 
 
     <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
-    <dubbo:reference id="accountRpcService" interface="com.wf.trans.rpc.AccountRpcService"/>
-
+    <dubbo:reference id="userLoginRpcService" interface="com.wf.uic.rpc.UserLoginRpcService"/>
 
 </beans>

@@ -1,55 +1,83 @@
 package com.wf.data.controller.api;
 
-import com.wf.core.web.base.BaseController;
+import javax.validation.Valid;
+
+import com.wf.data.common.DataBaseController;
+import com.wf.data.controller.request.UicBuryingPointRequest;
 import com.wf.data.dao.entity.mycat.UicBuryingPoint;
 import com.wf.data.service.MycatUicBuryingPointService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 埋点内部接口
- * Created by chris on 2017/4/1.
+ *
+ * @author zy 2016-12-16
  */
-@RequestMapping("/ms/uic/burying")
+@RequestMapping("/api/burying")
 @RestController
-public class BuryingController extends BaseController {
-
+public class BuryingController extends DataBaseController {
     @Autowired
-    private MycatUicBuryingPointService mycatUicBuryingPointService;
+    private MycatUicBuryingPointService uicBuryingPointService;
+    /**
+     * 设置埋点
+     * GameTypeContents
+     * BuryingPointContents
+     * @param request
+     * @return
+     */
+    @RequestMapping("point")
+    public Object point(@Valid@RequestBody UicBuryingPointRequest request) {
+        Long userId = null;
+
+        try {
+            userId = getUserIdNoError();
+        } catch (Exception e) {
+        }
+
+        UicBuryingPoint uicBuryingPoint = new UicBuryingPoint();
+        uicBuryingPoint.setUserId(userId);
+        uicBuryingPoint.setGameType(request.getGameType());
+        uicBuryingPoint.setBuryingType(request.getBuryingType());
+        uicBuryingPoint.setChannelId(getChannelId());
+        uicBuryingPointService.save(uicBuryingPoint);
+        return SUCCESS;
+    }
 
     /**
-     * 保存埋点
-     *
-     * @param uicBuryingPoint
+     * 设置埋点并返回改类型埋点是否首次
+     * 用于判断用户首次进入游戏
+     * GameTypeContents
+     * BuryingPointContents
+     * @param request
+     * @return
      */
-    @RequestMapping("save")
-    public void save(@RequestBody UicBuryingPoint uicBuryingPoint) {
-    	mycatUicBuryingPointService.save(uicBuryingPoint);
+    @RequestMapping("buryingPoint/firstLoad")
+    public Object buryingPointReturnStatus(@Valid@RequestBody UicBuryingPointRequest request) {
+
+        Long userId = null;
+        UicBuryingPoint point = null;
+        try {
+            userId = getUserId();
+            point = uicBuryingPointService.getByGameTypeAndBuryingType(request.getGameType(), request.getBuryingType(), userId);
+        } catch (Exception e) {
+            logger.error("buryingPoint/firstLoad获取游戏埋点数据失败,{}",e);
+        }
+
+
+        UicBuryingPoint uicBuryingPoint = new UicBuryingPoint();
+        uicBuryingPoint.setUserId(userId);
+        uicBuryingPoint.setGameType(request.getGameType());
+        uicBuryingPoint.setBuryingType(request.getBuryingType());
+        uicBuryingPoint.setChannelId(getChannelId());
+        uicBuryingPointService.save(uicBuryingPoint);
+        if(point != null){
+            return data(false);
+        }else{
+            return data(true);
+        }
     }
-    
-    @RequestMapping(value = "findLastGameLoading/{userId}/{gameType}", method = RequestMethod.GET)
-    public UicBuryingPoint findLastGameLoading(@PathVariable Long userId, @PathVariable Integer gameType) {
-        return mycatUicBuryingPointService.findLastGameLoading(userId, gameType);
-    }
-    
-    @RequestMapping(value = "getUserLastPlayGame/{userId}/{num}/{channelId}", method = RequestMethod.GET)
-    public List<UicBuryingPoint> getUserLastPlayGame(@PathVariable Long userId, @PathVariable Integer num, @PathVariable Long channelId) {
-        return mycatUicBuryingPointService.getUserLastPlayGame(userId, num, channelId);
-    }
-    
-    @RequestMapping(value = "getByGameTypeAndBuryingType/{gameType}/{buryingType}/{userId}", method = RequestMethod.GET)
-    public UicBuryingPoint getByGameTypeAndBuryingType(@PathVariable Integer gameType, @PathVariable Integer buryingType, @PathVariable Long userId) {
-        return mycatUicBuryingPointService.getByGameTypeAndBuryingType(gameType, buryingType, userId);
-    }
-    
-    @RequestMapping(value = "getLastLoginWealTime/{userId}/{buryingType}", method = RequestMethod.GET)
-    public Date getLastLoginWealTime(@PathVariable Long userId,@PathVariable Integer buryingType){
-    	return mycatUicBuryingPointService.getLastLoginWealTime(userId,buryingType);
-    }
-    
-    
-    
+
+
 }
