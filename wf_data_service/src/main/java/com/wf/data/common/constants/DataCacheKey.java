@@ -8,21 +8,15 @@ import com.wf.core.cache.CacheType;
  * controller
  * @author Fe 2016年4月16日
  */
-public enum ControllerCacheKey implements CacheKey {
+public enum DataCacheKey implements CacheKey {
 	/**
-	 * data user
+	 * 渠道信息
 	 */
-	MYCAT_UIC_USER_BY_ID,
-	MYCAT_UIC_USER_BY_LOGINNAME,
-	MYCAT_UIC_USER_BY_THIRD_ID,
-	MYCAT_UIC_USER_BY_VISITOR_TOKEN,
-	UIC_USER_BY_INVITATION_CODE,
-	UIC_USER_BY_PARENT_INVITATION_CODE,
-	UIC_USER_GROUP_BY_PARENT_INVITATION_CODE,
+	CHANNEL_INFO,
 	UIC_USER_BEHAVIORTYPE_BY_EVENTID
 	;
 	private final String value;
-	private ControllerCacheKey() {
+	private DataCacheKey() {
 		this.value = CacheType.CONTROLLER.getName() + '_' + name();
 	}
 	@Override

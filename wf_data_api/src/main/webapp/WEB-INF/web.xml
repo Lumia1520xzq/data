@@ -6,7 +6,7 @@
 	<display-name>uic-api</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:application/app-spring-uic.xml</param-value>
+		<param-value>classpath*:application/app-spring-data.xml</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

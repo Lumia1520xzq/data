@@ -7,66 +7,77 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.BaseController;
 import com.wf.data.common.constants.ChannelConstants;
+import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UicCacheKey;
 import com.wf.uic.rpc.UserLoginRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
-
 /**
  * @author zk
  */
-public abstract class DataBaseController extends BaseController {
-    @Resource
+public class DataBaseController extends BaseController {
+
+    @Autowired
     private ChannelRpcService channelRpcService;
-    @Resource
+    @Autowired
     private UserLoginRpcService userLoginRpcService;
     @Autowired
     private EhcacheManager ehcacheManager;
+    /**
+     * 删除过期数据间隔，单位秒
+     */
+    private static final int EXPIRE_INTERVAL = 300;
 
     /**
-     * 获取渠道ID
-     * @return 渠道ID
+     * 获取当前渠道
+     *
+     * @return
      */
-    public Long getChannelId() {
-        String channel = super.getAppChannel();
-        if (StringUtils.isBlank(channel)) {
+    protected Long getChannelId() {
+        String shopChannel = getAppChannel();
+        if (StringUtils.isBlank(shopChannel)) {
             //默认多多互娱
             return ChannelConstants.JDD_CHANNEL;
         }
-        channel = channel.split("#")[0];
-        if (!NumberUtils.isDigits(channel)) {
+        shopChannel = shopChannel.split("#")[0];
+        if (!NumberUtils.isDigits(shopChannel)) {
             throw new ChannelErrorException();
         }
-        ChannelInfoDto channelInfo = channelRpcService.get(Long.parseLong(channel));
-        if (channelInfo == null || channelInfo.getEnable() == DataConstants.NO) {
-            throw new ChannelErrorException();
-        }
-        return Long.parseLong(channel);
+        ChannelInfoDto channelInfoDto = getChannelById(Long.parseLong(shopChannel));
+        return channelInfoDto.getId();
     }
 
     /**
-     * 获取父级渠道Id,没有父级，显示自己Id
-     * @return 渠道ID
-     */
-    protected Long getParentChannelId() {
-        return this.getParentChannelId(this.getChannelId());
-    }
-
-    /**
-     * 获取父级渠道Id,没有父级，显示自己Id
-     * @return 渠道ID
+     * 获取上级渠道
+     *
+     * @param channelId
+     * @return
      */
     protected Long getParentChannelId(final Long channelId) {
-        if (channelId == null) {
-            return null;
-        }
-        ChannelInfoDto channelInfo = channelRpcService.getParentChannel(channelId);;
-        if (channelInfo == null) {
-            throw new ChannelErrorException();
-        }
+        ChannelInfoDto channelInfo = getChannelById(channelId);
         return channelInfo.getParentId() == null ? channelId : channelInfo.getParentId();
+    }
+
+    /**
+     * 获取上级渠道
+     * @return
+     */
+    protected Long getParentChannelId() {
+        return getParentChannelId(getChannelId());
+    }
+
+    private ChannelInfoDto getChannelById(Long channelId) {
+        //判断渠道是否存在
+        ChannelInfoDto channelInfoDto = (ChannelInfoDto) ehcacheManager.get(DataCacheKey.CHANNEL_INFO.key(channelId));
+        if (channelInfoDto == null) {
+            channelInfoDto = channelRpcService.get(channelId);
+            if (channelInfoDto == null || channelInfoDto.getEnable() == DataConstants.NO) {
+                throw new ChannelErrorException();
+            }
+            ehcacheManager.set(DataCacheKey.CHANNEL_INFO.key(channelId), channelInfoDto, EXPIRE_INTERVAL);
+        }
+        return channelInfoDto;
     }
 
     /**
@@ -75,18 +86,13 @@ public abstract class DataBaseController extends BaseController {
      */
     protected Long getUserId() {
         String token = super.getToken();
-        Long userId;
-        Object ehcacheVal = ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
-        if(ehcacheVal != null){
-            userId = (Long)ehcacheVal;
-        }else{
-            userId =  userLoginRpcService.getUserId(token);
-            if(userId != null){
-                ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token),userId,3600);
-            }
-        }
+        Long userId = (Long) ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
         if (userId == null) {
-            throw new LbmOAuthException();
+            userId = userLoginRpcService.getUserId(token);
+            if (userId == null) {
+                throw new LbmOAuthException();
+            }
+            ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token), userId, EXPIRE_INTERVAL);
         }
         return userId;
     }
@@ -109,7 +115,13 @@ public abstract class DataBaseController extends BaseController {
      * @return
      */
     private Long getUserInfoNoError(String token) {
-        Long userId = userLoginRpcService.getUserId(token);
+        Long userId = (Long) ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
+        if (userId == null) {
+            userId = userLoginRpcService.getUserId(token);
+            if (userId != null) {
+                ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token), userId, EXPIRE_INTERVAL);
+            }
+        }
         return userId;
     }
 

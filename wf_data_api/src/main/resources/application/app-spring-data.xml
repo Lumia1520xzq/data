@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<import resource="app-disconf-uic.xml"/>
+	<import resource="app-disconf-data.xml"/>
 	<import resource="app-db-mysql-data.xml" />
 	<import resource="app-db-mycat-data.xml" />
 	<import resource="app-dubbo-consumer.xml"/>
@@ -31,5 +31,4 @@
 	</context:component-scan>
 
 	<bean class="com.wf.core.utils.core.SpringContextHolder" />
-	<!--<bean id="idGeneratorHander" class="com.wf.core.idg.IDGeneratorHanderImpl" />-->
 </beans>
