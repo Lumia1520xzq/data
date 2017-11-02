@@ -59,6 +59,13 @@ public class DataBaseController extends BaseController {
         return channelInfo.getParentId() == null ? channelId : channelInfo.getParentId();
     }
 
+    /**
+     * 获取上级渠道
+     * @return
+     */
+    protected Long getParentChannelId() {
+        return getParentChannelId(getChannelId());
+    }
 
     private ChannelInfoDto getChannelById(Long channelId) {
         //判断渠道是否存在
