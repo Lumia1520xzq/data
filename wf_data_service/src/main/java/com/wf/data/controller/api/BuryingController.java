@@ -6,6 +6,7 @@ import com.wf.data.common.DataBaseController;
 import com.wf.data.controller.request.UicBuryingPointRequest;
 import com.wf.data.dao.entity.mycat.UicBuryingPoint;
 import com.wf.data.service.MycatUicBuryingPointService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class BuryingController extends DataBaseController {
     @Autowired
     private MycatUicBuryingPointService uicBuryingPointService;
+
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
     /**
      * 设置埋点
      * GameTypeContents
@@ -42,6 +46,7 @@ public class BuryingController extends DataBaseController {
         uicBuryingPoint.setBuryingType(request.getBuryingType());
         uicBuryingPoint.setChannelId(getChannelId());
         uicBuryingPointService.save(uicBuryingPoint);
+//        rabbitTemplate.convertAndSend("monitor_rick_buryingpoint", uicBuryingPoint);
         return SUCCESS;
     }
 
