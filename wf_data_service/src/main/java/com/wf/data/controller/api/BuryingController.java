@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author zy 2016-12-16
  */
-@RequestMapping("/api/burying")
+@RequestMapping("/data/api/burying")
 @RestController
 public class BuryingController extends DataBaseController {
     @Autowired
