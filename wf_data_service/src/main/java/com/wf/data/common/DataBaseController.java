@@ -13,14 +13,16 @@ import com.wf.data.common.constants.UicCacheKey;
 import com.wf.uic.rpc.UserLoginRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
+
 /**
  * @author zk
  */
 public class DataBaseController extends BaseController {
 
-    @Autowired
+    @Resource
     private ChannelRpcService channelRpcService;
-    @Autowired
+    @Resource
     private UserLoginRpcService userLoginRpcService;
     @Autowired
     private EhcacheManager ehcacheManager;
