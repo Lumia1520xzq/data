@@ -12,7 +12,7 @@ import com.wf.data.service.UicBehaviorTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(maxAge = 3600)
 @RequestMapping("/data/api/behaviorRecord")
 @RestController
 public class BehaviorRecordController extends DataBaseController {

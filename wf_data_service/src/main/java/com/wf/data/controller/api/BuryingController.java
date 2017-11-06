@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author zy 2016-12-16
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(maxAge = 3600)
 @RequestMapping("/data/api/burying")
 @RestController
 public class BuryingController extends DataBaseController {
