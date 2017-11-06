@@ -32,12 +32,15 @@
 				</property>
 			</bean>
 		</mvc:message-converters>
-	</mvc:annotation-driven>	
-	
+	</mvc:annotation-driven>
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
-			<bean class="com.wf.core.interceptor.TimeCostInterceptor"></bean>
+			<bean class="com.wf.core.interceptor.TimeCostInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.wf.core.interceptor.AllowOriginInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
