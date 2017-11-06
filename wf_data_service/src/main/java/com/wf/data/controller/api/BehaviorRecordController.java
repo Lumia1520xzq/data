@@ -10,10 +10,7 @@ import com.wf.data.dao.entity.mysql.UicBehaviorType;
 import com.wf.data.service.MycatUicBehaviorRecordService;
 import com.wf.data.service.UicBehaviorTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/data/api/behaviorRecord")
@@ -31,7 +28,7 @@ public class BehaviorRecordController extends DataBaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("point")
+	@RequestMapping(value = "point", method = RequestMethod.POST)
 	public Object behaviorRecord(@Valid@RequestBody BehaviorRequest request) {
 		Long userId = null;
 		try {

@@ -8,10 +8,7 @@ import com.wf.data.dao.entity.mycat.UicBuryingPoint;
 import com.wf.data.service.MycatUicBuryingPointService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -33,7 +30,7 @@ public class BuryingController extends DataBaseController {
      * @param request
      * @return
      */
-    @RequestMapping("point")
+    @RequestMapping(value = "point", method = RequestMethod.POST)
     public Object point(@Valid@RequestBody UicBuryingPointRequest request) {
         Long userId = null;
 
