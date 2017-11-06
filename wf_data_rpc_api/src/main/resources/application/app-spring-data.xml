@@ -27,13 +27,13 @@
     <context:component-scan base-package="com.wf.data" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <context:component-scan base-package="com.wf.data.dao" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-    <context:component-scan base-package="com.wf.data.service.biz" use-default-filters="false">
+    <context:component-scan base-package="com.wf.data.service" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
     <bean class="com.wf.core.utils.core.SpringContextHolder"/>
