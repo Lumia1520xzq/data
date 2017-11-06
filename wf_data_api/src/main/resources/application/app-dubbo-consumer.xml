@@ -13,6 +13,6 @@
 
 
     <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
-    <dubbo:reference id="userLoginRpcService" interface="com.wf.uic.rpc.UserLoginRpcService"/>
+    <dubbo:reference id="userRpcService" interface="com.wf.uic.rpc.UserRpcService"/>
 
 </beans>

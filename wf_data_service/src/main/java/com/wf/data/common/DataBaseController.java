@@ -10,7 +10,7 @@ import com.wf.data.common.constants.ChannelConstants;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UicCacheKey;
-import com.wf.uic.rpc.UserLoginRpcService;
+import com.wf.uic.rpc.UserRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
@@ -23,7 +23,7 @@ public class DataBaseController extends BaseController {
     @Resource
     private ChannelRpcService channelRpcService;
     @Resource
-    private UserLoginRpcService userLoginRpcService;
+    private UserRpcService userRpcService;
     @Autowired
     private EhcacheManager ehcacheManager;
     /**
@@ -90,7 +90,7 @@ public class DataBaseController extends BaseController {
         String token = super.getToken();
         Long userId = (Long) ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
         if (userId == null) {
-            userId = userLoginRpcService.getUserId(token);
+            userId = userRpcService.getUserId(token);
             if (userId == null) {
                 throw new LbmOAuthException();
             }
@@ -119,7 +119,7 @@ public class DataBaseController extends BaseController {
     private Long getUserInfoNoError(String token) {
         Long userId = (Long) ehcacheManager.get(UicCacheKey.OAUTH2_TOKEN_INFO.key(token));
         if (userId == null) {
-            userId = userLoginRpcService.getUserId(token);
+            userId = userRpcService.getUserId(token);
             if (userId != null) {
                 ehcacheManager.set(UicCacheKey.OAUTH2_TOKEN_INFO.key(token), userId, EXPIRE_INTERVAL);
             }
