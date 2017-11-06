@@ -7,7 +7,6 @@
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 
-<!--    <dubbo:application name="data-consumer-api"/>
-    <dubbo:registry address="${dubbo.zookeeper}"/>-->
-
+    <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
+    <dubbo:reference id="userLoginRpcService" interface="com.wf.uic.rpc.UserLoginRpcService"/>
 </beans>
