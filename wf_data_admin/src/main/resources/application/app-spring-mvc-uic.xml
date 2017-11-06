@@ -13,6 +13,16 @@
 	</context:component-scan>
 	
 	<mvc:default-servlet-handler />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.wf.core.interceptor.TimeCostInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.wf.core.interceptor.AllowOriginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	<mvc:annotation-driven>
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
