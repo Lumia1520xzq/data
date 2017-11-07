@@ -17,7 +17,7 @@ public enum DataCacheKey implements CacheKey {
 	;
 	private final String value;
 	private DataCacheKey() {
-		this.value = CacheType.CONTROLLER.getName() + '_' + name();
+		this.value = "DATA:" + name();
 	}
 	@Override
 	public String key() {

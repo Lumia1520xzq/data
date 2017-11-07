@@ -19,7 +19,7 @@ public enum UicCacheKey implements CacheKey {
     private final String value;
 
     UicCacheKey() {
-        this.value = CacheType.CONTROLLER.getName() + ":PLAT:OAUTH:" + name();
+        this.value = "DATA:USER:" + name();
     }
 
     @Override
