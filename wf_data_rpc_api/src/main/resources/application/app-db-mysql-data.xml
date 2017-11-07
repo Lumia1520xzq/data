@@ -5,11 +5,11 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<bean id="uicWriteDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<bean id="dataWriteDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}" />
-		<property name="url" value="${jdbc.uic.write.url}" />
-		<property name="username" value="${jdbc.uic.write.username}" />
-		<property name="password" value="${jdbc.uic.write.password}" />
+		<property name="url" value="${jdbc.data.write.url}" />
+		<property name="username" value="${jdbc.data.write.username}" />
+		<property name="password" value="${jdbc.data.write.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
 		<property name="maxActive" value="500" />
@@ -22,11 +22,11 @@
 		<property name="testOnReturn" value="true" />
 		<property name="filters" value="stat" />
 	</bean>
-	<bean id="uicReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<bean id="dataReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}" />
-		<property name="url" value="${jdbc.uic.read.url}" />
-		<property name="username" value="${jdbc.uic.read.username}" />
-		<property name="password" value="${jdbc.uic.read.password}" />
+		<property name="url" value="${jdbc.data.read.url}" />
+		<property name="username" value="${jdbc.data.read.username}" />
+		<property name="password" value="${jdbc.data.read.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
 		<property name="maxActive" value="500" />
@@ -40,36 +40,32 @@
 		<property name="filters" value="stat" />
 	</bean>
 
-	<bean id="multipleDataSource-mysql" class="com.wf.core.db.MultipleDataSource">
+	<bean id="dataMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
 		<!-- 默认数据库是写的数据库 -->
-		<property name="defaultTargetDataSource" ref="uicWriteDataSource" />
+		<property name="defaultTargetDataSource" ref="dataWriteDataSource" />
 		<property name="targetDataSources">
 			<map>
-				<entry value-ref="uicWriteDataSource" key="dataSourceWrite" />
-				<entry value-ref="uicReadDataSource" key="dataSourceRead" />
+				<entry value-ref="dataWriteDataSource" key="dataSourceWrite" />
+				<entry value-ref="dataReadDataSource" key="dataSourceRead" />
 			</map>
 		</property>
 	</bean>
 
 
-	<bean id="sqlSessionFactory-mysql" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="multipleDataSource-mysql" />
+	<bean id="dataSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataMultipleDataSource" />
 		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mysql" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mysql/**/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory-mysql" />
+		<property name="sqlSessionFactoryBeanName" value="dataSqlSessionFactory" />
 		<property name="basePackage" value="com.wf.data.dao.mysql" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
-	<!--<bean id="uicSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">-->
-		<!--<constructor-arg ref="sqlSessionFactory" />-->
-	<!--</bean>-->
-	<bean id="tractionManager-mysql" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="multipleDataSource-mysql" />
-	</bean>
 
-	<!--<tx:annotation-driven transaction-manager="tractionManager-mysql" proxy-target-class="true" />-->
+	<bean id="dataTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataMultipleDataSource" />
+	</bean>
 </beans>

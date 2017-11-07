@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
-<mapper namespace="com.wf.data.dao.mycat.MycatUicBehaviorRecordDao">
+<mapper namespace="com.wf.data.dao.mycat.BehaviorRecordDao">
 	
-	<sql id="uicBehaviorRecordColumns">
+	<sql id="behaviorRecordColumns">
 		t.id,
 		t.user_id,
 		t.behavior_event_id,
@@ -18,22 +15,25 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.delete_flag
 	</sql>
 	
-	<sql id="uicBehaviorRecordWhere">
+	<sql id="behaviorRecordWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
 	</sql>
 	
-	<sql id="uicBehaviorRecordJoins">
-	</sql>
-	
-	<select id="get" resultType="UicBehaviorRecord">
-		SELECT <include refid="uicBehaviorRecordColumns"/> FROM uic_behavior_record t WHERE id = #{id}
+	<select id="get" resultType="BehaviorRecord">
+		SELECT <include refid="behaviorRecordColumns"/> 
+		FROM uic_behavior_record t WHERE id = #{id}
 	</select>
-	<select id="findList" resultType="UicBehaviorRecord">
-		SELECT <include refid="uicBehaviorRecordColumns"/> FROM uic_behavior_record t <include refid="uicBehaviorRecordJoins"/>
-		WHERE <include refid="uicBehaviorRecordWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	
+	<select id="findList" resultType="BehaviorRecord">
+		SELECT <include refid="behaviorRecordColumns"/> 
+		FROM uic_behavior_record t
+		WHERE <include refid="behaviorRecordWhere"/> 
+		ORDER BY id desc LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
-		SELECT COUNT(*) FROM uic_behavior_record t WHERE <include refid="uicBehaviorRecordWhere" />
+		SELECT COUNT(*) 
+		FROM uic_behavior_record t
+		WHERE <include refid="behaviorRecordWhere" />
 	</select>
 	
 	<insert id="insert">
@@ -70,7 +70,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<delete id="delete">
-		UPDATE uic_behavior_record SET delete_flag = 1 WHERE ID = #{id} 
+		UPDATE uic_behavior_record SET delete_flag = 1 WHERE ID = #{id}
 	</delete>
 </mapper>
 

@@ -1,9 +1,8 @@
 package com.wf.data.dao.entity.mycat;
 
-
 import com.wf.core.persistence.DataEntity;
 
-public class UicBehaviorRecord extends DataEntity {
+public class BehaviorRecord extends DataEntity {
 	private static final long serialVersionUID = -1;
 	private Long userId;
 	private Long behaviorEventId;

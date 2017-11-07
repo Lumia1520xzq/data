@@ -3,8 +3,8 @@ package com.wf.data.testrpc;
 import com.wf.data.rpc.BehaviorRecordRpcService;
 import com.wf.data.rpc.BuryingRpcService;
 import com.wf.data.rpc.dto.BehaviorRecordDto;
+import com.wf.data.rpc.dto.BuryingPointDto;
 import com.wf.data.rpc.dto.JsonResult;
-import com.wf.data.rpc.dto.UicBuryingPointDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -44,14 +44,14 @@ public class TestRpc {
     @Test
     public void test2(){
 
-        UicBuryingPointDto uicBuryingPointDto = new UicBuryingPointDto();
-        uicBuryingPointDto.setUserId(99119911L);
-        uicBuryingPointDto.setBuryingType(2);
-        uicBuryingPointDto.setChannelId(100000L);
-        uicBuryingPointDto.setGameType(0);
-        uicBuryingPointDto.setCountNum(8);
+        BuryingPointDto point = new BuryingPointDto();
+        point.setUserId(99119911L);
+        point.setBuryingType(2);
+        point.setChannelId(100000L);
+        point.setGameType(0);
+        point.setCountNum(8);
 
-        JsonResult result = buryingRpcService.save(uicBuryingPointDto);
+        JsonResult result = buryingRpcService.save(point);
 
         System.out.println("result.getSuccess() : " + result.getSuccess());
     }
@@ -59,21 +59,21 @@ public class TestRpc {
     @Test
     public void test3(){
 
-        UicBuryingPointDto dto =  buryingRpcService.findLastGameLoading(99119911L, 8);
+        BuryingPointDto dto =  buryingRpcService.findLastGameLoading(99119911L, 8);
         System.out.println(dto);
 
     }
 
     @Test
     public void test4(){
-        List<UicBuryingPointDto> list = buryingRpcService.getUserLastPlayGame(99119911L, 8, 100000L) ;
+        List<BuryingPointDto> list = buryingRpcService.getUserLastPlayGame(99119911L, 8, 100000L) ;
         System.out.println(list);
 
     }
 
     @Test
     public void test5(){
-        UicBuryingPointDto dto = buryingRpcService.getByGameTypeAndBuryingType(0, 2, 99119911L);
+        BuryingPointDto dto = buryingRpcService.getByGameTypeAndBuryingType(0, 2, 99119911L);
         System.out.println(dto);
     }
 

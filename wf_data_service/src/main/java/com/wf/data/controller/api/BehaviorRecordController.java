@@ -2,13 +2,12 @@ package com.wf.data.controller.api;
 
 import javax.validation.Valid;
 
-import com.wf.core.web.base.BaseController;
 import com.wf.data.common.DataBaseController;
 import com.wf.data.controller.request.BehaviorRequest;
-import com.wf.data.dao.entity.mycat.UicBehaviorRecord;
-import com.wf.data.dao.entity.mysql.UicBehaviorType;
-import com.wf.data.service.MycatUicBehaviorRecordService;
-import com.wf.data.service.UicBehaviorTypeService;
+import com.wf.data.dao.entity.mycat.BehaviorRecord;
+import com.wf.data.dao.entity.mysql.BehaviorType;
+import com.wf.data.service.BehaviorRecordService;
+import com.wf.data.service.BehaviorTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BehaviorRecordController extends DataBaseController {
 	@Autowired
-	private MycatUicBehaviorRecordService behaviorRecordService;
+	private BehaviorRecordService behaviorRecordService;
 	@Autowired
-	private UicBehaviorTypeService uicBehaviorTypeService;
+	private BehaviorTypeService behaviorTypeService;
 
 	/**
 	 * 设置埋点
@@ -35,15 +34,15 @@ public class BehaviorRecordController extends DataBaseController {
 			userId = getUserIdNoError();
 		} catch (Exception e) {
 		}
-		UicBehaviorType uicBehaviorType = uicBehaviorTypeService.getByEventId(request.getBehaviorEventId());
-		if (uicBehaviorType != null) {
-			UicBehaviorRecord uicBehaviorRecord = new UicBehaviorRecord();
-			uicBehaviorRecord.setUserId(userId);
-			uicBehaviorRecord.setBehaviorEventId(request.getBehaviorEventId());
-			uicBehaviorRecord.setBehaviorName(uicBehaviorType.getFullName());
-			uicBehaviorRecord.setChannelId(getChannelId());
-			uicBehaviorRecord.setParentChannelId(getParentChannelId());
-			behaviorRecordService.save(uicBehaviorRecord);
+		BehaviorType behaviorType = behaviorTypeService.getByEventId(request.getBehaviorEventId());
+		if (behaviorType != null) {
+			BehaviorRecord record = new BehaviorRecord();
+			record.setUserId(userId);
+			record.setBehaviorEventId(request.getBehaviorEventId());
+			record.setBehaviorName(behaviorType.getFullName());
+			record.setChannelId(getChannelId());
+			record.setParentChannelId(getParentChannelId());
+			behaviorRecordService.save(record);
 		}
 
 

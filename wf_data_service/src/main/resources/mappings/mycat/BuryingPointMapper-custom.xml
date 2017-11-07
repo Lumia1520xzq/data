@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<mapper namespace="com.wf.data.dao.mycat.BuryingPointDao">
 
-<mapper namespace="com.wf.data.dao.mycat.MycatUicBuryingPointDao">
-
-	<select id="getUserLastPlayGame" resultType="UicBuryingPoint">
+	<select id="getUserLastPlayGame" resultType="BuryingPoint">
 		SELECT max(create_time) create_time,game_type FROM uic_burying_point
 		WHERE game_type IS NOT NULL AND game_type !=3
 		AND user_id = #{userId} AND burying_type = 7
@@ -16,8 +13,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		ORDER BY create_time DESC LIMIT #{gameNum}
 	</select>
 	
-	<select id="getByGameTypeAndBuryingType" resultType="UicBuryingPoint">
-		SELECT  <include refid="uicBuryingPointColumns" />
+	<select id="getByGameTypeAndBuryingType" resultType="BuryingPoint">
+		SELECT  <include refid="buryingPointColumns" />
 		FROM uic_burying_point t
 		WHERE t.delete_flag = 0 and t.burying_type = #{buryingType} and t.game_type = #{gameType} and t.user_id = #{userId}
 		ORDER BY t.id DESC
@@ -25,13 +22,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getLastLoginWealTime" resultType="java.util.Date">
-		select create_time from uic_burying_point 
+		select create_time from uic_burying_point
 		where burying_type=#{buryingType} and user_id=#{userId}
 		order by create_time DESC limit 0,1
 	</select>
 	
-	<select id="findLastGameLoading" resultType="UicBuryingPoint">
-		SELECT <include refid="uicBuryingPointColumns" />  
+	<select id="findLastGameLoading" resultType="BuryingPoint">
+		SELECT <include refid="buryingPointColumns" />
 		FROM uic_burying_point t
 		where t.delete_flag = 0 and t.user_id  = #{userId} and t.burying_type = 8 AND t.game_type = #{gameType}
 		order by t.create_time DESC limit 1

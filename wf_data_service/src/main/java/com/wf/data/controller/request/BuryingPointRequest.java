@@ -4,7 +4,7 @@ import com.wf.core.persistence.DataEntity;
 
 import javax.validation.constraints.NotNull;
 
-public class UicBuryingPointRequest extends DataEntity {
+public class BuryingPointRequest extends DataEntity {
     private static final long serialVersionUID = -1;
     @NotNull(message = "埋点类型不能为空")
     private Integer buryingType;

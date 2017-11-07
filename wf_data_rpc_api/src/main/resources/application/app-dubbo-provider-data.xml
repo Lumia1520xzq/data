@@ -19,9 +19,9 @@
     <dubbo:service interface="com.wf.data.rpc.BuryingRpcService" ref="buryingRpcService" registry="registry"
                    delay="-1"/>
 
-    <bean id="uicBehaviorRecordRpcService" class="com.wf.data.rpc.impl.BehaviorRecordRpcServiceImpl"/>
+    <bean id="dataBehaviorRecordRpcService" class="com.wf.data.rpc.impl.BehaviorRecordRpcServiceImpl"/>
     <dubbo:service interface="com.wf.data.rpc.BehaviorRecordRpcService"
-                   ref="uicBehaviorRecordRpcService" registry="registry" delay="-1"/>
+                   ref="dataBehaviorRecordRpcService" registry="registry" delay="-1"/>
 
 
 </beans>

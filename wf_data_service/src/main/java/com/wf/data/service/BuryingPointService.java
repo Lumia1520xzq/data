@@ -3,8 +3,8 @@ package com.wf.data.service;
 import com.wf.core.service.CrudService;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.MapUtils;
-import com.wf.data.dao.entity.mycat.UicBuryingPoint;
-import com.wf.data.dao.mycat.MycatUicBuryingPointDao;
+import com.wf.data.dao.entity.mycat.BuryingPoint;
+import com.wf.data.dao.mycat.BuryingPointDao;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class MycatUicBuryingPointService extends CrudService<MycatUicBuryingPointDao, UicBuryingPoint> {
+public class BuryingPointService extends CrudService<BuryingPointDao, BuryingPoint> {
 	
 	@Async
 	@Override
-	public void save(UicBuryingPoint entity) {
+	public void save(BuryingPoint entity) {
 		if(entity != null && entity.getUserId() == null){
 			entity.setUserId(0L);
 		}
@@ -33,7 +33,7 @@ public class MycatUicBuryingPointService extends CrudService<MycatUicBuryingPoin
 	 */
 	@Async
 	public void save(Integer gameType, Integer buryingType, Long userId, Long channelId) {
-		UicBuryingPoint point = new UicBuryingPoint();
+		BuryingPoint point = new BuryingPoint();
 		point.setUserId(userId);
 		point.setGameType(gameType);
 		point.setBuryingType(buryingType);
@@ -48,7 +48,7 @@ public class MycatUicBuryingPointService extends CrudService<MycatUicBuryingPoin
 	 * @param channelId
 	 * @return
 	 */
-	public List<UicBuryingPoint> getUserLastPlayGame(Long userId, Integer gameNum, Long channelId ) {
+	public List<BuryingPoint> getUserLastPlayGame(Long userId, Integer gameNum, Long channelId ) {
 		Calendar calendar = Calendar.getInstance();
 		String end = DateUtils.formatDateTime(DateUtils.getDayEndTime(calendar.getTime()));
 		calendar.add(Calendar.DATE, -7);
@@ -62,7 +62,7 @@ public class MycatUicBuryingPointService extends CrudService<MycatUicBuryingPoin
 	 * @param buryingType
 	 * @return
 	 */
-	public UicBuryingPoint getByGameTypeAndBuryingType(Integer gameType, Integer buryingType, Long userId) {
+	public BuryingPoint getByGameTypeAndBuryingType(Integer gameType, Integer buryingType, Long userId) {
 		return dao.getByGameTypeAndBuryingType(gameType, buryingType, userId);
 	}
 	
@@ -72,7 +72,7 @@ public class MycatUicBuryingPointService extends CrudService<MycatUicBuryingPoin
 	 * @param gameType
 	 * @return
 	 */
-	public UicBuryingPoint findLastGameLoading(Long userId, Integer gameType) {
+	public BuryingPoint findLastGameLoading(Long userId, Integer gameType) {
 		return dao.findLastGameLoading(userId,gameType);
 	}
 	

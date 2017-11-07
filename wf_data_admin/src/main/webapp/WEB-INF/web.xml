@@ -3,10 +3,10 @@
 		 xmlns="http://java.sun.com/xml/ns/javaee"
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		 version="2.5">
-	<display-name>wf_uic_admin</display-name>
+	<display-name>wf_data_admin</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:application/app-spring-uic.xml</param-value>
+		<param-value>classpath*:application/app-spring-data.xml</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -111,7 +111,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath*:application/app-spring-mvc-uic.xml</param-value>
+			<param-value>classpath*:application/app-spring-mvc-data.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

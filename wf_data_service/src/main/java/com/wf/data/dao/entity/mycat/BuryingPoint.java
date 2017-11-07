@@ -1,9 +1,8 @@
 package com.wf.data.dao.entity.mycat;
 
-
 import com.wf.core.persistence.DataEntity;
 
-public class UicBuryingPoint extends DataEntity {
+public class BuryingPoint extends DataEntity {
 	private static final long serialVersionUID = -1;
 	private Long userId;
 	private Integer buryingType;
@@ -53,7 +52,7 @@ public class UicBuryingPoint extends DataEntity {
 
 	@Override
 	public String toString() {
-		return "UicBuryingPoint{" +
+		return "BuryingPoint{" +
 				"userId=" + userId +
 				", buryingType=" + buryingType +
 				", gameType=" + gameType +

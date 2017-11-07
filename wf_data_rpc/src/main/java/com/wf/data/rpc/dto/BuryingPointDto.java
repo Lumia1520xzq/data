@@ -3,7 +3,7 @@ package com.wf.data.rpc.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UicBuryingPointDto implements Serializable {
+public class BuryingPointDto implements Serializable {
     private Long userId;
     private Integer buryingType;    //埋点类型
     private Integer gameType;
@@ -80,7 +80,7 @@ public class UicBuryingPointDto implements Serializable {
 
     @Override
     public String toString() {
-        return "UicBuryingPointDto{" +
+        return "BuryingPointDto{" +
                 "userId=" + userId +
                 ", buryingType=" + buryingType +
                 ", gameType=" + gameType +

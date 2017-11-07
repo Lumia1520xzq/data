@@ -3,10 +3,9 @@ package com.wf.data.controller.api;
 import javax.validation.Valid;
 
 import com.wf.data.common.DataBaseController;
-import com.wf.data.controller.request.UicBuryingPointRequest;
-import com.wf.data.dao.entity.mycat.UicBuryingPoint;
-import com.wf.data.service.MycatUicBuryingPointService;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.wf.data.controller.request.BuryingPointRequest;
+import com.wf.data.dao.entity.mycat.BuryingPoint;
+import com.wf.data.service.BuryingPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BuryingController extends DataBaseController {
     @Autowired
-    private MycatUicBuryingPointService uicBuryingPointService;
+    private BuryingPointService dataBuryingPointService;
 
 //    @Autowired
 //    private RabbitTemplate rabbitTemplate;
@@ -31,7 +30,7 @@ public class BuryingController extends DataBaseController {
      * @return
      */
     @RequestMapping(value = "point", method = RequestMethod.POST)
-    public Object point(@Valid@RequestBody UicBuryingPointRequest request) {
+    public Object point(@Valid@RequestBody BuryingPointRequest request) {
         Long userId = null;
 
         try {
@@ -39,12 +38,12 @@ public class BuryingController extends DataBaseController {
         } catch (Exception e) {
         }
 
-        UicBuryingPoint uicBuryingPoint = new UicBuryingPoint();
-        uicBuryingPoint.setUserId(userId);
-        uicBuryingPoint.setGameType(request.getGameType());
-        uicBuryingPoint.setBuryingType(request.getBuryingType());
-        uicBuryingPoint.setChannelId(getChannelId());
-        uicBuryingPointService.save(uicBuryingPoint);
+        BuryingPoint point = new BuryingPoint();
+        point.setUserId(userId);
+        point.setGameType(request.getGameType());
+        point.setBuryingType(request.getBuryingType());
+        point.setChannelId(getChannelId());
+        dataBuryingPointService.save(point);
 //        rabbitTemplate.convertAndSend("monitor_rick_buryingpoint", uicBuryingPoint);
         return SUCCESS;
     }
@@ -58,24 +57,24 @@ public class BuryingController extends DataBaseController {
      * @return
      */
     @RequestMapping("buryingPoint/firstLoad")
-    public Object buryingPointReturnStatus(@Valid@RequestBody UicBuryingPointRequest request) {
+    public Object buryingPointReturnStatus(@Valid@RequestBody BuryingPointRequest request) {
 
         Long userId = null;
-        UicBuryingPoint point = null;
+        BuryingPoint point = null;
         try {
             userId = getUserId();
-            point = uicBuryingPointService.getByGameTypeAndBuryingType(request.getGameType(), request.getBuryingType(), userId);
+            point = dataBuryingPointService.getByGameTypeAndBuryingType(request.getGameType(), request.getBuryingType(), userId);
         } catch (Exception e) {
             logger.error("buryingPoint/firstLoad获取游戏埋点数据失败,{}",e);
         }
 
 
-        UicBuryingPoint uicBuryingPoint = new UicBuryingPoint();
-        uicBuryingPoint.setUserId(userId);
-        uicBuryingPoint.setGameType(request.getGameType());
-        uicBuryingPoint.setBuryingType(request.getBuryingType());
-        uicBuryingPoint.setChannelId(getChannelId());
-        uicBuryingPointService.save(uicBuryingPoint);
+        BuryingPoint dataBuryingPoint = new BuryingPoint();
+        dataBuryingPoint.setUserId(userId);
+        dataBuryingPoint.setGameType(request.getGameType());
+        dataBuryingPoint.setBuryingType(request.getBuryingType());
+        dataBuryingPoint.setChannelId(getChannelId());
+        dataBuryingPointService.save(dataBuryingPoint);
         if(point != null){
             return data(false);
         }else{

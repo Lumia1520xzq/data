@@ -2,40 +2,37 @@ package com.wf.data.rpc.impl;
 
 import com.google.common.collect.Lists;
 import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.entity.mycat.UicBuryingPoint;
+import com.wf.data.dao.entity.mycat.BuryingPoint;
 import com.wf.data.rpc.BuryingRpcService;
+import com.wf.data.rpc.dto.BuryingPointDto;
 import com.wf.data.rpc.dto.JsonResult;
-import com.wf.data.rpc.dto.UicBuryingPointDto;
-import com.wf.data.service.MycatUicBuryingPointService;
+import com.wf.data.service.BuryingPointService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Date;
 import java.util.List;
 
 public class BuryingRpcServiceImpl implements BuryingRpcService {
     @Autowired
-    private MycatUicBuryingPointService mycatUicBuryingPointService;
+    private BuryingPointService buryingPointService;
 
     @Override
-    public JsonResult save(UicBuryingPointDto uicBuryingPointDto) {
+    public JsonResult save(BuryingPointDto buryingPointDto) {
 
-        UicBuryingPoint uicBuryingPoint = new UicBuryingPoint();
-        BeanUtils.copyProperties(uicBuryingPointDto, uicBuryingPoint);
-        mycatUicBuryingPointService.save(uicBuryingPoint);
+        BuryingPoint point = new BuryingPoint();
+        BeanUtils.copyProperties(buryingPointDto, point);
+        buryingPointService.save(point);
 
         return JsonResultUtils.markSuccessResult();
     }
 
     @Override
-    public UicBuryingPointDto findLastGameLoading(Long userId, Integer gameType) {
-        UicBuryingPoint point = mycatUicBuryingPointService.findLastGameLoading(userId, gameType);
+    public BuryingPointDto findLastGameLoading(Long userId, Integer gameType) {
+        BuryingPoint point = buryingPointService.findLastGameLoading(userId, gameType);
 
         if (null != point) {
-            UicBuryingPointDto dto = new UicBuryingPointDto();
+            BuryingPointDto dto = new BuryingPointDto();
             BeanUtils.copyProperties(point, dto);
             return dto;
         }
@@ -43,12 +40,12 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
     }
 
     @Override
-    public List<UicBuryingPointDto> getUserLastPlayGame(Long userId, Integer num, Long channelId) {
-        List<UicBuryingPointDto> list = Lists.newArrayList();
-        List<UicBuryingPoint> result = mycatUicBuryingPointService.getUserLastPlayGame(userId, num, channelId);
+    public List<BuryingPointDto> getUserLastPlayGame(Long userId, Integer num, Long channelId) {
+        List<BuryingPointDto> list = Lists.newArrayList();
+        List<BuryingPoint> result = buryingPointService.getUserLastPlayGame(userId, num, channelId);
         if (null != result && result.size() > 0) {
-            for (UicBuryingPoint item : result) {
-                UicBuryingPointDto dto = new UicBuryingPointDto();
+            for (BuryingPoint item : result) {
+                BuryingPointDto dto = new BuryingPointDto();
                 BeanUtils.copyProperties(item, dto);
                 list.add(dto);
             }
@@ -57,11 +54,11 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
     }
 
     @Override
-    public UicBuryingPointDto getByGameTypeAndBuryingType(Integer gameType, Integer buryingType, Long userId) {
-        UicBuryingPoint point = mycatUicBuryingPointService.getByGameTypeAndBuryingType(gameType, buryingType, userId);
+    public BuryingPointDto getByGameTypeAndBuryingType(Integer gameType, Integer buryingType, Long userId) {
+        BuryingPoint point = buryingPointService.getByGameTypeAndBuryingType(gameType, buryingType, userId);
 
         if (null != point) {
-            UicBuryingPointDto pointDto = new UicBuryingPointDto();
+            BuryingPointDto pointDto = new BuryingPointDto();
             BeanUtils.copyProperties(point,pointDto);
             return pointDto;
         }
@@ -70,7 +67,7 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
 
     @Override
     public Date getLastLoginWealTime(Long userId, Integer buryingType) {
-        return mycatUicBuryingPointService.getLastLoginWealTime(userId,buryingType);
+        return buryingPointService.getLastLoginWealTime(userId,buryingType);
     }
 
 }

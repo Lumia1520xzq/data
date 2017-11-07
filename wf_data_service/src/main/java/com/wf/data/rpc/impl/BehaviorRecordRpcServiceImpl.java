@@ -1,13 +1,13 @@
 package com.wf.data.rpc.impl;
 
 import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.entity.mycat.UicBehaviorRecord;
-import com.wf.data.dao.entity.mysql.UicBehaviorType;
+import com.wf.data.dao.entity.mycat.BehaviorRecord;
+import com.wf.data.dao.entity.mysql.BehaviorType;
 import com.wf.data.rpc.BehaviorRecordRpcService;
 import com.wf.data.rpc.dto.JsonResult;
 import com.wf.data.rpc.dto.BehaviorRecordDto;
-import com.wf.data.service.MycatUicBehaviorRecordService;
-import com.wf.data.service.UicBehaviorTypeService;
+import com.wf.data.service.BehaviorRecordService;
+import com.wf.data.service.BehaviorTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BehaviorRecordRpcServiceImpl implements BehaviorRecordRpcService {
 
     @Autowired
-    private MycatUicBehaviorRecordService mycatUicBehaviorRecordService;
+    private BehaviorRecordService behaviorRecordService;
     @Autowired
-    private UicBehaviorTypeService uicBehaviorTypeService;
+    private BehaviorTypeService behaviorTypeService;
 
     @Override
     public JsonResult<String> save(BehaviorRecordDto behaviorRecordDto) {
 
         try {
-            UicBehaviorRecord uicBehaviorRecord = new UicBehaviorRecord();
-            BeanUtils.copyProperties(behaviorRecordDto, uicBehaviorRecord);
+            BehaviorRecord behaviorRecord = new BehaviorRecord();
+            BeanUtils.copyProperties(behaviorRecordDto, behaviorRecord);
 
-            UicBehaviorType uicBehaviorType = uicBehaviorTypeService.getByEventId(uicBehaviorRecord.getBehaviorEventId());
-            if (uicBehaviorType != null) {
-                String name = uicBehaviorType.getFullName();
-                uicBehaviorRecord.setBehaviorName(name);
-                mycatUicBehaviorRecordService.save(uicBehaviorRecord);
+            BehaviorType behaviorType = behaviorTypeService.getByEventId(behaviorRecord.getBehaviorEventId());
+            if (behaviorType != null) {
+                String name = behaviorType.getFullName();
+                behaviorRecord.setBehaviorName(name);
+                behaviorRecordService.save(behaviorRecord);
             }
             return JsonResultUtils.markSuccessResult();
         } catch (BeansException e) {

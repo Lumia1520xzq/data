@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
-<mapper namespace="com.wf.data.dao.mysql.UicBehaviorTypeDao">
+<mapper namespace="com.wf.data.dao.mysql.BehaviorTypeDao">
 	
-	<sql id="uicBehaviorTypeColumns">
+	<sql id="behaviorTypeColumns">
 		t.id,
 		t.name,
 		t.parent_event_id,
@@ -20,7 +17,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.delete_flag
 	</sql>
 	
-	<sql id="uicBehaviorTypeWhere">
+	<sql id="behaviorTypeWhere">
 		t.delete_flag = 0
 		<if test="p.name != null and p.name != ''">
       		AND t.name like CONCAT('%', #{p.name}, '%')
@@ -42,18 +39,21 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>  
 	</sql>
 	
-	<sql id="uicBehaviorTypeJoins">
-	</sql>
-	
-	<select id="get" resultType="UicBehaviorType">
-		SELECT <include refid="uicBehaviorTypeColumns"/> FROM uic_behavior_type t WHERE id = #{id}
+	<select id="get" resultType="BehaviorType">
+		SELECT <include refid="behaviorTypeColumns"/>
+		FROM uic_behavior_type t
+		WHERE id = #{id}
 	</select>
-	<select id="findList" resultType="UicBehaviorType">
-		SELECT <include refid="uicBehaviorTypeColumns"/> FROM uic_behavior_type t <include refid="uicBehaviorTypeJoins"/>
-		WHERE <include refid="uicBehaviorTypeWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	<select id="findList" resultType="BehaviorType">
+		SELECT <include refid="behaviorTypeColumns"/>
+		FROM uic_behavior_type t
+		WHERE <include refid="behaviorTypeWhere"/>
+		ORDER BY id desc LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
-		SELECT COUNT(*) FROM uic_behavior_type t WHERE <include refid="uicBehaviorTypeWhere" />
+		SELECT COUNT(*)
+		FROM uic_behavior_type t
+		WHERE <include refid="behaviorTypeWhere" />
 	</select>
 	
 	<insert id="insert">
@@ -96,7 +96,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<delete id="delete">
-		UPDATE uic_behavior_type SET delete_flag = 1 WHERE ID = #{id} 
+		UPDATE uic_behavior_type SET delete_flag = 1 WHERE ID = #{id}
 	</delete>
 </mapper>
 

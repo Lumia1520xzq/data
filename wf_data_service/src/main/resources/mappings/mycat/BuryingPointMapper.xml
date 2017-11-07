@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<mapper namespace="com.wf.data.dao.mycat.BuryingPointDao">
 
-<mapper namespace="com.wf.data.dao.mycat.MycatUicBuryingPointDao">
-
-	<sql id="uicBuryingPointColumns">
+	<sql id="buryingPointColumns">
 		t.id,
 		t.user_id,
 		t.burying_type,
@@ -17,30 +14,26 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.game_type
 	</sql>
 
-	<sql id="uicBuryingPointWhere">
+	<sql id="buryingPointWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
 	</sql>
-
-	<sql id="uicBuryingPointJoins">
-	</sql>
 	
-	<select id="get" resultType="UicBuryingPoint">
+	<select id="get" resultType="BuryingPoint">
 		SELECT
-		<include refid="uicBuryingPointColumns" />
+		<include refid="buryingPointColumns" />
 		FROM uic_burying_point t WHERE id = #{id}
 	</select>
-	<select id="findList" resultType="UicBuryingPoint">
-		SELECT
-		<include refid="uicBuryingPointColumns" />
+
+	<select id="findList" resultType="BuryingPoint">
+		SELECT <include refid="buryingPointColumns" />
 		FROM uic_burying_point t
-		<include refid="uicBuryingPointJoins" />
-		WHERE
-		<include refid="uicBuryingPointWhere" />
+		WHERE <include refid="buryingPointWhere" />
 		ORDER BY update_time desc LIMIT #{start}, #{length}
 	</select>
+
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM uic_burying_point WHERE
-		<include refid="uicBuryingPointWhere" />
+		<include refid="buryingPointWhere" />
 	</select>
 	
 	<insert id="insert">
@@ -64,7 +57,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<update id="update">
-		UPDATE uic_burying_point SET
+		UPDATE data_burying_point SET
 			user_id = #{userId}, 
 			burying_type = #{buryingType}, 
 			channel_id = #{channelId}, 
@@ -74,8 +67,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<delete id="delete">
-		UPDATE uic_burying_point SET delete_flag = 1 WHERE ID
-		= #{id}
+		UPDATE uic_burying_point SET delete_flag = 1 WHERE ID = #{id}
 	</delete>
 </mapper>
 

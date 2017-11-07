@@ -3,7 +3,7 @@
 		 xmlns="http://java.sun.com/xml/ns/javaee"
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		 version="2.5">
-	<display-name>wf_uic_rpc_api</display-name>
+	<display-name>wf_data_rpc_api</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:application/app-spring-data.xml</param-value>

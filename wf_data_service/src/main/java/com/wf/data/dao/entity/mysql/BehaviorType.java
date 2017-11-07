@@ -1,9 +1,8 @@
 package com.wf.data.dao.entity.mysql;
 
-
 import com.wf.core.persistence.DataEntity;
 
-public class UicBehaviorType extends DataEntity {
+public class BehaviorType extends DataEntity {
 	private static final long serialVersionUID = -1;
 	private String name;
 	private Long parentEventId;

@@ -7,9 +7,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
-	<import resource="app-disconf-uic.xml"/>
-	<import resource="app-db-mysql-uic.xml" />
-	<import resource="app-db-mycat-uic.xml" />
+	<import resource="app-disconf-data.xml"/>
+	<import resource="app-db-mysql-data.xml" />
+	<import resource="app-db-mycat-data.xml" />
 	<import resource="classpath:wf/spring-common.xml"/>
 	<import resource="classpath:wf/spring-redis.xml"/>
 	<import resource="classpath:wf/spring-idg.xml"/>
