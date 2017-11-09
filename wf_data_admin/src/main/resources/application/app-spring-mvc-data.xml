@@ -13,16 +13,6 @@
 	</context:component-scan>
 	
 	<mvc:default-servlet-handler />
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="com.wf.core.interceptor.TimeCostInterceptor"/>
-		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="com.wf.core.interceptor.AllowOriginInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
 	<mvc:annotation-driven>
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -42,7 +32,17 @@
 				</property>
 			</bean>
 		</mvc:message-converters>
-	</mvc:annotation-driven>	
+	</mvc:annotation-driven>
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.wf.core.interceptor.TimeCostInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.wf.core.interceptor.AllowOriginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/"/>
