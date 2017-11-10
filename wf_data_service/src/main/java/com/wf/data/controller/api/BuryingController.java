@@ -56,7 +56,7 @@ public class BuryingController extends DataBaseController {
      * @param request
      * @return
      */
-    @RequestMapping("buryingPoint/firstLoad")
+    @RequestMapping("firstLoad")
     public Object buryingPointReturnStatus(@Valid@RequestBody BuryingPointRequest request) {
 
         Long userId = null;
