@@ -10,6 +10,10 @@
 		<module>wf_data_service</module>
 		<module>wf_data_rpc</module>
 		<module>wf_data_rpc_api</module>
+		<module>wf_data_task</module>
+		<module>wf_data_mq</module>
+		<module>wf_data_mqc</module>
+
     </modules>
 	<name>wf_data</name>
 	<properties>
