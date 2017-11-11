@@ -3,43 +3,23 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-">
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-    <import resource="classpath*:wf/spring-redis.xml"/>
-    <import resource="classpath*:wf/spring-idg.xml"/>
-    <import resource="classpath*:wf/spring-ehcache.xml"/>
-    <!--<import resource="classpath*:wf/spring-common.xml"/>-->
-    <!--<import resource="classpath*:wf/spring-jms.xml"/>-->
-
-
-    <import resource="app-disconf-data.xml"/>
-    <import resource="app-db-mycat-data.xml"/>
-    <import resource="app-db-mysql-data.xml"/>
-    <import resource="app-dubbo-provider-data.xml"/>
-    <import resource="app-dubbo-consumer.xml"/>
 
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
     <context:component-scan base-package="com.wf.data" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-    <context:component-scan base-package="com.wf.data.dao" use-default-filters="false">
+    <context:component-scan base-package="com.wf.data" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-    <context:component-scan base-package="com.wf.data.service" use-default-filters="false">
+    <context:component-scan base-package="com.wf.data" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
-
-    <bean class="com.wf.core.utils.core.SpringContextHolder"/>
-
-    <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
 
     <aop:config>
         <aop:pointcut id="transactionPointCut"
@@ -47,6 +27,24 @@
         <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="transactionPointCut"
                      order="1"/>
     </aop:config>
+
+    <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
+
+    <bean class="com.wf.core.utils.core.SpringContextHolder"/>
+
+    <import resource="classpath*:wf/spring-redis.xml"/>
+    <import resource="classpath*:wf/spring-idg.xml"/>
+    <import resource="classpath*:wf/spring-email.xml"/>
+    <import resource="classpath*:wf/spring-event.xml"/>
+    <!--<import resource="classpath*:wf/spring-random.xml"/>-->
+    <!--<import resource="classpath*:wf/spring-sensitive.xml"/>-->
+    <import resource="classpath:wf/spring-ehcache.xml"/>
+
+    <import resource="app-disconf-data.xml"/>
+    <import resource="app-db-mysql-data.xml"/>
+    <import resource="app-db-mycat-data.xml"/>
+    <import resource="app-dubbo-consumer.xml"/>
+    <import resource="app-jms-data.xml"/>
 
 
 </beans>

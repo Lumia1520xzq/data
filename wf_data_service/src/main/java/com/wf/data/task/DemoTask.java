@@ -8,7 +8,10 @@ public class DemoTask {
 
         try {
             Thread.sleep(5 * 1000);
+            System.out.println("----  ----");
+
         } catch (InterruptedException e) {
+            System.out.println("---  ----");
         }
 
     }

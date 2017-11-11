@@ -7,7 +7,7 @@
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 
-    <dubbo:application name="wf_data_api_consumer"/>
+    <dubbo:application name="wf_data_mqc_consumer"/>
     <dubbo:registry id="registry" address="${dubbo.zookeeper}" client="zkclient" timeout="100000"/>
     <!--<dubbo:protocol name="dubbo" accepts="200" port="${dubbo.api.port}"  />-->
 
