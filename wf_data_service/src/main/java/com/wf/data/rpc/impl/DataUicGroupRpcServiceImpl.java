@@ -21,8 +21,8 @@ public class DataUicGroupRpcServiceImpl implements DataUicGroupRpcService {
     private UicGroupService uicGroupService;
 
     @Override
-    public List<Long> findGroupUsers(String groupIds) {
-        return uicGroupService.findGroupUsers(groupIds);
+    public List<Long> findGroupUsers(List<String> groupIdList) {
+        return uicGroupService.findGroupUsers(groupIdList);
     }
 
     @Override

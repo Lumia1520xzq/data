@@ -11,10 +11,10 @@ public interface DataUicGroupRpcService {
     /**
      * 根据组获取组中的所有用户， 多个组以逗号分隔
      *
-     * @param groupIds
+     * @param groupIdList
      * @return
      */
-    List<Long> findGroupUsers(String groupIds);
+    List<Long> findGroupUsers(List<String> groupIdList);
 
 
     /**
