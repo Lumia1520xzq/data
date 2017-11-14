@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mysql.TransConvertDao">
+	
+	<sql id="transConvertColumns">
+		t.id,
+		t.user_id,
+		t.order_sn,
+		t.amount,
+		t.third_order_sn,
+		t.third_amount,
+		t.source,
+		t.pay_type,
+		t.status,
+		t.audit_version,
+		t.channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="transConvertWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.userId!=null">
+			AND t.user_id = #{p.userId}
+		</if>
+		<if test="p.status!=null">
+			AND t.status = #{p.status}
+		</if>
+	</sql>
+	
+	<sql id="transConvertJoins">
+	</sql>
+	
+	<select id="get" resultType="TransConvert">
+		SELECT <include refid="transConvertColumns"/> FROM trans_convert t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="TransConvert">
+		SELECT <include refid="transConvertColumns"/> FROM trans_convert t <include refid="transConvertJoins"/>
+		WHERE <include refid="transConvertWhere"/> ORDER BY update_time desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM trans_convert WHERE <include refid="transConvertWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO trans_convert (
+			id, 
+			user_id, 
+			order_sn, 
+			amount, 
+			third_order_sn, 
+			third_amount, 
+			source, 
+			pay_type, 
+			status,
+			audit_version,
+			channel_id, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{orderSn}, 
+			#{amount}, 
+			#{thirdOrderSn}, 
+			#{thirdAmount}, 
+			#{source}, 
+			#{payType}, 
+			#{status},
+			#{auditVersion},
+			#{channelId}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE trans_convert SET
+			user_id = #{userId}, 
+			order_sn = #{orderSn}, 
+			amount = #{amount}, 
+			third_order_sn = #{thirdOrderSn}, 
+			third_amount = #{thirdAmount}, 
+			source = #{source}, 
+			pay_type = #{payType}, 
+			status = #{status}, 
+			channel_id = #{channelId}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE trans_convert SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

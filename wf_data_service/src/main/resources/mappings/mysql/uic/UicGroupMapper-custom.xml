@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mysql.UicGroupDao">
+
+	<select id="findFromSubGroup" resultType="UicGroup">
+		select
+		<include refid="uicGroupColumns" />
+		FROM uic_group t WHERE
+		delete_flag = 0
+		<if test="userId != null">
+			AND user_id = #{userId}
+		</if>
+		<if test="groupIdList.size()!=0">
+			AND t.group_type_id in
+			<foreach collection="groupIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<select id="findFromParentGroup" resultType="UicGroup">
+		select
+		<include refid="uicGroupColumns" />
+		FROM uic_group t WHERE
+		delete_flag = 0
+		<if test="userId != null">
+			AND user_id = #{userId}
+		</if>
+		<if test="groupIdList.size()!=0">
+			AND t.group_type_parent_id in
+			<foreach collection="groupIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<select id="findGroupUserIds" resultType="Long">
+		select distinct user_id
+		FROM uic_group t WHERE
+		delete_flag = 0
+		<if test="groupIdList.size()!=0">
+			AND t.group_type_id in
+			<foreach collection="groupIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<delete id="deletByGroupTypeParentId" parameterType="java.lang.Long">
+		delete FROM
+		uic_group WHERE group_type_parent_id = #{groupTypeParentId}
+	</delete>
+	
+	<delete id="deletByUserIdAndParentId">
+		delete FROM
+		uic_group WHERE group_type_parent_id = #{groupTypeParentId}
+		and user_id = #{userId}
+	</delete>
+
+	<select id="getUserInGroupType" resultType="java.lang.Long">
+		select group_type_id FROM uic_group t WHERE delete_flag = 0 AND user_id = #{userId}
+	</select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mysql.ReportFishBettingInfoDao">
+
+    <select id="getFishBettingInfo" resultType="ReportFishBettingInfo">
+        select <include refid="reportFishBettingInfoColumns"/>
+        from ${tableName} t
+        where 1=1
+        <if test="entity.userId != null">
+            AND  user_id=${entity.userId}
+        </if>
+        <if test="entity.fishConfigId != null">
+            AND  fish_config_id=${entity.fishConfigId}
+        </if>
+        <if test="entity.amount != null">
+            AND  amount=${entity.amount}
+        </if>
+        <if test="entity.channelId != null">
+            AND  channel_id=${entity.channelId}
+        </if>
+        <if test="entity.bettingDate != null">
+            AND  betting_date='${entity.bettingDate}'
+        </if>
+    </select>
+
+</mapper>
+

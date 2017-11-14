@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mysql.ReportChangeNoteDao">
+
+	<select id="getCathecticNum" resultType="Long">
+	select IFNULL(count(id),0) from `report_change_note`
+	where create_time between #{beginDate} and #{endDate}
+	<if test="gameType == null or gameType == '' or gameType == 0">
+		AND game_type != 3 
+	</if>
+	<if test="gameType != null and gameType != '' and gameType != 0">
+		AND game_type = #{gameType}
+	</if>   
+	<if test="parentId != null and parentId != ''">
+		AND channel_id LIKE CONCAT(#{parentId}, '%')
+	</if>
+	<if test="channelId != null">
+		AND channel_id = #{channelId}
+	</if>
+	<if test="userId != null">
+		AND user_id = #{userId}
+	</if>
+	<if test="userIds != null and  userIds.size() != 0">
+	    AND user_id not in
+	<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+	    #{item}
+	</foreach>
+	</if>
+	</select>
+	
+	<!-- 全部投注盈利情况 -->
+	<select id="findCathecticListByDate" resultType="ReportGameInfo">
+		SELECT
+		<choose>  
+            <when test="searchType ==1">
+               DATE_FORMAT(t.create_time,'%Y-%m-%d %H') search_date,
+            </when>  
+            <otherwise>  
+               DATE_FORMAT(t.create_time,'%Y-%m-%d') search_date,
+            </otherwise>  
+        </choose>  
+		IFNULL(count(DISTINCT user_id),0) cathectic_user_num,  -- 投注人数
+		IFNULL(COUNT(user_id),0) cathectic_num, -- 投注笔数
+		IFNULL(SUM(t.betting_amount),0) cathectic_money, -- 投注流水
+		IFNULL(SUM(t.result_amount),0) win_money -- 返奖流水
+		FROM `report_change_note` t
+		WHERE 1=1
+		AND t.delete_flag = 0
+		<if test="gameType == null or gameType == '' or gameType == 0">
+			AND t.game_type != 3 
+		</if>
+		<if test="gameType != null and gameType != '' and gameType != 0">
+			AND t.game_type = #{gameType}
+		</if>
+		<if test="parentId != null">
+			AND t.channel_id LIKE CONCAT( #{parentId}, '%')
+		</if>
+		<if test="channelId != null">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="userIds != null and  userIds.size() != 0">
+	        AND t.user_id not in
+	     <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+	     </foreach>
+	    </if>
+	    <if test="channelIds != null and channelIds.size() != 0">
+	        AND t.channel_id in
+	     <foreach collection="channelIds" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+	     </foreach>
+	    </if>
+		AND t.create_time BETWEEN #{beginDate} AND #{endDate}
+		<choose>  
+            <when test="searchType ==1">  
+               GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d %H')
+            </when>  
+            <otherwise>  
+               GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')
+            </otherwise>  
+        </choose>  
+	</select>
+	
+	
+	<select id="getCathecticUserNum" resultType="Integer">
+	select IFNULL(count(DISTINCT user_id),0) from `report_change_note`
+	where create_time between #{beginDate} and #{endDate}
+	<if test="gameType == null or gameType == '' or gameType == 0">
+		AND game_type != 3 
+	</if>
+	<if test="gameType != null and gameType != '' and gameType != 0">
+		AND game_type = #{gameType}
+	</if>  
+	<if test="parentId != null and parentId != ''">
+		AND channel_id LIKE CONCAT(#{parentId}, '%')
+	</if>
+	<if test="channelId != null">
+		AND channel_id = #{channelId}
+	</if>
+	<if test="userIds != null and  userIds.size() != 0">
+	    AND user_id not in
+	<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+	    #{item}
+	</foreach>
+	</if>
+	</select>
+	
+	<!-- 一段时间内的投注用户列表 -->
+	<select id="findBettingUsersByDate" resultType="Long">
+		SELECT DISTINCT user_id   
+		FROM `report_change_note` t
+		WHERE 1=1
+		AND t.delete_flag = 0
+		<if test="gameType == null or gameType == '' or gameType == 0">
+			AND t.game_type != 3 
+		</if>
+		<if test="gameType != null and gameType != '' and gameType != 0">
+			AND t.game_type = #{gameType}
+		</if>
+		<if test="parentId != null">
+			AND t.channel_id LIKE CONCAT( #{parentId}, '%')
+		</if>
+		<if test="channelId != null">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="userIds != null and  userIds.size() != 0">
+	        AND t.user_id not in
+	     <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+		    #{item}
+	     </foreach>
+	    </if>
+		AND t.create_time BETWEEN #{beginDate} AND #{endDate}
+	</select>
+	 
+    <select id="getCathecticProfit" resultType="Long">
+	select IFNULL(sum(result_amount-betting_amount),0) from `report_change_note`
+	where create_time between #{beginDate} and #{endDate}
+	<if test="gameType == null or gameType == '' or gameType == 0">
+		AND game_type != 3 
+	</if>
+	<if test="gameType != null and gameType != '' and gameType != 0">
+		AND game_type = #{gameType}
+	</if>   
+	<if test="parentId != null and parentId != ''">
+		AND channel_id LIKE CONCAT(#{parentId}, '%')
+	</if>
+	<if test="channelId != null">
+		AND channel_id = #{channelId}
+	</if>
+	<if test="userId != null">
+		AND user_id = #{userId}
+	</if>
+	<if test="userIds != null and  userIds.size() != 0">
+	    AND user_id not in
+	<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+	    #{item}
+	</foreach>
+	</if>
+	</select>
+	 
+	<select id="getCathecticGames" resultType="Integer">
+	select IFNULL(count(distinct game_type),0) from `report_change_note`
+	where create_time between #{beginDate} and #{endDate}
+	<if test="gameType == null or gameType == '' or gameType == 0">
+		AND game_type != 3 
+	</if>
+	<if test="gameType != null and gameType != '' and gameType != 0">
+		AND game_type = #{gameType}
+	</if>   
+	<if test="parentId != null and parentId != ''">
+		AND channel_id LIKE CONCAT(#{parentId}, '%')
+	</if>
+	<if test="channelId != null">
+		AND channel_id = #{channelId}
+	</if>
+	<if test="userId != null">
+		AND user_id = #{userId}
+	</if>
+	<if test="userIds != null and  userIds.size() != 0">
+	    AND user_id not in
+	<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+	    #{item}
+	</foreach>
+	</if>
+	</select>
+	 
+</mapper>
+

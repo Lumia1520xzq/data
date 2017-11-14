@@ -19,6 +19,12 @@
 	<import resource="classpath*:wf/spring-ehcache.xml"/>
 	<import resource="classpath*:wf/spring-idg.xml"/>
 
+	<bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
+		<constructor-arg index="0" value="${es.ips}" />
+		<constructor-arg index="1" value="${es.clusterName}" />
+		<constructor-arg index="2" value="${es.port}" />
+		<constructor-arg index="3" value="${es.nodeName}" />
+	</bean>
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	<context:component-scan base-package="com.wf.data" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+	
+<mapper namespace="com.wf.data.dao.mysql.UicGroupTypeDao">
+	<sql id="uicGroupTypeColumns">
+		t.id,
+		t.name,
+		t.parent_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="uicGroupTypeWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="uicGroupTypeJoins">
+	</sql>
+	
+	<select id="get" resultType="UicGroupType">
+		SELECT <include refid="uicGroupTypeColumns"/> FROM uic_group_type t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="UicGroupType">
+		SELECT <include refid="uicGroupTypeColumns"/> FROM uic_group_type t <include refid="uicGroupTypeJoins"/>
+		WHERE <include refid="uicGroupTypeWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM uic_group_type t WHERE <include refid="uicGroupTypeWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uic_group_type (
+			id, 
+			name, 
+			parent_id, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{parentId}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uic_group_type SET
+			name = #{name}, 
+			parent_id = #{parentId}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE uic_group_type SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
