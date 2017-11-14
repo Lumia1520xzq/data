@@ -41,8 +41,6 @@
     <import resource="classpath*:wf/spring-idg.xml"/>
     <import resource="classpath*:wf/spring-email.xml"/>
     <import resource="classpath*:wf/spring-event.xml"/>
-    <!--<import resource="classpath*:wf/spring-random.xml"/>-->
-    <!--<import resource="classpath*:wf/spring-sensitive.xml"/>-->
     <import resource="classpath:wf/spring-ehcache.xml"/>
 
     <import resource="app-disconf-data.xml"/>
