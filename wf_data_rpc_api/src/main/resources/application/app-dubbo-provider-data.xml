@@ -32,4 +32,9 @@
     <dubbo:service interface="com.wf.data.rpc.DataUicGroupRpcService"
                    ref="dataUicGroupRpcService" registry="registry" delay="-1"/>
 
+    <!--用户充值 monitor项目使用-->
+    <bean id="dataTransConvertRpcService" class="com.wf.data.rpc.impl.DataTransConvertRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataTransConvertRpcService"
+                   ref="dataTransConvertRpcService" registry="registry" delay="-1"/>
+
 </beans>
