@@ -2,7 +2,7 @@ package com.wf.data.rpc.impl;
 
 import com.google.common.collect.Lists;
 import com.wf.data.dao.entity.mysql.UicUserLog;
-import com.wf.data.rpc.UicUserLogRpcService;
+import com.wf.data.rpc.DataUicUserLogRpcService;
 import com.wf.data.rpc.dto.UicUserLogDto;
 import com.wf.data.service.UicUserLogService;
 import org.springframework.beans.BeanUtils;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UicUserLogRpcServiceImpl implements UicUserLogRpcService {
+public class DataUicUserLogRpcServiceImpl implements DataUicUserLogRpcService {
 
     @Autowired
     private UicUserLogService uicUserLogService;

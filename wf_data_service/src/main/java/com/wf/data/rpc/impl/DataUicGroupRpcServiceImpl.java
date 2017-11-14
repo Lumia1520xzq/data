@@ -2,7 +2,7 @@ package com.wf.data.rpc.impl;
 
 import com.google.common.collect.Lists;
 import com.wf.data.dao.entity.mysql.UicGroup;
-import com.wf.data.rpc.UicGroupRpcService;
+import com.wf.data.rpc.DataUicGroupRpcService;
 import com.wf.data.rpc.dto.UicGroupDto;
 import com.wf.data.service.UicGroupService;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author jijie.chen
  */
 @Service
-public class UicGroupRpcServiceImpl implements UicGroupRpcService {
+public class DataUicGroupRpcServiceImpl implements DataUicGroupRpcService {
 
     @Autowired
     private UicGroupService uicGroupService;

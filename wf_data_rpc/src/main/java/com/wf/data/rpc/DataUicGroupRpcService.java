@@ -1,15 +1,13 @@
 package com.wf.data.rpc;
 
 import com.wf.data.rpc.dto.UicGroupDto;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author jijie.chen
  */
-@Service
-public interface UicGroupRpcService {
+public interface DataUicGroupRpcService {
     /**
      * 根据组获取组中的所有用户， 多个组以逗号分隔
      *

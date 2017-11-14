@@ -1,12 +1,10 @@
 package com.wf.data.rpc;
 
 import com.wf.data.rpc.dto.UicUserLogDto;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public interface UicUserLogRpcService {
+public interface DataUicUserLogRpcService {
 
     List<String> findIpByIpCount(UicUserLogDto log);
 
