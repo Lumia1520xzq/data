@@ -8,6 +8,8 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.entity.dto.UicDto;
 import com.wf.data.dao.entity.mycat.UicUser;
+import com.wf.data.service.DataConfigService;
+import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.elasticsearch.EsTransCommonService;
 import com.wf.data.service.elasticsearch.EsUicCommonService;
@@ -15,7 +17,6 @@ import com.wf.data.service.elasticsearch.EsUicPlatformService;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
@@ -32,15 +33,13 @@ import java.util.Map;
 public class UserInfoListJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private EsUicPlatformService esUicPlatformService;
-    @Autowired
-    private EsTransCommonService esTransCommonService;
-    @Autowired
-    private EsUicCommonService esUicCommonService;
-    @Autowired
-    private TransConvertService transConvertService;
 
+    private final EsUicPlatformService esUicPlatformService = SpringContextHolder.getBean(EsUicPlatformService.class);
+    private final EsTransCommonService esTransCommonService = SpringContextHolder.getBean(EsTransCommonService.class);
+    private final EsUicCommonService esUicCommonService = SpringContextHolder.getBean(EsUicCommonService.class);
+    private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
+    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     public void execute() {
         logger.info("用户信息列表分析开始。。。。。。。。");
 
@@ -76,8 +75,8 @@ public class UserInfoListJob {
 
     private String getRechargeList(Long channelId) {
         String userTemplate = "<table border='1'>";
-        Map<String,Object> map = new HashMap<>();
-        map.put("channelId",channelId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("channelId", channelId);
         List<Long> logList = transConvertService.getRechargeUserIdsByDay(map);
         for (Long userId : logList) {
             UicUser user = esUicPlatformService.get(userId);
@@ -329,11 +328,10 @@ public class UserInfoListJob {
     }
 
     private void sendEmail(String template, String title) {
-        ConfigRpcService configRpcService = SpringContextHolder.getBean(ConfigRpcService.class);
-        EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
+
         try {
             // 获取收件人
-            String receivers = configRpcService.findByName(DataConstants.USERINFO_DATA_RECEIVER).getValue();
+            String receivers = dataConfigService.findByName(DataConstants.USERINFO_DATA_RECEIVER).getValue();
             if (StringUtils.isNotEmpty(receivers)) {
                 // 发送邮件
                 for (String to : receivers.split(",")) {

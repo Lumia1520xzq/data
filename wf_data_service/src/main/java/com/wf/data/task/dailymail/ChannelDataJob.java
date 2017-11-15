@@ -11,8 +11,10 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.entity.mysql.ReportGameInfo;
 import com.wf.data.service.ReportChangeNoteService;
+import com.wf.data.service.RoomFishInfoNewService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
+import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import com.wf.data.service.elasticsearch.EsUicChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +34,13 @@ import java.util.Map;
 @Component
 public class ChannelDataJob  {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private ReportChangeNoteService reportChangeNoteService;
-    @Autowired
-    private UicGroupService uicGroupService;
-    @Autowired
-    private TransConvertService transConvertService;
-    @Autowired
-    private EsUicChannelService channelService;
 
-    private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse'>" 
+	private final ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
+	private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
+	private final EsUicChannelService channelService = SpringContextHolder.getBean(EsUicChannelService.class);
+	private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+
+    private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse'>"
     +"<tr style='font-weight:bold'><td>渠道</td><td>充值金额</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>充值用户数</td><td>付费渗透率</td><td>投注流水</td><td>返奖流水</td><td>返奖率</td><td>新增人数</td><td>新用户投注转化率</td><td>新用户次留</td></tr>";
     private final String TABLE_END = "</table>";
     private final String TEMPLATE="<tr><td>channel</td><td>rechargeSum</td><td>activeUser</td><td>bettingUser</td><td>bettingRate</td><td>rechargeUser</td><td>payRate</td><td>cathecticMoney</td><td>winMoney</td><td>winMoneyRate</td><td>newUser</td><td>newBettingRate</td><td>newRemainRate</td></tr>";

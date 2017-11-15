@@ -1,6 +1,7 @@
 package com.wf.data.task.dataclean;
 
 import com.wf.base.rpc.ConfigRpcService;
+import com.wf.core.email.EmailHander;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
@@ -9,11 +10,9 @@ import com.wf.data.dao.entity.mycat.UicUser;
 import com.wf.data.dao.entity.mysql.ReportGrayUser;
 import com.wf.data.dao.entity.mysql.UicGroup;
 import com.wf.data.dao.entity.mysql.UicUserLog;
-import com.wf.data.service.ReportGrayUserService;
-import com.wf.data.service.TransConvertService;
-import com.wf.data.service.UicGroupService;
-import com.wf.data.service.UicUserLogService;
+import com.wf.data.service.*;
 import com.wf.data.service.elasticsearch.EsGrayService;
+import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,17 +33,12 @@ import java.util.Map;
 @Component
 public class GrayUserJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private ReportGrayUserService reportGrayUserService;
-    @Autowired
-    private UicGroupService uicGroupService;
-    @Autowired
-    private TransConvertService transConvertService;
-    @Autowired
-    private EsGrayService grayService;
-    @Autowired
-    private UicUserLogService logService;
-
+    private final UicUserLogService logService = SpringContextHolder.getBean(UicUserLogService.class);
+    private final ReportGrayUserService reportGrayUserService = SpringContextHolder.getBean(ReportGrayUserService.class);
+    private final EsGrayService grayService = SpringContextHolder.getBean(EsGrayService.class);
+    private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
+    private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
 
     public void execute() {
         logger.info("开始灰名单用户监控分析");
@@ -114,9 +108,8 @@ public class GrayUserJob {
     }
 
     private List<String> getWfIpsList() {
-        ConfigRpcService configRpcService = SpringContextHolder.getBean(ConfigRpcService.class);
         // 获取公司ip
-        String wfIps = configRpcService.findByName(DataConstants.MONITOR_RISK_WF_IPS).getValue();
+        String wfIps = dataConfigService.findByName(DataConstants.MONITOR_RISK_WF_IPS).getValue();
         String[] wfIpsArr = wfIps.split(",");
         List<String> wfIpsList = Arrays.asList(wfIpsArr);
         return wfIpsList;

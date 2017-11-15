@@ -11,8 +11,10 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.entity.mysql.ReportGameInfo;
 import com.wf.data.service.ReportChangeNoteService;
+import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsClubService;
+import com.wf.data.service.elasticsearch.EsUicChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +33,12 @@ import java.util.*;
 @Component
 public class ClubBettingJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired
-	private UicGroupService uicGroupService;
-	@Autowired
-	private ReportChangeNoteService reportService;
-	@Autowired
-	private EsClubService clubService;
-	
+
+    private final ReportChangeNoteService reportService = SpringContextHolder.getBean(ReportChangeNoteService.class);
+    private final EsClubService clubService = SpringContextHolder.getBean(EsClubService.class);
+    private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+
+
     private static final Long CLUB_ANDROID_CHANNEL = 400001001L;
     
     private static final Long CLUB_IOS_CHANNEL = 500001001L;
