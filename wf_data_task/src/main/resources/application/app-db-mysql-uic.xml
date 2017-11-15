@@ -25,6 +25,7 @@
 
 	<bean id="uicMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
 		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="uicReadDataSource" />
 		<property name="targetDataSources">
 			<map>
 				<entry value-ref="uicReadDataSource" key="dataSourceRead" />

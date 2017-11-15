@@ -31,11 +31,7 @@ import java.util.Map;
 public class AllGameDayReportJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
-    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
-    private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
-    private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+
 
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
@@ -51,7 +47,8 @@ public class AllGameDayReportJob {
 
     public void execute() {
         logger.info("游戏数据日报表分析");
-
+        DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+        EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
@@ -160,7 +157,7 @@ public class AllGameDayReportJob {
 
     //投注信息 
     private ReportGameInfo getBettingInfo(Integer gameType, String date) {
-
+        ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("beginDate", date + " 00:00:00");
         params.put("endDate", date + " 23:59:59");
@@ -172,7 +169,7 @@ public class AllGameDayReportJob {
 
     //投注用户数 
     private Integer getCathecticUserNum(Integer gameType, String date) {
-
+        ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("beginDate", date + " 00:00:00");
         params.put("endDate", date + " 23:59:59");
@@ -184,7 +181,7 @@ public class AllGameDayReportJob {
 
     //查询内部人员的Id
     private List<Long> getInternalUserIds() {
-
+        UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
         List<Long> userIds = uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
         return userIds;
     }
@@ -212,7 +209,7 @@ public class AllGameDayReportJob {
      * @return
      */
     private String getTempOne(Integer gameType, String date) {
-
+        EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
         // 1、新增用户数
         Integer newUser = gameService.getNewUser(gameType, date);
         // 2、活跃用户
@@ -266,7 +263,7 @@ public class AllGameDayReportJob {
      * 趋势(前7天~前1天)
      */
     private String getTempTwo(Integer gameType, String date) {
-
+        EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
         StringBuffer sb = new StringBuffer();
         String beginDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 7));
         String endDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 1));
