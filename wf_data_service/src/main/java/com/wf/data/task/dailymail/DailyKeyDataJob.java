@@ -6,7 +6,7 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.entity.mysql.ReportGameInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
@@ -27,7 +27,6 @@ import java.util.Map;
  *
  * @author jdd
  */
-@Component
 public class DailyKeyDataJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

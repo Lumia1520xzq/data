@@ -6,7 +6,7 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.entity.mysql.UicUserLog;
+import com.wf.data.dao.uic.entity.UicUserLog;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.UicUserLogService;
 import org.slf4j.Logger;
@@ -23,7 +23,6 @@ import java.util.List;
  * @author chengsheng.liu
  * @date 2017年9月25日
  */
-@Component
 public class IpInfoListJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

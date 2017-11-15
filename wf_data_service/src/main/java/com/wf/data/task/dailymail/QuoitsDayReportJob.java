@@ -8,7 +8,7 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.entity.mysql.ReportGameInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
@@ -28,7 +28,6 @@ import java.util.Map;
  * @author jianjian.huang
  *         2017年8月23日
  */
-@Component
 public class QuoitsDayReportJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

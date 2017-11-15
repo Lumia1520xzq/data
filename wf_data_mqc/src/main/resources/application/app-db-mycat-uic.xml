@@ -34,7 +34,7 @@
 
 	<bean id="mycatUicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mycatUicMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mycat" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.data.entity.mycat" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mycat/uic/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>

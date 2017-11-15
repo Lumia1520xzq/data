@@ -9,15 +9,12 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.entity.mysql.ReportGameInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.ReportChangeNoteService;
-import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsClubService;
-import com.wf.data.service.elasticsearch.EsUicChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
@@ -30,7 +27,6 @@ import java.util.*;
  * 处理获取数据失败问题，重试15次
  * Created by jianjian on 2017/10/23
  */
-@Component
 public class ClubBettingJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

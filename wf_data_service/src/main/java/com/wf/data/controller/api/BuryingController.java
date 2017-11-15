@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import com.wf.data.common.DataBaseController;
 import com.wf.data.controller.request.BuryingPointRequest;
-import com.wf.data.dao.entity.mycat.BuryingPoint;
+import com.wf.data.dao.mycat.entity.BuryingPoint;
 import com.wf.data.service.BuryingPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,5 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.base.rpc.ConfigRpcService;
 import com.wf.core.email.EmailHander;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
@@ -8,7 +7,7 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
-import com.wf.data.dao.entity.mysql.TransChangeNote;
+import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.elasticsearch.EsUicBuryingPointService;
@@ -27,7 +26,6 @@ import java.util.*;
  *
  * @author jianjian.huang
  */
-@Component
 public class DailyDataJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

@@ -1,15 +1,13 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.base.rpc.ConfigRpcService;
 import com.wf.core.email.EmailHander;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.entity.dto.UicDto;
-import com.wf.data.dao.entity.mycat.UicUser;
+import com.wf.data.dto.UicDto;
+import com.wf.data.dao.uic.entity.UicUser;
 import com.wf.data.service.DataConfigService;
-import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.elasticsearch.EsTransCommonService;
 import com.wf.data.service.elasticsearch.EsUicCommonService;
@@ -29,7 +27,6 @@ import java.util.Map;
  * @author chengsheng.liu
  * @date 2017年9月25日
  */
-@Component
 public class UserInfoListJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

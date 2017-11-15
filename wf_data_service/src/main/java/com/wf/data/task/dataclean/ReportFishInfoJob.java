@@ -2,7 +2,7 @@ package com.wf.data.task.dataclean;
 
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.entity.mysql.ReportFishBettingInfo;
+import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.service.ReportFishBettingInfoService;
 import com.wf.data.service.RoomFishInfoNewService;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import java.util.Map;
  * @author chengsheng.liu
  * @date 2017年9月25日
  */
-@Component
 public class ReportFishInfoJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

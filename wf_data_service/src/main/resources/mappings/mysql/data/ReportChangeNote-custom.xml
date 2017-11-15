@@ -4,7 +4,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.mysql.ReportChangeNoteDao">
+<mapper namespace="com.wf.data.dao.data.ReportChangeNoteDao">
 
 	<select id="getCathecticNum" resultType="Long">
 	select IFNULL(count(id),0) from `report_change_note`

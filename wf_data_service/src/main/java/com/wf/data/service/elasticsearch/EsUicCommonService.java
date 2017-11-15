@@ -5,7 +5,7 @@ import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
-import com.wf.data.dao.entity.dto.UicDto;
+import com.wf.data.dto.UicDto;
 import com.wf.data.service.UicGroupService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;

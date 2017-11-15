@@ -3,10 +3,10 @@ package com.wf.data.service;
 
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.entity.mysql.ReportFishBettingInfo;
-import com.wf.data.dao.entity.mysql.ReportGameInfo;
-import com.wf.data.dao.entity.mysql.RoomFishInfoNew;
-import com.wf.data.dao.mysql.RoomFishInfoNewDao;
+import com.wf.data.dao.data.entity.ReportFishBettingInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dao.fish.entity.RoomFishInfoNew;
+import com.wf.data.dao.fish.RoomFishInfoNewDao;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

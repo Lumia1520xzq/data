@@ -35,14 +35,14 @@
 
 	<bean id="transSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="transMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mysql" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.data" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mysql/trans/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="transSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.data.dao.mysql" />
+		<property name="basePackage" value="com.wf.data.dao.data" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 

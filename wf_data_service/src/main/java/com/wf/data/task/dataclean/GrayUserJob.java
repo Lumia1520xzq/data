@@ -1,22 +1,18 @@
 package com.wf.data.task.dataclean;
 
-import com.wf.base.rpc.ConfigRpcService;
-import com.wf.core.email.EmailHander;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.entity.mycat.UicUser;
-import com.wf.data.dao.entity.mysql.ReportGrayUser;
-import com.wf.data.dao.entity.mysql.UicGroup;
-import com.wf.data.dao.entity.mysql.UicUserLog;
+import com.wf.data.dao.uic.entity.UicUser;
+import com.wf.data.dao.data.entity.ReportGrayUser;
+import com.wf.data.dao.uic.entity.UicGroup;
+import com.wf.data.dao.uic.entity.UicUserLog;
 import com.wf.data.service.*;
 import com.wf.data.service.elasticsearch.EsGrayService;
-import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -30,7 +26,6 @@ import java.util.Map;
  * @author jianjian huang
  *         2017年8月23日
  */
-@Component
 public class GrayUserJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final UicUserLogService logService = SpringContextHolder.getBean(UicUserLogService.class);

@@ -1,14 +1,9 @@
 package com.wf.data.rpc.impl;
 
 import com.google.common.collect.Lists;
-import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.entity.mysql.ReportGrayUser;
-import com.wf.data.dao.entity.mysql.UicGroup;
-import com.wf.data.dao.entity.mysql.UicUserLog;
+import com.wf.data.dao.data.entity.ReportGrayUser;
 import com.wf.data.rpc.DataReportGrayUserRpcService;
 import com.wf.data.rpc.dto.DataReportGrayUserDto;
-import com.wf.data.rpc.dto.DataUicGroupDto;
-import com.wf.data.rpc.dto.JsonResult;
 import com.wf.data.service.ReportGrayUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;

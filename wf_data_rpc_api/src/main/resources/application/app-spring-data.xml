@@ -23,6 +23,10 @@
     <import resource="app-dubbo-provider-data.xml"/>
     <import resource="app-dubbo-consumer.xml"/>
 
+    <import resource="app-db-mysql-fish.xml" />
+    <import resource="app-db-mysql-trans.xml" />
+    <import resource="app-db-mysql-uic.xml" />
+
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
         <constructor-arg index="0" value="${es.ips}" />
         <constructor-arg index="1" value="${es.clusterName}" />
