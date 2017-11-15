@@ -3,7 +3,7 @@ package com.wf.data.rpc.impl;
 import com.google.common.collect.Lists;
 import com.wf.data.dao.entity.mysql.UicUserLog;
 import com.wf.data.rpc.DataUicUserLogRpcService;
-import com.wf.data.rpc.dto.UicUserLogDto;
+import com.wf.data.rpc.dto.DataUicUserLogDto;
 import com.wf.data.service.UicUserLogService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class DataUicUserLogRpcServiceImpl implements DataUicUserLogRpcService {
     private UicUserLogService uicUserLogService;
 
     @Override
-    public List<String> findIpByIpCount(UicUserLogDto logDto) {
+    public List<String> findIpByIpCount(DataUicUserLogDto logDto) {
         UicUserLog log = new UicUserLog();
         BeanUtils.copyProperties(logDto, log);
         List<String> ipList = uicUserLogService.findIpByIpCount(log);
@@ -27,15 +27,15 @@ public class DataUicUserLogRpcServiceImpl implements DataUicUserLogRpcService {
 
 
     @Override
-    public List<UicUserLogDto> findUserLogByIp(UicUserLogDto logDto) {
-        List<UicUserLogDto> list = Lists.newArrayList();
+    public List<DataUicUserLogDto> findUserLogByIp(DataUicUserLogDto logDto) {
+        List<DataUicUserLogDto> list = Lists.newArrayList();
         UicUserLog log = new UicUserLog();
         BeanUtils.copyProperties(logDto, log);
 
         List<UicUserLog> uicUserLogs = uicUserLogService.findUserLogByIp(log);
         if (null != uicUserLogs && uicUserLogs.size() > 0) {
             for (UicUserLog item : uicUserLogs) {
-                UicUserLogDto dto = new UicUserLogDto();
+                DataUicUserLogDto dto = new DataUicUserLogDto();
                 BeanUtils.copyProperties(dto, item);
                 list.add(dto);
             }
@@ -49,10 +49,10 @@ public class DataUicUserLogRpcServiceImpl implements DataUicUserLogRpcService {
     }
 
     @Override
-    public UicUserLogDto getUserCountByIp(List<String> ips) {
+    public DataUicUserLogDto getUserCountByIp(List<String> ips) {
         UicUserLog log = uicUserLogService.getUserCountByIp(ips);
         if(null != log){
-            UicUserLogDto dto = new UicUserLogDto();
+            DataUicUserLogDto dto = new DataUicUserLogDto();
             BeanUtils.copyProperties(dto, log);
             return dto;
         }

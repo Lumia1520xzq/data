@@ -4,7 +4,7 @@ package com.wf.data.rpc.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UicGroupDto implements Serializable {
+public class DataUicGroupDto implements Serializable {
 	private static final long serialVersionUID = -1;
 	private Long userId;
 	private String userData;

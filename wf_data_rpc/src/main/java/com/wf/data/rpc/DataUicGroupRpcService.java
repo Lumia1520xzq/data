@@ -1,6 +1,6 @@
 package com.wf.data.rpc;
 
-import com.wf.data.rpc.dto.UicGroupDto;
+import com.wf.data.rpc.dto.DataUicGroupDto;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public interface DataUicGroupRpcService {
      * @param groupIds
      * @return
      */
-    List<UicGroupDto> getInGroupByUserId(Long userId, List<Long> groupIds);
+    List<DataUicGroupDto> getInGroupByUserId(Long userId, List<Long> groupIds);
 
 
 }

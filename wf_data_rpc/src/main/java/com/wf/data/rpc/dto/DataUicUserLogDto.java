@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class UicUserLogDto implements Serializable {
+public class DataUicUserLogDto implements Serializable {
 	private static final long serialVersionUID = -1;
 	private Long userId;
 	private Integer type;

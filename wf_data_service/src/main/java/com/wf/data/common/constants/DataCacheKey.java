@@ -13,7 +13,10 @@ public enum DataCacheKey implements CacheKey {
 	 * 渠道信息
 	 */
 	CHANNEL_INFO,
-	UIC_USER_BEHAVIORTYPE_BY_EVENTID
+	UIC_USER_BEHAVIORTYPE_BY_EVENTID,
+
+	DATA_CONFIG_BY_NAME,
+
 	;
 	private final String value;
 	private DataCacheKey() {

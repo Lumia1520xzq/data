@@ -1,16 +1,16 @@
 package com.wf.data.rpc;
 
-import com.wf.data.rpc.dto.UicUserLogDto;
+import com.wf.data.rpc.dto.DataUicUserLogDto;
 
 import java.util.List;
 
 public interface DataUicUserLogRpcService {
 
-    List<String> findIpByIpCount(UicUserLogDto log);
+    List<String> findIpByIpCount(DataUicUserLogDto log);
 
-    List<UicUserLogDto> findUserLogByIp(UicUserLogDto log);
+    List<DataUicUserLogDto> findUserLogByIp(DataUicUserLogDto log);
 
     List<String> findIpByUserId(Long userId);
 
-    UicUserLogDto getUserCountByIp(List<String> ips);
+    DataUicUserLogDto getUserCountByIp(List<String> ips);
 }

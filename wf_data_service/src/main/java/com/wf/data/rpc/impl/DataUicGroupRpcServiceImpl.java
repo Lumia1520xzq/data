@@ -3,7 +3,7 @@ package com.wf.data.rpc.impl;
 import com.google.common.collect.Lists;
 import com.wf.data.dao.entity.mysql.UicGroup;
 import com.wf.data.rpc.DataUicGroupRpcService;
-import com.wf.data.rpc.dto.UicGroupDto;
+import com.wf.data.rpc.dto.DataUicGroupDto;
 import com.wf.data.service.UicGroupService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,12 @@ public class DataUicGroupRpcServiceImpl implements DataUicGroupRpcService {
     }
 
     @Override
-    public List<UicGroupDto> getInGroupByUserId(Long userId, List<Long> groupIds) {
-        List<UicGroupDto> list = Lists.newArrayList();
+    public List<DataUicGroupDto> getInGroupByUserId(Long userId, List<Long> groupIds) {
+        List<DataUicGroupDto> list = Lists.newArrayList();
         List<UicGroup> uicGroups = uicGroupService.getInGroupByUserId(userId, groupIds);
         if (null != uicGroups && uicGroups.size() > 0) {
             for (UicGroup uicGroup : uicGroups) {
-                UicGroupDto dto = new UicGroupDto();
+                DataUicGroupDto dto = new DataUicGroupDto();
                 BeanUtils.copyProperties(uicGroup, dto);
                 list.add(dto);
             }

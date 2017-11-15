@@ -37,4 +37,11 @@
     <dubbo:service interface="com.wf.data.rpc.DataTransConvertRpcService"
                    ref="dataTransConvertRpcService" registry="registry" delay="-1"/>
 
+    <bean id="dataReportGrayUserRpcService" class="com.wf.data.rpc.impl.DataReportGrayUserRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataReportGrayUserRpcService"
+                   ref="dataReportGrayUserRpcService" registry="registry" delay="-1"/>
+
+    <bean id="dataConfigRpcService" class="com.wf.data.rpc.impl.DataConfigRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataConfigRpcService"
+                   ref="dataConfigRpcService" registry="registry" delay="-1"/>
 </beans>
