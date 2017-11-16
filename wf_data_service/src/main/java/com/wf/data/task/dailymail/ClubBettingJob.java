@@ -10,6 +10,7 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsClubService;
@@ -33,7 +34,8 @@ public class ClubBettingJob {
     private final ReportChangeNoteService reportService = SpringContextHolder.getBean(ReportChangeNoteService.class);
     private final EsClubService clubService = SpringContextHolder.getBean(EsClubService.class);
     private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
-
+    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
 
     private static final Long CLUB_ANDROID_CHANNEL = 400001001L;
     
@@ -79,8 +81,7 @@ public class ClubBettingJob {
     
     public void execute() {
         logger.info("开始投注人数分析");
-        ConfigRpcService configRpcService = SpringContextHolder.getBean(ConfigRpcService.class);
-        EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
+
         byte count = 0;
         Calendar cal = Calendar.getInstance();
         Date currDate = cal.getTime();
@@ -88,7 +89,7 @@ public class ClubBettingJob {
         cal.add(Calendar.HOUR_OF_DAY, -1); 
         while (count <= 15) {
             try {
-                String receivers = configRpcService.findByName(DataConstants.CLUB_BETTING_DATA_RECEIVER).getValue();
+                String receivers = dataConfigService.findByName(DataConstants.CLUB_BETTING_DATA_RECEIVER).getValue();
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
                     content.append(EMAIL_STYLE);

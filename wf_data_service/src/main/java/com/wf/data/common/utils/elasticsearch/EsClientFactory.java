@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wf.core.persistence.Page;
 import com.wf.data.common.utils.JsonHelper;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -193,13 +194,21 @@ public class EsClientFactory implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        pool = new GenericObjectPool(this.poolFactory);
-        pool.setMaxActive(20); // 能从池中借出的对象的最大数目
-        pool.setMaxIdle(20); // 池中可以空闲对象的最大数目
-        pool.setMaxWait(100); //对象池空时调用borrowObject方法，最多等待多少毫秒
-        pool.setTimeBetweenEvictionRunsMillis(600000);// 间隔每过多少毫秒进行一次后台对象清理的行动
-        pool.setNumTestsPerEvictionRun(-1);// －1表示清理时检查所有线程
-        pool.setMinEvictableIdleTimeMillis(3000);// 设定在进行后台对象清理时，休眠时间超过了3000毫秒的对象为过期
+        GenericObjectPoolConfig config = new GenericObjectPoolConfig();
+        config.setMaxTotal(20);// 整个池最大值
+        config.setMaxIdle(8);// 最大空闲
+        config.setMinIdle(0);// 最小空闲
+        config.setMaxWaitMillis(2000);// 最大等待时间，-1表示一直等
+        config.setBlockWhenExhausted(true);// 当对象池没有空闲对象时，新的获取对象的请求是否阻塞。true阻塞。默认值是true
+        config.setTestOnBorrow(false);// 在从对象池获取对象时是否检测对象有效，true是；默认值是false
+        config.setTestOnReturn(false);// 在向对象池中归还对象时是否检测对象有效，true是，默认值是false
+        config.setTestWhileIdle(false);// 在检测空闲对象线程检测到对象不需要移除时，是否检测对象的有效性。true是，默认值是false
+        config.setMinEvictableIdleTimeMillis(3000); // 可发呆的时间
+        config.setTestWhileIdle(false); // 发呆过长移除的时候是否test一下先
+
+        pool = new GenericObjectPool(this.poolFactory,config);
+
+
         logger.info("连接池已经初始化");
     }
 }
