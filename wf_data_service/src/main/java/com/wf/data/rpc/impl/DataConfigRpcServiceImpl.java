@@ -31,30 +31,30 @@ public class DataConfigRpcServiceImpl implements DataConfigRpcService{
 
     @Override
     public boolean getBooleanValueByName(String name) {
-        return false;
+        return dataConfigService.getBooleanValueByName(name);
     }
 
 
     @Override
     public double getDoubleValueByName(String name) {
-        return 0;
+        return dataConfigService.getDoubleValueByName(name);
     }
 
     @Override
     public float getFloatValueByName(String name) {
-        return 0;
+        return dataConfigService.getFloatValueByName(name);
     }
 
 
     @Override
     public int getIntValueByName(String name) {
-        return 0;
+        return dataConfigService.getIntValueByName(name);
     }
 
 
     @Override
     public long getLongValueByName(String name) {
-        return 0;
+        return dataConfigService.getLongValueByName(name);
     }
 
 }
