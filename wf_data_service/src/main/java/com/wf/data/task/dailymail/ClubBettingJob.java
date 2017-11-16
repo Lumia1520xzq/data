@@ -9,13 +9,12 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.entity.mysql.ReportGameInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsClubService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
@@ -28,16 +27,14 @@ import java.util.*;
  * 处理获取数据失败问题，重试15次
  * Created by jianjian on 2017/10/23
  */
-@Component
 public class ClubBettingJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired
-	private UicGroupService uicGroupService;
-	@Autowired
-	private ReportChangeNoteService reportService;
-	@Autowired
-	private EsClubService clubService;
-	
+
+    private final ReportChangeNoteService reportService = SpringContextHolder.getBean(ReportChangeNoteService.class);
+    private final EsClubService clubService = SpringContextHolder.getBean(EsClubService.class);
+    private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+
+
     private static final Long CLUB_ANDROID_CHANNEL = 400001001L;
     
     private static final Long CLUB_IOS_CHANNEL = 500001001L;

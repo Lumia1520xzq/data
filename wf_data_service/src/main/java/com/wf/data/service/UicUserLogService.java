@@ -1,8 +1,8 @@
 package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.entity.mysql.UicUserLog;
-import com.wf.data.dao.mysql.UicUserLogDao;
+import com.wf.data.dao.uic.entity.UicUserLog;
+import com.wf.data.dao.uic.UicUserLogDao;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

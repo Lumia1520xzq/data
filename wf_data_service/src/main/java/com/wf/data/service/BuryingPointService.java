@@ -3,7 +3,7 @@ package com.wf.data.service;
 import com.wf.core.service.CrudService;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.MapUtils;
-import com.wf.data.dao.entity.mycat.BuryingPoint;
+import com.wf.data.dao.mycat.entity.BuryingPoint;
 import com.wf.data.dao.mycat.BuryingPointDao;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

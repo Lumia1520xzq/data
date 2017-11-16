@@ -8,7 +8,7 @@ import com.wf.data.common.constants.EsContents;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
-import com.wf.data.dao.entity.mycat.UicUser;
+import com.wf.data.dao.uic.entity.UicUser;
 import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;

@@ -1,12 +1,12 @@
 package com.wf.data.task.dataclean;
 
+import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.entity.mysql.ReportFishBettingInfo;
+import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.service.ReportFishBettingInfoService;
 import com.wf.data.service.RoomFishInfoNewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -18,14 +18,13 @@ import java.util.Map;
  * @author chengsheng.liu
  * @date 2017年9月25日
  */
-@Component
 public class ReportFishInfoJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private RoomFishInfoNewService roomFishInfoNewService;
-    @Autowired
-    private ReportFishBettingInfoService reportFishBettingInfoService;
+
+    private final RoomFishInfoNewService roomFishInfoNewService = SpringContextHolder.getBean(RoomFishInfoNewService.class);
+    private final ReportFishBettingInfoService reportFishBettingInfoService = SpringContextHolder.getBean(ReportFishBettingInfoService.class);
+
 
     public void execute() {
         logger.info("捕鱼数据清洗开始。。。。。。。。");

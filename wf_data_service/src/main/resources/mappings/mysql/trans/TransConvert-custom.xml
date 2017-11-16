@@ -3,7 +3,7 @@
 PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
-<mapper namespace="com.wf.data.dao.mysql.TransConvertDao">
+<mapper namespace="com.wf.data.dao.trans.TransConvertDao">
 	
 	<select id="getConvertUserId" resultType="TransConvert">
 		SELECT user_id,MIN(create_time) create_time from trans_convert where status = 8 and delete_flag = 0 group by user_id

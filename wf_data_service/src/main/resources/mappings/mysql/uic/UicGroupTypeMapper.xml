@@ -5,7 +5,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 	
-<mapper namespace="com.wf.data.dao.mysql.UicGroupTypeDao">
+<mapper namespace="com.wf.data.dao.uic.UicGroupTypeDao">
 	<sql id="uicGroupTypeColumns">
 		t.id,
 		t.name,

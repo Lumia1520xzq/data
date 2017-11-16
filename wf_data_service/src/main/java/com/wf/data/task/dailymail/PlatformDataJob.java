@@ -1,6 +1,5 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.base.rpc.ConfigRpcService;
 import com.wf.core.email.EmailHander;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
@@ -9,14 +8,14 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.entity.mysql.ReportGameInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsUicPlatformService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
@@ -29,17 +28,16 @@ import java.util.Map;
  * @author jianjian huang
  * 2017年8月23日 
  */
-@Component
 public class PlatformDataJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private EsUicPlatformService platformService;
-    @Autowired
-    private ReportChangeNoteService reportChangeNoteService;
-    @Autowired
-    private UicGroupService uicGroupService;
-    @Autowired
-    private TransConvertService transConvertService;
+
+
+	private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+	private final ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
+	private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
+	private final EsUicPlatformService platformService = SpringContextHolder.getBean(EsUicPlatformService.class);
+	private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
+	private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse'>" 
     +"<tr><td rowspan='27' bgcolor='#DDDDDD' width='120'><span>平台数据报表</span><br/><span>dateTime日</span></td><td colspan='10' bgcolor='#DDDDDD'>基础数据</td></tr>" 
@@ -55,15 +53,13 @@ public class PlatformDataJob {
 
     public void execute() {
 	logger.info("开始平台数据报表分析");
-	ConfigRpcService configRpcService = SpringContextHolder.getBean(ConfigRpcService.class);
-	EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
 	byte count = 0;
 	// 昨天的开始时间
 	String date = DateUtils.getYesterdayDate();
 	while (count <= 5) {
 	    try {
 		// 获取收件人 ------ 收件人要改
-		String receivers = configRpcService.findByName(DataConstants.PLATFORM_DATA_RECEIVER).getValue();
+		String receivers = dataConfigService.findByName(DataConstants.PLATFORM_DATA_RECEIVER).getValue();
 		if (StringUtils.isNotEmpty(receivers)) {
 		    StringBuilder content = new StringBuilder();
 		    content.append(buildPlatformInfo(date));
@@ -129,7 +125,6 @@ public class PlatformDataJob {
     
     /**
      * 整合
-     * @param gameType
      * @param date
      * @return
      */

@@ -1,7 +1,7 @@
 package com.wf.data.rpc.impl;
 
 import com.google.common.collect.Lists;
-import com.wf.data.dao.entity.mysql.UicUserLog;
+import com.wf.data.dao.uic.entity.UicUserLog;
 import com.wf.data.rpc.DataUicUserLogRpcService;
 import com.wf.data.rpc.dto.DataUicUserLogDto;
 import com.wf.data.service.UicUserLogService;

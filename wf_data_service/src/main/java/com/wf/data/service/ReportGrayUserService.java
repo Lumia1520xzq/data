@@ -1,8 +1,8 @@
 package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.entity.mysql.ReportGrayUser;
-import com.wf.data.dao.mysql.ReportGrayUserDao;
+import com.wf.data.dao.data.entity.ReportGrayUser;
+import com.wf.data.dao.data.ReportGrayUserDao;
 import org.springframework.stereotype.Service;
 
 @Service

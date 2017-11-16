@@ -4,10 +4,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.mysql.RoomFishInfoNewDao">
+<mapper namespace="com.wf.data.dao.fish.RoomFishInfoNewDao">
 
 	<!-- 捕鱼的投注信息 -->
-	<select id="findBettingInfoByDate" resultType="ReportGameInfo">
+	<select id="findBettingInfoByDate" resultType="com.wf.data.dao.data.entity.ReportGameInfo">
 		SELECT
 		<choose>  
             <when test="searchType ==1">
@@ -70,7 +70,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-	<select id="findFishDateByDate" resultType="ReportFishBettingInfo">
+	<select id="findFishDateByDate" resultType="com.wf.data.dao.data.entity.ReportFishBettingInfo">
 		SELECT
 		t.user_id userId,
 		t.channel_id channelId,
