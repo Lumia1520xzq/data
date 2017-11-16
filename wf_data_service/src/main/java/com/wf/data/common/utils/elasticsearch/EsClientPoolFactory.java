@@ -21,7 +21,7 @@ public class EsClientPoolFactory extends BasePooledObjectFactory<EsClient> {
 
     @Override
     public EsClient create() throws Exception {
-
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
         Settings settings = Settings.builder().put("cluster.name", esBean.getClusterName()).put("node.name", esBean.getNodeName()).put("client.transport.sniff", true).build();
         @SuppressWarnings("resource")
         TransportClient client = new PreBuiltTransportClient(settings);

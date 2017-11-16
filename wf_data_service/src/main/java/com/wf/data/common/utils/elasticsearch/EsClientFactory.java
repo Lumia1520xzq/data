@@ -184,10 +184,8 @@ public class EsClientFactory implements InitializingBean {
     }
 
     private EsClient getESClient() {
-        EsClient esClient = null;
         try {
-            esClient = pool.borrowObject();
-            return esClient;
+            return pool.borrowObject();
         } catch (Exception e) {
             throw new RuntimeException("线程池异常", e);
         }
@@ -209,7 +207,6 @@ public class EsClientFactory implements InitializingBean {
         config.setTestWhileIdle(false); // 发呆过长移除的时候是否test一下先
 
         pool = new GenericObjectPool<EsClient>(this.poolFactory,config);
-
 
         logger.info("连接池已经初始化");
     }
