@@ -14,7 +14,6 @@
 
     <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
     <dubbo:reference id="userRpcService" interface="com.wf.uic.rpc.UserRpcService"/>
-    <dubbo:reference id="emailHander" interface="com.wf.core.email.EmailHander "/>
 
     <dubbo:reference id="configRpcService" interface="com.wf.base.rpc.ConfigRpcService "/>
     <dubbo:reference id="userGroupRpcService" interface="com.wf.uic.rpc.UserGroupRpcService "/>
