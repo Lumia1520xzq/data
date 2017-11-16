@@ -10,6 +10,7 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
@@ -35,6 +36,8 @@ public class ChannelDataJob  {
 	private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
 	private final EsUicChannelService channelService = SpringContextHolder.getBean(EsUicChannelService.class);
 	private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+	private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+	private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse'>"
     +"<tr style='font-weight:bold'><td>渠道</td><td>充值金额</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>充值用户数</td><td>付费渗透率</td><td>投注流水</td><td>返奖流水</td><td>返奖率</td><td>新增人数</td><td>新用户投注转化率</td><td>新用户次留</td></tr>";
@@ -44,16 +47,14 @@ public class ChannelDataJob  {
 
     public void execute() {
 	logger.info("开始每日各渠道关键数据分析");
-	ConfigRpcService configRpcService = SpringContextHolder.getBean(ConfigRpcService.class);
-	EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
 
 		byte count = 0;
 	// 昨天的开始时间
 	String date = DateUtils.getYesterdayDate();
 	while (count <= 5) {
 	    try {
-		// 获取收件人 ------ 收件人要改
-		String receivers = configRpcService.findByName(DataConstants.CHANNEL_DATA_RECEIVER).getValue();
+		// 获取收件人
+		String receivers = dataConfigService.findByName(DataConstants.CHANNEL_DATA_RECEIVER).getValue();
 		if (StringUtils.isNotEmpty(receivers)) {
 		    StringBuilder content = new StringBuilder();
 		    content.append(CONTENT_TEMP_ONE);
