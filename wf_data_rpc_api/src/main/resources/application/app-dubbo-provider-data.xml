@@ -23,5 +23,25 @@
     <dubbo:service interface="com.wf.data.rpc.BehaviorRecordRpcService"
                    ref="dataBehaviorRecordRpcService" registry="registry" delay="-1"/>
 
+    <!--用户登录ip日志 monitor项目使用-->
+    <bean id="dataUserLogRpcService" class="com.wf.data.rpc.impl.DataUicUserLogRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataUicUserLogRpcService"
+                   ref="dataUserLogRpcService" registry="registry" delay="-1"/>
+    <!--用户分组 monitor项目使用-->
+    <bean id="dataUicGroupRpcService" class="com.wf.data.rpc.impl.DataUicGroupRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataUicGroupRpcService"
+                   ref="dataUicGroupRpcService" registry="registry" delay="-1"/>
 
+    <!--用户充值 monitor项目使用-->
+    <bean id="dataTransConvertRpcService" class="com.wf.data.rpc.impl.DataTransConvertRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataTransConvertRpcService"
+                   ref="dataTransConvertRpcService" registry="registry" delay="-1"/>
+
+    <bean id="dataReportGrayUserRpcService" class="com.wf.data.rpc.impl.DataReportGrayUserRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataReportGrayUserRpcService"
+                   ref="dataReportGrayUserRpcService" registry="registry" delay="-1"/>
+
+    <bean id="dataConfigRpcService" class="com.wf.data.rpc.impl.DataConfigRpcServiceImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataConfigRpcService"
+                   ref="dataConfigRpcService" registry="registry" delay="-1"/>
 </beans>

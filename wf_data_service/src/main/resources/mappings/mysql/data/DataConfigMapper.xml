@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataConfigDao">
+	
+	<sql id="dataConfigColumns">
+		t.id,
+		t.name,
+		t.value,
+		t.remark,
+		t.channel_id,
+		t.delete_flag,
+		t.create_time,
+		t.update_time
+	</sql>
+	
+	<sql id="dataConfigWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="dataConfigJoins">
+	</sql>
+	
+	<select id="get" resultType="DataConfig">
+		SELECT <include refid="dataConfigColumns"/> FROM data_config t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DataConfig">
+		SELECT <include refid="dataConfigColumns"/> FROM data_config t <include refid="dataConfigJoins"/>
+		WHERE <include refid="dataConfigWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM data_config t WHERE <include refid="dataConfigWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO data_config (
+			id, 
+			name, 
+			value, 
+			remark, 
+			channel_id, 
+			delete_flag, 
+			create_time, 
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{value}, 
+			#{remark}, 
+			#{channelId}, 
+			#{deleteFlag}, 
+			#{createTime}, 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE data_config SET
+			name = #{name}, 
+			value = #{value}, 
+			remark = #{remark}, 
+			channel_id = #{channelId}, 
+			delete_flag = #{deleteFlag}, 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE data_config SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

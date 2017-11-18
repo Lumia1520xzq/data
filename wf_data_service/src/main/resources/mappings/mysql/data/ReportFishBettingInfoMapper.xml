@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+		"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.ReportFishBettingInfoDao">
+
+	<sql id="reportFishBettingInfoColumns">
+		t.id,
+		t.user_id,
+		t.fish_config_id,
+		t.amount,
+		t.betting_count,
+		t.betting_amount,
+		t.result_amount,
+		t.betting_date,
+		t.channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+
+	<sql id="reportFishBettingInfoWhere">
+		t.delete_flag = ${DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="reportFishBettingInfoJoins">
+	</sql>
+
+	<select id="get" resultType="ReportFishBettingInfo" statementType="STATEMENT">
+		SELECT <include refid="reportFishBettingInfoColumns"/> FROM ${tableName} t WHERE id = ${id}
+	</select>
+	<select id="findList" resultType="ReportFishBettingInfo" statementType="STATEMENT">
+		SELECT <include refid="reportFishBettingInfoColumns"/> FROM ${tableName} t <include refid="reportFishBettingInfoJoins"/>
+		WHERE <include refid="reportFishBettingInfoWhere"/> ORDER BY id desc LIMIT ${start}, ${length}
+	</select>
+	<select id="count" resultType="long" statementType="STATEMENT">
+		SELECT COUNT(*) FROM ${tableName} t WHERE <include refid="reportFishBettingInfoWhere" />
+	</select>
+
+	<insert id="insert" statementType="STATEMENT">
+		INSERT INTO ${tableName} (
+		id,
+		user_id,
+		fish_config_id,
+		amount,
+		betting_count,
+		betting_amount,
+		result_amount,
+		betting_date,
+		<if test="entity.channelId != null">
+			channel_id,
+		</if>
+		delete_flag
+		) VALUES (
+		${entity.id},
+		${entity.userId},
+		${entity.fishConfigId},
+		${entity.amount},
+		${entity.bettingCount},
+		${entity.bettingAmount},
+		${entity.resultAmount},
+		'${entity.bettingDate}',
+		<if test="entity.channelId != null">
+		  ${entity.channelId},
+		</if>
+		${entity.deleteFlag}
+		)
+	</insert>
+
+	<update id="update" statementType="STATEMENT">
+		UPDATE ${tableName} SET
+			user_id = ${entity.userId},
+			fish_config_id = ${entity.fishConfigId},
+			amount = ${entity.amount},
+			betting_count = ${entity.bettingCount},
+			betting_amount = ${entity.bettingAmount},
+			result_amount = ${entity.resultAmount},
+			betting_date = ${entity.bettingDate},
+			channel_id = ${entity.channelId},
+			delete_flag = ${entity.deleteFlag}
+		WHERE id = ${entity.id}
+	</update>
+
+	<delete id="delete" statementType="STATEMENT">
+		UPDATE ${tableName} SET delete_flag = 1 WHERE ID = ${id}
+	</delete>
+</mapper>
+

@@ -1,7 +1,7 @@
 package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.entity.mycat.BehaviorRecord;
+import com.wf.data.dao.mycat.entity.BehaviorRecord;
 import com.wf.data.dao.mycat.BehaviorRecordDao;
 import org.springframework.stereotype.Service;
 
