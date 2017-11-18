@@ -19,7 +19,7 @@ public enum UicCacheKey implements CacheKey {
     private final String value;
 
     UicCacheKey() {
-        this.value = "DATA:USER:" + name();
+        this.value = "DATA:UIC:" + name();
     }
 
     @Override
