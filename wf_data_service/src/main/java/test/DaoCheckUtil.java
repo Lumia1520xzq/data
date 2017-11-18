@@ -18,7 +18,7 @@ import java.util.jar.JarFile;
  */
 public class DaoCheckUtil {
 
-	public static final String PACKAGE_NAME = "com.wf.data.dao.mysql";
+	public static final String PACKAGE_NAME = "com.wf.data.dao.uic";
 
 	public static void main(String[] args) throws Exception {
 		List<String> classNames = getClassName(PACKAGE_NAME, false);
