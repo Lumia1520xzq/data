@@ -36,7 +36,7 @@ public class EsClientFactory implements InitializingBean {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private EsClientPoolFactory poolFactory;
-    private GenericObjectPool pool;
+    private GenericObjectPool<EsClient> pool;
 
     public <T> T get(String index, String type, String id, Class<T> clazz) {
         EsClient esClient = getESClient();
@@ -185,7 +185,7 @@ public class EsClientFactory implements InitializingBean {
 
     private EsClient getESClient() {
         try {
-            return ((EsClient) pool.borrowObject());
+            return pool.borrowObject();
         } catch (Exception e) {
             throw new RuntimeException("线程池异常", e);
         }
@@ -206,8 +206,7 @@ public class EsClientFactory implements InitializingBean {
         config.setMinEvictableIdleTimeMillis(3000); // 可发呆的时间
         config.setTestWhileIdle(false); // 发呆过长移除的时候是否test一下先
 
-        pool = new GenericObjectPool(this.poolFactory,config);
-
+        pool = new GenericObjectPool<EsClient>(this.poolFactory,config);
 
         logger.info("连接池已经初始化");
     }

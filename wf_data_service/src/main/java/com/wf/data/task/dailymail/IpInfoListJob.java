@@ -28,7 +28,7 @@ public class IpInfoListJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final UicUserLogService uicUserLogService = SpringContextHolder.getBean(UicUserLogService.class);
-
+    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     public void execute() {
         logger.info("根据ip分析用户行为开始。。。。。。。。");
         int ipCount = dataConfigService.getIntValueByName(DataConstants.MONITOR_IP_COUNT);
@@ -70,9 +70,8 @@ public class IpInfoListJob {
     private void sendEmail(String template, String title) {
         try {
             // 获取收件人
-            ConfigRpcService configRpcService = SpringContextHolder.getBean(ConfigRpcService.class);
-            EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
-            String receivers = configRpcService.findByName(DataConstants.MONITOR_IP_RECEIVER).getValue();
+
+            String receivers = dataConfigService.findByName(DataConstants.MONITOR_IP_RECEIVER).getValue();
             if (StringUtils.isNotEmpty(receivers)) {
                 // 发送邮件
                 for (String to : receivers.split(",")) {
