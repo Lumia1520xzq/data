@@ -1,8 +1,8 @@
 package com.wf.data.rpc.impl;
 
 import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.entity.mycat.BehaviorRecord;
-import com.wf.data.dao.entity.mysql.BehaviorType;
+import com.wf.data.dao.mycat.entity.BehaviorRecord;
+import com.wf.data.dao.data.entity.BehaviorType;
 import com.wf.data.rpc.BehaviorRecordRpcService;
 import com.wf.data.rpc.dto.JsonResult;
 import com.wf.data.rpc.dto.BehaviorRecordDto;

@@ -2,7 +2,7 @@ package com.wf.data.dao.mycat;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
-import com.wf.data.dao.entity.mycat.BuryingPoint;
+import com.wf.data.dao.mycat.entity.BuryingPoint;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

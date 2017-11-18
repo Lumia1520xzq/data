@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.data.dao.trans.TransConvertDao">
+	
+	<select id="getConvertUserId" resultType="TransConvert">
+		SELECT user_id,MIN(create_time) create_time from trans_convert where status = 8 and delete_flag = 0 group by user_id
+	</select>
+	
+	<select id="getConvertByOrderSn" resultType="TransConvert">
+		SELECT <include refid="transConvertColumns"/> FROM trans_convert t WHERE order_sn = #{orderSn}
+	</select>
+	<select id="getConvertByThirdSn" resultType="TransConvert">
+		SELECT <include refid="transConvertColumns"/> FROM trans_convert t WHERE third_order_sn = #{thirdSn} and pay_type=#{payType}
+	</select>
+
+
+	
+	<select id="findJSNotSuccessConvert" resultType="TransConvert">
+		SELECT <include refid="transConvertColumns"/> FROM trans_convert t WHERE create_time &gt;=#{date} and status = 1 AND channel_id = 100001
+	</select>
+
+	<!--查询一段时间内的总充值金额 -->
+	<select id="findSumRechargeByTime" resultType="Double">
+		SELECT IFNULL(SUM(third_amount),0) FROM `trans_convert`
+		WHERE STATUS=8 AND delete_flag=0
+		AND create_time BETWEEN #{beginDate} AND #{endDate}	
+		<if test="channelId != null and channelId != ''">
+		AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+		AND channel_id LIKE CONCAT('%', #{parentId}, '%')
+		</if>
+	</select>
+
+	<!--查询用户总充值金额 -->
+	<select id="findUserSumRecharge" resultType="Double">
+		SELECT IFNULL(SUM(third_amount),0) FROM `trans_convert`
+		WHERE STATUS=8 AND delete_flag=0 and user_id=#{userId}
+	</select>
+
+	<select id="getIncomeAmount" resultType="Double">
+		SELECT IFNULL(SUM(third_amount),0) incomeAmount
+		FROM `trans_convert`
+		WHERE STATUS=8 AND delete_flag=0
+		AND create_time BETWEEN #{beginDate} AND #{endDate}
+		<if test="channelId != null and channelId != ''">
+			AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND channel_id LIKE CONCAT('%', #{parentId}, '%')
+		</if>
+		<if test="userId != null">
+			AND user_id = #{userId} 
+		</if>
+	</select>
+	
+	<select id="getRechargeNumByUserIdAndDate" resultType="Double">
+	  SELECT IFNULL(sum(third_amount),0) FROM `trans_convert`
+      WHERE `status`=8 AND delete_flag=0
+      AND user_id=#{userId} AND DATE_FORMAT(create_time,'%Y-%m-%d')= #{date}
+	</select>
+	
+		
+	<select id="getMinRechargeTimeByDate" resultType="java.util.Date"> 
+	 SELECT MIN(create_time) FROM `trans_convert`
+	 WHERE `status`=8 AND delete_flag=0  
+	 AND user_id=#{userId} 
+	 AND create_time between #{beginDate} and #{endDate} 
+	</select>
+		
+	<select id="findRechargeUserIdsTillTime" resultType="Long">
+	  SELECT DISTINCT user_id FROM `trans_convert`
+      WHERE `status`=8 AND delete_flag=0
+      AND create_time &lt; #{date}
+	</select>
+	
+    <select id="findUserIdsBySumRecharge" resultType="Long">
+		SELECT user_id 
+	    FROM `trans_convert` 
+	    WHERE status = 8 and delete_flag=0 and create_time &lt; #{date}
+	    group by user_id
+	    <choose>
+		<when test="endNum == 0">
+		HAVING SUM(IFNULL(third_amount, 0)) = #{endNum}
+		</when>
+		<when test="startNum &gt;= 1 and startNum &lt; 100000">
+		HAVING SUM(IFNULL(third_amount, 0)) &lt; #{endNum}
+	    AND SUM(IFNULL(third_amount, 0)) &gt;= #{startNum}
+		</when>
+		<when test="startNum &gt;= 100000">
+		HAVING SUM(IFNULL(third_amount, 0)) &gt;= #{startNum}
+		</when>
+		</choose>  
+	</select> 
+	
+	<select id="getRechargeUserIdsByDay" resultType="Long">
+	select distinct user_id 
+	from `trans_convert`
+	WHERE status = 8 and delete_flag=0
+	<if test="beginDate != null and beginDate != ''">
+		and create_time between #{beginDate} and #{endDate}
+	</if>
+	<if test="channelId != null and channelId != ''">
+	AND channel_id = #{channelId}
+	</if>
+	<if test="parentId != null and parentId != ''">
+	AND channel_id LIKE CONCAT('%', #{parentId}, '%')
+	</if>
+	</select>
+
+	<select id="getMaxRechargeMoney" resultType="Double">
+		SELECT max(third_amount) FROM trans_convert WHERE user_id = #{userId} AND status=8 AND delete_flag=0
+	</select>
+
+	<select id="getRechargeTimes" resultType="Long">
+		SELECT count(1) FROM trans_convert WHERE user_id = #{userId} AND status=8 AND delete_flag=0
+	</select>
+	
+	<select id="getRechargeCountByDay" resultType="Long">
+	select IFNULL(count(id),0) from `trans_convert`
+	WHERE status = 8 and delete_flag=0 and create_time between #{beginDate} and #{endDate}
+	<if test="channelId != null and channelId != ''">
+	AND channel_id = #{channelId}
+	</if>
+	<if test="parentId != null and parentId != ''">
+	AND channel_id LIKE CONCAT('%', #{parentId}, '%')
+	</if>
+	</select>
+	
+    <select id="getRechargeSumByUserIdAndDate" resultType="TransChangeNote">
+		SELECT user_id,sum(third_amount) business_money 
+        FROM `trans_convert` 
+        WHERE `status`=8 AND delete_flag=0 
+        AND create_time BETWEEN #{beginDate} and #{endDate}
+     	group by user_id
+	</select>
+
+</mapper>
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.uic.UicUserLogDao">
+    <select id="findIpByIpCount" resultType="string">
+		SELECT	ip
+		 FROM `uic_user_log`
+		 WHERE 1=1
+		 AND create_time  BETWEEN #{beginDate} AND #{endDate}
+		 GROUP BY ip HAVING count(DISTINCT user_id)>= #{ipCount}
+	</select>
+
+	<select id="findUserLogByIp" resultType="UicUserLog">
+		SELECT
+		user_id,
+		ip
+		FROM uic_user_log
+		WHERE 1=1
+		AND create_time BETWEEN #{beginDate} AND #{endDate}
+		<if test="ips != null and  ips.size() != 0">
+			AND ip IN
+			<foreach collection="ips" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY ip,user_id
+	</select>
+	
+	<select id="findIpByUserId" resultType="string">
+	 SELECT DISTINCT ip FROM `uic_user_log` WHERE user_id = #{userId}
+	</select>
+	
+	<select id="getUserCountByIp" resultType="UicUserLog">
+	 SELECT ip 'ip',COUNT(DISTINCT user_id) 'userCount' 
+	 FROM uic_user_log  
+	 WHERE 1=1
+	<if test="ips != null and ips.size() != 0">
+	    AND ip in
+	<foreach collection="ips" index="index" item="item" open="(" separator="," close=")">
+	    #{item}
+	</foreach>
+	</if>
+	 GROUP BY ip 
+	 ORDER BY COUNT(DISTINCT user_id) DESC LIMIT 1
+	</select>
+	
+</mapper>
+

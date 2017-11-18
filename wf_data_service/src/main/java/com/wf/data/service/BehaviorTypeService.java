@@ -1,14 +1,11 @@
 package com.wf.data.service;
 
 import com.wf.core.cache.CacheData;
-import com.wf.core.db.DataSource;
-import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
-import com.wf.data.dao.entity.mysql.BehaviorType;
-import com.wf.data.dao.mysql.BehaviorTypeDao;
+import com.wf.data.dao.data.entity.BehaviorType;
+import com.wf.data.dao.data.BehaviorTypeDao;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author jijie.chen

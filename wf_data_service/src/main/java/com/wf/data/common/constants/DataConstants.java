@@ -15,4 +15,34 @@ public interface DataConstants {
      */
     int NO = 0;
 
+
+    String GAME_BETTING_DATA_RECEIVER = "game_betting_data_receiver";
+    String CLUB_BETTING_DATA_RECEIVER = "club_betting_data_receiver";
+
+    //平台数据报表
+    String PLATFORM_DATA_RECEIVER="platform_data_receiver";
+    //游戏数据报表
+    String GAME_DATA_RECEIVER="game_data_receiver";
+    //用户信息列表
+    String USERINFO_DATA_RECEIVER="userinfo_data_receiver";
+    //套圈数据报表
+    String QUOITS_DATA_RECEIVER="quoits_data_receiver";
+    //数据日检
+    String DAILY_DATA_RECEIVER="daily_data_receiver";
+    //每日关键数据
+    String DAILY_KEY_DATA="daily_key_data";
+    //每日各渠道关键数据
+    String CHANNEL_DATA_RECEIVER="channel_data_receiver";
+
+    /**
+     * 同ip个数设置
+     */
+    String MONITOR_IP_COUNT = "monitor_ip_count";
+
+    String MONITOR_RISK_WF_IPS = "monitor_risk_wf_ips";
+    /**
+     * ip邮件接收人
+     */
+    String MONITOR_IP_RECEIVER = "monitor_ip_receiver";
+
 }

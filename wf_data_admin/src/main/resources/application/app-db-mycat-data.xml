@@ -53,9 +53,9 @@
 
 	<bean id="mycatdataSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mycatdataMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.entity.mycat" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.data.entity.mycat" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/mycat/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mycat/data/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mycatdataMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">

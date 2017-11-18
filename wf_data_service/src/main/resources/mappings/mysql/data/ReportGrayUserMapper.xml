@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.ReportGrayUserDao">
+	
+	<sql id="reportGrayUserColumns">
+		t.id,
+		t.user_id,
+		t.reg_time,
+		t.gray_time,
+		t.reg_channel_id,
+		t.ip,
+		t.ip_user_count,
+		t.sum_recharge,
+		t.after_gray_recharge,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="reportGrayUserWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="reportGrayUserJoins">
+	</sql>
+	
+	<select id="get" resultType="ReportGrayUser">
+		SELECT <include refid="reportGrayUserColumns"/> FROM report_gray_user t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="ReportGrayUser">
+		SELECT <include refid="reportGrayUserColumns"/> FROM report_gray_user t <include refid="reportGrayUserJoins"/>
+		WHERE <include refid="reportGrayUserWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM report_gray_user t WHERE <include refid="reportGrayUserWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO report_gray_user (
+			id, 
+			user_id, 
+			reg_time, 
+			gray_time, 
+			reg_channel_id, 
+			ip, 
+			ip_user_count, 
+			sum_recharge, 
+			after_gray_recharge, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{regTime}, 
+			#{grayTime}, 
+			#{regChannelId}, 
+			#{ip}, 
+			#{ipUserCount}, 
+			#{sumRecharge}, 
+			#{afterGrayRecharge}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE report_gray_user SET
+			user_id = #{userId}, 
+			reg_time = #{regTime}, 
+			gray_time = #{grayTime}, 
+			reg_channel_id = #{regChannelId}, 
+			ip = #{ip}, 
+			ip_user_count = #{ipUserCount}, 
+			sum_recharge = #{sumRecharge}, 
+			after_gray_recharge = #{afterGrayRecharge}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE report_gray_user SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

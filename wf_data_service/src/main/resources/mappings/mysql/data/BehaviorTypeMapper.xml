@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.data.dao.data.BehaviorTypeDao">
+	
+	<sql id="behaviorTypeColumns">
+		t.id,
+		t.name,
+		t.parent_event_id,
+		t.event_id,
+		t.full_name,
+		t.behavior_catagory,
+		t.behavior_level,
+		t.is_show,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="behaviorTypeWhere">
+		t.delete_flag = 0
+		<if test="p.name != null and p.name != ''">
+      		AND t.name like CONCAT('%', #{p.name}, '%')
+		</if> 
+		<if test="p.eventId != null ">
+      		AND t.event_id = #{p.eventId}
+		</if> 
+		<if test="p.behaviorCatagory != null and p.behaviorCatagory != ''">
+      		AND t.behavior_catagory = #{p.behaviorCatagory}
+		</if> 
+		<if test="p.behaviorLevel != null">
+      		AND t.behavior_level = #{p.behaviorLevel}
+		</if> 
+		<if test="p.isShow != null">
+      		AND t.is_show = #{p.isShow}
+		</if>
+		<if test="p.parentEventId != null">
+      		AND t.parent_event_id = #{p.parentEventId}
+		</if>  
+	</sql>
+	
+	<select id="get" resultType="BehaviorType">
+		SELECT <include refid="behaviorTypeColumns"/>
+		FROM uic_behavior_type t
+		WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="BehaviorType">
+		SELECT <include refid="behaviorTypeColumns"/>
+		FROM uic_behavior_type t
+		WHERE <include refid="behaviorTypeWhere"/>
+		ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*)
+		FROM uic_behavior_type t
+		WHERE <include refid="behaviorTypeWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uic_behavior_type (
+			id, 
+			name, 
+			parent_event_id, 
+			event_id, 
+			full_name, 
+			behavior_catagory, 
+			behavior_level, 
+			is_show, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{parentEventId}, 
+			#{eventId}, 
+			#{fullName}, 
+			#{behaviorCatagory}, 
+			#{behaviorLevel}, 
+			#{isShow}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uic_behavior_type SET
+			name = #{name}, 
+			parent_event_id = #{parentEventId}, 
+			event_id = #{eventId}, 
+			full_name = #{fullName}, 
+			behavior_catagory = #{behaviorCatagory}, 
+			behavior_level = #{behaviorLevel}, 
+			is_show = #{isShow}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE uic_behavior_type SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+
