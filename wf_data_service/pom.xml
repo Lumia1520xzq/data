@@ -13,6 +13,12 @@
 	</properties>
 
 	<dependencies>
+		<!-- 临时加下 -->
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>1.5.4</version>
+		</dependency>
 		<dependency>
 			<groupId>com.wf</groupId>
 			<artifactId>wf_core</artifactId>
