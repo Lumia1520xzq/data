@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.fish.RoomFishInfoDao">
+	
+	<sql id="roomFishInfoColumns">
+		t.id,
+		t.room_id,
+		t.fish_id,
+		t.user_id,
+		t.fish_config_id,
+		t.amount,
+		t.return_amount,
+		t.road_id,
+		t.appear_time,
+		t.disappear_time,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="roomFishInfoWhere">
+		t.delete_flag = ${DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="roomFishInfoJoins">
+	</sql>
+	
+	<select id="get" resultType="RoomFishInfo"  statementType="STATEMENT">
+		SELECT <include refid="roomFishInfoColumns"/> FROM ${tableName}  t WHERE id = ${id}
+	</select>
+	<select id="findList" resultType="RoomFishInfo"  statementType="STATEMENT">
+		SELECT <include refid="roomFishInfoColumns"/> FROM ${tableName}  t <include refid="roomFishInfoJoins"/>
+		WHERE <include refid="roomFishInfoWhere"/> ORDER BY id desc LIMIT ${start}, ${length}
+	</select>
+	<select id="count" resultType="long"  statementType="STATEMENT">
+		SELECT COUNT(*) FROM ${tableName}  t WHERE <include refid="roomFishInfoWhere" />
+	</select>
+
+</mapper>
+

@@ -3,7 +3,11 @@ package com.wf.data.dao.data;
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
+import com.wf.data.dao.data.entity.ReportGameInfo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 @MyBatisDao(tableName = "report_fish_betting_info")
 public interface ReportFishBettingInfoDao extends CrudDao<ReportFishBettingInfo> {
@@ -44,4 +48,9 @@ public interface ReportFishBettingInfoDao extends CrudDao<ReportFishBettingInfo>
      * @return
      */
     public int delete(@Param("tableName") String tableName, @Param("id") Long id);
+
+
+    ReportGameInfo findBettingInfoByDate(Map<String,Object> params);
+
+    List<Long> findBettingUsersByDate(Map<String,Object> params);
 }

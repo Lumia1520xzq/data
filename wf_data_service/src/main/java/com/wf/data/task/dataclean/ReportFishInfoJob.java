@@ -4,10 +4,9 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.service.ReportFishBettingInfoService;
-import com.wf.data.service.RoomFishInfoNewService;
+import com.wf.data.service.RoomFishInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class ReportFishInfoJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final RoomFishInfoNewService roomFishInfoNewService = SpringContextHolder.getBean(RoomFishInfoNewService.class);
+    private final RoomFishInfoService roomFishInfoService = SpringContextHolder.getBean(RoomFishInfoService.class);
     private final ReportFishBettingInfoService reportFishBettingInfoService = SpringContextHolder.getBean(ReportFishBettingInfoService.class);
 
 
@@ -45,9 +44,11 @@ public class ReportFishInfoJob {
         String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(searchDate), DateUtils.DATE_TIME_PATTERN);
         String endDate = DateUtils.formatDate(DateUtils.getDayEndTime(searchDate), DateUtils.DATE_TIME_PATTERN);
         Map<String, Object> map = new HashMap<>();
+        String tableName = "room_fish_info_" + DateUtils.formatDate(searchDate, DateUtils.YYYYMMDD_PATTERN);
         map.put("beginDate", beginDate);
         map.put("endDate", endDate);
-        return roomFishInfoNewService.findFishDateByDate(map);
+        map.put("tableName", tableName);
+        return roomFishInfoService.findFishDateByDate(map);
     }
 
 

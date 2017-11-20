@@ -1,5 +1,9 @@
 package com.wf.data.service.elasticsearch;
 
+import com.google.common.collect.Lists;
+import com.wf.base.rpc.ChannelRpcService;
+import com.wf.base.rpc.dto.ChannelInfoDto;
+import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.data.common.constants.BuryingPointContents;
@@ -24,7 +28,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * 
+ *
  * @author jianjian.huang
  * @date 2017年9月4日
  */
@@ -34,30 +38,31 @@ public class EsUicChannelService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private EsClientFactory esClientFactory;
+	private final ChannelRpcService channelService = SpringContextHolder.getBean(ChannelRpcService.class);
 
 	// 1、新增用户
-	public Integer getNewUser(String date,Long channelId){
-		List<UicUser> users = esClientFactory.list(EsContents.UIC_USER,EsContents.UIC_USER,getUicUserQuery(date,channelId),0, 10000,UicUser.class);
+	public Integer getNewUser(String date,Long parentId,Long channelId){
+		List<UicUser> users = esClientFactory.list(EsContents.UIC_USER,EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId),0, 10000,UicUser.class);
 		return users.size();
 	}
-	
+
 	// 2、活跃用户(游戏)
-	public Integer getActiveUser(String date,Long channelId){
-		AggregationBuilder aggsBuilder= EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
+	public Integer getActiveUser(String date,Long parentId,Long channelId){
+		AggregationBuilder aggsBuilder=EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date),1);
-		List<Long> activeUsers=getUserIds(aggsBuilder,null,date+" 00:00:00",DateUtils.formatDateTime(nextDate), BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE,channelId);
+		List<Long> activeUsers=getUserIds(aggsBuilder,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE,parentId,channelId);
 		return activeUsers.size();
 	}
-	
+
 	// 新用户中的投注人数
-	public Integer getNewBettingUser(String date,Long channelId){
+	public Integer getNewBettingUser(String date,Long parentId,Long channelId){
 		AggregationBuilder aggsBuilder=EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		//新增用户
-		List<UicUser> newUserList=esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, getUicUserQuery(date,channelId),0, 10000,UicUser.class);
+		List<UicUser> newUserList=esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, getUicUserQuery(date,parentId,channelId),0, 10000,UicUser.class);
 		//当天投注人数
 		Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date),1);
 		List<Long> dailyBetting=getUserIds
-		(aggsBuilder,null,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_USER_BEATING,channelId);
+				(aggsBuilder,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_USER_BEATING,parentId,channelId);
 		if(CollectionUtils.isEmpty(newUserList)||CollectionUtils.isEmpty(dailyBetting)){
 			return 0;
 		}
@@ -69,17 +74,17 @@ public class EsUicChannelService {
 		}
 		return count;
 	}
-	
+
 	// 新增次日留存
-	public String getRemainRate(String date,Long channelId){
+	public String getRemainRate(String date,Long parentId,Long channelId){
 		AggregationBuilder aggsBuilder=EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		//新增用户
-		List<UicUser> newUserList=esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, getUicUserQuery(date,channelId),0, 10000,UicUser.class);
+		List<UicUser> newUserList=esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId),0, 10000,UicUser.class);
 		//次日活跃用户
 		Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date),1);
 		Date nextTwoDate = DateUtils.getNextDate(DateUtils.parseDate(date),2);
 		List<Long> nextDayActive=getUserIds(
-		aggsBuilder,null,DateUtils.formatDateTime(nextDate),DateUtils.formatDateTime(nextTwoDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE,channelId);
+				aggsBuilder,DateUtils.formatDateTime(nextDate),DateUtils.formatDateTime(nextTwoDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE,parentId,channelId);
 		if(CollectionUtils.isEmpty(newUserList)||CollectionUtils.isEmpty(nextDayActive)){
 			return "0%";
 		}
@@ -92,12 +97,12 @@ public class EsUicChannelService {
 		int newUserCount=newUserList.size();
 		return NumberUtils.format(BigDecimalUtil.div(count,newUserCount,4),"#.##%");
 	}
-	
-	
-	private List<Long> getUserIds(AggregationBuilder aggsBuilder,Integer gameType,String begin,String end,Integer buryingType,Long channelId){
+
+
+	private List<Long> getUserIds(AggregationBuilder aggsBuilder,String begin,String end,Integer buryingType,Long parentId,Long channelId){
 		List<Long> list=new ArrayList<Long>();
 		Aggregations aggs = esClientFactory.getAggregation(
-		EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(gameType,begin,end,buryingType,channelId));
+				EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(begin,end,buryingType,parentId,channelId));
 		LongTerms agg = (LongTerms)aggs.get("userCount");
 		Iterator<Bucket> it=agg.getBuckets().iterator();
 		while(it.hasNext()) {
@@ -106,14 +111,11 @@ public class EsUicChannelService {
 		}
 		return list;
 	}
-	
+
 	// 日活用户查询条件
-	private QueryBuilder getActiveQuery(Integer gameType,String beginTime,String endTime,Integer buryingType,Long channelId) {
+	private QueryBuilder getActiveQuery(String beginTime,String endTime,Integer buryingType,Long parentId,Long channelId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		QueryBuilder query = null;
-		if (gameType != null) {
-		map.put("game_type",gameType);
-		}
 		map.put("delete_flag", 0);
 		map.put("burying_type",buryingType);
 		BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
@@ -123,15 +125,25 @@ public class EsUicChannelService {
 		if(endTime!=null){
 			boolQuery.must(QueryBuilders.rangeQuery("create_time").lt(DateUtils.formatUTCDate(endTime,DateUtils.DATE_TIME_PATTERN)));
 		}
-		if (channelId != null) {
+		if(channelId != null){
 			boolQuery.must(QueryBuilders.termQuery("channel_id",channelId));
-		} 
+		}else {
+			if (parentId != null) {
+				List<ChannelInfoDto> dtoList = channelService.findSubChannel(parentId);
+				List<Long> channelIds = Lists.newArrayList();
+				for(ChannelInfoDto dto : dtoList){
+					channelIds.add(dto.getId());
+				}
+				channelIds.add(0, parentId);
+				boolQuery.must(QueryBuilders.termsQuery("channel_id", channelIds));
+			}
+		}
 		query = boolQuery;
 		logger.debug("query" + query);
 		return query;
 	}
 
-	private QueryBuilder getUicUserQuery(String date,Long channelId) {
+	private QueryBuilder getUicUserQuery(String date,Long parentId,Long channelId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		QueryBuilder query = null;
 		map.put("delete_flag", 0);
@@ -142,9 +154,20 @@ public class EsUicChannelService {
 		}
 		if (channelId != null) {
 			boolQuery.must(QueryBuilders.termQuery("reg_channel_id", channelId));
-		} 
+		}else {
+			if (parentId != null) {
+				List<ChannelInfoDto> dtoList = channelService.findSubChannel(parentId);
+				List<Long> channelIds = Lists.newArrayList();
+				for(ChannelInfoDto dto : dtoList){
+					channelIds.add(dto.getId());
+				}
+				channelIds.add(0, parentId);
+				boolQuery.must(QueryBuilders.termsQuery("reg_channel_id", channelIds));
+			}
+		}
 		query = boolQuery;
 		logger.debug("query" + query);
 		return query;
 	}
 }
+

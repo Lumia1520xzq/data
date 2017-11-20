@@ -12,13 +12,12 @@ import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
-import com.wf.data.service.RoomFishInfoNewService;
+import com.wf.data.service.RoomFishInfoService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.text.DecimalFormat;
@@ -37,7 +36,7 @@ public class BettingAnalyseJob {
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
     private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
-    private final RoomFishInfoNewService roomFishInfoNewService = SpringContextHolder.getBean(RoomFishInfoNewService.class);
+    private final RoomFishInfoService roomFishInfoService = SpringContextHolder.getBean(RoomFishInfoService.class);
 
     private final String EMAIL_STYLE = "<style>table{margin-top:10px;width:700px;" +
             "border-collapse:collapse;border-spacing:0;" +
@@ -235,13 +234,18 @@ public class BettingAnalyseJob {
         int hourAfter = hour + 1;
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
-        //今天所有的投注情况 
-        ReportGameInfo dayInfo = roomFishInfoNewService.findBettingInfoByDate(getParams(cal, null, 0));
+        //今天所有的投注情况
+        Map<String, Object> params = getParams(cal, null, 0);
+        String tableName = "room_fish_info_" + DateUtils.formatDate(cal.getTime(), DateUtils.YYYYMMDD_PATTERN);
+        params.put("tableName", tableName);
+        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(params);
         if (dayInfo == null) {
             dayInfo = new ReportGameInfo();
         }
-        //过去一小时的投注情况 
-        ReportGameInfo hourInfo = roomFishInfoNewService.findBettingInfoByDate(getParams(cal, null, 1));
+        //过去一小时的投注情况
+        Map<String, Object> map = getParams(cal, null, 1);
+        map.put("tableName", tableName);
+        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(map);
         if (hourInfo == null) {
             hourInfo = new ReportGameInfo();
         }
@@ -282,13 +286,18 @@ public class BettingAnalyseJob {
         if (hourSumInfo == null) {
             hourSumInfo = new ReportGameInfo();
         }
-        //今天所有的投注情况(捕鱼) 
-        ReportGameInfo dayFishInfo = roomFishInfoNewService.findBettingInfoByDate(getParams(cal, null, 0));
+        //今天所有的投注情况(捕鱼)
+        Map<String, Object> params = getParams(cal, null, 0);
+        String tableName = "room_fish_info_" + DateUtils.formatDate(cal.getTime(), DateUtils.YYYYMMDD_PATTERN);
+        params.put("tableName", tableName);
+        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(params);
         if (dayFishInfo == null) {
             dayFishInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况(捕鱼)
-        ReportGameInfo hourFishInfo = roomFishInfoNewService.findBettingInfoByDate(getParams(cal, null, 1));
+        Map<String, Object> map = getParams(cal, null, 1);
+        map.put("tableName", tableName);
+        ReportGameInfo hourFishInfo = roomFishInfoService.findBettingInfoByDate(map);
         if (hourFishInfo == null) {
             hourFishInfo = new ReportGameInfo();
         }
@@ -296,12 +305,12 @@ public class BettingAnalyseJob {
         Integer dailyActive = gameService.getActiveUser(null, DateUtils.formatDate(cal.getTime()));
         //投注用户 需要去重
 
-        List<Long> daySumUserIds = reportService.findBettingUsersByDate(getParams(cal, null, 0));
-        List<Long> dayFishUserIds = roomFishInfoNewService.findBettingUsersByDate(getParams(cal, null, 0));
+        List<Long> daySumUserIds = reportService.findBettingUsersByDate(params);
+        List<Long> dayFishUserIds = roomFishInfoService.findBettingUsersByDate(params);
         Integer bettingUser = getBettingUsers(daySumUserIds, dayFishUserIds);
 
-        List<Long> hourSumUserIds = reportService.findBettingUsersByDate(getParams(cal, null, 1));
-        List<Long> hourFishUserIds = roomFishInfoNewService.findBettingUsersByDate(getParams(cal, null, 1));
+        List<Long> hourSumUserIds = reportService.findBettingUsersByDate(map);
+        List<Long> hourFishUserIds = roomFishInfoService.findBettingUsersByDate(map);
         Integer hourBettingUser = getBettingUsers(hourSumUserIds, hourFishUserIds);
 
 
