@@ -3,7 +3,6 @@ package com.wf.data.service.elasticsearch;
 import com.google.common.collect.Lists;
 import com.wf.base.rpc.ChannelRpcService;
 import com.wf.base.rpc.dto.ChannelInfoDto;
-import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.data.common.constants.BuryingPointContents;
@@ -25,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -38,7 +38,8 @@ public class EsUicChannelService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private EsClientFactory esClientFactory;
-	private final ChannelRpcService channelService = SpringContextHolder.getBean(ChannelRpcService.class);
+	@Resource
+	private ChannelRpcService channelRpcService;
 
 	// 1、新增用户
 	public Integer getNewUser(String date,Long parentId,Long channelId){
@@ -129,7 +130,7 @@ public class EsUicChannelService {
 			boolQuery.must(QueryBuilders.termQuery("channel_id",channelId));
 		}else {
 			if (parentId != null) {
-				List<ChannelInfoDto> dtoList = channelService.findSubChannel(parentId);
+				List<ChannelInfoDto> dtoList = channelRpcService.findSubChannel(parentId);
 				List<Long> channelIds = Lists.newArrayList();
 				for(ChannelInfoDto dto : dtoList){
 					channelIds.add(dto.getId());
@@ -156,7 +157,7 @@ public class EsUicChannelService {
 			boolQuery.must(QueryBuilders.termQuery("reg_channel_id", channelId));
 		}else {
 			if (parentId != null) {
-				List<ChannelInfoDto> dtoList = channelService.findSubChannel(parentId);
+				List<ChannelInfoDto> dtoList = channelRpcService.findSubChannel(parentId);
 				List<Long> channelIds = Lists.newArrayList();
 				for(ChannelInfoDto dto : dtoList){
 					channelIds.add(dto.getId());
