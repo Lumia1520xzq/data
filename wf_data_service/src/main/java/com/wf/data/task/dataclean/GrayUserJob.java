@@ -4,21 +4,17 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.uic.entity.UicUser;
 import com.wf.data.dao.data.entity.ReportGrayUser;
 import com.wf.data.dao.uic.entity.UicGroup;
+import com.wf.data.dao.uic.entity.UicUser;
 import com.wf.data.dao.uic.entity.UicUserLog;
 import com.wf.data.service.*;
 import com.wf.data.service.elasticsearch.EsGrayService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 拉取过往的灰名单用户并存入report_gray_user
@@ -43,25 +39,27 @@ public class GrayUserJob {
                 //所有的灰名单用户
                 List<UicGroup> grayList = getGrayUsersList();
                 //
-                if (CollectionUtils.isNotEmpty(grayList)) {
-                    for (UicGroup uicGroup : grayList) {
+                if(CollectionUtils.isNotEmpty(grayList)) {
+                    List<ReportGrayUser> users = new ArrayList<ReportGrayUser>();
+                    for (UicGroup uicGroup:grayList) {
                         Long userId = uicGroup.getUserId();
                         ReportGrayUser entity = reportGrayUserService.getByUserId(userId);
                         if (entity == null) {
                             entity = new ReportGrayUser();
+                            //1、用户id
+                            entity.setUserId(userId);
+                            //2、注册时间
+                            UicUser user = grayService.getNewUser(userId);
+                            if (user == null) {
+                                user = new UicUser();
+                            }
+                            entity.setRegTime(user.getCreateTime());
+                            //3、拉灰时间
+                            entity.setGrayTime(uicGroup.getCreateTime());
+                            //4、注册渠道
+                            entity.setRegChannelId(user.getRegChannelId());
                         }
-                        //1、用户id
-                        entity.setUserId(userId);
-                        //2、注册时间
-                        UicUser user = grayService.getNewUser(userId);
-                        if (user == null) {
-                            user = new UicUser();
-                        }
-                        entity.setRegTime(user.getCreateTime());
-                        //3、拉灰时间
-                        entity.setGrayTime(uicGroup.getCreateTime());
-                        //4、注册渠道
-                        entity.setRegChannelId(user.getRegChannelId());
+                        logger.info("IP分析开始{}",new Date());
                         //5、IP
                         List<String> ips = logService.findIpByUserId(userId);
                         if (CollectionUtils.isNotEmpty(ips)) {
@@ -70,18 +68,20 @@ public class GrayUserJob {
                             entity.setIp(uicUserLog.getIp());
                             entity.setIpUserCount(uicUserLog.getUserCount());
                         }
+                        logger.info("IP分析结束{}",new Date());
                         //6、总充值
                         double sumRecharge = transConvertService.findUserSumRecharge(userId);
                         entity.setSumRecharge(sumRecharge);
                         //7、拉灰后充值
-                        Map<String, Object> params = new HashMap<>();
+                        Map<String,Object> params = new HashMap<>();
                         params.put("beginDate", DateUtils.formatDateTime(uicGroup.getCreateTime()));
                         params.put("endDate", DateUtils.formatCurrentDate());
                         params.put("userId", userId);
                         double afterGrayRecharge = transConvertService.getIncomeAmount(params);
                         entity.setAfterGrayRecharge(afterGrayRecharge);
-                        reportGrayUserService.save(entity);
+                        users.add(entity);
                     }
+                    reportGrayUserService.batchSave(users);
                 }
                 break;
             } catch (Exception e) {
@@ -96,18 +96,18 @@ public class GrayUserJob {
     }
 
     //所有的灰名单用户
-    private List<UicGroup> getGrayUsersList() {
+    private List<UicGroup> getGrayUsersList(){
         Long grayListGroup = UserGroupContents.GRAY_LIST_GROUP;
-        List<UicGroup> grayList = uicGroupService.getInGroupByUserId(null, Arrays.asList(grayListGroup));
+        List<UicGroup> grayList = uicGroupService.getInGroupByUserId(null,Arrays.asList(grayListGroup));
         return grayList;
     }
 
-    private List<String> getWfIpsList() {
+    private List<String> getWfIpsList(){
         // 获取公司ip
         String wfIps = dataConfigService.findByName(DataConstants.MONITOR_RISK_WF_IPS).getValue();
         String[] wfIpsArr = wfIps.split(",");
         List<String> wfIpsList = Arrays.asList(wfIpsArr);
-        return wfIpsList;
+        return  wfIpsList;
     }
 
 }
