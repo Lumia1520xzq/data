@@ -129,4 +129,15 @@
 		<servlet-name>DruidStatView</servlet-name>
 		<url-pattern>/druid/*</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<description></description>
+		<display-name>系统监控</display-name>
+		<servlet-name>MonitoringServlet</servlet-name>
+		<servlet-class>com.wf.core.web.monitor.MonitoringServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MonitoringServlet</servlet-name>
+		<url-pattern>/public/monitoring</url-pattern>
+	</servlet-mapping>
 </web-app>
