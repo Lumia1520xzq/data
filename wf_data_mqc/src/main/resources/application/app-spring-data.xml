@@ -44,10 +44,13 @@
     <import resource="classpath:wf/spring-ehcache.xml"/>
 
     <import resource="app-disconf-data.xml"/>
-    <import resource="app-db-mysql-data.xml"/>
-    <import resource="app-db-mycat-data.xml"/>
     <import resource="app-dubbo-consumer.xml"/>
     <import resource="app-jms-data.xml"/>
 
+    <import resource="app-db-mycat-data.xml" />
+    <import resource="app-db-mysql-data.xml" />
+    <import resource="app-db-mysql-fish.xml" />
+    <import resource="app-db-mysql-trans.xml" />
+    <import resource="app-db-mysql-uic.xml" />
 
 </beans>

@@ -12,7 +12,7 @@
 		<property name="password" value="${jdbc.fish.read.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
-		<property name="maxActive" value="500" />
+		<property name="maxActive" value="50" />
 		<property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<property name="minEvictableIdleTimeMillis" value="300000" />
@@ -36,14 +36,14 @@
 
 	<bean id="fishSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="fishMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.data" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.fish.entity" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mysql/fish/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
-	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<bean id="fishMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="fishSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.data.dao.data" />
+		<property name="basePackage" value="com.wf.data.dao.fish" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 

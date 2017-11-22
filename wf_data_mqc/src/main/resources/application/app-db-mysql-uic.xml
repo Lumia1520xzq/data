@@ -12,7 +12,7 @@
 		<property name="password" value="${jdbc.uic.read.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
-		<property name="maxActive" value="500" />
+		<property name="maxActive" value="50" />
 		<property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<property name="minEvictableIdleTimeMillis" value="300000" />
@@ -25,6 +25,7 @@
 
 	<bean id="uicMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
 		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="uicReadDataSource" />
 		<property name="targetDataSources">
 			<map>
 				<entry value-ref="uicReadDataSource" key="dataSourceRead" />
@@ -35,18 +36,18 @@
 
 	<bean id="uicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="uicMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.data" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.uic.entity" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mysql/uic/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
-	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<bean id="uicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="uicSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.data.dao.data" />
+		<property name="basePackage" value="com.wf.data.dao.uic" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 
-	<bean id="dataTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="uicTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="uicMultipleDataSource" />
 	</bean>
 </beans>

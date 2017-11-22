@@ -22,5 +22,18 @@
 	</bean>
 
 	<!--消息-->
+	<!--接受所有用户投注发奖   -->
+	<rabbit:queue name="report_task_betting" />
+	<rabbit:listener-container connection-factory="connectionFactory" message-converter="messageConverter" concurrency="100" >
+		<rabbit:listener queues="report_task_betting" ref="reportTaskBettingListener" />
+	</rabbit:listener-container>
+	<bean id="reportTaskBettingListener" class="com.wf.data.mqc.ReportTaskBettingListener" />
+	<!--report 接收用户投注行为，进行每笔统计 -->
+	<rabbit:queue name="report_change_betting" />
+	<rabbit:listener-container connection-factory="connectionFactory" message-converter="messageConverter" concurrency="100" >
+		<rabbit:listener queues="report_change_betting" ref="reportChangeBettingListener" />
+	</rabbit:listener-container>
+	<bean id="reportChangeBettingListener" class="com.wf.data.mqc.ReportChangeBettingListener" />
+
 
 </beans>
