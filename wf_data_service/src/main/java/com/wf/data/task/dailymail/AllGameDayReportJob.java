@@ -46,7 +46,7 @@ public class AllGameDayReportJob {
     private final String TABLE_END = "</table><br/>";
 
     public void execute() {
-        logger.info("游戏数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
+        logger.info("开始游戏数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
         DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
         EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
         byte count = 0;
