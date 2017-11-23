@@ -49,4 +49,11 @@ public class DataReportGrayUserRpcServiceImpl implements DataReportGrayUserRpcSe
             return false;
         }
     }
+
+    @Override
+    public void deleteList(List<DataReportGrayUserDto> list) {
+        for(DataReportGrayUserDto dto : list){
+            delete(dto);
+        }
+    }
 }

@@ -1,5 +1,8 @@
 package com.wf.data.task.dataclean;
 
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.GfJsonUtil;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
@@ -81,15 +84,16 @@ public class GrayUserJob {
                         entity.setAfterGrayRecharge(afterGrayRecharge);
                         users.add(entity);
                     }
+                    logger.info("微信绑定状态: traceId={}, jsonObject={},", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(users));
                     reportGrayUserService.batchSave(users);
                 }
                 break;
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error(">>>>>>>>>>>>>>灰名单用户监控分析异常，重新执行 " + count, e);
+                    logger.error("灰名单用户监控分析异常，重新执行 {}, ex={}, traceId={}",count, LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error(">>>>>>>>>>>>>>灰名单用户监控分析异常，停止分析", e);
+                    logger.error("灰名单用户监控分析异常 ex={}, traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
             }
         }

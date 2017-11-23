@@ -13,4 +13,6 @@ public interface DataReportGrayUserRpcService {
     List<DataReportGrayUserDto> findList(DataReportGrayUserDto entity, int maxResult);
 
     boolean delete(DataReportGrayUserDto entity);
+
+    void deleteList(List<DataReportGrayUserDto> list);
 }
