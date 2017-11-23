@@ -12,7 +12,7 @@
 		<property name="password" value="${jdbc.data.write.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
-		<property name="maxActive" value="500" />
+		<property name="maxActive" value="50" />
 		<property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<property name="minEvictableIdleTimeMillis" value="300000" />
@@ -29,7 +29,7 @@
 		<property name="password" value="${jdbc.data.read.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
-		<property name="maxActive" value="500" />
+		<property name="maxActive" value="50" />
 		<property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<property name="minEvictableIdleTimeMillis" value="300000" />
@@ -54,12 +54,12 @@
 
 	<bean id="dataSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.data" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.data.entity" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
 		<property name="mapperLocations" value="classpath*:mappings/mysql/data/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
-	<bean id="mapperScannerConfigurer-mysql" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<bean id="dataMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="dataSqlSessionFactory" />
 		<property name="basePackage" value="com.wf.data.dao.data" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />

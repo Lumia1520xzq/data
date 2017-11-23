@@ -36,7 +36,7 @@ public class DataUicUserLogRpcServiceImpl implements DataUicUserLogRpcService {
         if (null != uicUserLogs && uicUserLogs.size() > 0) {
             for (UicUserLog item : uicUserLogs) {
                 DataUicUserLogDto dto = new DataUicUserLogDto();
-                BeanUtils.copyProperties(dto, item);
+                BeanUtils.copyProperties(item, dto);
                 list.add(dto);
             }
         }
@@ -53,7 +53,7 @@ public class DataUicUserLogRpcServiceImpl implements DataUicUserLogRpcService {
         UicUserLog log = uicUserLogService.getUserCountByIp(ips);
         if(null != log){
             DataUicUserLogDto dto = new DataUicUserLogDto();
-            BeanUtils.copyProperties(dto, log);
+            BeanUtils.copyProperties(log,dto );
             return dto;
         }
         return null;
