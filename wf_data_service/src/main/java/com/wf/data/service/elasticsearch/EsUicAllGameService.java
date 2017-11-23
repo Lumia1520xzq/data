@@ -97,12 +97,10 @@ public class EsUicAllGameService {
 		List<Long> newUsers=getUserIds(aggsBuilder,gameType,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
 		//新增用户
 		List<Long> newUserList=getNewUserList(oldUsers, newUsers);
-		
 		//次日活跃用户
 		Date nextTwoDate = DateUtils.getNextDate(DateUtils.parseDate(date),2);
 		List<Long> nextDayActive=getUserIds(
 		aggsBuilder,gameType,DateUtils.formatDateTime(nextDate),DateUtils.formatDateTime(nextTwoDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
-		
 		if(CollectionUtils.isEmpty(newUserList)||CollectionUtils.isEmpty(nextDayActive)){
 			return "0%";
 		}

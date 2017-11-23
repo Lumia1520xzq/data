@@ -1,6 +1,8 @@
 package com.wf.data.task.dailymail;
 
 import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
@@ -32,8 +34,6 @@ public class AllGameDayReportJob {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-
-
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
             + "<tr style='font-weight:bold'><td rowspan='30' bgcolor='#DDDDDD' width='120'><span>gameName</span><br/><span>dateTime日</span></td><td colspan='8' bgcolor='#DDDDDD'>基础数据</td></tr>"
             + "<tr style='font-weight:bold' ><td>新增用户</td><td>活跃用户</td><td>平台日活人数</td><td>导入率</td><td>累计用户</td><td>&nbsp </td> <td>&nbsp </td><td>&nbsp </td></tr>"
@@ -46,7 +46,7 @@ public class AllGameDayReportJob {
     private final String TABLE_END = "</table><br/>";
 
     public void execute() {
-        logger.info("游戏数据日报表分析");
+        logger.info("游戏数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
         DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
         EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
         byte count = 0;
@@ -70,22 +70,22 @@ public class AllGameDayReportJob {
                     // 发送邮件
                     for (String to : receivers.split(",")) {
                         try {
-                            emailHander.sendHtml(to,
-                                    String.format("游戏数据日报表分析汇总(%s)", DateUtils.getDate()), content.toString());
+                            emailHander.sendHtml(to,String.format("游戏数据日报表分析汇总(%s)", DateUtils.getDate()), content.toString());
                         } catch (MessagingException e) {
-                            logger.error("游戏数据日报表分析发送失败：" + to);
+                            logger.error("游戏数据日报表发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
                     }
                 } else {
-                    logger.error(">>>>>>>>>>>>游戏数据日报表分析接收人未设置");
+                    logger.error("游戏数据日报表未设置收件人，traceId={}", TraceIdUtils.getTraceId());
                 }
+                logger.info("游戏数据日报表发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error(">>>>>>>>>>>>>>游戏数据日报表分析异常，重新执行 " + count, e);
+                    logger.error("游戏数据日报表分析异常,重新执行{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error(">>>>>>>>>>>>>>游戏数据日报表分析异常重新执行失败，停止分析", e);
+                    logger.error("游戏数据日报表分析异常，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
             }
         }

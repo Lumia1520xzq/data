@@ -1,6 +1,8 @@
 package com.wf.data.task.dailymail;
 
 import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
@@ -26,7 +28,7 @@ import java.util.*;
 /**
  * 平台投注人数分析汇总
  * 定时发送邮件
- * 处理获取数据失败问题，重试15次
+ * 处理获取数据失败问题，重试5次
  * Created by jianjian on 2017/08/24
  */
 public class BettingAnalyseJob {
@@ -72,15 +74,13 @@ public class BettingAnalyseJob {
     }
 
     public void execute() {
-        logger.info("开始投注人数分析");
-
-
+        logger.info("开始每小时投注邮件分析:traceId={}", TraceIdUtils.getTraceId());
         byte count = 0;
         Calendar cal = Calendar.getInstance();
         Date currDate = cal.getTime();
         //处理0点时的统计数据，当前日期向前推1小时，保证统计昨天数据
         cal.add(Calendar.HOUR_OF_DAY, -1);
-        while (count <= 15) {
+        while (count <= 5) {
             try {
                 String receivers = dataConfigService.findByName(DataConstants.GAME_BETTING_DATA_RECEIVER).getValue();
                 if (StringUtils.isNotEmpty(receivers)) {
@@ -105,20 +105,20 @@ public class BettingAnalyseJob {
                                     DateUtils.formatDate(currDate, DateUtils.MINUTE_PATTERN)),
                                     content.toString());
                         } catch (MessagingException e) {
-                            logger.error("Dart投注人数分析发送失败：" + to);
+                            logger.error("每小时投注邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
                     }
                 } else {
-                    logger.error(">>>>>>>>>>>>投注人数分析接收人未设置");
+                    logger.error("每小时投注邮件未设置收件人，traceId={}", TraceIdUtils.getTraceId());
                 }
-                logger.info(">>>>>>>>>>>>>>投注人数分析正常结束");
+                logger.info("每小时投注邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception ex) {
                 count++;
-                if (count <= 15) {
-                    logger.error(">>>>>>>>>>>>>>投注人数分析异常，重新执行 " + count, ex);
+                if (count <= 5) {
+                    logger.error("每小时投注邮件发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error(">>>>>>>>>>>>>>投注人数分析重新执行失败，停止分析", ex);
+                    logger.error("每小时投注邮件发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 }
             }
         }
@@ -191,7 +191,6 @@ public class BettingAnalyseJob {
     }
 
     private String getTemp(Calendar cal, Integer gameType) {
-
         int today = cal.get(Calendar.DATE);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int hourAfter = hour + 1;
@@ -226,7 +225,6 @@ public class BettingAnalyseJob {
                 .replace("HOUR_AWARD_RATE", hourInfo.getCathecticMoney() == 0L ? "0%" :
                         NumberUtils.format(BigDecimalUtil.div(hourInfo.getWinMoney(), hourInfo.getCathecticMoney(), 4), "#.##%"));
     }
-
 
     private String getFishTemp(Calendar cal) {
         int today = cal.get(Calendar.DATE);
@@ -304,16 +302,12 @@ public class BettingAnalyseJob {
         //DAU
         Integer dailyActive = gameService.getActiveUser(null, DateUtils.formatDate(cal.getTime()));
         //投注用户 需要去重
-
         List<Long> daySumUserIds = reportService.findBettingUsersByDate(params);
         List<Long> dayFishUserIds = roomFishInfoService.findBettingUsersByDate(params);
         Integer bettingUser = getBettingUsers(daySumUserIds, dayFishUserIds);
-
         List<Long> hourSumUserIds = reportService.findBettingUsersByDate(map);
         List<Long> hourFishUserIds = roomFishInfoService.findBettingUsersByDate(map);
         Integer hourBettingUser = getBettingUsers(hourSumUserIds, hourFishUserIds);
-
-
         return CONTENT_TEMP
                 .replace("TODAY", (today < 10 ? ("0" + today) : String.valueOf(today)))
                 .replace("DAILY_ACTIVE", format(dailyActive))

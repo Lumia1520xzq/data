@@ -1,5 +1,7 @@
 package com.wf.data.task.dataclean;
 
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
@@ -26,7 +28,7 @@ public class ReportFishInfoJob {
 
 
     public void execute() {
-        logger.info("捕鱼数据清洗开始。。。。。。。。");
+        logger.info("捕鱼数据清洗开始:traceId={}", TraceIdUtils.getTraceId());
         String bettingDate = DateUtils.getYesterdayDate();
         Date yesterday = DateUtils.parseDate(DateUtils.getYesterdayDate());
         List<ReportFishBettingInfo> bettingInfoList = getRoomFishInfoList(yesterday);
@@ -35,9 +37,9 @@ public class ReportFishInfoJob {
         try {
             reportFishBettingInfoService.batchSave(tableName, bettingInfoList, bettingDate);
         } catch (Exception e) {
-            logger.error("report_fish_betting_info表保存失败，{}", e);
+            logger.error("report_fish_betting_info表保存失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
         }
-        logger.info("捕鱼数据清洗结束。。。。。。。。");
+        logger.info("捕鱼数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
     private List<ReportFishBettingInfo> getRoomFishInfoList(Date searchDate) {
