@@ -12,7 +12,7 @@
 		<property name="password" value="${jdbc.mycatdata.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
-		<property name="maxActive" value="500" />
+		<property name="maxActive" value="50" />
 		<property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<property name="minEvictableIdleTimeMillis" value="300000" />
@@ -29,7 +29,7 @@
 		<property name="password" value="${jdbc.mycatdata.password}" />
 		<property name="initialSize" value="3" />
 		<property name="minIdle" value="3" />
-		<property name="maxActive" value="500" />
+		<property name="maxActive" value="50" />
 		<property name="maxWait" value="60000" />
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
 		<property name="minEvictableIdleTimeMillis" value="300000" />
@@ -53,14 +53,14 @@
 
 	<bean id="mycatdataSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mycatdataMultipleDataSource" />
-		<property name="typeAliasesPackage" value="com.wf.data.dao.mycat.entity" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.mycatdata.entity" />
 		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
-		<property name="mapperLocations" value="classpath*:mappings/mycat/data/*.xml" />
+		<property name="mapperLocations" value="classpath*:mappings/mycatdata/*.xml" />
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
 	</bean>
 	<bean id="mycatdataMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="mycatdataSqlSessionFactory" />
-		<property name="basePackage" value="com.wf.data.dao.mycat" />
+		<property name="basePackage" value="com.wf.data.dao.mycatdata" />
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 	<bean id="mycatdataTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

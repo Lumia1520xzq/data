@@ -1,4 +1,4 @@
-package com.wf.data.dao.mycat.entity;
+package com.wf.data.dao.mycatdata.entity;
 
 import com.wf.core.persistence.DataEntity;
 

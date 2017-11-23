@@ -2,7 +2,7 @@ package com.wf.data.rpc.impl;
 
 import com.google.common.collect.Lists;
 import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.mycat.entity.BuryingPoint;
+import com.wf.data.dao.mycatdata.entity.BuryingPoint;
 import com.wf.data.rpc.BuryingRpcService;
 import com.wf.data.rpc.dto.BuryingPointDto;
 import com.wf.data.rpc.dto.JsonResult;

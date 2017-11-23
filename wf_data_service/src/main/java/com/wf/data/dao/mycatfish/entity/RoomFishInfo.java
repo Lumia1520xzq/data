@@ -1,4 +1,4 @@
-package com.wf.data.dao.fish.entity;
+package com.wf.data.dao.mycatfish.entity;
 
 
 import com.wf.core.persistence.DataEntity;

@@ -46,10 +46,8 @@ public class ReportFishInfoJob {
         String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(searchDate), DateUtils.DATE_TIME_PATTERN);
         String endDate = DateUtils.formatDate(DateUtils.getDayEndTime(searchDate), DateUtils.DATE_TIME_PATTERN);
         Map<String, Object> map = new HashMap<>();
-        String tableName = "room_fish_info_" + DateUtils.formatDate(searchDate, DateUtils.YYYYMMDD_PATTERN);
         map.put("beginDate", beginDate);
         map.put("endDate", endDate);
-        map.put("tableName", tableName);
         return roomFishInfoService.findFishDateByDate(map);
     }
 

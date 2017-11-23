@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import com.wf.data.common.DataBaseController;
 import com.wf.data.controller.request.BehaviorRequest;
-import com.wf.data.dao.mycat.entity.BehaviorRecord;
+import com.wf.data.dao.mycatdata.entity.BehaviorRecord;
 import com.wf.data.dao.data.entity.BehaviorType;
 import com.wf.data.service.BehaviorRecordService;
 import com.wf.data.service.BehaviorTypeService;

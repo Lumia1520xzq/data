@@ -233,17 +233,12 @@ public class BettingAnalyseJob {
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
         //今天所有的投注情况
-        Map<String, Object> params = getParams(cal, null, 0);
-        String tableName = "room_fish_info_" + DateUtils.formatDate(cal.getTime(), DateUtils.YYYYMMDD_PATTERN);
-        params.put("tableName", tableName);
-        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(params);
+        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0));
         if (dayInfo == null) {
             dayInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况
-        Map<String, Object> map = getParams(cal, null, 1);
-        map.put("tableName", tableName);
-        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(map);
+        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 1));
         if (hourInfo == null) {
             hourInfo = new ReportGameInfo();
         }
@@ -286,15 +281,12 @@ public class BettingAnalyseJob {
         }
         //今天所有的投注情况(捕鱼)
         Map<String, Object> params = getParams(cal, null, 0);
-        String tableName = "room_fish_info_" + DateUtils.formatDate(cal.getTime(), DateUtils.YYYYMMDD_PATTERN);
-        params.put("tableName", tableName);
-        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(params);
+        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0));
         if (dayFishInfo == null) {
             dayFishInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况(捕鱼)
         Map<String, Object> map = getParams(cal, null, 1);
-        map.put("tableName", tableName);
         ReportGameInfo hourFishInfo = roomFishInfoService.findBettingInfoByDate(map);
         if (hourFishInfo == null) {
             hourFishInfo = new ReportGameInfo();
