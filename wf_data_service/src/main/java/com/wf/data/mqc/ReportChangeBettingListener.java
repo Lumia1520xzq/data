@@ -1,6 +1,9 @@
 package com.wf.data.mqc;
 
 import com.wf.core.event.BettingTaskEvent;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.GfJsonUtil;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.mqc.processor.ReportChangeBettingProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +31,7 @@ public class ReportChangeBettingListener implements MessageListener {
 
             bettingProcessor.process(event);
         } catch (Exception e) {
-            logger.error("ReportChangeBettingListener处理错误:{}", e);
+            logger.error("ReportChangeBettingListener处理错误: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
 
     }
