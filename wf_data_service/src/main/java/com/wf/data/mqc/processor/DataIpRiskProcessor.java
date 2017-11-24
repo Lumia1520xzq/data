@@ -1,6 +1,7 @@
 package com.wf.data.mqc.processor;
 
 import com.wf.core.event.BettingTaskEvent;
+import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.DateUtils;
@@ -101,8 +102,13 @@ public class DataIpRiskProcessor {
             uicGroup.setGroupTypeId(UserGroupContents.GRAY_LIST_GROUP);
             uicGroup.setGroupTypeParentId(UserGroupContents.BLACK_WHITE_LIST_GROUP);
             uicGroup.setUserData("ip风控,ip数:" + userCount + ",充值:" + recharge + "元");
-            userGroupRpcService.saveToGroup(uicGroup);
             logger.info("ip:{}下的用户数:{},充值:{}: userId={},traceId={}", GfJsonUtil.toJSONString(userIp), GfJsonUtil.toJSONString(userCount), GfJsonUtil.toJSONString(recharge), GfJsonUtil.toJSONString(userId), TraceIdUtils.getTraceId());
+            try {
+                userGroupRpcService.saveToGroup(uicGroup);
+            }catch (Exception e){
+                logger.error("userId={},error:{},traceId={}",  GfJsonUtil.toJSONString(userId), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                throw  e;
+            }
         }
 
 
