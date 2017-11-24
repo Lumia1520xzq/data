@@ -45,4 +45,21 @@ public interface DataConstants {
      */
     String MONITOR_IP_RECEIVER = "monitor_ip_receiver";
 
+    /**
+     *同ip下登录用户数
+     */
+    String MONITOR_RISK_IP_DAY = "monitor_risk_ip_day";
+
+
+    /**
+     * 用户累计充值金额
+     */
+    String MONITOR_RISK_USER_RECHARGE = "monitor_risk_user_recharge";
+
+    String MONITOR_GRAY_USER_RECHARGE = "monitor_gray_user_recharge";
+
+
+
+
+
 }

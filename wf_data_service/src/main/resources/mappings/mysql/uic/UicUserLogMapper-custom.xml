@@ -32,7 +32,12 @@
 	<select id="findIpByUserId" resultType="string">
 	 SELECT DISTINCT ip FROM `uic_user_log` WHERE user_id = #{userId}
 	</select>
-	
+
+	<select id="getLastIpByUserId" resultType="string">
+		SELECT  ip FROM `uic_user_log` WHERE user_id = #{userId} ORDER BY create_time DESC LIMIT 1
+	</select>
+
+
 	<select id="getUserCountByIp" resultType="UicUserLog">
 	 SELECT ip 'ip',COUNT(DISTINCT user_id) 'userCount' 
 	 FROM uic_user_log  
@@ -45,6 +50,15 @@
 	</if>
 	 GROUP BY ip 
 	 ORDER BY COUNT(DISTINCT user_id) DESC LIMIT 1
+	</select>
+
+
+	<select id="getUserCount" resultType="Integer">
+		SELECT COUNT(DISTINCT user_id)
+		FROM uic_user_log
+		WHERE 1=1
+		AND ip = #{ip}
+		AND create_time  BETWEEN #{beginDate} AND #{endDate}
 	</select>
 	
 </mapper>
