@@ -48,6 +48,7 @@ public class DataIpRiskProcessor {
         List<Long> userGroup = Arrays.asList(UserGroupContents.GRAY_LIST_GROUP);
         List<UicGroup> grayUicGroupList = uicGroupService.getInGroupByUserId(userId, userGroup);
         if (null != grayUicGroupList && grayUicGroupList.size() > 0) {
+            logger.info(GfJsonUtil.toJSONString(grayUicGroupList));
             logger.info("用户已在灰名单: traceId={}, userId={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(userId));
             return;
         }
