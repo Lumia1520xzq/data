@@ -5,8 +5,8 @@ package com.wf.data.service;
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.dao.data.entity.ReportGameInfo;
-import com.wf.data.dao.mycatfish.entity.RoomFishInfo;
 import com.wf.data.dao.mycatfish.RoomFishInfoDao;
+import com.wf.data.dao.mycatfish.entity.RoomFishInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

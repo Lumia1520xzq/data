@@ -2,7 +2,6 @@ package com.wf.data.mqc;
 
 import com.wf.core.event.BettingTaskEvent;
 import com.wf.core.log.LogExceptionStackTrace;
-import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.mqc.processor.ReportChangeBettingProcessor;
 import org.slf4j.Logger;

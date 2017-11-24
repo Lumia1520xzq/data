@@ -1,11 +1,11 @@
 package com.wf.data.rpc.impl;
 
 import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.mycatdata.entity.BehaviorRecord;
 import com.wf.data.dao.data.entity.BehaviorType;
+import com.wf.data.dao.mycatdata.entity.BehaviorRecord;
 import com.wf.data.rpc.BehaviorRecordRpcService;
-import com.wf.data.rpc.dto.JsonResult;
 import com.wf.data.rpc.dto.BehaviorRecordDto;
+import com.wf.data.rpc.dto.JsonResult;
 import com.wf.data.service.BehaviorRecordService;
 import com.wf.data.service.BehaviorTypeService;
 import org.springframework.beans.BeanUtils;
