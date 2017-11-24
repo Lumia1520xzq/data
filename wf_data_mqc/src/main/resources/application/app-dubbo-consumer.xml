@@ -16,4 +16,10 @@
     <dubbo:reference id="userRpcService" interface="com.wf.uic.rpc.UserRpcService"/>
     <dubbo:reference id="userGroupRpcService" interface="com.wf.uic.rpc.UserGroupRpcService"/>
 
+
+
+    <dubbo:reference id="configRpcService" interface="com.wf.base.rpc.ConfigRpcService "/>
+    <dubbo:reference id="userLogRpcService" interface="com.wf.uic.rpc.UserLogRpcService"/>
+    <dubbo:reference id="convertRpcService" interface="com.wf.trans.rpc.ConvertRpcService "/>
+
 </beans>
