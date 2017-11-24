@@ -15,7 +15,6 @@ import com.wf.data.service.UicGroupService;
 import com.wf.data.service.UicUserLogService;
 import com.wf.uic.rpc.UserGroupRpcService;
 import com.wf.uic.rpc.dto.UicGroupDto;
-import jodd.util.CollectionUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +48,9 @@ public class DataIpRiskProcessor {
 
         List<Long> userGroup = Arrays.asList(UserGroupContents.GRAY_LIST_GROUP);
         List<UicGroup> grayUicGroupList = uicGroupService.getInGroupByUserId(userId, userGroup);
+        logger.info("灰名单：traceId={}, grayUicGroupList={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(grayUicGroupList));
         if (CollectionUtils.isNotEmpty(grayUicGroupList)) {
-            logger.info("灰名单：{}",GfJsonUtil.toJSONString(grayUicGroupList.get(0)));
+
             logger.info("用户已在灰名单: traceId={}, userId={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(userId));
             return;
         }
@@ -109,9 +108,9 @@ public class DataIpRiskProcessor {
             logger.info("ip:{}下的用户数:{},充值:{}: userId={},traceId={}", GfJsonUtil.toJSONString(userIp), GfJsonUtil.toJSONString(userCount), GfJsonUtil.toJSONString(recharge), GfJsonUtil.toJSONString(userId), TraceIdUtils.getTraceId());
             try {
                 userGroupRpcService.saveToGroup(uicGroup);
-            }catch (Exception e){
-                logger.error("userId={},error:{},traceId={}",  GfJsonUtil.toJSONString(userId), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
-                throw  e;
+            } catch (Exception e) {
+                logger.error("userId={},error:{},traceId={}", GfJsonUtil.toJSONString(userId), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                throw e;
             }
         }
 
