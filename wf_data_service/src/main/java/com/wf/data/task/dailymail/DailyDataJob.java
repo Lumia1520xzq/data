@@ -17,7 +17,6 @@ import com.wf.data.service.elasticsearch.EsUicPlatformService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.text.DecimalFormat;

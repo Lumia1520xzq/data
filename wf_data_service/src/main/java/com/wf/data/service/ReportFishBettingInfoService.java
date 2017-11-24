@@ -1,8 +1,8 @@
 package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.dao.data.ReportFishBettingInfoDao;
+import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.dao.data.entity.ReportGameInfo;
 import org.springframework.stereotype.Service;
 

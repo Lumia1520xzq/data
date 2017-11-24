@@ -2,7 +2,6 @@ package com.wf.data.common.constants;
 
 
 import com.wf.core.cache.CacheKey;
-import com.wf.core.cache.CacheType;
 
 /**
  * controller

@@ -1,15 +1,15 @@
 package com.wf.data.controller.api;
 
-import javax.validation.Valid;
-
 import com.wf.data.common.DataBaseController;
 import com.wf.data.controller.request.BehaviorRequest;
-import com.wf.data.dao.mycatdata.entity.BehaviorRecord;
 import com.wf.data.dao.data.entity.BehaviorType;
+import com.wf.data.dao.mycatdata.entity.BehaviorRecord;
 import com.wf.data.service.BehaviorRecordService;
 import com.wf.data.service.BehaviorTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin(maxAge = 3600)
 @RequestMapping("/data/api/behaviorRecord")

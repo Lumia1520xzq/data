@@ -2,8 +2,8 @@ package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
-import com.wf.data.dao.data.entity.DataConfig;
 import com.wf.data.dao.data.DataConfigDao;
+import com.wf.data.dao.data.entity.DataConfig;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

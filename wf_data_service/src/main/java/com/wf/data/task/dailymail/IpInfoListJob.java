@@ -1,9 +1,7 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.base.rpc.ConfigRpcService;
 import com.wf.core.email.EmailHander;
 import com.wf.core.log.LogExceptionStackTrace;
-import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
@@ -14,7 +12,6 @@ import com.wf.data.service.DataConfigService;
 import com.wf.data.service.UicUserLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.util.Date;
