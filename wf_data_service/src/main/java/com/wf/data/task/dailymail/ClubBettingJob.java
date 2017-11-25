@@ -1,7 +1,8 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.base.rpc.ConfigRpcService;
 import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
@@ -16,7 +17,6 @@ import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsClubService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.text.DecimalFormat;
@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * 俱乐部邮件
  * 定时发送邮件
- * 处理获取数据失败问题，重试15次
+ * 处理获取数据失败问题，重试5次
  * Created by jianjian on 2017/10/23
  */
 public class ClubBettingJob {
@@ -38,10 +38,8 @@ public class ClubBettingJob {
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
 
     private static final Long CLUB_ANDROID_CHANNEL = 400001001L;
-    
     private static final Long CLUB_IOS_CHANNEL = 500001001L;
-	
-    
+
     private final String EMAIL_STYLE = "<style>table{margin-top:10px;width:700px;" +
             "border-collapse:collapse;border-spacing:0;" +
             "border-top:1px solid #D6D6D6;border-left:1px solid #D6D6D6}" +
@@ -57,9 +55,6 @@ public class ClubBettingJob {
             "<tr><td>返奖率</td><td>AWARD_RATE</td></tr>" +
             "</table>";
 
-
-
-    
 	//查询内部人员
     private List<Long> getInternalUserIds(){
 	List<Long> userIds = uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
@@ -71,8 +66,7 @@ public class ClubBettingJob {
 	List<Long> channelIds = Arrays.asList(CLUB_ANDROID_CHANNEL,CLUB_IOS_CHANNEL);
 	return channelIds;
     }
-    
-    
+
     private String format(Object obj) {
     	DecimalFormat df = new DecimalFormat("#,###");
     	String str = df.format(obj);
@@ -80,14 +74,13 @@ public class ClubBettingJob {
     }
     
     public void execute() {
-        logger.info("开始投注人数分析");
-
+        logger.info("开始俱乐部每小时投注邮件分析:traceId={}", TraceIdUtils.getTraceId());
         byte count = 0;
         Calendar cal = Calendar.getInstance();
         Date currDate = cal.getTime();
         //处理0点时的统计数据，当前日期向前推1小时，保证统计昨天数据
         cal.add(Calendar.HOUR_OF_DAY, -1); 
-        while (count <= 15) {
+        while (count <= 5) {
             try {
                 String receivers = dataConfigService.findByName(DataConstants.CLUB_BETTING_DATA_RECEIVER).getValue();
                 if (StringUtils.isNotEmpty(receivers)) {
@@ -109,20 +102,20 @@ public class ClubBettingJob {
                                             DateUtils.formatDate(currDate, DateUtils.MINUTE_PATTERN)),
                                     content.toString());
                         } catch (MessagingException e) {
-                            logger.error("俱乐部邮件分析发送失败：" + to);
+                            logger.error("俱乐部每小时投注邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
                     }
                 } else {
-                    logger.error(">>>>>>>>>>>>投注人数分析接收人未设置");
+                    logger.error("俱乐部每小时投注邮件未设置收件人，traceId={}", TraceIdUtils.getTraceId());
                 }
-                logger.info(">>>>>>>>>>>>>>投注人数分析正常结束");
+                logger.info("俱乐部每小时投注邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception ex) {
                 count++;
-                if (count <= 15) {
-                    logger.error(">>>>>>>>>>>>>>投注人数分析异常，重新执行 " + count, ex);
+                if (count <= 5) {
+                    logger.error("俱乐部每小时投注邮件发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error(">>>>>>>>>>>>>>投注人数分析重新执行失败，停止分析", ex);
+                    logger.error("俱乐部每小时投注邮件发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 }
             }
         }

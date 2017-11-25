@@ -35,7 +35,7 @@ public class GrayUserJob {
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
 
     public void execute() {
-        logger.info("开始灰名单用户监控分析");
+        logger.info("开始灰名单用户监控分析:traceId={}",TraceIdUtils.getTraceId());
         byte count = 0;
         while (count <= 5) {
             try {
@@ -62,7 +62,6 @@ public class GrayUserJob {
                             //4、注册渠道
                             entity.setRegChannelId(user.getRegChannelId());
                         }
-                        logger.info("IP分析开始{}",new Date());
                         //5、IP
                         List<String> ips = logService.findIpByUserId(userId);
                         if (CollectionUtils.isNotEmpty(ips)) {
@@ -71,7 +70,6 @@ public class GrayUserJob {
                             entity.setIp(uicUserLog.getIp());
                             entity.setIpUserCount(uicUserLog.getUserCount());
                         }
-                        logger.info("IP分析结束{}",new Date());
                         //6、总充值
                         double sumRecharge = transConvertService.findUserSumRecharge(userId);
                         entity.setSumRecharge(sumRecharge);
@@ -84,16 +82,21 @@ public class GrayUserJob {
                         entity.setAfterGrayRecharge(afterGrayRecharge);
                         users.add(entity);
                     }
-                    logger.info("微信绑定状态: traceId={}, jsonObject={},", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(users));
-                    reportGrayUserService.batchSave(users);
+                    logger.info("拉灰用户名单: traceId={}, jsonObject={},", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(users));
+                    try {
+                        reportGrayUserService.batchSave(users);
+                    }catch (Exception e){
+                        logger.error("report_gray_user表保存失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    }
                 }
+                logger.info("灰名单用户监控分析结束:traceId={}",TraceIdUtils.getTraceId());
                 break;
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error("灰名单用户监控分析异常，重新执行 {}, ex={}, traceId={}",count, LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    logger.error("灰名单用户监控分析异常，重新执行{},ex={},traceId={}",count, LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error("灰名单用户监控分析异常 ex={}, traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    logger.error("灰名单用户监控分析异常，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
             }
         }

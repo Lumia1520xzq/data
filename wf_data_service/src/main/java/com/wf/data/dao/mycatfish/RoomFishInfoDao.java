@@ -1,11 +1,11 @@
-package com.wf.data.dao.fish;
+package com.wf.data.dao.mycatfish;
 
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.dao.data.entity.ReportGameInfo;
-import com.wf.data.dao.fish.entity.RoomFishInfo;
+import com.wf.data.dao.mycatfish.entity.RoomFishInfo;
 
 import java.util.List;
 import java.util.Map;

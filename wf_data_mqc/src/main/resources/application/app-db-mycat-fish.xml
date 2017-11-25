@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="mycatfishReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.mycatfish.read.url}" />
+		<property name="username" value="${jdbc.mycatfish.read.username}" />
+		<property name="password" value="${jdbc.mycatfish.read.password}" />
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="50" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="select 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="filters" value="stat" />
+	</bean>
+
+	<bean id="mycatfishMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
+		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="mycatfishReadDataSource" />
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="mycatfishReadDataSource" key="dataSourceRead" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="mycatfishSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="mycatfishMultipleDataSource" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.mycatfish.entity" />
+		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
+		<property name="mapperLocations" value="classpath*:mappings/mycatfish/*.xml" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+	</bean>
+	<bean id="mycatfishMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="mycatfishSqlSessionFactory" />
+		<property name="basePackage" value="com.wf.data.dao.mycatfish" />
+		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
+	</bean>
+
+	<bean id="mycatfishTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="mycatfishMultipleDataSource" />
+	</bean>
+</beans>

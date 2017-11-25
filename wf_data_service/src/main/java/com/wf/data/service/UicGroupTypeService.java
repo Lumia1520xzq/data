@@ -2,8 +2,8 @@ package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.uic.entity.UicGroupType;
 import com.wf.data.dao.uic.UicGroupTypeDao;
+import com.wf.data.dao.uic.entity.UicGroupType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

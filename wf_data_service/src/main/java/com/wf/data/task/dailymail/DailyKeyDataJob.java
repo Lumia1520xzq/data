@@ -1,6 +1,8 @@
 package com.wf.data.task.dailymail;
 
 import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.StringUtils;
@@ -15,7 +17,6 @@ import com.wf.data.service.elasticsearch.EsUicBuryingPointService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ import java.util.Map;
  */
 public class DailyKeyDataJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
 
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
@@ -49,7 +49,7 @@ public class DailyKeyDataJob {
     private final String CONTENT_TWO_END = "</table>";
 
     public void execute() {
-        logger.info("开始查询每日关键数值");
+        logger.info("开始进行每日关键数据分析:traceId={}", TraceIdUtils.getTraceId());
         byte count = 0;
         //昨天的日期
         String date = DateUtils.getYesterdayDate();
@@ -114,20 +114,20 @@ public class DailyKeyDataJob {
                         try {
                             emailHander.sendHtml(to, String.format("%s 关键数值汇总", date), content.toString());
                         } catch (MessagingException e) {
-                            logger.error("每日关键数值发送失败：" + to);
+                            logger.error("每日关键数值邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
                     }
                 } else {
-                    logger.error(">>>>>>>>>>>>每日关键数值接收人未设置");
+                    logger.error("每日关键数值邮件未设置收件人，traceId={}", TraceIdUtils.getTraceId());
                 }
-                logger.info(">>>>>>>>>>>>>>每日关键数值发送正常结束");
+                logger.info("每日关键数值邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception ex) {
                 count++;
                 if (count <= 5) {
-                    logger.error(">>>>>>>>>>>>>>每日关键数值发送异常,重新执行 " + count, ex);
+                    logger.error("每日关键数值邮件发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error(">>>>>>>>>>>>>>每日关键数值重新发送失败", ex);
+                    logger.error("每日关键数值邮件发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 }
             }
         }

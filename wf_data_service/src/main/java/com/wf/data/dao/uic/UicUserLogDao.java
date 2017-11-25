@@ -15,6 +15,11 @@ public interface UicUserLogDao extends CrudDao<UicUserLog> {
     List<UicUserLog> findUserLogByIp(UicUserLog log);
     
     List<String> findIpByUserId(@Param("userId") Long userId);
-    
+
+    String getLastIpByUserId(@Param("userId") Long userId);
+
     UicUserLog getUserCountByIp(@Param("ips") List<String> ips);
+
+
+    Integer getUserCount(UicUserLog log);
 }

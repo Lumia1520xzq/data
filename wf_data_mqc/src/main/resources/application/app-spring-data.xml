@@ -49,7 +49,7 @@
 
     <import resource="app-db-mycat-data.xml" />
     <import resource="app-db-mysql-data.xml" />
-    <import resource="app-db-mysql-fish.xml" />
+    <import resource="app-db-mycat-fish.xml" />
     <import resource="app-db-mysql-trans.xml" />
     <import resource="app-db-mysql-uic.xml" />
 

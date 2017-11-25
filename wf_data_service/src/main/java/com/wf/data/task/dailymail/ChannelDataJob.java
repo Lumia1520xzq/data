@@ -1,6 +1,8 @@
 package com.wf.data.task.dailymail;
 
 import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
@@ -47,7 +49,7 @@ public class ChannelDataJob {
 
 
     public void execute() {
-        logger.info("开始每日各渠道关键数据分析");
+        logger.info("开始每日各渠道关键数据分析:traceId={}", TraceIdUtils.getTraceId());
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
@@ -71,19 +73,20 @@ public class ChannelDataJob {
                         try {
                             emailHander.sendHtml(to,String.format("每日各渠道关键数据分析汇总(%s)",DateUtils.getDate()),content.toString());
                         } catch (MessagingException e) {
-                            logger.error("每日各渠道关键数据分析发送失败：" + to);
+                            logger.error("每日各渠道关键数据邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
                     }
                 } else {
-                    logger.error(">>>>>>>>>>>>每日各渠道关键数据分析接收人未设置");
+                    logger.error("每日各渠道关键数据分析接收人未设置，traceId={}", TraceIdUtils.getTraceId());
                 }
+                logger.info("每日各渠道关键数据邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error(">>>>>>>>>>>>>>每日各渠道关键数据分析异常，重新执行 " + count, e);
+                    logger.error("每日各渠道关键数据发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error(">>>>>>>>>>>>>>每日各渠道关键数据分析异常重新执行失败，停止分析", e);
+                    logger.error("每日各渠道关键数据发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
 
             }
@@ -127,10 +130,8 @@ public class ChannelDataJob {
         Double rechargeSum = transConvertService.findSumRechargeByTime(toMap(date,parentId,channelId));
         // 3、日活
         Integer activeUser = channelService.getActiveUser(date,parentId,channelId);
-
         ReportGameInfo gameInfo = getBettingInfo(date,parentId,channelId);
         ReportGameInfo fishInfo = getFishBettingInfo(date, parentId, channelId);
-
         // 4、投注用户数
         List<Long> bettingUsers = getBettingUsers(date, parentId, channelId);
         List<Long> fishBettingUsers = getFishBettingUsers(date, parentId, channelId);

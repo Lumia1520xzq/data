@@ -1,6 +1,8 @@
 package com.wf.data.task.dailymail;
 
 import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
@@ -16,7 +18,6 @@ import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsUicPlatformService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.util.HashMap;
@@ -30,8 +31,6 @@ import java.util.Map;
  */
 public class PlatformDataJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-
 	private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
 	private final ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
 	private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
@@ -52,7 +51,7 @@ public class PlatformDataJob {
     private final String TABLE_END = "</table>";
 
     public void execute() {
-	logger.info("开始平台数据报表分析");
+	logger.info("开始平台数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
 	byte count = 0;
 	// 昨天的开始时间
 	String date = DateUtils.getYesterdayDate();
@@ -69,19 +68,20 @@ public class PlatformDataJob {
 			try {
 			    emailHander.sendHtml(to,String.format("平台数据报表分析汇总(%s)",DateUtils.getDate()),content.toString());
 			} catch (MessagingException e) {
-			    logger.error("平台数据报表分析发送失败：" + to);
+				logger.error("平台数据日报表发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
 			}
 		    }
 		} else {
-		    logger.error(">>>>>>>>>>>>平台数据报表分析接收人未设置");
+			logger.error("平台数据日报表未设置收件人，traceId={}", TraceIdUtils.getTraceId());
 		}
+			logger.info("平台数据日报表发送成功:traceId={}", TraceIdUtils.getTraceId());
 		break;
 	    } catch (Exception e) {
 		count++;
 		if (count <= 5) {
-		    logger.error(">>>>>>>>>>>>>>平台数据报表分析异常，重新执行 " + count, e);
+			logger.error("平台数据日报表分析异常,重新执行{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
 		} else {
-		    logger.error(">>>>>>>>>>>>>>平台数据报表分析异常重新执行失败，停止分析", e);
+			logger.error("平台数据日报表分析异常，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
 		}
 
 	    }

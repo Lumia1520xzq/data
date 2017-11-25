@@ -1,5 +1,6 @@
 package com.wf.data.common.dal.mybatis;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
@@ -51,9 +52,9 @@ public class SQLPrintPlugin implements Interceptor {
                 try {
                     IbatisExecutSqlFormat sqlFormat = new IbatisExecutSqlFormat();
 //                    System.out.println(sqlFormat.formatSql(invocation, time));
-                    logger.info("[{}]-[{}]","sqlprint",sqlFormat.formatSql(invocation, time));
+                    logger.info("[{}]-[{}]", "sqlprint", sqlFormat.formatSql(invocation, time));
                 } catch (Exception e) {
-                    e.printStackTrace(System.err);
+                    logger.error("SQL监视插件执行异常 ex={}", ExceptionUtils.getStackTrace(e));
                 }
             }
         }
