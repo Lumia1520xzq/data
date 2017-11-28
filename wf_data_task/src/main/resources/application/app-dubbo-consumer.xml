@@ -9,7 +9,6 @@
 
     <dubbo:application name="wf_data_task"/>
     <dubbo:registry id="registry" address="${dubbo.zookeeper}" client="zkclient" timeout="100000"/>
-    <!--<dubbo:protocol name="dubbo" accepts="200" port="${dubbo.api.port}"  />-->
 
 
     <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
