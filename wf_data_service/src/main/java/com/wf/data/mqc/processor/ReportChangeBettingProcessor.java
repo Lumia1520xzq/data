@@ -1,8 +1,12 @@
 package com.wf.data.mqc.processor;
 
 import com.wf.core.event.BettingTaskEvent;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.dao.data.entity.ReportChangeNote;
 import com.wf.data.service.ReportChangeNoteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +15,10 @@ public class ReportChangeBettingProcessor {
     @Autowired
     private ReportChangeNoteService reportChangeNoteService;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public void process(final BettingTaskEvent event) {
+
         Long userId = event.getUserId();
         if (userId == null) {
             return;
@@ -34,8 +41,12 @@ public class ReportChangeBettingProcessor {
         if (event.getResturnAmount() != null) {
             changeNote.setResultAmount(event.getResturnAmount().doubleValue());
         }
+        try {
+            reportChangeNoteService.save(changeNote);
+        }catch (Exception e){
+            logger.error("保存单笔投注流水失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+        }
 
-        reportChangeNoteService.save(changeNote);
 
 
     }
