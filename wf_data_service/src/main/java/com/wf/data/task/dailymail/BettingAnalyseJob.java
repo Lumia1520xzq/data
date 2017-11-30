@@ -1,5 +1,30 @@
 package com.wf.data.task.dailymail;
 
+import com.wf.core.email.EmailHander;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.TraceIdUtils;
+import com.wf.core.utils.core.SpringContextHolder;
+import com.wf.core.utils.type.BigDecimalUtil;
+import com.wf.core.utils.type.DateUtils;
+import com.wf.core.utils.type.NumberUtils;
+import com.wf.core.utils.type.StringUtils;
+import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.GameTypeContents;
+import com.wf.data.common.constants.UserGroupContents;
+import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.service.DataConfigService;
+import com.wf.data.service.ReportChangeNoteService;
+import com.wf.data.service.RoomFishInfoService;
+import com.wf.data.service.UicGroupService;
+import com.wf.data.service.elasticsearch.EsUicAllGameService;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.mail.MessagingException;
+import java.text.DecimalFormat;
+import java.util.*;
+
 /**
  * 平台投注人数分析汇总
  * 定时发送邮件
@@ -7,7 +32,7 @@ package com.wf.data.task.dailymail;
  * Created by jianjian on 2017/08/24
  */
 public class BettingAnalyseJob {
-   /* private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final ReportChangeNoteService reportService = SpringContextHolder.getBean(ReportChangeNoteService.class);
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
@@ -207,13 +232,16 @@ public class BettingAnalyseJob {
         int hourAfter = hour + 1;
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
+        String dbName = "fish";
+        String yesterday = DateUtils.formatDate(cal.getTime(),DateUtils.YYYYMMDD_PATTERN);
+        dbName = dbName +yesterday;
         //今天所有的投注情况
-        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0));
+        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0),dbName);
         if (dayInfo == null) {
             dayInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况
-        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 1));
+        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 1),dbName);
         if (hourInfo == null) {
             hourInfo = new ReportGameInfo();
         }
@@ -244,6 +272,9 @@ public class BettingAnalyseJob {
         int hourAfter = hour + 1;
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
+        String dbName = "fish";
+        String yesterday = DateUtils.formatDate(cal.getTime(),DateUtils.YYYYMMDD_PATTERN);
+        dbName = dbName +yesterday;
         //今天所有的投注情况(除捕鱼) 
         ReportGameInfo daySumInfo = reportService.findCathecticListByDate(getParams(cal, null, 0));
         if (daySumInfo == null) {
@@ -256,13 +287,13 @@ public class BettingAnalyseJob {
         }
         //今天所有的投注情况(捕鱼)
         Map<String, Object> params = getParams(cal, null, 0);
-        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0));
+        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0),dbName);
         if (dayFishInfo == null) {
             dayFishInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况(捕鱼)
         Map<String, Object> map = getParams(cal, null, 1);
-        ReportGameInfo hourFishInfo = roomFishInfoService.findBettingInfoByDate(map);
+        ReportGameInfo hourFishInfo = roomFishInfoService.findBettingInfoByDate(map,dbName);
         if (hourFishInfo == null) {
             hourFishInfo = new ReportGameInfo();
         }
@@ -270,10 +301,10 @@ public class BettingAnalyseJob {
         Integer dailyActive = gameService.getActiveUser(null, DateUtils.formatDate(cal.getTime()));
         //投注用户 需要去重
         List<Long> daySumUserIds = reportService.findBettingUsersByDate(params);
-        List<Long> dayFishUserIds = roomFishInfoService.findBettingUsersByDate(params);
+        List<Long> dayFishUserIds = roomFishInfoService.findBettingUsersByDate(params,dbName);
         Integer bettingUser = getBettingUsers(daySumUserIds, dayFishUserIds);
         List<Long> hourSumUserIds = reportService.findBettingUsersByDate(map);
-        List<Long> hourFishUserIds = roomFishInfoService.findBettingUsersByDate(map);
+        List<Long> hourFishUserIds = roomFishInfoService.findBettingUsersByDate(map,dbName);
         Integer hourBettingUser = getBettingUsers(hourSumUserIds, hourFishUserIds);
         return CONTENT_TEMP
                 .replace("TODAY", (today < 10 ? ("0" + today) : String.valueOf(today)))
@@ -315,5 +346,5 @@ public class BettingAnalyseJob {
         }
         return count;
     }
-*/
+
 }
