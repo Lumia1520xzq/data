@@ -44,7 +44,7 @@ public class DataBaseController extends BaseController {
         }
         shopChannel = shopChannel.split("#")[0];
         if (!NumberUtils.isDigits(shopChannel)) {
-            throw new ChannelErrorException();
+            throw new ChannelErrorException(getAppChannel());
         }
         ChannelInfoDto channelInfoDto = getChannelById(Long.parseLong(shopChannel));
         return channelInfoDto.getId();
@@ -57,6 +57,9 @@ public class DataBaseController extends BaseController {
      * @return
      */
     protected Long getParentChannelId(final Long channelId) {
+        if (channelId == null) {
+            return null;
+        }
         ChannelInfoDto channelInfo = getChannelById(channelId);
         return channelInfo.getParentId() == null ? channelId : channelInfo.getParentId();
     }
@@ -75,7 +78,7 @@ public class DataBaseController extends BaseController {
         if (channelInfoDto == null) {
             channelInfoDto = channelRpcService.get(channelId);
             if (channelInfoDto == null || channelInfoDto.getEnable() == DataConstants.NO) {
-                throw new ChannelErrorException();
+                throw new ChannelErrorException(channelId.toString());
             }
             ehcacheManager.set(DataCacheKey.CHANNEL_INFO.key(channelId), channelInfoDto, EXPIRE_INTERVAL);
         }
