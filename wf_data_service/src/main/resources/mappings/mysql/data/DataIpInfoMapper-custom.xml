@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataIpInfoDao">
+
+    <update id="updateIpCount">
+        UPDATE data_ip_info SET
+        ip_count = #{ipCount}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getDataIpInfo" resultType="DataIpInfo">
+        SELECT <include refid="dataIpInfoColumns"/>
+        FROM data_ip_info t
+        WHERE t.ip = #{ip}
+        AND t.login_date = #{loginDate}
+        AND t.delete_flag = 0
+    </select>
+</mapper>
+

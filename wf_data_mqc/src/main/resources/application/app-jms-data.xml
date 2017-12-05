@@ -35,12 +35,12 @@
 	</rabbit:listener-container>
 	<bean id="reportChangeBettingListener" class="com.wf.data.mqc.ReportChangeBettingListener" />
 
-	<!--根据ip风控投注用户-->
-	<rabbit:queue name="data_ip_risk" />
+	<!--用户登录日志-->
+	<rabbit:queue name="login_log_queue" />
 	<rabbit:listener-container connection-factory="connectionFactory" message-converter="messageConverter" concurrency="100" >
-		<rabbit:listener queues="data_ip_risk" ref="dataIpRiskListener" />
+		<rabbit:listener queues="login_log_queue" ref="userLoginLogListener" />
 	</rabbit:listener-container>
-	<bean id="dataIpRiskListener" class="com.wf.data.mqc.DataIpRiskListener" />
+	<bean id="userLoginLogListener" class="com.wf.data.mqc.UserLoginLogListener" />
 
 
 </beans>
