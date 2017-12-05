@@ -20,6 +20,8 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_RISK_FLAG,
 
+	DATA_IP_LOCK,
+
 	;
 	private final String value;
 	private DataCacheKey() {

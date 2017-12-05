@@ -8,7 +8,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
     <update id="updateIpCount">
         UPDATE data_ip_info SET
-        ip_count = #{ipCount}
+        ip_count = ip_count + #{ipCount}
         WHERE id = #{id}
     </update>
 
