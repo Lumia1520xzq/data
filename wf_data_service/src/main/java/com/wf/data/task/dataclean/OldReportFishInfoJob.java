@@ -1,10 +1,14 @@
 package com.wf.data.task.dataclean;
 
 import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
+import com.wf.core.utils.type.StringUtils;
+import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
+import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportFishBettingInfoService;
 import com.wf.data.service.RoomFishInfoService;
 import org.slf4j.Logger;
@@ -27,12 +31,16 @@ public class OldReportFishInfoJob {
 
     private final RoomFishInfoService roomFishInfoService = SpringContextHolder.getBean(RoomFishInfoService.class);
     private final ReportFishBettingInfoService reportFishBettingInfoService = SpringContextHolder.getBean(ReportFishBettingInfoService.class);
-
+    private final DataConfigService dataConfigService= SpringContextHolder.getBean(DataConfigService.class);
 
     public void execute() {
         logger.info("捕鱼数据清洗开始:traceId={}", TraceIdUtils.getTraceId());
-
-        Date startDate = DateUtils.parseDate("2017-11-29");
+        String date = dataConfigService.findByName(DataConstants.DATA_FISH_BEGIN_DAY).getValue();
+        if (StringUtils.isBlank(date)) {
+            logger.error("捕鱼开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
+            return;
+        }
+        Date startDate = DateUtils.parseDate(date);
         Date nextDate = startDate;
         Date endDate = DateUtils.parseDate(DateUtils.formatDate(new Date()));
         int i = 0;

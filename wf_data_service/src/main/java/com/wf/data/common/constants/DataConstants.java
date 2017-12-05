@@ -59,6 +59,9 @@ public interface DataConstants {
     String MONITOR_GRAY_USER_RECHARGE = "monitor_gray_user_recharge";
 
 
+    String DATA_FISH_BEGIN_DAY = "data_fish_begin_day";
+
+
 
 
 
