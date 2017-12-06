@@ -37,14 +37,24 @@ public class OldReportFishInfoJob {
         logger.info("捕鱼数据清洗开始:traceId={}", TraceIdUtils.getTraceId());
         String date = dataConfigService.findByName(DataConstants.DATA_FISH_BEGIN_DAY).getValue();
         if (StringUtils.isBlank(date)) {
+            logger.error("捕鱼时间未设置: traceId={}", TraceIdUtils.getTraceId());
+            return;
+        }
+
+        String[] dates = date.split(",");
+        if (StringUtils.isBlank(dates[0])) {
             logger.error("捕鱼开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
             return;
         }
-        Date startDate = DateUtils.parseDate(date);
+        if (StringUtils.isBlank(dates[1])) {
+            logger.error("捕鱼结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
+            return;
+        }
+        Date startDate = DateUtils.parseDate(dates[0]);
         Date nextDate = startDate;
-        Date endDate = DateUtils.parseDate(DateUtils.formatDate(new Date()));
+        Date endDate = DateUtils.parseDate(dates[1]);
         int i = 0;
-        while (nextDate.getTime() <= endDate.getTime()) {
+        while (nextDate.getTime() < endDate.getTime()) {
             nextDate = DateUtils.getNextDate(startDate, i++);
             String bettingDate = DateUtils.formatDate(nextDate);
             Date searchDate = DateUtils.parseDate(bettingDate);
