@@ -22,6 +22,8 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_IP_LOCK,
 
+	DATA_ACTIVE_EVENT,
+
 	;
 	private final String value;
 	private DataCacheKey() {
