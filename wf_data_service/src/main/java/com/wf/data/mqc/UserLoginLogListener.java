@@ -3,6 +3,7 @@ package com.wf.data.mqc;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.mqc.processor.UserLoginLogProcessor;
+import com.wf.data.service.DataConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -22,14 +23,17 @@ public class UserLoginLogListener implements MessageListener {
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private UserLoginLogProcessor userLoginLogProcessor;
+    @Autowired
+    private DataConfigService dataConfigService;
 
     @Override
     public void onMessage(Message message) {
 
         try {
             Map<String, Object> mapReq = (Map<String, Object>) rabbitTemplate.getMessageConverter().fromMessage(message);
-
-            userLoginLogProcessor.process(mapReq);
+            if (dataConfigService.getBooleanValueByName("data_ip_risk_open")) {
+                userLoginLogProcessor.process(mapReq);
+            }
         } catch (Exception e) {
             logger.error("UserLoginLogListener处理错误: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
