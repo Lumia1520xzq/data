@@ -5,9 +5,13 @@ import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.BehaviorType;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @MyBatisDao(tableName = "uic_behavior_type")
 public interface BehaviorTypeDao extends CrudDao<BehaviorType> {
 	
 	BehaviorType getByEventId(@Param("eventId") Long eventId);
+
+	List<Long> getActiveEventId();
 
 }

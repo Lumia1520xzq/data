@@ -7,12 +7,20 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+    <bean class="com.wf.core.utils.core.SpringContextHolder"/>
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
         <constructor-arg index="0" value="${es.ips}" />
         <constructor-arg index="1" value="${es.clusterName}" />
         <constructor-arg index="2" value="${es.port}" />
         <constructor-arg index="3" value="${es.nodeName}" />
+    </bean>
+
+    <bean id="dbConfig" class="com.wf.data.common.config.DbConfig">
+        <constructor-arg index="0" value="${src.host}" />
+        <constructor-arg index="1" value="${src.username}" />
+        <constructor-arg index="2" value="${src.password}" />
+        <constructor-arg index="3" value="${src.port}" />
     </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
@@ -35,7 +43,7 @@
 
     <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
 
-    <bean class="com.wf.core.utils.core.SpringContextHolder"/>
+
 
     <import resource="classpath*:wf/spring-redis.xml"/>
     <import resource="classpath*:wf/spring-idg.xml"/>
@@ -49,7 +57,6 @@
 
     <import resource="app-db-mycat-data.xml" />
     <import resource="app-db-mysql-data.xml" />
-    <import resource="app-db-mycat-fish.xml" />
     <import resource="app-db-mysql-trans.xml" />
     <import resource="app-db-mysql-uic.xml" />
 

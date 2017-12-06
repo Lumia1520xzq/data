@@ -8,6 +8,12 @@
 		WHERE  t.delete_flag = 0
 		AND t.event_id = #{eventId}
 	</select>
+
+	<select id="getActiveEventId" resultType="Long">
+		SELECT event_id FROM uic_behavior_type t
+		WHERE  t.delete_flag = 0
+		AND t.event_id  LIKE '%99'
+	</select>
 	
 </mapper>
 
