@@ -88,14 +88,21 @@ public class BettingAnalyseJob {
                     content.append(EMAIL_STYLE);
                     //所有游戏汇总信息
                     content.append(buildSumInfo(cal));
-                    content.append(buildDartInfo(cal));
-                    content.append(buildBilliardInfo(cal));
-                    content.append(buildWarInfo(cal));
-                    content.append(buildArrowInfo(cal));
-                    content.append(buildFootballInfo(cal));
-                    content.append(buildMotorInfo(cal));
-                    content.append(buildKingdomInfo(cal));
+                    //多多捕鱼
                     content.append(buildFishInfo(cal));
+                    //梦想桌球
+                    content.append(buildBilliardInfo(cal));
+                    //梦想飞镖
+                    content.append(buildDartInfo(cal));
+                    //热血摩托
+                    content.append(buildMotorInfo(cal));
+                    //热血军团
+                    content.append(buildWarInfo(cal));
+                    //貂蝉保卫战
+                    content.append(buildArrowInfo(cal));
+                    //多多三国
+                    content.append(buildKingdomInfo(cal));
+                    //欢乐套圈
                     content.append(buildQuoitsInfo(cal));
                     content.insert(0, "截止" + DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN + " HH:00") + "<br/><br/>");
                     for (String to : receivers.split(",")) {
@@ -147,11 +154,6 @@ public class BettingAnalyseJob {
     private String buildArrowInfo(Calendar cal) {
         String temp = getTemp(cal, 5);
         return temp.replace("GAME_NAME", "貂蝉保卫战");
-    }
-
-    private String buildFootballInfo(Calendar cal) {
-        String temp = getTemp(cal, 7);
-        return temp.replace("GAME_NAME", "足球竞猜");
     }
 
     private String buildMotorInfo(Calendar cal) {
