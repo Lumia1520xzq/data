@@ -16,10 +16,12 @@ import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsUicPlatformService;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +152,7 @@ public class PlatformDataJob {
 	// 3、累计用户
 	Integer sumUser = platformService.getSumUser();
 	// 4、新增充值人数
-	Integer newRechargeUser =platformService.getNewRechargeUser(date);
+	Integer newRechargeUser = getNewRechargeUsers(date);
 	// 5、累计充值人数
 	Integer sumRechargeUser = platformService.getSumRechargeUser();
 	// 投注信息
@@ -180,7 +182,7 @@ public class PlatformDataJob {
 		.replace("sumUser", sumUser.toString())
 		.replace("newRechargeUser", newRechargeUser.toString())
 		.replace("sumRechargeUser", sumRechargeUser.toString())
-		
+
 		.replace("cathecticMoney", cathecticMoney.toString())
 		.replaceFirst("winMoney", winMoney.toString())
 		.replace("moneyGap", moneyGap.toString())
@@ -233,14 +235,29 @@ public class PlatformDataJob {
     	return sb.toString();
     }
     
-    //趋势=>充值用户数
     private Integer getRechargeUser(String date){
     	Map<String,Object> params=new HashMap<String,Object>();
     	params.put("beginDate", date+" 00:00:00");
     	params.put("endDate", date+" 23:59:59");
-    	List<Long> list=transConvertService.getRechargeUserIdsByDay(params);
+    	List<Long> list = transConvertService.getRechargeUserIdsByDay(params);
     	return list.size();
     }
-    
+
+    private Integer getNewRechargeUsers(String date){
+		Map<String,Object> params = new HashMap<>();
+		String yesDay = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date),1));
+		params.put("endDate",yesDay + " 23:59:59");
+		List<Long> oldUserIds = transConvertService.getRechargeUserIdsByDay(params);
+		params.put("beginDate",date + " 00:00:00");
+		params.put("endDate",date + " 23:59:59");
+		List<Long> newUserIds = transConvertService.getRechargeUserIdsByDay(params);
+		if (CollectionUtils.isEmpty(newUserIds)) {
+			return 0;
+		}
+		if (CollectionUtils.isEmpty(oldUserIds)){
+			return newUserIds.size();
+		}
+		return CollectionUtils.intersection(newUserIds,CollectionUtils.disjunction(newUserIds,oldUserIds)).size();
+	}
 
 }

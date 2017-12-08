@@ -1,6 +1,7 @@
 package com.wf.data.service.elasticsearch;
 
 import com.wf.core.cache.CacheHander;
+import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.data.common.constants.BuryingPointContents;
@@ -9,6 +10,7 @@ import com.wf.data.common.utils.DateUtils;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
 import com.wf.data.dao.uic.entity.UicUser;
+import com.wf.data.service.TransConvertService;
 import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -34,7 +36,6 @@ public class EsUicPlatformService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private EsClientFactory esClientFactory;
-
     @Autowired
     private CacheHander cacheHander;
 
