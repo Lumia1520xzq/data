@@ -4,7 +4,6 @@ import com.wf.core.event.BettingTaskEvent;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.data.service.DataConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -20,8 +19,6 @@ public class ReportTaskBettingListener implements MessageListener {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    @Autowired
-    private DataConfigService dataConfigService;
 
     @Override
     public void onMessage(Message message) {
@@ -29,15 +26,6 @@ public class ReportTaskBettingListener implements MessageListener {
         BettingTaskEvent event = (BettingTaskEvent) rabbitTemplate.getMessageConverter().fromMessage(message);
         try {
             rabbitTemplate.convertAndSend("report_change_betting", event);
-        } catch (Exception e) {
-            logger.error("ReportTaskBettingListener转发失败: traceId={}, ex={},event={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(event));
-
-        }
-
-        try {
-            if(dataConfigService.getBooleanValueByName("data_ip_risk_open")){
-                rabbitTemplate.convertAndSend("data_ip_risk", event);
-            }
         } catch (Exception e) {
             logger.error("ReportTaskBettingListener转发失败: traceId={}, ex={},event={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(event));
 

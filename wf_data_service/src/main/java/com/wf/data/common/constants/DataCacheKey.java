@@ -16,6 +16,14 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_CONFIG_BY_NAME,
 
+	DATA_IP_USER,
+
+	DATA_RISK_FLAG,
+
+	DATA_IP_LOCK,
+
+	DATA_ACTIVE_EVENT,
+
 	;
 	private final String value;
 	private DataCacheKey() {

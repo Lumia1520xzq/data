@@ -48,7 +48,12 @@ public class ReportFishInfoJob {
         Map<String, Object> map = new HashMap<>();
         map.put("beginDate", beginDate);
         map.put("endDate", endDate);
-        return roomFishInfoService.findFishDateByDate(map);
+
+        String dbName = "fish";
+        String yesterday = DateUtils.formatDate(searchDate,DateUtils.YYYYMMDD_PATTERN);
+        dbName = dbName +yesterday;
+
+        return roomFishInfoService.findFishDateByDate(map,dbName);
     }
 
 
