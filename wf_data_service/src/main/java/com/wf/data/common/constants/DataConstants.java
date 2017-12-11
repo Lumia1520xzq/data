@@ -60,20 +60,14 @@ public interface DataConstants {
      */
     String MONITOR_RISK_USER_RECHARGE = "monitor_risk_user_recharge";
 
-<<<<<<< HEAD
+
     /**
      * 每日推送
      */
     String DAILY_INTRODUCE_RECEIVER = "daily_introduce_receiver";
-=======
+
     String MONITOR_GRAY_USER_RECHARGE = "monitor_gray_user_recharge";
 
-
     String DATA_FISH_BEGIN_DAY = "data_fish_begin_day";
-
-
-
-
->>>>>>> test
 
 }
