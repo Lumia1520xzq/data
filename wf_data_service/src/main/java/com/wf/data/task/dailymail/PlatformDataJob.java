@@ -150,7 +150,8 @@ public class PlatformDataJob {
 	// 3、累计用户
 	Integer sumUser = platformService.getSumUser();
 	// 4、新增充值人数
-	Integer newRechargeUser =platformService.getNewRechargeUser(date);
+//	Integer newRechargeUser = platformService.getNewRechargeUser(date);
+	Integer newRechargeUser = 0;
 	// 5、累计充值人数
 	Integer sumRechargeUser = platformService.getSumRechargeUser();
 	// 投注信息
