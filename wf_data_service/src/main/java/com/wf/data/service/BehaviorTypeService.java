@@ -7,6 +7,8 @@ import com.wf.data.dao.data.BehaviorTypeDao;
 import com.wf.data.dao.data.entity.BehaviorType;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author jijie.chen
  *
@@ -22,6 +24,14 @@ public class BehaviorTypeService extends CrudService<BehaviorTypeDao, BehaviorTy
 			}
 		});
 		
+	}
+
+	/**
+	 * 获取所有游戏日活埋点
+	 * @return
+	 */
+	public List<Long> getActiveEventId(){
+		return cacheHander.cache(DataCacheKey.DATA_ACTIVE_EVENT.key(),() -> dao.getActiveEventId());
 	}
 
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataIpInfoDao">
+
+	<sql id="dataIpInfoColumns">
+		t.id,
+		t.ip,
+		t.ip_count,
+		t.channel_id,
+		t.login_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+
+	<sql id="dataIpInfoWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="dataIpInfoJoins">
+	</sql>
+
+	<select id="get" resultType="DataIpInfo">
+		SELECT <include refid="dataIpInfoColumns"/> FROM data_ip_info t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DataIpInfo">
+		SELECT <include refid="dataIpInfoColumns"/> FROM data_ip_info t <include refid="dataIpInfoJoins"/>
+		WHERE <include refid="dataIpInfoWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM data_ip_info t WHERE <include refid="dataIpInfoWhere" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO data_ip_info (
+		id,
+		ip,
+		ip_count,
+		channel_id,
+		login_date,
+		create_time,
+		delete_flag
+		) VALUES (
+		#{id},
+		#{ip},
+		#{ipCount},
+		#{channelId},
+		#{loginDate},
+		#{createTime},
+		#{deleteFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE data_ip_info SET
+			ip = #{ip},
+			ip_count = #{ipCount},
+			channel_id = #{channelId},
+			login_date = #{loginDate},
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE data_ip_info SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

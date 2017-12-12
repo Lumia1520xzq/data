@@ -88,14 +88,21 @@ public class BettingAnalyseJob {
                     content.append(EMAIL_STYLE);
                     //所有游戏汇总信息
                     content.append(buildSumInfo(cal));
-                    content.append(buildDartInfo(cal));
-                    content.append(buildBilliardInfo(cal));
-                    content.append(buildWarInfo(cal));
-                    content.append(buildArrowInfo(cal));
-                    content.append(buildFootballInfo(cal));
-                    content.append(buildMotorInfo(cal));
-                    content.append(buildKingdomInfo(cal));
+                    //多多捕鱼
                     content.append(buildFishInfo(cal));
+                    //梦想桌球
+                    content.append(buildBilliardInfo(cal));
+                    //梦想飞镖
+                    content.append(buildDartInfo(cal));
+                    //热血摩托
+                    content.append(buildMotorInfo(cal));
+                    //热血军团
+                    content.append(buildWarInfo(cal));
+                    //貂蝉保卫战
+                    content.append(buildArrowInfo(cal));
+                    //多多三国
+                    content.append(buildKingdomInfo(cal));
+                    //欢乐套圈
                     content.append(buildQuoitsInfo(cal));
                     content.insert(0, "截止" + DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN + " HH:00") + "<br/><br/>");
                     for (String to : receivers.split(",")) {
@@ -147,11 +154,6 @@ public class BettingAnalyseJob {
     private String buildArrowInfo(Calendar cal) {
         String temp = getTemp(cal, 5);
         return temp.replace("GAME_NAME", "貂蝉保卫战");
-    }
-
-    private String buildFootballInfo(Calendar cal) {
-        String temp = getTemp(cal, 7);
-        return temp.replace("GAME_NAME", "足球竞猜");
     }
 
     private String buildMotorInfo(Calendar cal) {
@@ -232,13 +234,16 @@ public class BettingAnalyseJob {
         int hourAfter = hour + 1;
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
+        String dbName = "fish";
+        String yesterday = DateUtils.formatDate(cal.getTime(),DateUtils.YYYYMMDD_PATTERN);
+        dbName = dbName +yesterday;
         //今天所有的投注情况
-        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0));
+        ReportGameInfo dayInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0),dbName);
         if (dayInfo == null) {
             dayInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况
-        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 1));
+        ReportGameInfo hourInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 1),dbName);
         if (hourInfo == null) {
             hourInfo = new ReportGameInfo();
         }
@@ -269,6 +274,9 @@ public class BettingAnalyseJob {
         int hourAfter = hour + 1;
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
+        String dbName = "fish";
+        String yesterday = DateUtils.formatDate(cal.getTime(),DateUtils.YYYYMMDD_PATTERN);
+        dbName = dbName +yesterday;
         //今天所有的投注情况(除捕鱼) 
         ReportGameInfo daySumInfo = reportService.findCathecticListByDate(getParams(cal, null, 0));
         if (daySumInfo == null) {
@@ -281,13 +289,13 @@ public class BettingAnalyseJob {
         }
         //今天所有的投注情况(捕鱼)
         Map<String, Object> params = getParams(cal, null, 0);
-        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0));
+        ReportGameInfo dayFishInfo = roomFishInfoService.findBettingInfoByDate(getParams(cal, null, 0),dbName);
         if (dayFishInfo == null) {
             dayFishInfo = new ReportGameInfo();
         }
         //过去一小时的投注情况(捕鱼)
         Map<String, Object> map = getParams(cal, null, 1);
-        ReportGameInfo hourFishInfo = roomFishInfoService.findBettingInfoByDate(map);
+        ReportGameInfo hourFishInfo = roomFishInfoService.findBettingInfoByDate(map,dbName);
         if (hourFishInfo == null) {
             hourFishInfo = new ReportGameInfo();
         }
@@ -295,10 +303,10 @@ public class BettingAnalyseJob {
         Integer dailyActive = gameService.getActiveUser(null, DateUtils.formatDate(cal.getTime()));
         //投注用户 需要去重
         List<Long> daySumUserIds = reportService.findBettingUsersByDate(params);
-        List<Long> dayFishUserIds = roomFishInfoService.findBettingUsersByDate(params);
+        List<Long> dayFishUserIds = roomFishInfoService.findBettingUsersByDate(params,dbName);
         Integer bettingUser = getBettingUsers(daySumUserIds, dayFishUserIds);
         List<Long> hourSumUserIds = reportService.findBettingUsersByDate(map);
-        List<Long> hourFishUserIds = roomFishInfoService.findBettingUsersByDate(map);
+        List<Long> hourFishUserIds = roomFishInfoService.findBettingUsersByDate(map,dbName);
         Integer hourBettingUser = getBettingUsers(hourSumUserIds, hourFishUserIds);
         return CONTENT_TEMP
                 .replace("TODAY", (today < 10 ? ("0" + today) : String.valueOf(today)))

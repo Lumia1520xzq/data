@@ -26,7 +26,7 @@ import java.util.*;
 
 /**
  * @author jianjian.huang
- * @date 2017年8月23日
+ * @date 2017年12月8日
  */
 
 @Service
@@ -34,19 +34,20 @@ public class EsUicPlatformService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private EsClientFactory esClientFactory;
-
     @Autowired
     private CacheHander cacheHander;
 
-
     public UicUser get(final Long id) {
-        return esClientFactory.get(EsContents.UIC_USER, EsContents.UIC_USER, id.toString(),
-                UicUser.class);
+        return esClientFactory.get(EsContents.UIC_USER ,EsContents.UIC_USER, id.toString(),UicUser.class);
     }
 
-    // 当日新增用户list<Long>
+    /**
+     * 当日新增用户ID的list<Long>
+     * @param date
+     * @return
+     */
     public List<Long> getNewUserList(String date) {
-        List<Long> list = new ArrayList<Long>();
+        List<Long> list = new ArrayList<>();
         List<UicUser> users = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, getUicUserQuery(date), 0, 10000, UicUser.class);
         if (CollectionUtils.isNotEmpty(users)) {
             for (UicUser user : users) {
@@ -60,13 +61,21 @@ public class EsUicPlatformService {
         return esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, userQuery(date, channelId), 0, 1000000, UicUser.class);
     }
 
-    // 1、新增用户
+    /**
+     * 新增用户数量
+     * @param date
+     * @return
+     */
     public Integer getNewUser(String date) {
         List<UicUser> users = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, getUicUserQuery(date), 0, 10000, UicUser.class);
         return users.size();
     }
 
-    // 2、活跃用户(游戏)
+    /**
+     * 游戏活跃用户数
+     * @param date
+     * @return
+     */
     public Integer getActiveUser(String date) {
         AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
         Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date), 1);
@@ -74,14 +83,21 @@ public class EsUicPlatformService {
         return activeUsers.size();
     }
 
-    // 3、累计用户
+    /**
+     * 累计用户数
+     * @return
+     */
     public Integer getSumUser() {
         AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
         List<Long> sumUser = getUserIds(aggsBuilder, null, null, null, BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
         return sumUser.size();
     }
 
-    // 4、新增充值人数
+    /**
+     * 新增充值人数
+     * @param date
+     * @return
+     */
     public Integer getNewRechargeUser(String date) {
         AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
         List<Long> oldUsers = getUserIds(aggsBuilder, null, null, date + " 00:00:00", BuryingPointContents.POINT_TYPE_RECHARGE_SUCCESS);
@@ -91,13 +107,15 @@ public class EsUicPlatformService {
         return count;
     }
 
-    // 5、累计充值人数
+    /**
+     * 累计充值人数
+     * @return
+     */
     public Integer getSumRechargeUser() {
         AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
         List<Long> sumUser = getUserIds(aggsBuilder, null, null, null, BuryingPointContents.POINT_TYPE_RECHARGE_SUCCESS);
         return sumUser.size();
     }
-
 
     // 新用户中的投注人数
     public Integer getNewBettingUser(String date) {

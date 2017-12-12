@@ -5,6 +5,7 @@ import org.elasticsearch.script.Script;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 import java.util.Map;
 
@@ -31,10 +32,6 @@ public class EsQueryBuilders {
 		return builder;
 	}
 
-	/**
-	 * 查询所有
-	 * @return
-	 */
 	public static MatchAllQueryBuilder matchAllQuery() {
 		
         return QueryBuilders.matchAllQuery();
@@ -107,21 +104,24 @@ public class EsQueryBuilders {
 	 * @return
 	 */
 	public static AggregationBuilder addAggregation(String name, String field, Integer size){
-		if(size == null) size = 10;
+		if(size == null) {size = 10;}
 		return AggregationBuilders.terms(name).field(field).size(size);
+	}
+
+	public static AggregationBuilder addAggregationTermAsc(String name, String field, Integer size,boolean asc){
+		if(size == null) {size = 10;}
+		return AggregationBuilders.terms(name).field(field).size(size).order(Terms.Order.term(asc));
 	}
 	
 	
 	public static AggregationBuilder sumAggregation(String name, String field){
 		return AggregationBuilders.sum(name).field(field);
 	}
-	
-	public static AggregationBuilder dateHistogram(String name, String field, DateHistogramInterval interval){
-		return AggregationBuilders.dateHistogram(name).field(field).dateHistogramInterval(interval);
-		
+
+	public static AggregationBuilder minAggregation(String name, String field){
+		return AggregationBuilders.min(name).field(field);
 	}
-	
-	//多字段乘积求和  mapScript自己定义
+
 	public static AggregationBuilder scriptedMetric(String name, Script mapScript){
 		Script initScript=new Script("params._agg.transactions=[]");
 		Script combineScript=new Script("double total = 0; for (t in params._agg.transactions) { total += t } return total");
@@ -129,5 +129,5 @@ public class EsQueryBuilders {
 		return AggregationBuilders.scriptedMetric(name).initScript(initScript).mapScript(mapScript)
 			   .combineScript(combineScript).reduceScript(reduceScript);
 	}
-	
+
 }
