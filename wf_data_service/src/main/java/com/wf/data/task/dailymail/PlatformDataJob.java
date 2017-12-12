@@ -16,7 +16,6 @@ import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsUicPlatformService;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,15 +49,13 @@ public class PlatformDataJob {
     +"<tr style='font-weight:bold'><td>日期</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>充值用户数</td><td>付费渗透率</td><td>新增用户</td><td>新增用户投注人数</td><td>新用户投注转化率</td><td>新增次留</td></tr>"; 
 
     private final String TABLE_END = "</table>";
-	private static final int TIMES = 5;
-	private static final String COMMA = ",";
 
     public void execute() {
 	logger.info("开始平台数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
 	byte count = 0;
 	// 昨天的开始时间
 	String date = DateUtils.getYesterdayDate();
-	while (count <= TIMES) {
+	while (count <= 5) {
 	    try {
 		// 获取收件人 ------ 收件人要改
 		String receivers = dataConfigService.findByName(DataConstants.PLATFORM_DATA_RECEIVER).getValue();
@@ -67,7 +64,7 @@ public class PlatformDataJob {
 		    content.append(buildPlatformInfo(date));
 		    content.insert(0, date +"数据如下" + "<br/><br/>");
 		    // 发送邮件
-		    for (String to : receivers.split(COMMA)) {
+		    for (String to : receivers.split(",")) {
 			try {
 			    emailHander.sendHtml(to,String.format("平台数据报表分析汇总(%s)",DateUtils.getDate()),content.toString());
 			} catch (MessagingException e) {
@@ -81,7 +78,7 @@ public class PlatformDataJob {
 		break;
 	    } catch (Exception e) {
 		count++;
-		if (count <= TIMES) {
+		if (count <= 5) {
 			logger.error("平台数据日报表分析异常,重新执行{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
 		} else {
 			logger.error("平台数据日报表分析异常，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
@@ -91,6 +88,8 @@ public class PlatformDataJob {
 	}
     }
 
+    
+    //平台数据报表
     private String buildPlatformInfo(String date) {
     	String temp = getTemp(date);
     	temp = temp.replace("gameName", "平台数据报表");
@@ -98,29 +97,39 @@ public class PlatformDataJob {
     	return temp;
     }
     
+    //投注信息
     private ReportGameInfo getBettingInfo(String date){
-      	Map<String,Object> params=new HashMap<>();
+      	Map<String,Object> params=new HashMap<String,Object>();
     	params.put("beginDate",date+" 00:00:00");
     	params.put("endDate", date+" 23:59:59");
     	params.put("userIds", getInternalUserIds());
-    	return reportChangeNoteService.findCathecticListByDate(params);
+    	ReportGameInfo bettingInfo = reportChangeNoteService.findCathecticListByDate(params);
+    	return bettingInfo;
     }
     
+  //投注用户数 
     private Integer getCathecticUserNum(String date){
       	Map<String,Object> params=new HashMap<String,Object>();
     	params.put("beginDate",date+" 00:00:00");
     	params.put("endDate", date+" 23:59:59");
     	params.put("userIds", getInternalUserIds());
-    	return reportChangeNoteService.getCathecticUserNum(params);
-    }
-
-    private List<Long> getInternalUserIds(){
-	return uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
+    	Integer cathecticUserNum = reportChangeNoteService.getCathecticUserNum(params);
+    	return cathecticUserNum;
     }
     
-
+	//查询内部人员的Id
+    private List<Long> getInternalUserIds(){
+	List<Long> userIds = uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
+	return userIds;
+    }
+    
+    /**
+     * 整合
+     * @param date
+     * @return
+     */
     private String getTemp(String date){
-    	StringBuffer sb = new StringBuffer();
+    	StringBuffer sb=new StringBuffer();
     	sb.append(getTempOne(date));
     	sb.append(getTempTwo(date));
     	sb.append(TABLE_END);
@@ -128,7 +137,11 @@ public class PlatformDataJob {
     }
     
     
-
+    /**
+     * 基础+流水数据
+     * @param date
+     * @return
+     */
     private String getTempOne(String date){
 	// 1、新增用户数
     Integer	newUser= platformService.getNewUser(date);
@@ -137,7 +150,8 @@ public class PlatformDataJob {
 	// 3、累计用户
 	Integer sumUser = platformService.getSumUser();
 	// 4、新增充值人数
-	Integer newRechargeUser = getNewRechargeUsers(date);
+//	Integer newRechargeUser = platformService.getNewRechargeUser(date);
+	Integer newRechargeUser = 0;
 	// 5、累计充值人数
 	Integer sumRechargeUser = platformService.getSumRechargeUser();
 	// 投注信息
@@ -161,28 +175,29 @@ public class PlatformDataJob {
 	Long cathecticNum=info.getCathecticNum();
 	// 13、人均频次
 	String averageNum=cathecticUserCount==0?"0":NumberUtils.format(BigDecimalUtil.div(cathecticNum,cathecticUserCount,4),"#.#");
-		return	CONTENT_TEMP_ONE
+	String temp = CONTENT_TEMP_ONE
 		.replace("newUser", newUser.toString())
 		.replace("activeUser", activeUser.toString())
 		.replace("sumUser", sumUser.toString())
 		.replace("newRechargeUser", newRechargeUser.toString())
 		.replace("sumRechargeUser", sumRechargeUser.toString())
-
+		
 		.replace("cathecticMoney", cathecticMoney.toString())
 		.replaceFirst("winMoney", winMoney.toString())
 		.replace("moneyGap", moneyGap.toString())
-		.replace("winMoneyRate", winMoneyRate)
+		.replace("winMoneyRate", winMoneyRate.toString())
 		.replace("cathecticUserCount", cathecticUserCount.toString())
-		.replace("cathecticARPU", cathecticARPU)
+		.replace("cathecticARPU", cathecticARPU.toString())
 		.replace("cathecticNum", cathecticNum.toString())
-		.replace("averageNum", averageNum);
+		.replace("averageNum", averageNum.toString());
+	return temp;
     }
     
     /**
      * 趋势(前7天~前1天)
      */
     private String getTempTwo(String date) {
-    	StringBuffer sb = new StringBuffer();
+    	StringBuffer sb=new StringBuffer();
     	String beginDate= DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date),10));
     	String endDate=DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date),1));
     	List<String> list=DateUtils.getDateList(beginDate, endDate);
@@ -194,19 +209,19 @@ public class PlatformDataJob {
     		// 2、活跃用户
     		Integer activeUser = platformService.getActiveUser(dat);
     		// 3、投注用户数
-    		Integer bettingUser = getCathecticUserNum(dat);
+    		Integer bettingUser= getCathecticUserNum(dat);
     		// 4、投注转化率
-    		String bettingRate = activeUser == 0?"0%":NumberUtils.format(BigDecimalUtil.div(bettingUser,activeUser,4),"#.##%");
+    		String bettingRate=activeUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(bettingUser,activeUser,4),"#.##%");
     		// 7、新增用户
-    		Integer	newUser = platformService.getNewUser(dat);
+    		Integer	newUser= platformService.getNewUser(dat);
     		// 8、新增用户中的投注人数
     		Integer newBettingUser = platformService.getNewBettingUser(dat);
     		// 9、新增投注转化率
-    		String newBettingRate = newUser == 0?"0%":NumberUtils.format(BigDecimalUtil.div(newBettingUser,newUser,4),"#.##%");
+    		String newBettingRate=newUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(newBettingUser,newUser,4),"#.##%");
     		// 10、新增次日留存
-    		String newRemainRate = platformService.getRemainRate(dat);
+    		String newRemainRate=platformService.getRemainRate(dat);
     		// 5、充值用户数
-    		Integer rechargeUser = getRechargeUser(dat);
+    		Integer rechargeUser=getRechargeUser(dat);
     		// 6、付费渗透率(充值用户数/投注用户数)
     		String payRate=bettingUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(rechargeUser,bettingUser,4),"#.##%");
     		String result=temp
@@ -219,29 +234,14 @@ public class PlatformDataJob {
     	return sb.toString();
     }
     
+    //趋势=>充值用户数
     private Integer getRechargeUser(String date){
-    	Map<String,Object> params=new HashMap<>();
+    	Map<String,Object> params=new HashMap<String,Object>();
     	params.put("beginDate", date+" 00:00:00");
     	params.put("endDate", date+" 23:59:59");
-    	List<Long> list = transConvertService.getRechargeUserIdsByDay(params);
+    	List<Long> list=transConvertService.getRechargeUserIdsByDay(params);
     	return list.size();
     }
-
-    private Integer getNewRechargeUsers(String date){
-		Map<String,Object> params = new HashMap<>();
-		String yesDay = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date),1));
-		params.put("endDate",yesDay + " 23:59:59");
-		List<Long> oldUserIds = transConvertService.getRechargeUserIdsByDay(params);
-		params.put("beginDate",date + " 00:00:00");
-		params.put("endDate",date + " 23:59:59");
-		List<Long> newUserIds = transConvertService.getRechargeUserIdsByDay(params);
-		if (CollectionUtils.isEmpty(newUserIds)) {
-			return 0;
-		}
-		if (CollectionUtils.isEmpty(oldUserIds)){
-			return newUserIds.size();
-		}
-		return CollectionUtils.intersection(newUserIds,CollectionUtils.disjunction(newUserIds,oldUserIds)).size();
-	}
+    
 
 }
