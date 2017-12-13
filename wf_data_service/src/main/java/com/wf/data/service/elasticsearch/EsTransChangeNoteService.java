@@ -28,7 +28,7 @@ import java.util.*;
 /** 
  * 投注流水
  * @author jianjian.huang
- * @date 2017年8月16日
+ * 2017年8月16日
  */
 
 @Service
@@ -40,7 +40,9 @@ public class EsTransChangeNoteService {
 	@Autowired
 	private UicGroupService uicGroupService;
 
-	//投注人数
+	/**
+	 * 投注人数
+	 */
 	public Integer getBettingCount(String date,Long channelId,Integer gameType) {
 		AggregationBuilder aggsBuilder= EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		Aggregations aggs = esClientFactory.getAggregation(
@@ -49,8 +51,10 @@ public class EsTransChangeNoteService {
 		int count =agg.getBuckets().size();
 		return count;
 	}
-	
-	//投注流水 
+
+	/**
+	 * 投注流水
+	 */
 	public Double getBettingAmt(String date,Long channelId,Integer gameType) {
 		Script mapScript=new Script("params._agg.transactions.add(-1*doc.change_money.value*doc.change_type.value)");
 		AggregationBuilder aggsBuilder = EsQueryBuilders.scriptedMetric("bettingAmt", mapScript);
@@ -60,8 +64,10 @@ public class EsTransChangeNoteService {
 	    Double betting=(double)bettingAmt.aggregation();
 	    return betting;
 	}
-	
-	//派奖金叶子 
+
+	/**
+	 * 派奖金叶子
+	 */
 	public Double getAwardAmt(String date,Long channelId,Integer gameType) {
 		AggregationBuilder aggsBuilder = EsQueryBuilders.sumAggregation("businessAmount","change_money");
 		Aggregations aggs = esClientFactory.getAggregation
@@ -69,47 +75,48 @@ public class EsTransChangeNoteService {
 		Map<String, Aggregation> aggMap = aggs.asMap();
 		Sum sum = (Sum) aggMap.get("businessAmount");  
 		return sum.getValue();
-	} 
-	
-	
-	
-	//投注条件
+	}
+
+
+	/**
+	 * 投注条件
+	 */
 	private QueryBuilder getBettingQuery(String date,Long channelId,Integer gameType) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		QueryBuilder query = null;
+		Map<String, Object> map = new HashMap<>();
+		QueryBuilder query;
 		map.put("delete_flag", 0);
 		BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
-		List<Integer> inBizs=new ArrayList<Integer>();
+		List<Integer> inBizs=new ArrayList<>();
 		if(gameType==null){
 		          inBizs=Arrays.asList(
-				  TransactionContents.BUSINESS_TYPE_BETTING_DART, TransactionContents.BUSINESS_TYPE_BETTING_CENCEL, //飞镖
-				  TransactionContents.BUSINESS_TYPE_BETTING_BILLIARD,//桌球
-				  TransactionContents.BUSINESS_TYPE_BETTING_WARS,//军团
-				  TransactionContents.BUSINESS_TYPE_BETTING_ARROWS,//貂蝉保卫战 
-				  TransactionContents.BUSINESS_TYPE_FOOTBALL_BETTING,//足球竞猜 
-				  TransactionContents.BUSINESS_TYPE_MOTOR_BETTING,TransactionContents.BUSINESS_TYPE_MOTOR_BRTTING_CANCEL,//热血摩托 
-				  TransactionContents.BUSINESS_TYPE_KINGDOM_BETTING,TransactionContents.BUSINESS_TYPE_KINGDOM_CANCEL, //多多三国
-				  TransactionContents.BUSINESS_TYPE_FISH_FIRE_FISH //捕鱼
+				  TransactionContents.BUSINESS_TYPE_BETTING_DART, TransactionContents.BUSINESS_TYPE_BETTING_CENCEL,
+				  TransactionContents.BUSINESS_TYPE_BETTING_BILLIARD,
+				  TransactionContents.BUSINESS_TYPE_BETTING_WARS,
+				  TransactionContents.BUSINESS_TYPE_BETTING_ARROWS,
+				  TransactionContents.BUSINESS_TYPE_FOOTBALL_BETTING,
+				  TransactionContents.BUSINESS_TYPE_MOTOR_BETTING,TransactionContents.BUSINESS_TYPE_MOTOR_BRTTING_CANCEL,
+				  TransactionContents.BUSINESS_TYPE_KINGDOM_BETTING,TransactionContents.BUSINESS_TYPE_KINGDOM_CANCEL,
+				  TransactionContents.BUSINESS_TYPE_FISH_FIRE_FISH
 				  );
-		}else if(gameType==1) {
+		}else if(gameType == 1) {
 				 inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_BETTING_DART,TransactionContents.BUSINESS_TYPE_BETTING_CENCEL);
-		}else if(gameType==2) {
+		}else if(gameType == 2) {
 			     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_BETTING_BILLIARD);
 		}
-		else if(gameType==3) {
+		else if(gameType == 3) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_BETTING_QUOITS);
 	    }
-		else if(gameType==4) {
+		else if(gameType == 4) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_BETTING_WARS);
-	    }else if(gameType==5) {
+	    }else if(gameType == 5) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_BETTING_ARROWS);
-	    }else if(gameType==7) {
+	    }else if(gameType == 7) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_FOOTBALL_BETTING);
-	    }else if(gameType==8) {
+	    }else if(gameType == 8) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_MOTOR_BETTING,TransactionContents.BUSINESS_TYPE_MOTOR_BRTTING_CANCEL);
-	    }else if(gameType==9) {
+	    }else if(gameType == 9) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_KINGDOM_BETTING,TransactionContents.BUSINESS_TYPE_KINGDOM_CANCEL);
-	    }else if(gameType==10) {
+	    }else if(gameType == 10) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_FISH_FIRE_FISH);
 	    }
 		boolQuery.must(QueryBuilders.termsQuery("business_type",inBizs));
@@ -132,41 +139,41 @@ public class EsTransChangeNoteService {
 	}
 	
 	private QueryBuilder getAwardQuery(String date,Long channelId,Integer gameType) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		QueryBuilder query = null;
+		Map<String, Object> map = new HashMap<>();
+		QueryBuilder query;
 		map.put("delete_flag", 0);
 		BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
-		List<Integer> inBizs=new ArrayList<Integer>();
+		List<Integer> inBizs=new ArrayList<>();
 		if(gameType==null){
 		          inBizs=Arrays.asList(
-				  TransactionContents.BUSINESS_TYPE_WIN_DART, //飞镖
-				  TransactionContents.BUSINESS_TYPE_WIN_BILLIARD,//桌球
-				  TransactionContents.BUSINESS_TYPE_WIN_WARS,//军团
-				  TransactionContents.BUSINESS_TYPE_WIN_ARROWS,//貂蝉保卫战 
-				  TransactionContents.BUSINESS_TYPE_FOOTBALL_RETURN_AWARD,//足球竞猜 
-				  TransactionContents.BUSINESS_TYPE_MOTOR_RETURN_AWARD,//热血摩托 
-				  TransactionContents.BUSINESS_TYPE_KINGDOM_WIN, //多多三国
-				  TransactionContents.BUSINESS_TYPE_FISH_HIT_FISH //捕鱼
+				  TransactionContents.BUSINESS_TYPE_WIN_DART,
+				  TransactionContents.BUSINESS_TYPE_WIN_BILLIARD,
+				  TransactionContents.BUSINESS_TYPE_WIN_WARS,
+				  TransactionContents.BUSINESS_TYPE_WIN_ARROWS,
+				  TransactionContents.BUSINESS_TYPE_FOOTBALL_RETURN_AWARD,
+				  TransactionContents.BUSINESS_TYPE_MOTOR_RETURN_AWARD,
+				  TransactionContents.BUSINESS_TYPE_KINGDOM_WIN,
+				  TransactionContents.BUSINESS_TYPE_FISH_HIT_FISH
 				  );
-		}else if(gameType==1) {
+		}else if(gameType == 1) {
 				 inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_WIN_DART);
-		}else if(gameType==2) {
+		}else if(gameType == 2) {
 			     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_WIN_BILLIARD);
 		}
-		else if(gameType==3) {
+		else if(gameType == 3) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_WIN_QUOITS);
 	    }
-		else if(gameType==4) {
+		else if(gameType == 4) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_WIN_WARS);
-	    }else if(gameType==5) {
+	    }else if(gameType == 5) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_WIN_ARROWS);
-	    }else if(gameType==7) {
+	    }else if(gameType == 7) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_FOOTBALL_RETURN_AWARD);
-	    }else if(gameType==8) {
+	    }else if(gameType == 8) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_MOTOR_RETURN_AWARD);
-	    }else if(gameType==9) {
+	    }else if(gameType == 9) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_KINGDOM_WIN);
-	    }else if(gameType==10) {
+	    }else if(gameType == 10) {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_FISH_HIT_FISH);
 	    }
 		boolQuery.must(QueryBuilders.termsQuery("business_type",inBizs));
@@ -187,8 +194,11 @@ public class EsTransChangeNoteService {
 		logger.debug("query" + query);
 		return query;
 	}
-	
-	//查询内部人员的Id
+
+	/**
+	 * 查询内部用户
+	 * @return
+	 */
     private List<Long> getInternalUserIds(){
 	List<Long> userIds = uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
 	return userIds;
