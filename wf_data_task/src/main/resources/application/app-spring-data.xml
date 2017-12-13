@@ -16,6 +16,7 @@
 	<import resource="app-db-mysql-data.xml" />
 	<import resource="app-db-mysql-trans.xml" />
 	<import resource="app-db-mysql-uic.xml" />
+	<import resource="app-db-mysql-base.xml" />
 
 	<import resource="classpath*:schedule/app-scheduler.xml" />
 	<import resource="classpath*:wf/spring-redis.xml"/>

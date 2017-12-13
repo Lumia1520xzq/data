@@ -24,6 +24,8 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_ACTIVE_EVENT,
 
+	DATA_CHANNEL_INFO_BY_ID,
+
 	;
 	private final String value;
 	private DataCacheKey() {
