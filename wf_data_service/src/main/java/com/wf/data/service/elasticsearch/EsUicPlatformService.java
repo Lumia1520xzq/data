@@ -145,8 +145,7 @@ public class EsUicPlatformService {
 
     private List<Long> getUserIds(AggregationBuilder aggsBuilder, Integer gameType, String begin, String end, Integer buryingType) {
         List<Long> list = new ArrayList<Long>();
-        Aggregations aggs = esClientFactory.getAggregation(
-                EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT, aggsBuilder, getActiveQuery(gameType, begin, end, buryingType));
+        Aggregations aggs = esClientFactory.getAggregation(EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT, aggsBuilder, getActiveQuery(gameType, begin, end, buryingType));
         LongTerms agg = (LongTerms) aggs.get("userCount");
         Iterator<Bucket> it = agg.getBuckets().iterator();
         while (it.hasNext()) {

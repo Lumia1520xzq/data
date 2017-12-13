@@ -15,13 +15,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author  lcs
+ */
 @Component
 public class JdbcUtils {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private DbConfig dbConfig;
 
-    public Connection createConnection(DbConfig config, String dbName) throws SQLException {
+    private Connection createConnection(DbConfig config, String dbName) throws SQLException {
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:mysql://");
         sb.append(config.getHost());
@@ -34,15 +37,15 @@ public class JdbcUtils {
     }
 
 
-    public Connection createConnection(String dbName) {
+    private Connection createConnection(String dbName) {
         Connection conn = null;
         try {
             conn = createConnection(dbConfig, dbName);
         } catch (SQLException e) {
             try {
                 conn.close();
-            } catch (SQLException e1) {
-
+            } catch (Exception e1) {
+                logger.error("关闭连接失败,ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
             }
             e.printStackTrace();
             logger.error("无法连接到源数据库,ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
@@ -64,13 +67,15 @@ public class JdbcUtils {
             ResultSetMetaData rsd = rs.getMetaData();
             int count = rsd.getColumnCount();
             String[] names = new String[count];
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++) {
                 names[i] = rsd.getColumnLabel(i + 1);
+            }
             Map<String, Object> data;
             while (rs.next()) {
                 data = new LinkedHashMap<>(count);
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < count; i++) {
                     data.put(names[i], rs.getObject(i + 1));
+                }
                 resultList.add(data);
             }
             return resultList;
