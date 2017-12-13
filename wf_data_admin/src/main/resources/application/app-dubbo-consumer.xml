@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <dubbo:application name="wf_data_admin"/>
+    <dubbo:registry id="registry" address="${dubbo.zookeeper}" client="zkclient" timeout="100000"/>
+
+
+    <dubbo:reference id="userRpcService" interface="com.wf.uic.rpc.UserRpcService"/>
+    <dubbo:reference id="userGroupRpcService" interface="com.wf.uic.rpc.UserGroupRpcService"/>
+</beans>
