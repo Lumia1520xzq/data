@@ -28,6 +28,27 @@ Ext.define('WF.business.costMain', {
             items: [{
                 name: 'name',
                 fieldLabel: '配置项名称'
+            },{
+                name: 'channelId',
+                fieldLabel: '主渠道',
+                xtype: 'combo',
+                emptyText: "--请选择--",
+                displayField: 'name',
+                valueField: "id",
+                editable: false,
+                queryMode: "local",
+                store: 'childChannelStore',
+                listeners : {
+                    select : function(combo, records, objs) {
+                        store.load({
+                            params:{
+                                xxx : 'xxx',
+                                xxx :1
+                            }
+                        });
+                    }
+
+                }
             }]
         });
         me.add({

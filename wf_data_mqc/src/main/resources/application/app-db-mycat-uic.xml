@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<bean id="mycatuicReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.mycatuic.url}" />
+		<property name="username" value="${jdbc.mycatuic.username}" />
+		<property name="password" value="${jdbc.mycatuic.password}" />
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="20" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="filters" value="stat" />
+	</bean>
+
+	<bean id="mycatuicMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
+		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="mycatuicReadDataSource" />
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="mycatuicReadDataSource" key="dataSourceReadMycat" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="mycatuicSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="mycatuicMultipleDataSource" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.mycatuic.entity" />
+		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
+		<property name="mapperLocations" value="classpath*:mappings/mycatuic/*.xml" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+	</bean>
+	<bean id="mycatuicMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="mycatuicSqlSessionFactory" />
+		<property name="basePackage" value="com.wf.data.dao.mycatuic" />
+		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
+	</bean>
+	<bean id="mycatuicTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="mycatuicMultipleDataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="mycatuicTransactionManager" proxy-target-class="true" />
+
+</beans>

@@ -60,5 +60,6 @@
     <import resource="app-db-mysql-trans.xml" />
     <import resource="app-db-mysql-uic.xml" />
     <import resource="app-db-mysql-base.xml" />
+    <import resource="app-db-mycat-uic.xml" />
 
 </beans>

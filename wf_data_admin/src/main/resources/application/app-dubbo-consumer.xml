@@ -10,7 +10,7 @@
     <dubbo:application name="wf_data_admin"/>
     <dubbo:registry id="registry" address="${dubbo.zookeeper}" client="zkclient" timeout="100000"/>
 
-
+    <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
     <dubbo:reference id="userRpcService" interface="com.wf.uic.rpc.UserRpcService"/>
     <dubbo:reference id="userGroupRpcService" interface="com.wf.uic.rpc.UserGroupRpcService"/>
 </beans>
