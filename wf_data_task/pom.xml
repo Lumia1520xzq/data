@@ -35,6 +35,12 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>pre_pro</id>
+			<properties>
+				<package.environment>pre_pro</package.environment>
+			</properties>
+		</profile>
+		<profile>
 			<id>pro</id>
 			<properties>
 				<package.environment>pro</package.environment>
