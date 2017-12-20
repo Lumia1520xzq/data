@@ -108,6 +108,8 @@ public class BettingAnalyseJob {
                     content.append(buildArrowInfo(cal));
                     //多多三国
                     content.append(buildKingdomInfo(cal));
+                    //糖果夺宝
+                    content.append(buildCandyInfo(cal));
                     //欢乐套圈
                     content.append(buildQuoitsInfo(cal));
                     content.insert(0, "截止" + DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN + " HH:00") + "<br/><br/>");
@@ -180,6 +182,11 @@ public class BettingAnalyseJob {
     private String buildTcardInfo(Calendar cal) {
         String temp = getTcardTemp(cal);
         return temp.replace("GAME_NAME", "乐赢三张");
+    }
+
+    private String buildCandyInfo(Calendar cal) {
+        String temp = getTemp(cal, 12);
+        return temp.replace("GAME_NAME", "糖果夺宝");
     }
 
     private String buildQuoitsInfo(Calendar cal) {
