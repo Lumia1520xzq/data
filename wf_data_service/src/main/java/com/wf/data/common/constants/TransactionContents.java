@@ -92,11 +92,15 @@ public interface TransactionContents {
     /**
      * 打鱼
      */
-    int BUSINESS_TYPE_FISH_FIRE_FISH=10002;
+    int BUSINESS_TYPE_FISH_FIRE_FISH = 10002;
     /**
      * 命中鱼
      */
-    int BUSINESS_TYPE_FISH_HIT_FISH=10003;
+    int BUSINESS_TYPE_FISH_HIT_FISH = 10003;
+	/**
+	 * 捕鱼预扣除
+	 */
+	int BUSINESS_TYPE_FISH_PRE_DEDUCT = 10005;
 	/**
 	 * 乐赢三张 服务费
 	 */
@@ -117,5 +121,12 @@ public interface TransactionContents {
 	 * 乐赢三张 赢牌
 	 */
 	int BUSSINESS_TYPE_TCARD_WIN = 11005;
-	
+	/**
+	 * 消消乐投注
+	 */
+	int BUSINESS_TYPE_CANDY_BETTING = 12001;
+	/**
+	 * 消消乐返奖
+	 */
+	int BUSINESS_TYPE_CANDY_WIN = 12002;
 }
