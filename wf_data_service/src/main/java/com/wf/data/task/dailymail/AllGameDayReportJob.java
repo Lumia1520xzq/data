@@ -14,7 +14,9 @@ import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
+import com.wf.data.service.elasticsearch.EsTransChangeNoteService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,9 @@ public class AllGameDayReportJob {
             + "<tr style='font-weight:bold'><td colspan='8'  bgcolor='#DDDDDD'>趋势</td></tr>"
             + "<tr style='font-weight:bold' ><td>日期(向前7天)</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>新增用户</td><td>新增用户投注人数</td><td>新增投注转化率</td><td>新增次留</td></tr>";
     private final String TABLE_END = "</table><br/>";
+    private static final String COMMA = ",";
+    private static final int TIMES = 5;
+
 
     public void execute() {
         logger.info("开始游戏数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
@@ -51,23 +56,23 @@ public class AllGameDayReportJob {
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
-        while (count <= 5) {
+        while (count <= TIMES) {
             try {
                 // 获取收件人
                 String receivers = dataConfigService.findByName(DataConstants.GAME_DATA_RECEIVER).getValue();
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
-                    content.append(buildDartGameInfo(date));
+                    content.append(buildTcardGameInfo(date));
                     content.append(buildBilliardsGameInfo(date));
+                    content.append(buildDartGameInfo(date));
+                    content.append(buildMotorGameInfo(date));
                     content.append(buildWarsGameInfo(date));
                     content.append(buildArrowsGameInfo(date));
-                    content.append(buildFootBallGameInfo(date));
-                    content.append(buildMotorGameInfo(date));
                     content.append(buildKingdomGameInfo(date));
-                    content.append(buildFishGameInfo(date));
+                    content.append(buildCandyGameInfo(date));
                     content.insert(0, date + "数据如下" + "<br/><br/>");
                     // 发送邮件
-                    for (String to : receivers.split(",")) {
+                    for (String to : receivers.split(COMMA)) {
                         try {
                             emailHander.sendHtml(to,String.format("游戏数据日报表分析汇总(%s)", DateUtils.getDate()), content.toString());
                         } catch (MessagingException e) {
@@ -90,7 +95,9 @@ public class AllGameDayReportJob {
         }
     }
 
-    // 飞镖
+    /**
+     * 飞镖
+     */
     private String buildDartGameInfo(String date) {
         String temp = getTemp(1, date);
         temp = temp.replace("gameName", "梦想飞镖");
@@ -98,7 +105,9 @@ public class AllGameDayReportJob {
         return temp;
     }
 
-    // 桌球
+    /**
+     * 桌球
+     */
     private String buildBilliardsGameInfo(String date) {
         String temp = getTemp(2, date);
         temp = temp.replace("gameName", "梦想桌球");
@@ -106,7 +115,9 @@ public class AllGameDayReportJob {
         return temp;
     }
 
-    // 军团
+    /**
+     * 军团
+     */
     private String buildWarsGameInfo(String date) {
         String temp = getTemp(4, date);
         temp = temp.replace("gameName", "铁血军团");
@@ -114,7 +125,9 @@ public class AllGameDayReportJob {
         return temp;
     }
 
-    // 三国
+    /**
+     * 三国
+     */
     private String buildArrowsGameInfo(String date) {
         String temp = getTemp(5, date);
         temp = temp.replace("gameName", "貂蝉保卫战");
@@ -122,15 +135,9 @@ public class AllGameDayReportJob {
         return temp;
     }
 
-    //足球竞猜
-    private String buildFootBallGameInfo(String date) {
-        String temp = getTemp(7, date);
-        temp = temp.replace("gameName", "足球竞猜");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    //热血摩托
+    /**
+     * 热血摩托
+     */
     private String buildMotorGameInfo(String date) {
         String temp = getTemp(8, date);
         temp = temp.replace("gameName", "热血摩托");
@@ -138,7 +145,9 @@ public class AllGameDayReportJob {
         return temp;
     }
 
-    //多多三国
+    /**
+     * 多多三国
+     */
     private String buildKingdomGameInfo(String date) {
         String temp = getTemp(9, date);
         temp = temp.replace("gameName", "多多三国");
@@ -146,51 +155,59 @@ public class AllGameDayReportJob {
         return temp;
     }
 
-    //多多捕鱼
-    private String buildFishGameInfo(String date) {
-        String temp = getTemp(10, date);
-        temp = temp.replace("gameName", "多多捕鱼");
+    /**
+     * 糖果夺宝
+     */
+    private String buildCandyGameInfo(String date) {
+        String temp = getTemp(12, date);
+        temp = temp.replace("gameName", "糖果夺宝");
         temp = temp.replace("dateTime", date);
         return temp;
     }
 
-    //投注信息 
+    /**
+     * 乐赢三张
+     */
+    private String buildTcardGameInfo(String date){
+        String temp = getTcardTemp(11,date);
+        temp = temp.replace("gameName","乐赢三张");
+        temp = temp.replace("dateTime",date);
+        return temp;
+    }
+
+    /**
+     * 投注信息
+     */
     private ReportGameInfo getBettingInfo(Integer gameType, String date) {
         ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>(5);
         params.put("beginDate", date + " 00:00:00");
         params.put("endDate", date + " 23:59:59");
         params.put("gameType", gameType);
         params.put("userIds", getInternalUserIds());
-        ReportGameInfo bettingInfo = reportChangeNoteService.findCathecticListByDate(params);
-        return bettingInfo;
+        return reportChangeNoteService.findCathecticListByDate(params);
     }
 
-    //投注用户数 
+    /**
+     * 投注用户数
+     */
     private Integer getCathecticUserNum(Integer gameType, String date) {
         ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>(5);
         params.put("beginDate", date + " 00:00:00");
         params.put("endDate", date + " 23:59:59");
         params.put("gameType", gameType);
         params.put("userIds", getInternalUserIds());
-        Integer cathecticUserNum = reportChangeNoteService.getCathecticUserNum(params);
-        return cathecticUserNum;
+        return reportChangeNoteService.getCathecticUserNum(params);
     }
 
-    //查询内部人员的Id
     private List<Long> getInternalUserIds() {
         UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
-        List<Long> userIds = uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
-        return userIds;
+        return uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
     }
 
     /**
      * 整合
-     *
-     * @param gameType
-     * @param date
-     * @return
      */
     private String getTemp(Integer gameType, String date) {
         StringBuffer sb = new StringBuffer();
@@ -200,12 +217,19 @@ public class AllGameDayReportJob {
         return sb.toString();
     }
 
+    /**
+     * 整合三张
+     */
+     private String getTcardTemp(Integer gameType,String date){
+         StringBuffer sb = new StringBuffer();
+         sb.append(tempTcard(gameType,date));
+         sb.append(getTempTwo(gameType, date));
+         sb.append(TABLE_END);
+         return sb.toString();
+     }
 
     /**
      * 基础+流水数据
-     *
-     * @param date
-     * @return
      */
     private String getTempOne(Integer gameType, String date) {
         EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
@@ -240,22 +264,21 @@ public class AllGameDayReportJob {
         Long cathecticNum = info.getCathecticNum();
         // 13、人均频次
         String averageNum = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticNum, cathecticUserCount, 4), "#.#");
-        String temp = CONTENT_TEMP_ONE
+         return CONTENT_TEMP_ONE
                 .replace("newUser", newUser.toString())
                 .replace("activeUser", activeUser.toString())
                 .replace("dailyActive", dailyActive.toString())
-                .replace("importRate", importRate.toString())
+                .replace("importRate", importRate)
                 .replace("sumUser", sumUser.toString())
 
                 .replace("cathecticMoney", cathecticMoney.toString())
                 .replaceFirst("winMoney", winMoney.toString())
                 .replace("moneyGap", moneyGap.toString())
-                .replace("winMoneyRate", winMoneyRate.toString())
+                .replace("winMoneyRate", winMoneyRate)
                 .replace("cathecticUserCount", cathecticUserCount.toString())
-                .replace("cathecticARPU", cathecticARPU.toString())
+                .replace("cathecticARPU", cathecticARPU)
                 .replace("cathecticNum", cathecticNum.toString())
-                .replace("averageNum", averageNum.toString());
-        return temp;
+                .replace("averageNum", averageNum);
     }
 
     /**
@@ -263,24 +286,33 @@ public class AllGameDayReportJob {
      */
     private String getTempTwo(Integer gameType, String date) {
         EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
+        EsTransChangeNoteService changeNoteService = SpringContextHolder.getBean(EsTransChangeNoteService.class);
         StringBuffer sb = new StringBuffer();
         String beginDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 7));
         String endDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 1));
-        List<String> list = DateUtils.getDateList(beginDate, endDate);
-        String temp =
-                "<tr><td>date</td><td>activeUser</td><td>bettingUser</td><td>bettingRate</td><td>newUser</td><td>newBettingUser</td><td>newBettingRate</td><td>newRemainRate</td></tr>";
+        List<String> list = DateUtils.getDateList(beginDate,endDate);
+        String temp = "<tr><td>date</td><td>activeUser</td><td>bettingUser</td><td>bettingRate</td><td>newUser</td><td>newBettingUser</td><td>newBettingRate</td><td>newRemainRate</td></tr>";
         for (String dat : list) {
             // 1、日期
             // 2、活跃用户
             Integer activeUser = gameService.getActiveUser(gameType, dat);
             // 3、投注用户数
-            Integer bettingUser = getCathecticUserNum(gameType, dat);
+            Integer bettingUser;
+            if(gameType == 11){
+                bettingUser = changeNoteService.getBettingUserCount(dat,null,gameType);
+            }else{
+                bettingUser = getCathecticUserNum(gameType,dat);
+            }
             // 4、投注转化率
             String bettingRate = activeUser == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(bettingUser, activeUser, 4), "#.##%");
             // 5、新增用户
-            Integer newUser = gameService.getNewUser(gameType, dat);
+            Integer newUser = gameService.getNewUser(gameType,dat);
             // 6、新增用户中的投注人数
-            Integer newBettingUser = gameService.getNewBettingUser(gameType, dat);
+            // 新增用户列表
+            List<Long> newUserList = gameService.getNewUserList(gameType,dat);
+            // 投注列表
+            List<Long> bettingUserList = changeNoteService.getBettingUserIds(dat,null,gameType);
+            Integer newBettingUser = CollectionUtils.intersection(newUserList,bettingUserList).size();
             // 7、新增投注转化率
             String newBettingRate = newUser == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(newBettingUser, newUser, 4), "#.##%");
             // 8、新增次日留存
@@ -292,6 +324,55 @@ public class AllGameDayReportJob {
             sb.append(result);
         }
         return sb.toString();
+    }
+
+    /**
+     * (乐赢三张)基础+流水数据
+     */
+    private String tempTcard(Integer gameType, String date) {
+        EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
+        EsTransChangeNoteService changeNoteService = SpringContextHolder.getBean(EsTransChangeNoteService.class);
+        // 1、新增用户数
+        Integer newUser = gameService.getNewUser(gameType, date);
+        // 2、活跃用户
+        Integer activeUser = gameService.getActiveUser(gameType, date);
+        // 3、平台日活
+        Integer dailyActive = gameService.getDailyActive(date);
+        // 4、导入率
+        String importRate = dailyActive == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(activeUser, dailyActive, 4), "#.##%");
+        // 5、累计用户
+        Integer sumUser = gameService.getSumUser(gameType);
+        // 6、投注流水
+        Long cathecticMoney = changeNoteService.getBettingAmt(date,null,gameType);
+        // 7、返奖流水
+        Long winMoney = changeNoteService.getAwardAmt(date,null,gameType);
+        // 8、应用流水差
+        Long moneyGap = cathecticMoney - winMoney;
+        // 9、返奖率
+        String winMoneyRate = cathecticMoney == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(winMoney, cathecticMoney, 4), "#.##%");
+        // 10、投注人数
+        Integer cathecticUserCount = changeNoteService.getBettingUserCount(date,null,gameType);
+        // 11、投注ARPU
+        String cathecticARPU = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticMoney, cathecticUserCount, 4), "#.#");
+        // 12、投注笔数
+        Integer cathecticNum = changeNoteService.getBettingCount(date,null, gameType);
+        // 13、人均频次
+        String averageNum = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticNum, cathecticUserCount, 4), "#.#");
+        return CONTENT_TEMP_ONE
+                .replace("newUser", newUser.toString())
+                .replace("activeUser", activeUser.toString())
+                .replace("dailyActive", dailyActive.toString())
+                .replace("importRate", importRate)
+                .replace("sumUser", sumUser.toString())
+
+                .replace("cathecticMoney", cathecticMoney.toString())
+                .replaceFirst("winMoney", winMoney.toString())
+                .replace("moneyGap", moneyGap.toString())
+                .replace("winMoneyRate", winMoneyRate)
+                .replace("cathecticUserCount", cathecticUserCount.toString())
+                .replace("cathecticARPU", cathecticARPU)
+                .replace("cathecticNum", cathecticNum.toString())
+                .replace("averageNum", averageNum);
     }
 
 }

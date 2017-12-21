@@ -44,7 +44,7 @@ public class EsTcardService {
 	/**
      * 投注用户ID
 	 */
-	public List<Long> getBettingUserIds(Map<String,String> params) {
+	public List<Long> getBettingUserIds (Map<String,String> params){
 		List<Long> list = new ArrayList<>();
 		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userIds", "user_id", 1000000);
 		Aggregations aggs = esClientFactory.getAggregation(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, aggsBuilder, getBettingQuery(params));
@@ -61,7 +61,7 @@ public class EsTcardService {
 	 * 投注笔数
 	 */
 	public Integer getBettingCount(Map<String,String> params) {
-		List<TransChangeNote> note = esClientFactory.list(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, getBettingQuery(params), 0, 1000000, TransChangeNote.class);
+		List<TransChangeNote> note = esClientFactory.list(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, getBettingQuery(params), 0, 5000000, TransChangeNote.class);
 		return note.size();
 	}
 
