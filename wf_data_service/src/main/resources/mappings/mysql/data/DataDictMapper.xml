@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataDictDao">
+	
+	<sql id="dataDictColumns">
+		t.id,
+		t.label,
+		t.value,
+		t.type,
+		t.description,
+		t.sort,
+		t.create_by,
+		t.update_by,
+		t.remarks,
+		t.delete_flag,
+		t.create_time,
+		t.update_time
+	</sql>
+	
+	<sql id="dataDictWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="dataDictJoins">
+	</sql>
+	
+	<select id="get" resultType="DataDict">
+		SELECT <include refid="dataDictColumns"/> FROM data_dict t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DataDict">
+		SELECT <include refid="dataDictColumns"/> FROM data_dict t <include refid="dataDictJoins"/>
+		WHERE <include refid="dataDictWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM data_dict t WHERE <include refid="dataDictWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO data_dict (
+			id, 
+			label, 
+			value, 
+			type, 
+			description, 
+			sort, 
+			create_by, 
+			update_by, 
+			remarks, 
+			delete_flag, 
+			create_time, 
+		) VALUES (
+			#{id}, 
+			#{label}, 
+			#{value}, 
+			#{type}, 
+			#{description}, 
+			#{sort}, 
+			#{createBy}, 
+			#{updateBy}, 
+			#{remarks}, 
+			#{deleteFlag}, 
+			#{createTime}, 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE data_dict SET
+			label = #{label}, 
+			value = #{value}, 
+			type = #{type}, 
+			description = #{description}, 
+			sort = #{sort}, 
+			create_by = #{createBy}, 
+			update_by = #{updateBy}, 
+			remarks = #{remarks}, 
+			delete_flag = #{deleteFlag}, 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE data_dict SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

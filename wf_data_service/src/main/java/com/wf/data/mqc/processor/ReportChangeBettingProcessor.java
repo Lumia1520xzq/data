@@ -41,6 +41,9 @@ public class ReportChangeBettingProcessor {
         if (event.getResturnAmount() != null) {
             changeNote.setResultAmount(event.getResturnAmount().doubleValue());
         }
+        if(null != event.getCreateTime()){
+            changeNote.setCreateTime(event.getCreateTime());
+        }
         try {
             reportChangeNoteService.save(changeNote);
         }catch (Exception e){
