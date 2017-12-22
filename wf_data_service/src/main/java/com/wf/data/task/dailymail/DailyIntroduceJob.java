@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -98,6 +97,7 @@ public class DailyIntroduceJob {
 
     private String getTemplate(String date,Long channelId){
         StringBuffer sb = new StringBuffer();
+        Base64 base64 = new Base64();
         // 昨日活跃用户的list
         List<Long> activeUserIds = introduceService.getActiveUserIds(date,channelId);
         if (CollectionUtils.isNotEmpty(activeUserIds)) {
@@ -108,12 +108,12 @@ public class DailyIntroduceJob {
                 if (user != null){
                     if(JINSHAN.equals(channelId)){
                         String thirdId = user.getThirdId();
-                        if (thirdId != null){
-                            Base64 base64 = new Base64();
+                        Long regChannelId = user.getRegChannelId();
+                        if (thirdId != null && regChannelId != null && JINSHAN.equals(regChannelId)){
                             try {
                                 val = new String(base64.decode(thirdId), "UTF-8");
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
+                            } catch (Exception e) {
+                                logger.error("用户ID:{}解码失败，traceId={}",userId ,TraceIdUtils.getTraceId());
                             }
                         }
                     }

@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author lcs
+ */
 @Service
 public class RoomFishInfoService {
     private final JdbcUtils jdbcUtils = SpringContextHolder.getBean(JdbcUtils.class);
@@ -87,20 +90,26 @@ public class RoomFishInfoService {
         ReportGameInfo info = new ReportGameInfo();
         for (Map<String, Object> map : resultList) {
             ReportGameInfo items = new ReportGameInfo();
-            if (null != map.get("search_date"))
+            if (null != map.get("search_date")) {
                 items.setSearchDate(map.get("search_date").toString());
-            if (null != map.get("cathectic_user_num"))
+            }
+            if (null != map.get("cathectic_user_num")) {
                 items.setCathecticUserNum(Integer.valueOf(map.get("cathectic_user_num").toString()));
-            if (null != map.get("cathectic_num"))
+            }
+            if (null != map.get("cathectic_num")) {
                 items.setCathecticNum(Integer.valueOf(map.get("cathectic_num").toString()));
-            if (null != map.get("cathectic_money"))
+            }
+            if (null != map.get("cathectic_money")) {
                 items.setCathecticMoney(Long.valueOf(map.get("cathectic_money").toString()));
-            if (null != map.get("win_money"))
+            }
+            if (null != map.get("win_money")) {
                 items.setWinMoney(Long.valueOf(map.get("win_money").toString()));
+            }
             infoList.add(items);
         }
-        if (CollectionUtils.isNotEmpty(infoList))
+        if (CollectionUtils.isNotEmpty(infoList)) {
             info = infoList.get(0);
+        }
         return info;
     }
 
@@ -144,9 +153,9 @@ public class RoomFishInfoService {
 
         for (Map<String, Object> map : resultList) {
             Long userId = null;
-            if (null != map.get("userId"))
+            if (null != map.get("userId")) {
                 userId = Long.valueOf(map.get("userId").toString());
-
+            }
             list.add(userId);
         }
         return list;
@@ -185,21 +194,27 @@ public class RoomFishInfoService {
 
         for (Map<String, Object> params : resultList) {
             ReportFishBettingInfo info = new ReportFishBettingInfo();
-            if (null != params.get("userId"))
+            if (null != params.get("userId")) {
                 info.setUserId(Long.valueOf(params.get("userId").toString()));
-            if (null != params.get("channelId"))
+            }
+            if (null != params.get("channelId")) {
                 info.setChannelId(Long.valueOf(params.get("channelId").toString()));
-            if (null != params.get("fishConfigId"))
+            }
+            if (null != params.get("fishConfigId")) {
                 info.setFishConfigId(Integer.valueOf(params.get("fishConfigId").toString()));
-            if (null != params.get("amount"))
+            }
+            if (null != params.get("amount")) {
                 info.setAmount(Double.valueOf(params.get("amount").toString()));
-            if (null != params.get("bettingCount"))
+            }
+            if (null != params.get("bettingCount")) {
                 info.setBettingCount(Long.valueOf(params.get("bettingCount").toString()));
-            if (null != params.get("bettingAmount"))
+            }
+            if (null != params.get("bettingAmount")) {
                 info.setBettingAmount(Double.valueOf(params.get("bettingAmount").toString()));
-            if (null != params.get("resultAmount"))
+            }
+            if (null != params.get("resultAmount")) {
                 info.setResultAmount(Double.valueOf(params.get("resultAmount").toString()));
-
+            }
             list.add(info);
         }
         return list;
