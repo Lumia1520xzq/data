@@ -3,6 +3,8 @@ package com.wf.data.dao.data.entity;
 
 import com.wf.core.persistence.DataEntity;
 
+import java.util.List;
+
 public class DatawareBettingLogHour extends DataEntity {
 	private static final long serialVersionUID = -1;
 	private Long userId;
@@ -16,6 +18,16 @@ public class DatawareBettingLogHour extends DataEntity {
 	private String bettingHour;
 	private String bettingDate;
 
+
+	private List<Long> userList;
+
+	public List<Long> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<Long> userList) {
+		this.userList = userList;
+	}
 
 	public Long getUserId() {
 		return userId;

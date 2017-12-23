@@ -68,6 +68,8 @@ public interface DataConstants {
 
     String DATA_DATAWARE_UIC_GROUP = "data_dataware_uic_group";
 
+    String DATA_DATAWARE_DAY = "data_dataware_day";
+
 
     /**
      * 每日推送

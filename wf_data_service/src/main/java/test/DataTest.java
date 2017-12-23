@@ -1,6 +1,10 @@
 package test;
 
-import com.wf.data.common.utils.DateUtils;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author: lcs
@@ -44,9 +48,14 @@ public class DataTest {
 
         }*/
 
+        List<Long> userIDS = Arrays.asList(1l,2l,3l,4l,5l,6l,7l,8l,9l,10l);
+        List<Long> userID = Arrays.asList(8l,9l,10l);
 
-        String bettingDate = DateUtils.getYesterdayDate();
-        System.out.println(bettingDate);
+        Collection interColl = CollectionUtils.intersection(userIDS, userID);
+        List<Long> user = (List)interColl;
+        System.out.println(user);
+
+
 
     }
 }
