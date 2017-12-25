@@ -33,14 +33,6 @@ public class DayBettingLogJob {
 
     public void execute() {
         logger.info("每天投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
-        String cleanDay = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_DAY);
-        String bettingDate = "";
-        if (StringUtils.isNotEmpty(cleanDay)) {
-            bettingDate = cleanDay;
-        } else {
-            bettingDate = DateUtils.getYesterdayDate();
-        }
-
         List<Long> uicGroupList = Lists.newArrayList();
         String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
         if (StringUtils.isNotEmpty(datawareUicGroup)) {
@@ -51,7 +43,31 @@ public class DayBettingLogJob {
             logger.error("非正常用户规则未设置: traceId={}", TraceIdUtils.getTraceId());
         }
 
-        dayBettingLog(bettingDate, uicGroupList);
+        String cleanDay = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_BETTING_DAY);
+        String[] cleanDays = cleanDay.split(",");
+
+        if(cleanDays.length == 2){
+            List<String> datelist = DateUtils.getDateList(cleanDays[0],cleanDays[1]);
+            for(String bettingDate :datelist){
+                dayBettingLog(bettingDate, uicGroupList);
+            }
+
+        }else{
+            String bettingDate = "";
+            if (StringUtils.isNotEmpty(cleanDay)) {
+                bettingDate = cleanDay;
+            } else {
+                bettingDate = DateUtils.getYesterdayDate();
+            }
+            dayBettingLog(bettingDate, uicGroupList);
+        }
+
+
+
+
+
+
+
 
         logger.info("每天投注汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }

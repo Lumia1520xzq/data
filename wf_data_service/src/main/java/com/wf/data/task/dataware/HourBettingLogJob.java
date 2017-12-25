@@ -35,16 +35,65 @@ public class HourBettingLogJob {
 
     public void execute() {
         logger.info("每小时投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
-        int hours = dataConfigService.getIntValueByName(DataConstants.DATA_DATAWARE_HOURS);
+        int flag = dataConfigService.getIntValueByName(DataConstants.DATA_DATAWARE_FLAG);
+        if(flag ==1){
+            cleanBydays();
+        }else{
+            cleanByhour();
+        }
+        logger.info("每小时投注汇总结束:traceId={}", TraceIdUtils.getTraceId());
+    }
 
-        if (0 == hours) {
-            logger.error("data_dataware_hours未设置: traceId={}, params={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(hours));
+    private void cleanBydays(){
+        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_DAYS);
+
+        if (StringUtils.isBlank(date)) {
+            logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
             return;
         }
 
+        String[] dates = date.split(",");
+        if (StringUtils.isBlank(dates[0])) {
+            logger.error("清洗开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
+            return;
+        }
+        if (StringUtils.isBlank(dates[1])) {
+            logger.error("清洗结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
+            return;
+        }
+
+        String beginDate = dates[0];
+        String endDate = dates[1];
+
+
+
+        List<Long> uicGroupList = Lists.newArrayList();
+        String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
+        if (StringUtils.isNotEmpty(datawareUicGroup)) {
+            String[] uicGroupArr = datawareUicGroup.split(",");
+            List<String> userGroup = Arrays.asList(uicGroupArr);
+            uicGroupList = uicGroupService.findGroupUsers(userGroup);
+        } else {
+            logger.error("非正常用户规则未设置: traceId={}", TraceIdUtils.getTraceId());
+        }
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("beginDate", beginDate);
+        params.put("endDate", endDate);
+        //汇总游戏投注信息
+        getBettingLogFromReport(params, uicGroupList);
+        //汇总三张投注信息
+        getBettingLogFromTcard(params,uicGroupList);
+        //汇总捕鱼投注信息
+        getFishInfo(DateUtils.parseDateTime(beginDate),DateUtils.parseDateTime(endDate),uicGroupList);
+
+    }
+
+    private void cleanByhour(){
+
         Calendar cal = Calendar.getInstance();
         //当前日期向前推1小时，保证统计昨天数据
-        cal.add(Calendar.HOUR_OF_DAY, -hours);
+        cal.add(Calendar.HOUR_OF_DAY, -1);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.MILLISECOND, 0);
@@ -78,7 +127,6 @@ public class HourBettingLogJob {
         getBettingLogFromTcard(params,uicGroupList);
         //汇总捕鱼投注信息
         getFishInfo(cal.getTime(),calendar.getTime(),uicGroupList);
-        logger.info("每小时投注汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
 
@@ -95,6 +143,9 @@ public class HourBettingLogJob {
     private void getBettingLogFromReport(Map<String, Object> params, List<Long> uicGroupList) {
         try {
 
+            String gameType = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_GAMETYPE);
+            String[] gameTypes = gameType.split(",");
+            params.put("gameTypes",Arrays.asList(gameTypes));
             List<DatawareBettingLogHour> bettingLogHourList = reportChangeNoteService.getGameBettingRecord(params);
             for (DatawareBettingLogHour logHour : bettingLogHourList) {
                 logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
