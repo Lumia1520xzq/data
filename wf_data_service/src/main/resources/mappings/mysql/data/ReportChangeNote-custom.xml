@@ -200,8 +200,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			DATE_FORMAT(create_time,"%H") bettingHour
 		FROM `report_change_note`
 		WHERE 1=1
-		<if test="gameType != null">
-			AND game_type = #{gameType}
+		<if test="gameType != null and gameType != ''">
+			AND game_type =#{gameType}
+		</if>
+		<if test="gameTypes != null and  gameTypes.size() != 0">
+			AND game_type  in
+			<foreach collection="gameTypes" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
 		</if>
 		<if test="channelId != null">
 			AND channel_id = #{channelId}
