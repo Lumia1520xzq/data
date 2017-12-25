@@ -187,6 +187,35 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</foreach>
 	</if>
 	</select>
+
+	<select id="getGameBettingRecord" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+		SELECT
+			user_id userId,
+			game_type gameType,
+			channel_id channelId,
+			COUNT(1) bettingCount,
+			SUM(betting_amount) bettingAmount,
+			SUM(result_amount) resultAmount,
+			DATE_FORMAT(create_time,"%Y-%m-%d") bettingDate,
+			DATE_FORMAT(create_time,"%H") bettingHour
+		FROM `report_change_note`
+		WHERE 1=1
+		<if test="gameType != null and gameType != ''">
+			AND game_type =#{gameType}
+		</if>
+		<if test="gameTypes != null and  gameTypes.size() != 0">
+			AND game_type  in
+			<foreach collection="gameTypes" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="channelId != null">
+			AND channel_id = #{channelId}
+		</if>
+		AND create_time BETWEEN #{beginDate} AND #{endDate}
+		GROUP BY user_id,channel_id,game_type,DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
+		ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
+	</select>
 	 
 </mapper>
 

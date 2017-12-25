@@ -19,6 +19,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<sql id="dataConfigWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.name != null and p.name != ''">
+			AND t.name LIKE concat('%',#{p.name},'%')
+		</if>
+		<if test="p.id != null and p.id != ''">
+			AND t.id = #{p.id}
+		</if>
+		<if test="p.channelId != null and p.channelId != ''">
+			AND t.channel_id = #{p.channelId}
+		</if>
 	</sql>
 	
 	<sql id="dataConfigJoins">
@@ -61,7 +70,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			value = #{value}, 
 			remark = #{remark}, 
 			channel_id = #{channelId}, 
-			delete_flag = #{deleteFlag}, 
+			delete_flag = #{deleteFlag}
 		WHERE id = #{id}
 	</update>
 
