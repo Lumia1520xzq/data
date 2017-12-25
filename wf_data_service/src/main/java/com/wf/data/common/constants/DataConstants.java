@@ -60,6 +60,16 @@ public interface DataConstants {
      */
     String MONITOR_RISK_USER_RECHARGE = "monitor_risk_user_recharge";
 
+    /**
+     * 同步周期
+     * 暂定前1小时
+     */
+    String DATA_DATAWARE_HOURS = "data_dataware_hours";
+
+    String DATA_DATAWARE_UIC_GROUP = "data_dataware_uic_group";
+
+    String DATA_DATAWARE_DAY = "data_dataware_day";
+
 
     /**
      * 每日推送

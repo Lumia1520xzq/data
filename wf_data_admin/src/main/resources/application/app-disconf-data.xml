@@ -27,6 +27,7 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
             <list>
                 <value>classpath*:application.properties</value>
                 <value>classpath*:application-public.properties</value>
+                <value>classpath*:admin.properties</value>
                 <value>classpath*:zoo.properties</value>
                 <value>classpath*:dubbo.properties</value>
             </list>

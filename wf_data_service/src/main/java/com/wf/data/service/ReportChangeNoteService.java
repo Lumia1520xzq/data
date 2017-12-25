@@ -2,6 +2,7 @@ package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.ReportChangeNoteDao;
+import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportChangeNote;
 import com.wf.data.dao.data.entity.ReportGameInfo;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,10 @@ public class ReportChangeNoteService extends CrudService<ReportChangeNoteDao, Re
 	public Integer getCathecticGames(Map<String,Object> params) {
 		return dao.getCathecticGames(params);
 	}
+
+
+	public List<DatawareBettingLogHour> getGameBettingRecord(Map<String, Object> params){
+		return dao.getGameBettingRecord(params);
+	}
+
 }

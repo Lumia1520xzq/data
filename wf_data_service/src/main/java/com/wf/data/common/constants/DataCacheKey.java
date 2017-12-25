@@ -24,6 +24,30 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_ACTIVE_EVENT,
 
+	DATA_CHANNEL_INFO_BY_ID,
+
+	DATA_UIC_USER_BY_ID,
+
+	DATA_USER_GROUP,
+
+	SYS_DICT_ALL_LIST,
+	/**
+	 * type类型的字典集合
+	 */
+	SYS_DICT_BY_TYPE,
+	/**
+	 * 指定值的字典缓存
+	 */
+	SYS_DICT_BY_VALUE,
+	/**
+	 * 字典的value:label 键值对
+	 */
+	SYS_DICT_BY_TYPE_MAP,
+	/**
+	 * 字典类型type的label集合
+	 */
+	SYS_DICT_TYPE_LABEL_LIST,
+
 	;
 	private final String value;
 	private DataCacheKey() {

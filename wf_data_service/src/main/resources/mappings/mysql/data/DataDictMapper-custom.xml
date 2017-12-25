@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataDictDao">
+
+	<select id="findTypeList" resultType="string">
+		SELECT type FROM data_dict WHERE delete_flag = 0
+		GROUP BY type ORDER BY type
+	</select>
+
+	<select id="getDictByValue" resultType="DataDict">
+		SELECT
+		<include refid="dataDictColumns"/>
+		FROM data_dict t WHERE value = #{value} AND type = #{type} LIMIT 1
+	</select>
+
+	<select id="findByCond" resultType="DataDict">
+		SELECT
+		<include refid="dataDictColumns"/>
+		FROM data_dict t WHERE delete_flag = 0
+		<if test="type != null and type != ''">
+			AND type = #{type}
+		</if>
+		ORDER BY sort asc
+	</select>
+</mapper>
+

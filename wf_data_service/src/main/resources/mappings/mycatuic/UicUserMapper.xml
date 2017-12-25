@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mycatuic.UicUserDao">
+	
+	<sql id="uicUserColumns">
+		t.id,
+		t.loginname,
+		t.password,
+		t.nickname,
+		t.phone,
+		t.head_img,
+		t.user_source,
+		t.invitation_code,
+		t.parent_invitation_code,
+		t.back_award_percent,
+		t.third_id,
+		t.third_head_img,
+		t.third_params,
+		t.sound_flag,
+		t.status,
+		t.last_login_channel_id,
+		t.reg_channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="uicUserWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	    <if test="p.id != null and p.id !=''">
+			AND t.id=#{p.id}
+		</if>
+		<if test="p.loginname != null and p.loginname !=''">
+			AND t.loginname LIKE CONCAT('%', #{p.loginname}, '%')
+		</if>
+		<if test="p.nickname != null and p.nickname != '' and p.id == null">
+			AND t.nickname LIKE CONCAT('%', #{p.nickname}, '%')
+		</if>
+		<if test="p.nickname != null and p.nickname != '' and p.id != null">
+			AND t.nickname LIKE CONCAT('%', #{p.nickname}, '%') OR t.id = #{p.id}
+		</if>
+		<if test="p.parentInvitationCode != null and p.parentInvitationCode != ''">
+			AND t.parent_invitation_code = #{p.parentInvitationCode}
+		</if>
+       <!-- <if test="p.regChannelId != null and p.regChannelId != ''">
+			AND t.reg_channel_id LIKE CONCAT('%', #{p.regChannelId}, '%')
+		</if> -->
+	</sql>
+	
+	<select id="get" resultType="UicUser">
+		SELECT <include refid="uicUserColumns"/> FROM uic_user t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="UicUser">
+		SELECT <include refid="uicUserColumns"/> 
+		FROM uic_user t
+		WHERE <include refid="uicUserWhere"/> 
+		ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM uic_user t 
+		WHERE <include refid="uicUserWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO uic_user (
+			id, 
+			loginname, 
+			password, 
+			nickname, 
+			phone, 
+			head_img, 
+			user_source,
+			invitation_code,
+			parent_invitation_code,
+			back_award_percent,
+			third_id, 
+			third_head_img, 
+			third_params, 
+			sound_flag, 
+			status, 
+			last_login_channel_id, 
+			reg_channel_id, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{loginname}, 
+			#{password}, 
+			#{nickname}, 
+			#{phone}, 
+			#{headImg}, 
+			#{userSource},
+			#{invitationCode},
+			#{parentInvitationCode},
+			#{backAwardPercent},
+			#{thirdId}, 
+			#{thirdHeadImg}, 
+			#{thirdParams}, 
+			#{soundFlag}, 
+			#{status}, 
+			#{lastLoginChannelId}, 
+			#{regChannelId}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE uic_user SET
+			loginname = #{loginname}, 
+			password = #{password}, 
+			nickname = #{nickname}, 
+			phone = #{phone}, 
+			head_img = #{headImg}, 
+			user_source = #{userSource},
+			invitation_code = #{invitationCode},
+			parent_invitation_code = #{parentInvitationCode},
+			back_award_percent = #{backAwardPercent},
+			third_id = #{thirdId}, 
+			third_head_img = #{thirdHeadImg}, 
+			third_params = #{thirdParams}, 
+			sound_flag = #{soundFlag}, 
+			status = #{status}, 
+			last_login_channel_id = #{lastLoginChannelId}, 
+			reg_channel_id = #{regChannelId}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE uic_user SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

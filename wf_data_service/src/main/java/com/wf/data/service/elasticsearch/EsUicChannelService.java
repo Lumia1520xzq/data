@@ -1,8 +1,6 @@
 package com.wf.data.service.elasticsearch;
 
 import com.google.common.collect.Lists;
-import com.wf.base.rpc.ChannelRpcService;
-import com.wf.base.rpc.dto.ChannelInfoDto;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.data.common.constants.BuryingPointContents;
@@ -10,7 +8,9 @@ import com.wf.data.common.constants.EsContents;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.uic.entity.UicUser;
+import com.wf.data.service.ChannelInfoService;
 import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -39,7 +39,7 @@ public class EsUicChannelService {
 	@Autowired
 	private EsClientFactory esClientFactory;
 	@Resource
-	private ChannelRpcService channelRpcService;
+	private ChannelInfoService channelInfoService;
 
 	// 1、新增用户
 	public Integer getNewUser(String date,Long parentId,Long channelId){
@@ -130,9 +130,9 @@ public class EsUicChannelService {
 			boolQuery.must(QueryBuilders.termQuery("channel_id",channelId));
 		}else {
 			if (parentId != null) {
-				List<ChannelInfoDto> dtoList = channelRpcService.findSubChannel(parentId);
+				List<ChannelInfo> dtoList = channelInfoService.findSubChannel(parentId);
 				List<Long> channelIds = Lists.newArrayList();
-				for(ChannelInfoDto dto : dtoList){
+				for(ChannelInfo dto : dtoList){
 					channelIds.add(dto.getId());
 				}
 				channelIds.add(0, parentId);
@@ -157,9 +157,9 @@ public class EsUicChannelService {
 			boolQuery.must(QueryBuilders.termQuery("reg_channel_id", channelId));
 		}else {
 			if (parentId != null) {
-				List<ChannelInfoDto> dtoList = channelRpcService.findSubChannel(parentId);
+				List<ChannelInfo> dtoList = channelInfoService.findSubChannel(parentId);
 				List<Long> channelIds = Lists.newArrayList();
-				for(ChannelInfoDto dto : dtoList){
+				for(ChannelInfo dto : dtoList){
 					channelIds.add(dto.getId());
 				}
 				channelIds.add(0, parentId);

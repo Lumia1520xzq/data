@@ -17,7 +17,7 @@
         SELECT
         <include refid="dataConfigColumns"/>
         FROM data_config t
-        WHERE t.name = #{name} and t.channelId = #{channelId} AND t.delete_flag = 0
+        WHERE t.name = #{name} and t.channel_id = #{channelId} AND t.delete_flag = 0
     </select>
 </mapper>
 

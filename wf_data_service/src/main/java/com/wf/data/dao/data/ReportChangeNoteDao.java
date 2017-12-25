@@ -3,6 +3,7 @@ package com.wf.data.dao.data;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
+import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportChangeNote;
 import com.wf.data.dao.data.entity.ReportGameInfo;
 
@@ -25,4 +26,12 @@ public interface ReportChangeNoteDao extends CrudDao<ReportChangeNote> {
 	Long getCathecticProfit(Map<String, Object> params);
 
 	Integer getCathecticGames(Map<String, Object> params);
+
+
+	/**
+	 * 获取用户每小时投注信息汇总
+	 * @param params
+	 * @return
+	 */
+	List<DatawareBettingLogHour> getGameBettingRecord(Map<String, Object> params);
 }

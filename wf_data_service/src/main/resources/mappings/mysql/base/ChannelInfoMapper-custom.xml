@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- 存放手写的sql -->
+<mapper namespace="com.wf.data.dao.base.ChannelInfoDao">
+    <select id="findMainChannel" resultType="ChannelInfo">
+        select
+        <include refid="channelInfoColumns"/>
+        from channel_info t where t.parent_id is null
+    </select>
+
+    <select id="findSubChannel" resultType="ChannelInfo">
+        select
+        <include refid="channelInfoColumns"/>
+        from channel_info t where t.parent_id = #{parentId}
+    </select>
+
+    <select id="findAll" resultType="ChannelInfo">
+        select
+        <include refid="channelInfoColumns"/>
+        from channel_info t
+    </select>
+</mapper>
