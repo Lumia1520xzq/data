@@ -10,7 +10,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         SELECT
         user_id userId,
         channel_id channelId,
-        COUNT(1) bettingCount,
+        COUNT(CASE WHEN betting_type!=5 THEN 1 END) bettingCount,
         SUM(amount) bettingAmount,
         SUM(return_amount) resultAmount,
         DATE_FORMAT(create_time,"%Y-%m-%d") bettingDate,
@@ -20,6 +20,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="channelId != null">
             AND channel_id = #{channelId}
         </if>
+        AND `status` != -1
         AND create_time BETWEEN #{beginDate} AND #{endDate}
         GROUP BY user_id,channel_id,DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
         ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
