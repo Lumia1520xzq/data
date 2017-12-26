@@ -1,5 +1,6 @@
 package com.wf.data.task.dailymail;
 
+import com.google.common.collect.Lists;
 import com.wf.core.email.EmailHander;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
@@ -18,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 每日各渠道关键数据
@@ -39,6 +37,7 @@ public class ChannelDataJob {
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final ReportFishBettingInfoService fishService = SpringContextHolder.getBean(ReportFishBettingInfoService.class);
+
 
     private static final String FISH_PREFIX = "report_fish_betting_info_";
     private static final String OCTOBER = "2017-10-01";
@@ -93,28 +92,43 @@ public class ChannelDataJob {
         }
     }
 
+    /**
+     * 灰黑内用户
+     */
+    private List<Long> getGroupList() {
+        List<Long> uicGroupList = Lists.newArrayList();
+//        String value = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
+        String value = null;
+        if (StringUtils.isNotEmpty(value)) {
+            String[] uicGroupArr = value.split(",");
+            List<String> userGroup = Arrays.asList(uicGroupArr);
+            uicGroupList = uicGroupService.findGroupUsers(userGroup);
+        }
+        return uicGroupList;
+    }
+
     private String buildJSData(String date){
-        return getTemplate(date,100001L,null).replace("channel","奖多多(100001)");
+        return getTemplate(date,100001L,null,getGroupList()).replace("channel","奖多多(100001)");
     }
 
     private String buildOkoooData(String date){
-        return getTemplate(date,100006L,null).replace("channel","澳客(100006)");
+        return getTemplate(date,100006L,null,getGroupList()).replace("channel","澳客(100006)");
     }
 
     private String buildIosData(String date){
-        return getTemplate(date,null,300001L).replace("channel", "ios(300001)");
+        return getTemplate(date,null,300001L,getGroupList()).replace("channel", "ios(300001)");
     }
 
     private String buildGetuiData(String date){
-        return getTemplate(date,null,200001001L).replace("channel", "应用宝(200001001)");
+        return getTemplate(date,null,200001001L,getGroupList()).replace("channel", "应用宝(200001001)");
     }
 
     private String buildWeituoData(String date){
-        return getTemplate(date,null,200001021L).replace("channel", "微拓(200001021)");
+        return getTemplate(date,null,200001021L,getGroupList()).replace("channel", "微拓(200001021)");
     }
 
     private String buildDoyoData(String date){
-        return getTemplate(date,100002L,null).replace("channel", "逗游(100002)");
+        return getTemplate(date,100002L,null,getGroupList()).replace("channel", "逗游(100002)");
     }
 
     /**
@@ -122,14 +136,14 @@ public class ChannelDataJob {
      * @param date
      * @param parentId
      */
-    private String getTemplate(String date,Long parentId,Long channelId) {
+    private String getTemplate(String date,Long parentId,Long channelId,List<Long> userIds) {
         StringBuffer sb=new StringBuffer();
         String temp = TEMPLATE;
         // 1、渠道(稍后计算)
         // 2、充值金额
         Double rechargeSum = transConvertService.findSumRechargeByTime(toMap(date,parentId,channelId));
         // 3、日活
-        Integer activeUser = channelService.getActiveUser(date,parentId,channelId);
+        Integer activeUser = channelService.getActiveUser(date,parentId,channelId,userIds);
         ReportGameInfo gameInfo = getBettingInfo(date,parentId,channelId);
         ReportGameInfo fishInfo = getFishBettingInfo(date, parentId, channelId);
         // 4、投注用户数
@@ -149,13 +163,14 @@ public class ChannelDataJob {
         // 10、返奖率
         String winMoneyRate=cathecticMoney == 0?"0%":NumberUtils.format(BigDecimalUtil.div(winMoney,cathecticMoney,4),"#.##%");
         // 11、新增用户
-        Integer	newUser= channelService.getNewUser(date,parentId,channelId);
+        Integer	newUser= channelService.getNewUser(date,parentId,channelId,userIds);
         // 新增用户中的投注人数
-        Integer newBettingUser = channelService.getNewBettingUser(date,parentId,channelId);
+//        Integer newBettingUser = channelService.getNewBettingUser(date,parentId,channelId);
+        Integer newBettingUser = 0;
         // 12、新增投注转化率
         String newBettingRate=newUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(newBettingUser,newUser,4),"#.##%");
         // 13、新增次日留存
-        String newRemainRate=channelService.getRemainRate(date,parentId,channelId);
+        String newRemainRate=channelService.getRemainRate(date,parentId,channelId,userIds);
         String result=temp
                 .replace("rechargeSum",rechargeSum.toString()).replace("activeUser", activeUser.toString()).replace("bettingUser", bettingUser.toString())
                 .replace("bettingRate", bettingRate).replace("rechargeUser", rechargeUser.toString()).replace("payRate", payRate.toString())
@@ -234,7 +249,7 @@ public class ChannelDataJob {
         if (d.before(DateUtils.parseDate(OCTOBER))) {
             return null;
         }
-        return FISH_PREFIX+DateUtils.formatDate(d,"yyyyMM");
+        return FISH_PREFIX + DateUtils.formatDate(d,"yyyyMM");
     }
 
     //投注用户
@@ -251,7 +266,7 @@ public class ChannelDataJob {
 
     //投注用户(捕鱼)
     private List<Long> getFishBettingUsers(String date,Long parentId,Long channelId){
-        Map<String,Object> params=new HashMap<String,Object>();
+        Map<String,Object> params=new HashMap<>();
         params.put("fishTable", getFishTable(date));
         params.put("parentId",parentId);
         params.put("channelId",channelId);
