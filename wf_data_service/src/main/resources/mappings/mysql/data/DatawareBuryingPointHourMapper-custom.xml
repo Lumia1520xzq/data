@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DatawareBuryingPointHourDao">
+
+    <update id="updateUserGroup">
+        UPDATE dataware_burying_point_hour SET
+        user_group = #{userGroup}
+        WHERE 1=1
+        <if test="buryingDate != null and buryingDate != ''">
+            AND burying_date = #{buryingDate}
+        </if>
+        <if test="userList != null and userList.size()!=0">
+            AND user_id in
+            <foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <select id="findUserId" resultType="long">
+        SELECT DISTINCT user_id
+        FROM dataware_burying_point_hour
+        WHERE 1=1
+        <if test="buryingDate != null and buryingDate != ''">
+            AND burying_date = #{buryingDate}
+        </if>
+        <if test="userGroup != null and userGroup != ''">
+            AND user_group = #{userGroup}
+        </if>
+    </select>
+
+
+    <select id="findBuryingList" resultType="DatawareBuryingPointDay">
+        SELECT
+        user_id userId,
+        game_type gameType,
+        channel_id channelId,
+        sum(point_count) pointCount,
+        user_group userGroup,
+        burying_date buryingDate
+        FROM dataware_burying_point_hour
+        WHERE 1=1
+        <if test="buryingDate != null and buryingDate != ''">
+            AND burying_date = #{buryingDate}
+        </if>
+        <if test="userGroup != null and userGroup != ''">
+            AND user_group = #{userGroup}
+        </if>
+        GROUP BY user_id,channel_id,game_type,burying_date
+    </select>
+</mapper>
+

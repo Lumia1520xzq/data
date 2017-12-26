@@ -74,6 +74,14 @@ public interface DataConstants {
 
     String DATA_DATAWARE_BETTING_DAY = "data_dataware_betting_day";
     String DATA_DATAWARE_GAMETYPE = "data_dataware_gametype";
+    /**
+     * 埋点历史数据日期
+     */
+    String DATA_DATAWARE_BURYING_HISTORY_HOUR = "data_dataware_burying_history_hour";
+    String DATA_DATAWARE_BURYING_HISTORY_DAY = "data_dataware_burying_history_day";
+
+    String DATA_DATAWARE_BURYING_FLAG_HOUR = "data_dataware_burying_flag_hour";
+    String DATA_DATAWARE_BURYING_FLAG_DAY = "data_dataware_burying_flag_day";
 
 
     /**
