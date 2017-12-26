@@ -111,6 +111,11 @@
 								<include>*.properties</include>
 							</includes>
 						</resource>
+						<resource>
+							<directory>src/main/resources-profile/${package.environment}/js</directory>
+							<targetPath>/</targetPath>
+							<filtering>true</filtering>
+						</resource>
 					</webResources>
 				</configuration>
 			</plugin>
