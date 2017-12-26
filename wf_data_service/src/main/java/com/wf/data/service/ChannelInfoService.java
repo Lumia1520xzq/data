@@ -5,12 +5,16 @@ import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.dao.base.ChannelInfoDao;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * @author  JoeH
+ */
 @Service
 public class ChannelInfoService extends CrudService<ChannelInfoDao, ChannelInfo> {
 
@@ -42,6 +46,18 @@ public class ChannelInfoService extends CrudService<ChannelInfoDao, ChannelInfo>
     public List<ChannelInfo> findMainChannel() {
         return dao.findMainChannel();
     }
+
+    public List<Long> findMainChannelIds() {
+        List<Long> list = new ArrayList<>();
+        List<ChannelInfo> mainChannels = findMainChannel();
+        if (CollectionUtils.isNotEmpty(mainChannels)) {
+           for(ChannelInfo mainChannel:mainChannels){
+                list.add(mainChannel.getId());
+           }
+        }
+        return list;
+    }
+
 
     public List<ChannelInfo> findAll() {
         return dao.findAll();

@@ -27,13 +27,13 @@ import java.util.*;
 
 
 /** 
- * 乐赢三张投注
+ * 乐赢三张每小时邮件
  * @author jianjian.huang
  * 2017年12月12日
  */
 
 @Service
-public class EsTcardService {
+public class EsTcardDailyService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
@@ -91,7 +91,7 @@ public class EsTcardService {
      * 三张投注条件
 	 */
 	private QueryBuilder getBettingQuery(Map<String,String> params) {
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(4);
 		QueryBuilder query;
 		map.put("delete_flag", 0);
 		BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
@@ -107,7 +107,7 @@ public class EsTcardService {
 			boolQuery.must(QueryBuilders.rangeQuery("create_time").lte(DateUtils.formatUTCDate(endDate,DateUtils.DATE_TIME_PATTERN)));
 		}
 		//剔除内部用户
-		List<Long> internalUserIds=getInternalUserIds();
+		List<Long> internalUserIds = getInternalUserIds();
 		boolQuery.mustNot(QueryBuilders.termsQuery("user_id",internalUserIds));
 		query = boolQuery;
 		logger.debug("query" + query);
