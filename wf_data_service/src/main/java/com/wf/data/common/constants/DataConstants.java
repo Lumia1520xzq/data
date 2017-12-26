@@ -83,6 +83,9 @@ public interface DataConstants {
     String DATA_DATAWARE_BURYING_FLAG_HOUR = "data_dataware_burying_flag_hour";
     String DATA_DATAWARE_BURYING_FLAG_DAY = "data_dataware_burying_flag_day";
 
+    String DATA_DATAWARE_SIGN_FLAG_DAY = "data_dataware_sign_flag_day";
+    String DATA_DATAWARE_SIGN_HISTORY_DAY = "data_dataware_sign_history_day";
+
 
     /**
      * 每日推送

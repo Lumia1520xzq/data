@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.platform.PlatUserCheckLotteryLogDao">
+	
+	<sql id="platUserCheckLotteryLogColumns">
+		t.id,
+		t.user_id,
+		t.config_id,
+		t.check_day,
+		t.check_date,
+		t.activity_day,
+		t.is_check,
+		t.type,
+		t.is_receive,
+		t.receive_date,
+		t.channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="platUserCheckLotteryLogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="platUserCheckLotteryLogJoins">
+	</sql>
+	
+	<select id="get" resultType="PlatUserCheckLotteryLog">
+		SELECT <include refid="platUserCheckLotteryLogColumns"/> FROM plat_user_check_lottery_log t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="PlatUserCheckLotteryLog">
+		SELECT <include refid="platUserCheckLotteryLogColumns"/> FROM plat_user_check_lottery_log t <include refid="platUserCheckLotteryLogJoins"/>
+		WHERE <include refid="platUserCheckLotteryLogWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM plat_user_check_lottery_log t WHERE <include refid="platUserCheckLotteryLogWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO plat_user_check_lottery_log (
+			id, 
+			user_id, 
+			config_id, 
+			check_day, 
+			check_date, 
+			activity_day, 
+			is_check, 
+			type, 
+			is_receive, 
+			receive_date, 
+			channel_id, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{configId}, 
+			#{checkDay}, 
+			#{checkDate}, 
+			#{activityDay}, 
+			#{isCheck}, 
+			#{type}, 
+			#{isReceive}, 
+			#{receiveDate}, 
+			#{channelId}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE plat_user_check_lottery_log SET
+			user_id = #{userId}, 
+			config_id = #{configId}, 
+			check_day = #{checkDay}, 
+			check_date = #{checkDate}, 
+			activity_day = #{activityDay}, 
+			is_check = #{isCheck}, 
+			type = #{type}, 
+			is_receive = #{isReceive}, 
+			receive_date = #{receiveDate}, 
+			channel_id = #{channelId}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE plat_user_check_lottery_log SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
