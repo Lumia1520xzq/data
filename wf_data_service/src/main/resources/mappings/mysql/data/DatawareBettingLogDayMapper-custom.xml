@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
 <mapper namespace="com.wf.data.dao.data.DatawareBettingLogDayDao">
-	
 
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*)
+        FROM dataware_betting_log_day t
+        WHERE 1=1
+        <if test="bettingDate != null and bettingDate != ''">
+            AND t.betting_date = #{bettingDate}
+        </if>
+
+    </select>
 </mapper>
 

@@ -52,5 +52,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         </if>
         GROUP BY user_id,channel_id,game_type,burying_date
     </select>
+
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*) FROM dataware_burying_point_hour t
+        WHERE  1=1
+        <if test="buryingDate != null and buryingDate != ''">
+            AND  t.burying_date = #{buryingDate}
+        </if>
+        <if test="buryingHour != null and buryingHour != ''">
+            AND  t.burying_hour = #{buryingHour}
+        </if>
+    </select>
+
 </mapper>
 

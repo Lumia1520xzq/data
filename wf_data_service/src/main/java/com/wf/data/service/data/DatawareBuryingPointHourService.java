@@ -26,4 +26,8 @@ public class DatawareBuryingPointHourService extends CrudService<DatawareBurying
     public List<Long> findUserId(DatawareBuryingPointHour pointDay) {
         return dao.findUserId(pointDay);
     }
+
+    public long getCountByTime(Map<String,Object> map){
+        return dao.getCountByTime(map);
+    }
 }

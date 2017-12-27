@@ -17,4 +17,6 @@ public interface DatawareBuryingPointHourDao extends CrudDao<DatawareBuryingPoin
     int updateUserGroup(DatawareBuryingPointHour pointDay);
 
     List<Long> findUserId(DatawareBuryingPointHour pointDay);
+
+    long getCountByTime(Map<String,Object> map);
 }

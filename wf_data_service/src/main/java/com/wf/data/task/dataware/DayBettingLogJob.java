@@ -11,6 +11,8 @@ import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DatawareBettingLogDay;
 import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.service.*;
+import com.wf.data.service.data.DatawareBettingLogDayService;
+import com.wf.data.service.data.DatawareBettingLogHourService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,27 +48,31 @@ public class DayBettingLogJob {
         String cleanDay = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_BETTING_DAY);
         String[] cleanDays = cleanDay.split(",");
 
-        if(cleanDays.length == 2){
-            List<String> datelist = DateUtils.getDateList(cleanDays[0],cleanDays[1]);
-            for(String bettingDate :datelist){
-                dayBettingLog(bettingDate, uicGroupList);
+        Map<String, Object> params = new HashMap<>();
+
+        if (cleanDays.length == 2) {
+            List<String> datelist = DateUtils.getDateList(cleanDays[0], cleanDays[1]);
+            for (String bettingDate : datelist) {
+                params.put("bettingDate", bettingDate);
+                long count = datawareBettingLogDayService.getCountByTime(params);
+                if(count <=0){
+                    dayBettingLog(bettingDate, uicGroupList);
+                }
             }
 
-        }else{
+        } else {
             String bettingDate = "";
             if (StringUtils.isNotEmpty(cleanDay)) {
                 bettingDate = cleanDay;
             } else {
                 bettingDate = DateUtils.getYesterdayDate();
             }
-            dayBettingLog(bettingDate, uicGroupList);
+            params.put("bettingDate", bettingDate);
+            long count = datawareBettingLogDayService.getCountByTime(params);
+            if(count <=0){
+                dayBettingLog(bettingDate, uicGroupList);
+            }
         }
-
-
-
-
-
-
 
 
         logger.info("每天投注汇总结束:traceId={}", TraceIdUtils.getTraceId());

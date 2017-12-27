@@ -104,7 +104,13 @@ public class UserSignDayJob {
                     }
 
                     if (CollectionUtils.isNotEmpty(hourList)) {
-                        datawareUserSignDayService.batchSave(hourList);
+                        Map<String,Object> params = new HashMap<>();
+                        params.put("signDate",hourList.get(0).getSignDate());
+                        params.put("signHour",hourList.get(0).getSignHour());
+                        long count = datawareUserSignDayService.getCountByTime(map);
+                        if (count <= 0) {
+                            datawareUserSignDayService.batchSave(hourList);
+                        }
                     }
                 } catch (Exception e) {
                     logger.error("dataware_user_sign_day添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));

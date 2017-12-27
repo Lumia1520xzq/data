@@ -27,7 +27,18 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<sql id="datawareUserInfoJoins">
 	</sql>
-	
+
+	<select id="getCountByTime" resultType="long">
+		SELECT COUNT(*) FROM dataware_user_info t
+		WHERE  1=1
+		<if test="registeredDate != null and registeredDate != ''">
+			AND  t.registered_date = #{registeredDate}
+		</if>
+		<if test="registeredHour != null and registeredHour != ''">
+			AND  t.registered_hour = #{registeredHour}
+		</if>
+	</select>
+
 	<select id="get" resultType="DatawareUserInfo">
 		SELECT <include refid="datawareUserInfoColumns"/> FROM dataware_user_info t WHERE id = #{id}
 	</select>

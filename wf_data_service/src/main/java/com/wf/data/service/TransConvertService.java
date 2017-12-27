@@ -3,6 +3,7 @@ package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.data.entity.DatawareConvertHour;
 import com.wf.data.dao.trans.TransConvertDao;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.dao.trans.entity.TransConvert;
@@ -64,4 +65,9 @@ public class TransConvertService extends CrudService<TransConvertDao, TransConve
 	public double getIncomeAmount(Map<String,Object> params) {
 		return dao.getIncomeAmount(params);
 	}
+
+	public List<DatawareConvertHour> findConvertList(Map<String,Object> map){
+		return dao.findConvertList(map);
+	}
+
 }

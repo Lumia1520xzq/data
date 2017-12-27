@@ -50,8 +50,13 @@ public class BuryingPointDayJob {
         if (false == buryingFlag) {
             historyBuryingPoint(uicGroupList);
         } else {
-            String buryingBetting = DateUtils.getYesterdayDate();
-            buryingPoint(buryingBetting, uicGroupList);
+            String searchDate = DateUtils.getYesterdayDate();
+            Map<String, Object> params = new HashMap<>();
+            params.put("buryingDate", searchDate);
+            long count = datawareBuryingPointDayService.getCountByTime(params);
+            if (count <= 0) {
+                buryingPoint(searchDate, uicGroupList);
+            }
         }
 
 
@@ -81,7 +86,13 @@ public class BuryingPointDayJob {
 
             List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
             for (String searchDate : datelist) {
-                buryingPoint(searchDate, uicGroupList);
+                Map<String, Object> params = new HashMap<>();
+                params.put("buryingDate", searchDate);
+                long count = datawareBuryingPointDayService.getCountByTime(params);
+                if (count <= 0) {
+                    buryingPoint(searchDate, uicGroupList);
+                }
+
             }
         } catch (Exception e) {
             logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));

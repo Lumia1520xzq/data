@@ -96,26 +96,10 @@ public class BuryingPointHourJob {
                     endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
                 }
 
-                try {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("beginDate", beginDate);
-                    map.put("endDate", endDate);
-                    List<DatawareBuryingPointHour> hourList = buryingPointService.findBuryingHourList(map);
-
-                    for (DatawareBuryingPointHour item : hourList) {
-                        item.setUserGroup(getUserGroup(item.getUserId(), uicGroupList));
-                        DataDict dataDict = dataDictService.getDictByValue("game_type", item.getGameType());
-                        if (null != dataDict) {
-                            item.setGameName(dataDict.getLabel());
-                        }
-                    }
-
-                    if(CollectionUtils.isNotEmpty(hourList)){
-                        datawareBuryingPointHourService.batchSave(hourList);
-                    }
-                } catch (Exception e) {
-                    logger.error("buryingPointHour添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
-                }
+                Map<String, Object> map = new HashMap<>();
+                map.put("beginDate", beginDate);
+                map.put("endDate", endDate);
+                buryingPoint(map, uicGroupList);
             }
         } catch (Exception e) {
             logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
@@ -141,11 +125,15 @@ public class BuryingPointHourJob {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.MILLISECOND, 0);
         String endDate = DateUtils.formatDate(calendar.getTime(), "yyyy-MM-dd HH:mm:ss");
+        Map<String, Object> map = new HashMap<>();
+        map.put("beginDate", beginDate);
+        map.put("endDate", endDate);
+        buryingPoint(map, uicGroupList);
+    }
 
+    private void buryingPoint(Map<String, Object> map, List<Long> uicGroupList) {
         try {
-            Map<String, Object> map = new HashMap<>();
-            map.put("beginDate", beginDate);
-            map.put("endDate", endDate);
+
             List<DatawareBuryingPointHour> hourList = buryingPointService.findBuryingHourList(map);
 
             for (DatawareBuryingPointHour item : hourList) {
@@ -156,8 +144,14 @@ public class BuryingPointHourJob {
                 }
             }
 
-            if(CollectionUtils.isNotEmpty(hourList)){
-                datawareBuryingPointHourService.batchSave(hourList);
+            if (CollectionUtils.isNotEmpty(hourList)) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("buryingDate", hourList.get(0).getBuryingDate());
+                params.put("buryingHour", hourList.get(0).getBuryingHour());
+                long count = datawareBuryingPointHourService.getCountByTime(params);
+                if (count <= 0) {
+                    datawareBuryingPointHourService.batchSave(hourList);
+                }
             }
         } catch (Exception e) {
             logger.error("buryingPointHour添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
