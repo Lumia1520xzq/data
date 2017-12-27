@@ -77,7 +77,8 @@ public class EsUicChannelService {
 		//新增用户
 		List<UicUser> newUserList = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 100000,UicUser.class);
 		//次日活跃用户
-		List<Long> nextDayActive = getUserIds(aggsBuilder,date,parentId,channelId,userIds);
+		String nextDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(date),1));
+		List<Long> nextDayActive = getUserIds(aggsBuilder,nextDate,parentId,channelId,userIds);
 		if(CollectionUtils.isEmpty(newUserList)||CollectionUtils.isEmpty(nextDayActive)){
 			return "0%";
 		}
