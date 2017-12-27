@@ -36,7 +36,7 @@ public class ConvertHourJob {
         logger.info("每小时充值汇总开始:traceId={}", TraceIdUtils.getTraceId());
 
 
-        boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DATAWARE_BURYING_FLAG_HOUR);
+        boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DATAWARE_CONVERT_FLAG_HOUR);
         if (false == flag) {
             historyConvert();
         } else {
@@ -49,7 +49,7 @@ public class ConvertHourJob {
 
 
     private void historyConvert() {
-        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_BURYING_HISTORY_HOUR);
+        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_CONVERT_HISTORY_HOUR);
 
         if (StringUtils.isBlank(date)) {
             logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
