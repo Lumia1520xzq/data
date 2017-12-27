@@ -41,6 +41,10 @@ public interface DataConstants {
      */
     String CHANNEL_DATA_RECEIVER="channel_data_receiver";
     /**
+     * 每日各渠道关键数据的渠道
+     */
+    String DATA_DAILY_CHANNELS = "data_daily_channels";
+    /**
      * 同ip个数设置
      */
     String MONITOR_IP_COUNT = "monitor_ip_count";
