@@ -16,7 +16,7 @@ import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.RoomFishInfoService;
 import com.wf.data.service.UicGroupService;
-import com.wf.data.service.elasticsearch.EsTcardService;
+import com.wf.data.service.elasticsearch.EsTcardDailyService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class BettingAnalyseJob {
     private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
     private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
     private final RoomFishInfoService roomFishInfoService = SpringContextHolder.getBean(RoomFishInfoService.class);
-    private final EsTcardService tcardService = SpringContextHolder.getBean(EsTcardService.class);
+    private final EsTcardDailyService tcardService = SpringContextHolder.getBean(EsTcardDailyService.class);
 
     private final String EMAIL_STYLE = "<style>table{margin-top:10px;width:700px;" +
             "border-collapse:collapse;border-spacing:0;" +
