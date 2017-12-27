@@ -86,6 +86,9 @@ public interface DataConstants {
     String DATA_DATAWARE_SIGN_FLAG_DAY = "data_dataware_sign_flag_day";
     String DATA_DATAWARE_SIGN_HISTORY_DAY = "data_dataware_sign_history_day";
 
+    String DATA_DATAWARE_USERINFO_FLAG_DAY = "data_dataware_userinfo_flag_day";
+    String DATA_DATAWARE_USERINFO_HISTORY_DAY = "data_dataware_userinfo_history_day";
+
 
     /**
      * 每日推送
