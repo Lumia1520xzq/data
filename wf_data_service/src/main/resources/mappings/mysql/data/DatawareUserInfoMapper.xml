@@ -30,7 +30,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 	<select id="getCountByTime" resultType="long">
 		SELECT COUNT(*) FROM dataware_user_info t
-		WHERE  1=1
+		WHERE  1=1 AND t.delete_flag = 0
 		<if test="registeredDate != null and registeredDate != ''">
 			AND  t.registered_date = #{registeredDate}
 		</if>

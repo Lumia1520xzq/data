@@ -8,7 +8,7 @@
     <select id="getCountByTime" resultType="long">
         SELECT COUNT(*)
         FROM dataware_burying_point_day t
-        WHERE 1=1
+        WHERE 1=1 AND t.delete_flag = 0
         <if test="buryingDate != null and buryingDate != ''">
             AND t.burying_date = #{buryingDate}
         </if>

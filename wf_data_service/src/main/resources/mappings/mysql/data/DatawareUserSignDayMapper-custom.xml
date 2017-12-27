@@ -9,7 +9,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="getCountByTime" resultType="long">
 		SELECT COUNT(*)
 		FROM dataware_user_sign_day t
-		WHERE  1=1
+		WHERE  1=1 AND t.delete_flag = 0
 		<if test="signDate != null and signDate != ''">
 			AND  t.sign_date = #{signDate}
 		</if>
