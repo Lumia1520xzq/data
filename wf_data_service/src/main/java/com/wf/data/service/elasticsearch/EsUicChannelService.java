@@ -51,7 +51,7 @@ public class EsUicChannelService {
 	 */
 	public List<Long> getNewUserIds(String date,Long parentId,Long channelId,List<Long> userIds) {
 		List<Long> list = new ArrayList<>();
-		List<UicUser> users = esClientFactory.list(EsContents.UIC_USER,EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 10000,UicUser.class);
+		List<UicUser> users = esClientFactory.list(EsContents.UIC_USER,EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 100000,UicUser.class);
 		if(CollectionUtils.isNotEmpty(users)) {
 			for(UicUser user:users){
 				list.add(user.getId());
@@ -75,7 +75,7 @@ public class EsUicChannelService {
 	public String getRemainRate(String date,Long parentId,Long channelId,List<Long> userIds) {
 		AggregationBuilder aggsBuilder=EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		//新增用户
-		List<UicUser> newUserList = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 10000,UicUser.class);
+		List<UicUser> newUserList = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 100000,UicUser.class);
 		//次日活跃用户
 		List<Long> nextDayActive = getUserIds(aggsBuilder,date,parentId,channelId,userIds);
 		if(CollectionUtils.isEmpty(newUserList)||CollectionUtils.isEmpty(nextDayActive)){
