@@ -25,5 +25,28 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         GROUP BY user_id,channel_id,DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
         ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
     </select>
+
+    <select id="getBettingAndAward" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+        SELECT
+        SUM(amount) bettingAmount,
+        SUM(return_amount) resultAmount
+        FROM `tcard_user_betting_log`
+        WHERE 1=1 AND `status` != -1
+        <if test="parentId != null">
+            AND channel_id LIKE CONCAT( #{parentId}, '%')
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="userIds != null and userIds.size() != 0">
+            AND user_id not in
+            <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND create_time BETWEEN #{beginDate} AND #{endDate}
+        GROUP BY DATE_FORMAT(create_time,"%Y-%m-%d")
+    </select>
+
 </mapper>
 
