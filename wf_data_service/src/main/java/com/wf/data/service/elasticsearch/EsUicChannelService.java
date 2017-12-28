@@ -49,9 +49,9 @@ public class EsUicChannelService {
 	 * 2、新增用户id 集合
 	 *
 	 */
-	public List<Long> getNewUserIds(String date,Long parentId,Long channelId,List<Long> userIds) {
+	public List<Long> getNewUserIds(String date,Long parentId,Long channelId) {
 		List<Long> list = new ArrayList<>();
-		List<UicUser> users = esClientFactory.list(EsContents.UIC_USER,EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 100000,UicUser.class);
+		List<UicUser> users = esClientFactory.list(EsContents.UIC_USER,EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId),0, 100000,UicUser.class);
 		if(CollectionUtils.isNotEmpty(users)) {
 			for(UicUser user:users){
 				list.add(user.getId());
@@ -63,10 +63,13 @@ public class EsUicChannelService {
 	/**
 	 * 3、活跃用户
  	 */
-	public Integer getActiveUser(String date,Long parentId,Long channelId,List<Long> userIds) {
+	public List<Long> getActiveUserList(String date,Long parentId,Long channelId) {
 		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
-		List<Long> activeUsers = getUserIds(aggsBuilder,date,parentId,channelId,userIds);
-		return activeUsers.size();
+		List<Long> activeUsers = getUserIds(aggsBuilder,date,parentId,channelId);
+		if(null == activeUsers){
+			activeUsers = new ArrayList<>();
+		}
+		return activeUsers;
 	}
 
 	/**
@@ -75,14 +78,21 @@ public class EsUicChannelService {
 	public String getRemainRate(String date,Long parentId,Long channelId,List<Long> userIds) {
 		AggregationBuilder aggsBuilder=EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		//新增用户
-		List<UicUser> newUserList = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId,userIds),0, 100000,UicUser.class);
+		List<UicUser> newUserList = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER,getUicUserQuery(date,parentId,channelId),0, 100000,UicUser.class);
 		//次日活跃用户
 		String nextDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(date),1));
-		List<Long> nextDayActive = getUserIds(aggsBuilder,nextDate,parentId,channelId,userIds);
+		List<Long> nextDayActive = getUserIds(aggsBuilder,nextDate,parentId,channelId);
 		if(CollectionUtils.isEmpty(newUserList)||CollectionUtils.isEmpty(nextDayActive)){
 			return "0%";
 		}
-		int count=0;
+		List<UicUser> newList = new ArrayList<>();
+		for (UicUser newUser:newUserList){
+			if(!userIds.contains(newUser.getId())){
+				newList.add(newUser);
+			}
+		}
+		newUserList = newList;
+		int count = 0;
 		for(UicUser user:newUserList){
 			if(nextDayActive.contains(user.getId())){
 				count++;
@@ -93,9 +103,9 @@ public class EsUicChannelService {
 	}
 
 
-	private List<Long> getUserIds(AggregationBuilder aggsBuilder,String date,Long parentId,Long channelId,List<Long> userIds) {
+	private List<Long> getUserIds(AggregationBuilder aggsBuilder,String date,Long parentId,Long channelId) {
 		List<Long> list=new ArrayList<>();
-		Aggregations aggregations = esClientFactory.getAggregation(EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(date,parentId,channelId,userIds));
+		Aggregations aggregations = esClientFactory.getAggregation(EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(date,parentId,channelId));
 		LongTerms agg = (LongTerms)aggregations.get("userCount");
 		List<Bucket> buckets = agg.getBuckets();
 		for(Bucket buck:buckets){
@@ -107,7 +117,7 @@ public class EsUicChannelService {
 	/**
 	 * 日活用户查询条件
 	 */
-	private QueryBuilder getActiveQuery(String date,Long parentId,Long channelId,List<Long> userIds) {
+	private QueryBuilder getActiveQuery(String date,Long parentId,Long channelId) {
 		Map<String, Object> map = new HashMap<>(10);
 		QueryBuilder query;
 		map.put("delete_flag", 0);
@@ -131,8 +141,6 @@ public class EsUicChannelService {
 				boolQuery.must(QueryBuilders.termsQuery("channel_id", channelIds));
 			}
 		}
-		//去除特定用户
-		boolQuery.mustNot(QueryBuilders.termsQuery("user_id",userIds));
 		query = boolQuery;
 		logger.debug("query" + query);
 		return query;
@@ -141,7 +149,7 @@ public class EsUicChannelService {
 	/**
 	 * 用户表查询条件
 	 */
-	private QueryBuilder getUicUserQuery(String date,Long parentId,Long channelId,List<Long> userIds) {
+	private QueryBuilder getUicUserQuery(String date,Long parentId,Long channelId) {
 		Map<String, Object> map = new HashMap<>(10);
 		QueryBuilder query;
 		map.put("delete_flag", 0);
@@ -163,8 +171,6 @@ public class EsUicChannelService {
 				boolQuery.must(QueryBuilders.termsQuery("reg_channel_id", channelIds));
 			}
 		}
-		//去除特定用户
-		boolQuery.mustNot(QueryBuilders.termsQuery("id",userIds));
 		query = boolQuery;
 		logger.debug("query" + query);
 		return query;

@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.EsContents;
 import com.wf.data.common.constants.TransactionContents;
+import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.service.ChannelInfoService;
+import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -115,7 +117,9 @@ public class EsTcardChannelService {
 				boolQuery.must(QueryBuilders.termsQuery("channel_id", channelIds));
 			}
 		}
-		boolQuery.mustNot(QueryBuilders.termsQuery("user_id",userIds));
+		if (CollectionUtils.isNotEmpty(userIds)){
+			boolQuery.must(QueryBuilders.termsQuery("user_id",userIds));
+		}
 		query = boolQuery;
 		logger.debug("query" + query);
 		return query;
