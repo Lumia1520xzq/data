@@ -18,4 +18,11 @@ public interface TcardUserBettingLogDao extends CrudDao<TcardUserBettingLog> {
      * @return
      */
     List<DatawareBettingLogHour> getGameBettingRecord(Map<String, Object> params);
+
+    /**
+     * 获取投注和返奖流水
+     * @param params
+     * @return
+     */
+    List<DatawareBettingLogHour> getBettingAndAward(Map<String, Object> params);
 }

@@ -31,7 +31,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		AND channel_id = #{channelId}
 		</if>
 		<if test="parentId != null and parentId != ''">
-		AND channel_id LIKE CONCAT('%', #{parentId}, '%')
+		AND channel_id LIKE CONCAT(#{parentId}, '%')
 		</if>
 	</select>
 

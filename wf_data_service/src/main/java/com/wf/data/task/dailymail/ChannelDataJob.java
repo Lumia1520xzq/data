@@ -1,6 +1,7 @@
 package com.wf.data.task.dailymail;
 
 import com.google.common.collect.Lists;
+import com.wf.core.cache.CacheHander;
 import com.wf.core.email.EmailHander;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
@@ -9,9 +10,12 @@ import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
+import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.*;
 import com.wf.data.service.elasticsearch.EsTcardChannelService;
 import com.wf.data.service.elasticsearch.EsUicChannelService;
@@ -40,6 +44,8 @@ public class ChannelDataJob {
     private final ReportFishBettingInfoService fishService = SpringContextHolder.getBean(ReportFishBettingInfoService.class);
     private final EsTcardChannelService tcardService =  SpringContextHolder.getBean(EsTcardChannelService.class);
     private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
+    private final TcardUserBettingLogService tcardUserBettingLogService = SpringContextHolder.getBean(TcardUserBettingLogService.class);
+    private final CacheHander cacheHander = SpringContextHolder.getBean(CacheHander.class);
 
     private static final String FISH_PREFIX = "report_fish_betting_info_";
     private static final String OCTOBER = "2017-10-01";
@@ -109,7 +115,7 @@ public class ChannelDataJob {
     }
 
     /**
-     * 去除特定用户(灰黑内)
+     * 去除特定用户(灰黑内)走缓存
      */
     private List<Long> getGroupList() {
         List<Long> uicGroupList = Lists.newArrayList();
@@ -117,7 +123,7 @@ public class ChannelDataJob {
         if (StringUtils.isNotEmpty(value)) {
             String[] uicGroupArr = value.split(",");
             List<String> userGroup = Arrays.asList(uicGroupArr);
-            uicGroupList = uicGroupService.findGroupUsers(userGroup);
+            uicGroupList = cacheHander.cache(DataCacheKey.DATA_DATAWARE_UIC_GROUP.key(), () -> uicGroupService.findGroupUsers(userGroup));
         }
         return uicGroupList;
     }
@@ -130,14 +136,17 @@ public class ChannelDataJob {
         StringBuilder sb = new StringBuilder();
         // 2、充值金额
         Double rechargeSum = transConvertService.findSumRechargeByTime(toMap(date,parentId,channelId));
-        // 3、日活
-        Integer activeUser = channelService.getActiveUser(date,parentId,channelId,userIds);
+        // 3、日活(在代码中去重)
+        List<Long> activeUserList = channelService.getActiveUserList(date,parentId,channelId);
+        Integer activeUser = CollectionUtils.disjunction(activeUserList,CollectionUtils.intersection(activeUserList,userIds)).size();
         ReportGameInfo gameInfo = getBettingInfo(date,parentId,channelId);
         ReportGameInfo fishInfo = getFishBettingInfo(date, parentId, channelId);
         // 4、投注用户数(其他游戏+捕鱼+三张)
         List<Long> bettingUsers = getBettingUsers(date, parentId, channelId);
         List<Long> fishBettingUsers = getFishBettingUsers(date, parentId, channelId);
-        List<Long> tcardBettingUsers = tcardService.getTcardBettingUsers(date,parentId,channelId,userIds);
+        List<Long> tcardBettingUsers = tcardService.getTcardBettingUsers(date,parentId,channelId);
+        tcardBettingUsers = (List<Long>)CollectionUtils.disjunction(tcardBettingUsers,CollectionUtils.intersection(tcardBettingUsers,userIds));
+
         List<Long> sumBettingUsers = getBettingUserList(bettingUsers,fishBettingUsers,tcardBettingUsers);
         Integer bettingUser = sumBettingUsers.size();
         // 5、投注转化率
@@ -147,13 +156,17 @@ public class ChannelDataJob {
         // 7、付费渗透率(充值用户数/投注用户数)
         String payRate=bettingUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(rechargeUser,bettingUser,4),"#.##%");
         // 8、投注流水(其他游戏+捕鱼+三张)
-        Long  cathecticMoney = gameInfo.getCathecticMoney() + fishInfo.getCathecticMoney() + tcardService.getBettingAmt(date,parentId,channelId,userIds);
+        double tcardBetting = getTcardBetting(date,parentId,channelId).getBettingAmount();
+        double tcardResult = getTcardBetting(date,parentId,channelId).getResultAmount();
+
+        Long  cathecticMoney = gameInfo.getCathecticMoney() + fishInfo.getCathecticMoney() + (long)tcardBetting;
         // 9、返奖流水(其他游戏+捕鱼+三张)
-        Long winMoney = gameInfo.getWinMoney() + fishInfo.getWinMoney() + tcardService.getAwardAmt(date,parentId,channelId,userIds) ;
+        Long winMoney = gameInfo.getWinMoney() + fishInfo.getWinMoney() + (long)tcardResult;
         // 10、返奖率
         String winMoneyRate=cathecticMoney == 0?"0%":NumberUtils.format(BigDecimalUtil.div(winMoney,cathecticMoney,4),"#.##%");
         // 11、新增用户
-        List<Long> newUserIds = channelService.getNewUserIds(date,parentId,channelId,userIds);
+        List<Long> newUserIds = channelService.getNewUserIds(date,parentId,channelId);
+        newUserIds = (List<Long>)CollectionUtils.disjunction(newUserIds,CollectionUtils.intersection(newUserIds,userIds));
         Integer	newUser= newUserIds.size();
         // 新增用户中的投注人数
         Integer newBettingUser = CollectionUtils.intersection(newUserIds,sumBettingUsers).size();
@@ -170,6 +183,29 @@ public class ChannelDataJob {
         sb.append(result);
         return sb.toString();
     }
+
+    /**
+     * 去除灰黑内(三张投注流水)
+     */
+    private DatawareBettingLogHour getTcardBetting(String date,Long parentId,Long channelId) {
+        Map<String,Object> params=new HashMap<>(5);
+        params.put("beginDate",date+" 00:00:00");
+        params.put("endDate",date+" 23:59:59");
+        params.put("userIds",getGroupList());
+        params.put("parentId",parentId);
+        params.put("channelId",channelId);
+        List<DatawareBettingLogHour> list = tcardUserBettingLogService.getBettingAndAward(params);
+        if(CollectionUtils.isNotEmpty(list)){
+            return list.get(0);
+        }
+        DatawareBettingLogHour data = new DatawareBettingLogHour();
+        data.setBettingAmount(0.0);
+        data.setResultAmount(0.0);
+        return data;
+    }
+
+
+
 
     /**
      * 充值用户数
@@ -197,7 +233,7 @@ public class ChannelDataJob {
     /**
      * 投注信息(其他游戏)
      */
-    private ReportGameInfo getBettingInfo(String date,Long parentId,Long channelId){
+    private ReportGameInfo getBettingInfo(String date,Long parentId,Long channelId) {
         Map<String,Object> params=new HashMap<>(5);
         params.put("beginDate",date+" 00:00:00");
         params.put("endDate",date+" 23:59:59");

@@ -7,16 +7,15 @@ import com.wf.data.common.constants.TransactionContents;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.ChannelInfoService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.LongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.metrics.sum.Sum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +43,10 @@ public class EsTcardChannelService {
 	/**
 	 * 投注用户(三张)
 	 */
-	public List<Long> getTcardBettingUsers (String date,Long parentId,Long channelId,List<Long> userIds) {
+	public List<Long> getTcardBettingUsers (String date,Long parentId,Long channelId) {
 		List<Long> list = new ArrayList<>();
 		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userIds", "user_id", 1000000);
-		Aggregations aggs = esClientFactory.getAggregation(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, aggsBuilder, getTcardQuery(date,parentId,channelId,userIds,true));
+		Aggregations aggs = esClientFactory.getAggregation(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, aggsBuilder, getTcardQuery(date,parentId,channelId,true));
 		LongTerms agg = (LongTerms) aggs.get("userIds");
 		List<Terms.Bucket> buckets = agg.getBuckets();
 		for(Terms.Bucket buck:buckets) {
@@ -57,31 +56,24 @@ public class EsTcardChannelService {
 	}
 
 	/**
-	 * 投注流水
+	 * 投注明细
 	 */
-	public long getBettingAmt (String date,Long parentId,Long channelId,List<Long> userIds) {
-		AggregationBuilder aggsBuilder = EsQueryBuilders.sumAggregation("businessAmount","change_money");
-		Aggregations aggs = esClientFactory.getAggregation(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, aggsBuilder, getTcardQuery(date,parentId,channelId,userIds,true));
-		Map<String, Aggregation> aggMap = aggs.asMap();
-		Sum sum = (Sum) aggMap.get("businessAmount");
-		return (long)sum.getValue();
+	public List<TransChangeNote> getBettingDetails (String date,Long parentId,Long channelId) {
+		return esClientFactory.list(EsContents.TRANS_CHANGE_NOTE,  EsContents.TRANS_CHANGE_NOTE, getTcardQuery(date,parentId,channelId,true),0,5000000, TransChangeNote.class);
+
 	}
 
 	/**
-	 * 返奖流水
+	 * 返奖明细
 	 */
-	public long getAwardAmt(String date,Long parentId,Long channelId,List<Long> userIds) {
-		AggregationBuilder aggsBuilder = EsQueryBuilders.sumAggregation("businessAmount","change_money");
-		Aggregations aggs = esClientFactory.getAggregation(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, aggsBuilder, getTcardQuery(date,parentId,channelId,userIds,false));
-		Map<String, Aggregation> aggMap = aggs.asMap();
-		Sum sum = (Sum) aggMap.get("businessAmount");
-		return (long)sum.getValue();
+	public List<TransChangeNote> getAwardDetails (String date,Long parentId,Long channelId) {
+		return esClientFactory.list(EsContents.TRANS_CHANGE_NOTE,  EsContents.TRANS_CHANGE_NOTE, getTcardQuery(date,parentId,channelId,false),0,5000000, TransChangeNote.class);
 	}
 
 	/**
 	 * 三张投注 & 返奖条件
 	 */
-	private QueryBuilder getTcardQuery(String date,Long parentId,Long channelId,List<Long> userIds,boolean betting) {
+	private QueryBuilder getTcardQuery(String date,Long parentId,Long channelId,boolean betting) {
 		Map<String, Object> map = new HashMap<>(4);
 		QueryBuilder query;
 		map.put("delete_flag", 0);
@@ -115,7 +107,6 @@ public class EsTcardChannelService {
 				boolQuery.must(QueryBuilders.termsQuery("channel_id", channelIds));
 			}
 		}
-		boolQuery.mustNot(QueryBuilders.termsQuery("user_id",userIds));
 		query = boolQuery;
 		logger.debug("query" + query);
 		return query;
