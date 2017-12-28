@@ -48,6 +48,8 @@ public enum DataCacheKey implements CacheKey {
 	 */
 	SYS_DICT_TYPE_LABEL_LIST,
 
+	DATA_DATAWARE_UIC_GROUP
+
 	;
 	private final String value;
 	private DataCacheKey() {
