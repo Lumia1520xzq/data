@@ -1,4 +1,4 @@
-package com.wf.data.service;
+package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.DatawareBettingLogHourDao;
@@ -25,5 +25,9 @@ public class DatawareBettingLogHourService extends CrudService<DatawareBettingLo
 
     public List<DatawareBettingLogDay> findBettingList(Map<String, Object> params) {
         return dao.findBettingList(params);
+    }
+
+    public long getCountByTime(Map<String,Object> map){
+        return dao.getCountByTime(map);
     }
 }

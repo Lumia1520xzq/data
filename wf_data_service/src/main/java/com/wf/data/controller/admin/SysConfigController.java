@@ -58,4 +58,12 @@ public class SysConfigController extends ExtJsController {
 		dataConfigService.save(form);
 		return success();
 	}
+
+
+	@RequestMapping("/delete")
+	public Object delete() {
+		DataConfig entity = getForm(DataConfig.class);
+		dataConfigService.delete(entity);
+		return success();
+	}
 }

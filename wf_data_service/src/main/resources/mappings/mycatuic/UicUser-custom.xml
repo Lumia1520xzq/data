@@ -5,5 +5,27 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.wf.data.dao.mycatuic.UicUserDao">
 
+
+
+    <select id="findUserInfoByTime" resultType="com.wf.data.dao.data.entity.DatawareUserInfo">
+        SELECT
+        id userId,
+        nickname,
+        third_id thirdId,
+        reg_channel_id channelId,
+        create_time registeredTime,
+        DATE_FORMAT(create_time,"%H") registeredHour,
+        DATE_FORMAT(create_time,"%Y-%m-%d") registeredDate
+        FROM `uic_user`
+        WHERE 1=1
+        <if test="beginDate != null and beginDate != ''">
+            AND create_time &gt;=  #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND create_time &lt;=  #{endDate}
+        </if>
+        AND delete_flag = 0
+        LIMIT 10000000;
+    </select>
 </mapper>
 

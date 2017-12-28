@@ -1,7 +1,7 @@
-Ext.define('WF.sys.sysconfigMain', {
+Ext.define('WF.view.sys.config.sysConfigMain', {
     extend: 'Ext.panel.Panel',
     title: '配置项管理',
-    xtype: 'sysconfigMain',
+    xtype: 'sysConfigMain',
     closable: true,
     layout: {
         type: 'vbox',
@@ -35,36 +35,7 @@ Ext.define('WF.sys.sysconfigMain', {
             store: store,
             buildField: "Manual",
             forceFit: true,
-            tbar: [{
-                text: '新增',
-                iconCls: "icon-add",
-                handler: function () {
-                    var doRefresh = me.down('datagrid').store;
-                    Ext.create('WF.sys.addSysconfig', {doRefresh: doRefresh}).show();
-                }
-            }],
             columns: [{
-                menuDisabled: true,
-                sortable: false,
-                xtype: 'linkColumn',
-                header: '操作',
-                width: 60,
-                callback: function (link, record) {
-                    return link;
-                },
-                links: [{
-                    icon: 'edit',
-                    linkText: '编辑',
-                    handler: function (grid, rowIndex, colIndex, record) {
-                        var doRefresh = me.down('datagrid').store;
-                        var win = Ext.create("WF.sys.editSysconfig", {
-                            doRefresh: doRefresh
-                        });
-                        win.down('dataform').setValues(record.data);
-                        win.show();
-                    }
-                }]
-            }, {
                 text: '名称',
                 dataIndex: 'name',
                 width: 80,

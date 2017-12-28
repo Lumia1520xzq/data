@@ -18,4 +18,6 @@ public interface DatawareBettingLogHourDao extends CrudDao<DatawareBettingLogHou
 
     List<DatawareBettingLogDay> findBettingList(Map<String ,Object> params);
 
+    long getCountByTime(Map<String,Object> map);
+
 }

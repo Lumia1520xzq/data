@@ -2,6 +2,7 @@ package com.wf.data.dao.mycatdata;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
+import com.wf.data.dao.data.entity.DatawareBuryingPointHour;
 import com.wf.data.dao.mycatdata.entity.BuryingPoint;
 import org.apache.ibatis.annotations.Param;
 
@@ -40,4 +41,6 @@ public interface BuryingPointDao extends CrudDao<BuryingPoint> {
 	 * 未用userid查询的需要优化的逻辑
 	 ******************************************************************** 
 	 ********************************************************************/
+
+	List<DatawareBuryingPointHour> findBuryingHourList(Map<String,Object> map);
 }
