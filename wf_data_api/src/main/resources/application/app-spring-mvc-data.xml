@@ -44,14 +44,4 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="com.wf.core.interceptor.TimeCostInterceptor"/>
-		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="com.wf.core.interceptor.AllowOriginInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
 </beans>
