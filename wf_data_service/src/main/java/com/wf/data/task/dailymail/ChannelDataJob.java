@@ -13,6 +13,7 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.*;
@@ -43,6 +44,7 @@ public class ChannelDataJob {
     private final ReportFishBettingInfoService fishService = SpringContextHolder.getBean(ReportFishBettingInfoService.class);
     private final EsTcardChannelService tcardService =  SpringContextHolder.getBean(EsTcardChannelService.class);
     private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
+    private final TcardUserBettingLogService tcardUserBettingLogService = SpringContextHolder.getBean(TcardUserBettingLogService.class);
     private final CacheHander cacheHander = SpringContextHolder.getBean(CacheHander.class);
 
     private static final String FISH_PREFIX = "report_fish_betting_info_";
@@ -154,9 +156,12 @@ public class ChannelDataJob {
         // 7、付费渗透率(充值用户数/投注用户数)
         String payRate=bettingUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(rechargeUser,bettingUser,4),"#.##%");
         // 8、投注流水(其他游戏+捕鱼+三张)
-        Long  cathecticMoney = gameInfo.getCathecticMoney() + fishInfo.getCathecticMoney() + getTcardBetting(date,parentId,channelId,userIds);
+        double tcardBetting = getTcardBetting(date,parentId,channelId).getBettingAmount();
+        double tcardResult = getTcardBetting(date,parentId,channelId).getResultAmount();
+
+        Long  cathecticMoney = gameInfo.getCathecticMoney() + fishInfo.getCathecticMoney() + (long)tcardBetting;
         // 9、返奖流水(其他游戏+捕鱼+三张)
-        Long winMoney = gameInfo.getWinMoney() + fishInfo.getWinMoney() + getTcardAward(date,parentId,channelId,userIds);
+        Long winMoney = gameInfo.getWinMoney() + fishInfo.getWinMoney() + (long)tcardResult;
         // 10、返奖率
         String winMoneyRate=cathecticMoney == 0?"0%":NumberUtils.format(BigDecimalUtil.div(winMoney,cathecticMoney,4),"#.##%");
         // 11、新增用户
@@ -182,36 +187,25 @@ public class ChannelDataJob {
     /**
      * 去除灰黑内(三张投注流水)
      */
-    private Long getTcardBetting(String date,Long parentId,Long channelId,List<Long> userIds) {
-        List<TransChangeNote> list = tcardService.getBettingDetails(date,parentId,channelId);
-        double betting = 0L;
-        if(CollectionUtils.isNotEmpty(list)) {
-            for(TransChangeNote transChangeNote:list){
-                if(!userIds.contains(transChangeNote.getUserId())){
-                betting += transChangeNote.getChangeMoney();
-                }
-            }
+    private DatawareBettingLogHour getTcardBetting(String date,Long parentId,Long channelId) {
+        Map<String,Object> params=new HashMap<>(5);
+        params.put("beginDate",date+" 00:00:00");
+        params.put("endDate",date+" 23:59:59");
+        params.put("userIds",getGroupList());
+        params.put("parentId",parentId);
+        params.put("channelId",channelId);
+        List<DatawareBettingLogHour> list = tcardUserBettingLogService.getBettingAndAward(params);
+        if(CollectionUtils.isNotEmpty(list)){
+            return list.get(0);
         }
-        return (long)betting;
+        DatawareBettingLogHour data = new DatawareBettingLogHour();
+        data.setBettingAmount(0.0);
+        data.setResultAmount(0.0);
+        return data;
     }
 
 
 
-    /**
-     * 去除灰黑内(三张返奖流水)
-     */
-    private Long getTcardAward(String date,Long parentId,Long channelId,List<Long> userIds) {
-        List<TransChangeNote> list = tcardService.getAwardDetails(date,parentId,channelId);
-        double betting = 0L;
-        if(CollectionUtils.isNotEmpty(list)) {
-            for(TransChangeNote transChangeNote:list){
-                if(!userIds.contains(transChangeNote.getUserId())){
-                    betting += transChangeNote.getChangeMoney();
-                }
-            }
-        }
-        return (long)betting;
-    }
 
     /**
      * 充值用户数

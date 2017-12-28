@@ -20,4 +20,8 @@ public class TcardUserBettingLogService extends CrudService<TcardUserBettingLogD
         return dao.getGameBettingRecord(params);
     }
 
+    public List<DatawareBettingLogHour> getBettingAndAward(Map<String, Object> params){
+        return dao.getBettingAndAward(params);
+    }
+
 }
