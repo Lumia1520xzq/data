@@ -24,6 +24,11 @@
     initComponent: function () {
         this.callParent(arguments);
         var me = this;
+        var buttonStore = Ext.create("DCIS.Store", {
+            autoLoad: true,
+            url: 'admin/home/listButton.do?systemId=' + $systemId,
+            fields: ['menuCode', 'link', 'sort', 'disabled']
+        });
         callapi("admin/home/listModule.do", {
             root: $systemId
         }, function (result) {
@@ -47,13 +52,13 @@
                             leaf: false
                         },
                         autoLoad: true,
-                        fields: ['id', 'text', 'leaf', 'icon', 'expanded', 'moduleLink', 'billType']
+                        fields: ['id', 'text', 'leaf', 'icon', 'expanded', 'moduleLink', 'billType', 'parameters']
                     }),
                     listeners: {
                         cellclick: function (tree, td, cellIndex,
                                              record, tr, rowIndex, e, eo) {
                             if (record.data.leaf == true) {
-                                me.itemClick(record);
+                                me.itemClick(record, buttonStore);
                             }
                         }
                     }
@@ -62,7 +67,7 @@
             }
         });
     },
-    itemClick: function (rec) {
+    itemClick: function (rec, buttonStore) {
         var re = rec.data;
         var className = re.moduleLink;
         var center = Ext.ComponentQuery.query("maincontent_center")[0];
@@ -89,10 +94,25 @@
                 var panelQuery = Ext.ComponentQuery.query(alias);
                 if (panelQuery.length == 0) {
                     try {
+                        var tbar = Ext.create("Ext.toolbar.Toolbar");
+                        buttonStore.clearFilter(true);
+                        buttonStore.filter('menuCode', re.id);
+                        buttonStore.sort('sort', 'ASC');
+                        //console.log('first->' + buttonStore.getCount());
+                        buttonStore.each(function(rcd){
+                            var clsName = rcd.data.link;
+                            if (clsName != "" && clsName != null) {
+                                tbar.add(Ext.create(clsName, {disabled: rcd.data.disabled}));
+                            }
+                            return true;
+                        });
+
                         var panel = Ext.create(className, {
+                            tbar: tbar,
                             title : rec.parentNode.data.text + '-'
                             + re.text,
                             billType : re.billType,
+                            parameters : re.parameters,
                             icon : re.icon,
                             menuCode : re.id
                         });
@@ -120,10 +140,22 @@
                         }
                     }
                     try {
+                        var tbar = Ext.create("Ext.toolbar.Toolbar");
+                        buttonStore.clearFilter(true);
+                        buttonStore.filter('menuCode', re.id);
+                        buttonStore.sort('sort', 'ASC');
+                        buttonStore.each(function(rcd){
+                            var clsName = rcd.data.link;
+                            if (clsName != "" && clsName != null) {
+                                tbar.add(Ext.create(clsName, {disabled: rcd.data.disabled}));
+                            }
+                        });
                         var panel = Ext.create(className, {
+                            tbar: tbar,
                             title : rec.parentNode.data.text + '-'
                             + re.text,
                             billType : re.billType,
+                            parameters : re.parameters,
                             icon : re.icon,
                             menuCode : re.id
                         });

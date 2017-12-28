@@ -1,6 +1,6 @@
-Ext.define('WF.sys.editSysconfig', {
+Ext.define('WF.view.sys.dict.editDict', {
     extend: 'Ext.window.Window',
-    alias: 'editSysconfig',
+    alias: 'editDict',
     title: '编辑',
     modal: true,
     layout: {
@@ -18,9 +18,9 @@ Ext.define('WF.sys.editSysconfig', {
             items: [{
                 afterLabelTextTpl: required,
                 allowBlank: false,
-                name: 'name',
+                name: 'label',
                 colspan: 2,
-                fieldLabel: '名称'
+                fieldLabel: '展示值'
             },{
                 afterLabelTextTpl: required,
                 allowBlank: false,
@@ -28,24 +28,23 @@ Ext.define('WF.sys.editSysconfig', {
                 colspan: 2,
                 fieldLabel: '值'
             },{
+                afterLabelTextTpl: required,
+                allowBlank: false,
+                name: 'type',
+                colspan: 2,
+                fieldLabel: 'Key'
+            },{
                 allowBlank: true,
-                name: 'remark',
+                name: 'description',
                 xtype: 'textarea',
                 colspan: 2,
-                fieldLabel: '备注'
+                fieldLabel: '描述'
             },{
                 afterLabelTextTpl: required,
                 allowBlank: false,
+                name: 'sort',
                 colspan: 2,
-                name: 'channelId',
-                xtype: 'searchfield',
-                emptyText: "--请选择--",
-                displayField: 'name',
-                valueField: "id",
-                editable: false,
-                queryMode: "local",
-                store: 'channelStore',
-                fieldLabel: '渠道'
+                fieldLabel: '排序'
             },{
                 xtype: 'hidden',
                 name: 'id'
@@ -62,7 +61,7 @@ Ext.define('WF.sys.editSysconfig', {
                 return;
             }
             var doRefresh = currentWindow.doRefresh;
-            callapi("data/admin/sysconfig/save.do", form.getValues(),
+            callapi("data/admin/dict/save.do", form.getValues(),
                 function (result) {
                     if (result.success) {
                         Ext.MessageBox.show({

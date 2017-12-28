@@ -4,11 +4,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="com.wf.data.dao.trans.TransConvertDao">
-	
+
 	<select id="getConvertUserId" resultType="TransConvert">
 		SELECT user_id,MIN(create_time) create_time from trans_convert where status = 8 and delete_flag = 0 group by user_id
 	</select>
-	
+
 	<select id="getConvertByOrderSn" resultType="TransConvert">
 		SELECT <include refid="transConvertColumns"/> FROM trans_convert t WHERE order_sn = #{orderSn}
 	</select>
@@ -17,7 +17,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-	
+
 	<select id="findJSNotSuccessConvert" resultType="TransConvert">
 		SELECT <include refid="transConvertColumns"/> FROM trans_convert t WHERE create_time &gt;=#{date} and status = 1 AND channel_id = 100001
 	</select>
@@ -26,7 +26,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="findSumRechargeByTime" resultType="Double">
 		SELECT IFNULL(SUM(third_amount),0) FROM `trans_convert`
 		WHERE STATUS=8 AND delete_flag=0
-		AND create_time BETWEEN #{beginDate} AND #{endDate}	
+		AND create_time BETWEEN #{beginDate} AND #{endDate}
 		<if test="channelId != null and channelId != ''">
 		AND channel_id = #{channelId}
 		</if>
@@ -53,33 +53,33 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND channel_id LIKE CONCAT('%', #{parentId}, '%')
 		</if>
 		<if test="userId != null">
-			AND user_id = #{userId} 
+			AND user_id = #{userId}
 		</if>
 	</select>
-	
+
 	<select id="getRechargeNumByUserIdAndDate" resultType="Double">
 	  SELECT IFNULL(sum(third_amount),0) FROM `trans_convert`
       WHERE `status`=8 AND delete_flag=0
       AND user_id=#{userId} AND DATE_FORMAT(create_time,'%Y-%m-%d')= #{date}
 	</select>
-	
-		
-	<select id="getMinRechargeTimeByDate" resultType="java.util.Date"> 
+
+
+	<select id="getMinRechargeTimeByDate" resultType="java.util.Date">
 	 SELECT MIN(create_time) FROM `trans_convert`
 	 WHERE `status`=8 AND delete_flag=0  
 	 AND user_id=#{userId} 
 	 AND create_time between #{beginDate} and #{endDate} 
 	</select>
-		
+
 	<select id="findRechargeUserIdsTillTime" resultType="Long">
 	  SELECT DISTINCT user_id FROM `trans_convert`
       WHERE `status`=8 AND delete_flag=0
       AND create_time &lt; #{date}
 	</select>
-	
+
     <select id="findUserIdsBySumRecharge" resultType="Long">
-		SELECT user_id 
-	    FROM `trans_convert` 
+		SELECT user_id
+	    FROM `trans_convert`
 	    WHERE status = 8 and delete_flag=0 and create_time &lt; #{date}
 	    group by user_id
 	    <choose>
@@ -93,11 +93,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<when test="startNum &gt;= 100000">
 		HAVING SUM(IFNULL(third_amount, 0)) &gt;= #{startNum}
 		</when>
-		</choose>  
-	</select> 
-	
+		</choose>
+	</select>
+
 	<select id="getRechargeUserIdsByDay" resultType="Long">
-	select distinct user_id 
+	select distinct user_id
 	from `trans_convert`
 	WHERE status = 8 and delete_flag=0
 	<if test="beginDate != null and beginDate != ''">
@@ -121,7 +121,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="getRechargeTimes" resultType="Long">
 		SELECT count(1) FROM trans_convert WHERE user_id = #{userId} AND status=8 AND delete_flag=0
 	</select>
-	
+
 	<select id="getRechargeCountByDay" resultType="Long">
 	select IFNULL(count(id),0) from `trans_convert`
 	WHERE status = 8 and delete_flag=0 and create_time between #{beginDate} and #{endDate}
@@ -132,7 +132,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	AND channel_id LIKE CONCAT('%', #{parentId}, '%')
 	</if>
 	</select>
-	
+
     <select id="getRechargeSumByUserIdAndDate" resultType="TransChangeNote">
 		SELECT user_id,sum(third_amount) business_money 
         FROM `trans_convert` 
@@ -140,6 +140,26 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         AND create_time BETWEEN #{beginDate} and #{endDate}
      	group by user_id
 	</select>
+
+
+	<select id="findConvertList" resultType="com.wf.data.dao.data.entity.DatawareConvertHour">
+        SELECT
+        user_id userId,
+        channel_id channelId,
+        COUNT(1) rechargeCount,
+        SUM(third_amount) thirdAmount,
+        biz_type bizType,
+        DATE_FORMAT(create_time,"%H") convertHour,
+        DATE_FORMAT(create_time,"%Y-%m-%d") convertDate
+        FROM `trans_convert`
+        WHERE 1=1
+        AND create_time BETWEEN #{beginDate} and #{endDate}
+        AND status=8
+        AND delete_flag=0
+        GROUP BY user_id, channel_id,biz_type,DATE_FORMAT(create_time,"%H"),DATE_FORMAT(create_time,"%Y-%m-%d")
+	</select>
+
+
 
 </mapper>
 

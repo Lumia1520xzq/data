@@ -1,9 +1,7 @@
 package test;
 
-import org.apache.commons.collections.CollectionUtils;
+import com.wf.data.common.utils.DateUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,12 +46,26 @@ public class DataTest {
 
         }*/
 
-        List<Long> userIDS = Arrays.asList(1l,2l,3l,4l,5l,6l,7l,8l,9l,10l);
-        List<Long> userID = Arrays.asList(8l,9l,10l);
+        List<String> datelist = DateUtils.getDateList("2017-09-01 21:00:00","2017-09-10 10:59:59");
 
-        Collection interColl = CollectionUtils.intersection(userIDS, userID);
-        List<Long> user = (List)interColl;
-        System.out.println(user);
+        for(String searchDate : datelist){
+
+            if(datelist.get(0) == searchDate){
+                System.out.println(searchDate);
+                System.out.println(DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss"));
+
+            }else if (searchDate == datelist.get(datelist.size()-1)){
+                System.out.println(DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss"));
+                System.out.println(searchDate);
+            }else{
+                System.out.println(DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate,"yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
+                System.out.println(DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate,"yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
+            }
+           /* String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)),DateUtils.DATE_TIME_PATTERN);
+            String endDate =  DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)),DateUtils.DATE_TIME_PATTERN);
+            System.out.println(beginDate);
+            System.out.println(endDate);*/
+        }
 
 
 

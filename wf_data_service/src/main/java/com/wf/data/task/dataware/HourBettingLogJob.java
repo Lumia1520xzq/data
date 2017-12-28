@@ -11,6 +11,7 @@ import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.service.*;
+import com.wf.data.service.data.DatawareBettingLogHourService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +37,15 @@ public class HourBettingLogJob {
     public void execute() {
         logger.info("每小时投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
         int flag = dataConfigService.getIntValueByName(DataConstants.DATA_DATAWARE_FLAG);
-        if(flag ==1){
+        if (flag == 1) {
             cleanBydays();
-        }else{
+        } else {
             cleanByhour();
         }
         logger.info("每小时投注汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
-    private void cleanBydays(){
+    private void cleanBydays() {
         String date = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_DAYS);
 
         if (StringUtils.isBlank(date)) {
@@ -62,10 +63,6 @@ public class HourBettingLogJob {
             return;
         }
 
-        String beginDate = dates[0];
-        String endDate = dates[1];
-
-
 
         List<Long> uicGroupList = Lists.newArrayList();
         String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
@@ -77,19 +74,44 @@ public class HourBettingLogJob {
             logger.error("非正常用户规则未设置: traceId={}", TraceIdUtils.getTraceId());
         }
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("beginDate", beginDate);
-        params.put("endDate", endDate);
-        //汇总游戏投注信息
-        getBettingLogFromReport(params, uicGroupList);
-        //汇总三张投注信息
-        getBettingLogFromTcard(params,uicGroupList);
+        try {
+
+            List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
+            String beginDate = "";
+            String endDate = "";
+            for (String searchDate : datelist) {
+
+                if (datelist.get(0) == searchDate) {
+                    beginDate = searchDate;
+                    endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+
+                } else if (searchDate == datelist.get(datelist.size() - 1)) {
+                    beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+                    endDate = searchDate;
+                } else {
+                    beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
+                    endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
+                }
+
+                Map<String, Object> params = new HashMap<>();
+                params.put("beginDate", beginDate);
+                params.put("endDate", endDate);
+                //汇总游戏投注信息
+                getBettingLogFromReport(params, uicGroupList);
+                //汇总三张投注信息
+                getBettingLogFromTcard(params, uicGroupList);
+            }
+        } catch (Exception e) {
+            logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
+            return;
+        }
+
         //汇总捕鱼投注信息
-        getFishInfo(DateUtils.parseDateTime(beginDate),DateUtils.parseDateTime(endDate),uicGroupList);
+        getFishInfo(DateUtils.parseDateTime(dates[0]), DateUtils.parseDateTime(dates[1]), uicGroupList);
 
     }
 
-    private void cleanByhour(){
+    private void cleanByhour() {
 
         Calendar cal = Calendar.getInstance();
         //当前日期向前推1小时，保证统计昨天数据
@@ -124,12 +146,10 @@ public class HourBettingLogJob {
         //汇总游戏投注信息
         getBettingLogFromReport(params, uicGroupList);
         //汇总三张投注信息
-        getBettingLogFromTcard(params,uicGroupList);
+        getBettingLogFromTcard(params, uicGroupList);
         //汇总捕鱼投注信息
-        getFishInfo(cal.getTime(),calendar.getTime(),uicGroupList);
+        getFishInfo(cal.getTime(), calendar.getTime(), uicGroupList);
     }
-
-
 
 
     /**
@@ -145,7 +165,7 @@ public class HourBettingLogJob {
 
             String gameType = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_GAMETYPE);
             String[] gameTypes = gameType.split(",");
-            params.put("gameTypes",Arrays.asList(gameTypes));
+            params.put("gameTypes", Arrays.asList(gameTypes));
             List<DatawareBettingLogHour> bettingLogHourList = reportChangeNoteService.getGameBettingRecord(params);
             for (DatawareBettingLogHour logHour : bettingLogHourList) {
                 logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
@@ -155,13 +175,13 @@ public class HourBettingLogJob {
                 }
             }
             try {
-                if(CollectionUtils.isNotEmpty(bettingLogHourList)){
+                if (CollectionUtils.isNotEmpty(bettingLogHourList)) {
                     datawareBettingLogHourService.batchSave(bettingLogHourList);
                 }
             } catch (Exception e) {
                 logger.error("FromReport添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("FromReport获取记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
 
@@ -174,7 +194,7 @@ public class HourBettingLogJob {
      * @return
      */
     private void getBettingLogFromTcard(Map<String, Object> params, List<Long> uicGroupList) {
-        try{
+        try {
 
             List<DatawareBettingLogHour> bettingLogHourList = tcardUserBettingLogService.getGameBettingRecord(params);
             for (DatawareBettingLogHour logHour : bettingLogHourList) {
@@ -186,54 +206,54 @@ public class HourBettingLogJob {
                 }
             }
             try {
-                if(CollectionUtils.isNotEmpty(bettingLogHourList)){
+                if (CollectionUtils.isNotEmpty(bettingLogHourList)) {
                     datawareBettingLogHourService.batchSave(bettingLogHourList);
                 }
             } catch (Exception e) {
                 logger.error("FromTcard添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("FromTcard获取记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
 
     }
 
-    private void getFishInfo(Date startTime,Date endTime,List<Long> uicGroupList){
-        Map<String,Object> params = new HashMap<>();
+    private void getFishInfo(Date startTime, Date endTime, List<Long> uicGroupList) {
+        Map<String, Object> params = new HashMap<>();
         String startDate = DateUtils.formatDate(startTime, "yyyy-MM-dd HH:mm:ss");
         String endDate = DateUtils.formatDate(endTime, "yyyy-MM-dd HH:mm:ss");
-        List<String> datelist = DateUtils.getDateList(startDate,endDate);
+        List<String> datelist = DateUtils.getDateList(startDate, endDate);
 
-        if(DateUtils.formatDate(startTime, "yyyy-MM-dd").equals(DateUtils.formatDate(endTime, "yyyy-MM-dd"))){
+        if (DateUtils.formatDate(startTime, "yyyy-MM-dd").equals(DateUtils.formatDate(endTime, "yyyy-MM-dd"))) {
             params.put("beginDate", startDate);
             params.put("endDate", endDate);
             String day = DateUtils.formatDate(startTime, DateUtils.YYYYMMDD_PATTERN);
             String dbName = "fish";
             dbName = dbName + day;
-            getBettingLogFromFish(params,dbName,uicGroupList);
-        }else{
-            for(String dat : datelist){
-                if(datelist.get(0) == dat){
+            getBettingLogFromFish(params, dbName, uicGroupList);
+        } else {
+            for (String dat : datelist) {
+                if (datelist.get(0) == dat) {
                     params.put("beginDate", startDate);
                     params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(startTime), "yyyy-MM-dd HH:mm:ss"));
                     String day = DateUtils.formatDate(startTime, DateUtils.YYYYMMDD_PATTERN);
                     String dbName = "fish";
                     dbName = dbName + day;
-                    getBettingLogFromFish(params,dbName,uicGroupList);
-                }else if (dat == datelist.get(datelist.size()-1)){
+                    getBettingLogFromFish(params, dbName, uicGroupList);
+                } else if (dat == datelist.get(datelist.size() - 1)) {
                     params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(endTime), "yyyy-MM-dd HH:mm:ss"));
                     params.put("endDate", endDate);
                     String day = DateUtils.formatDate(endTime, DateUtils.YYYYMMDD_PATTERN);
                     String dbName = "fish";
                     dbName = dbName + day;
-                    getBettingLogFromFish(params,dbName,uicGroupList);
-                }else{
-                    params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(dat,"yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
-                    params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(dat,"yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
-                    String day = DateUtils.formatDate(DateUtils.parseDate(dat,"yyyy-MM-dd"), DateUtils.YYYYMMDD_PATTERN);
+                    getBettingLogFromFish(params, dbName, uicGroupList);
+                } else {
+                    params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(dat, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
+                    params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(dat, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
+                    String day = DateUtils.formatDate(DateUtils.parseDate(dat, "yyyy-MM-dd"), DateUtils.YYYYMMDD_PATTERN);
                     String dbName = "fish";
                     dbName = dbName + day;
-                    getBettingLogFromFish(params,dbName,uicGroupList);
+                    getBettingLogFromFish(params, dbName, uicGroupList);
                 }
             }
 
@@ -247,9 +267,9 @@ public class HourBettingLogJob {
      * @param params
      * @return
      */
-    private void getBettingLogFromFish(Map<String, Object> params,String dbName, List<Long> uicGroupList) {
-        try{
-            List<DatawareBettingLogHour> bettingLogHourList = roomFishInfoService.getGameBettingRecord(params,dbName);
+    private void getBettingLogFromFish(Map<String, Object> params, String dbName, List<Long> uicGroupList) {
+        try {
+            List<DatawareBettingLogHour> bettingLogHourList = roomFishInfoService.getGameBettingRecord(params, dbName);
             for (DatawareBettingLogHour logHour : bettingLogHourList) {
                 logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
                 logHour.setGameType(10);
@@ -259,13 +279,13 @@ public class HourBettingLogJob {
                 }
             }
             try {
-                if(CollectionUtils.isNotEmpty(bettingLogHourList)){
+                if (CollectionUtils.isNotEmpty(bettingLogHourList)) {
                     datawareBettingLogHourService.batchSave(bettingLogHourList);
                 }
             } catch (Exception e) {
                 logger.error("FromFish添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("FromFish获取记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
 

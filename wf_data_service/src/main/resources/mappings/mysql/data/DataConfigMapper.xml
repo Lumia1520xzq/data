@@ -46,22 +46,24 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insert">
 		INSERT INTO data_config (
-			id, 
-			name, 
-			value, 
-			remark, 
-			channel_id, 
-			delete_flag, 
-			create_time, 
-		) VALUES (
-			#{id}, 
-			#{name}, 
-			#{value}, 
-			#{remark}, 
-			#{channelId}, 
-			#{deleteFlag}, 
-			#{createTime}, 
-		)
+        id,
+        name,
+        value,
+        remark,
+        channel_id,
+        delete_flag,
+        create_time,
+        update_time
+        ) VALUES (
+        #{id},
+        #{name},
+        #{value},
+        #{remark},
+        #{channelId},
+        #{deleteFlag},
+        #{createTime},
+        #{updateTime}
+        )
 	</insert>
 	
 	<update id="update">
