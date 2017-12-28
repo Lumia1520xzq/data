@@ -2,6 +2,7 @@ package com.wf.data.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wf.core.cache.ehcache.EhcacheManager;
+import com.wf.core.extjs.model.ButtonModel;
 import com.wf.core.extjs.model.MenuModel;
 import com.wf.core.extjs.model.TreeModel;
 import com.wf.core.utils.GfJsonUtil;
@@ -88,6 +89,7 @@ public class HomeController {
             mm.setIcon(tm.getIcon());
             mm.setLeaf(tm.isLeaf());
             mm.setModuleLink(tm.getModuleLink());
+            mm.setParameters(tm.getParameters());
             maps.add(mm);
         }
         return maps;
@@ -101,5 +103,39 @@ public class HomeController {
     @RequestMapping("/listMenu")
     public Object listMenu(String code) {
         return getMenu(code);
+    }
+
+    /**
+     * 获取用户该子系统下有权限的按钮
+     * @param systemId
+     * @return
+     */
+    @RequestMapping("/listButton")
+    public Object listButton(String systemId) {
+        String longName = AssertionHolder.getAssertion().getPrincipal().getName();
+        String buttonCacheKey = longName + "-btn-" + systemId;
+        Object json = ehcacheManager.get(buttonCacheKey);
+        if (json == null) {
+            String url = Global.getConfig("mp.button.url");
+            if (StringUtils.isBlank(url)) {
+                throw new RuntimeException("can not find property 'mp.button.url' in 'application.properties.'");
+            }
+            if (url.contains("?")) {
+                if (!url.endsWith("&")) {
+                    url += "&";
+                }
+            } else {
+                url += "?";
+            }
+            url += "loginName=" + longName + "&systemId=" + systemId;
+            String body = HttpClientUtils.post(url, logger);
+            if (StringUtils.isBlank(body)) {
+                throw new RuntimeException("send HTTP Request to get menu data failed. request:" + url);
+            }
+            ehcacheManager.set(buttonCacheKey, body, MENU_LOCAL_CACHE_SECONDS);
+            json = body;
+        }
+
+        return GfJsonUtil.parseArray(json.toString(), ButtonModel.class);
     }
 }

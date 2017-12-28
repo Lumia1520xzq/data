@@ -23,6 +23,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<sql id="dataDictWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.type != null and p.type != ''">
+			AND type = #{p.type}
+		</if>
+		<if test="p.label != null and p.label != ''">
+			AND label LIKE CONCAT('%', #{p.label}, '%')
+		</if>
+		<if test="p.description != null and p.description != ''">
+			AND description LIKE CONCAT('%', #{p.description}, '%')
+		</if>
 	</sql>
 	
 	<sql id="dataDictJoins">
@@ -41,43 +50,39 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<insert id="insert">
 		INSERT INTO data_dict (
-			id, 
-			label, 
-			value, 
-			type, 
-			description, 
-			sort, 
-			create_by, 
-			update_by, 
-			remarks, 
-			delete_flag, 
-			create_time, 
-		) VALUES (
-			#{id}, 
-			#{label}, 
-			#{value}, 
-			#{type}, 
-			#{description}, 
-			#{sort}, 
-			#{createBy}, 
-			#{updateBy}, 
-			#{remarks}, 
-			#{deleteFlag}, 
-			#{createTime}, 
-		)
+        id,
+        value,
+        label,
+        type,
+        description,
+        sort,
+        create_by,
+        create_time,
+        remarks,
+        delete_flag
+        ) VALUES (
+        #{id},
+        #{value},
+        #{label},
+        #{type},
+        #{description},
+        #{sort},
+        #{createBy.id},
+        #{createTime},
+        #{remarks},
+        #{deleteFlag}
+        )
 	</insert>
 	
 	<update id="update">
 		UPDATE data_dict SET
-			label = #{label}, 
-			value = #{value}, 
-			type = #{type}, 
-			description = #{description}, 
-			sort = #{sort}, 
-			create_by = #{createBy}, 
-			update_by = #{updateBy}, 
-			remarks = #{remarks}, 
-			delete_flag = #{deleteFlag}, 
+			value = #{value},
+        	label = #{label},
+        	type = #{type},
+        	description = #{description},
+        	sort = #{sort},
+        	update_by = #{updateBy.id},
+        	remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 

@@ -116,6 +116,11 @@
 							<targetPath>/</targetPath>
 							<filtering>true</filtering>
 						</resource>
+						<resource>
+							<directory>src/main/resources-profile/${package.environment}/xml</directory>
+							<targetPath>WEB-INF</targetPath>
+							<filtering>true</filtering>
+						</resource>
 					</webResources>
 				</configuration>
 			</plugin>

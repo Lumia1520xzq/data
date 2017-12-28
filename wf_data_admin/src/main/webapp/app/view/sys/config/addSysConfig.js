@@ -1,6 +1,6 @@
-Ext.define('WF.sys.addSysconfig', {
+Ext.define('WF.view.sys.config.addSysConfig', {
   extend: 'Ext.window.Window',
-  alias: 'addSysconfig',
+  alias: 'addSysConfig',
   title: '新增',
   modal: true,
   layout: {
