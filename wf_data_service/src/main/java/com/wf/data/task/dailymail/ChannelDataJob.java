@@ -14,6 +14,7 @@ import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.*;
 import com.wf.data.service.elasticsearch.EsTcardChannelService;
 import com.wf.data.service.elasticsearch.EsUicChannelService;
@@ -56,6 +57,7 @@ public class ChannelDataJob {
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
+        date = "2017-12-26";
         while (count <= TIMES) {
             String contentTemp = "<table border='1' style='text-align: center ; border-collapse: collapse'>"
                     +"<tr style='font-weight:bold'><td>渠道</td><td>渠道ID</td><td>充值金额</td><td>日活人数</td><td>投注用户数</td><td>充值人数</td><td>新增人数</td><td>投注流水</td><td>投注转化率</td><td>付费渗透率</td><td>新用户投注转化率</td><td>新用户次留</td><td>返奖流水</td><td>返奖率</td></tr>";
@@ -141,7 +143,7 @@ public class ChannelDataJob {
         // 4、投注用户数(其他游戏+捕鱼+三张)
         List<Long> bettingUsers = getBettingUsers(date, parentId, channelId);
         List<Long> fishBettingUsers = getFishBettingUsers(date, parentId, channelId);
-        List<Long> tcardBettingUsers = tcardService.getTcardBettingUsers(date,parentId,channelId,null);
+        List<Long> tcardBettingUsers = tcardService.getTcardBettingUsers(date,parentId,channelId);
         tcardBettingUsers = (List<Long>)CollectionUtils.disjunction(tcardBettingUsers,CollectionUtils.intersection(tcardBettingUsers,userIds));
 
         List<Long> sumBettingUsers = getBettingUserList(bettingUsers,fishBettingUsers,tcardBettingUsers);
@@ -153,11 +155,9 @@ public class ChannelDataJob {
         // 7、付费渗透率(充值用户数/投注用户数)
         String payRate=bettingUser==0?"0%":NumberUtils.format(BigDecimalUtil.div(rechargeUser,bettingUser,4),"#.##%");
         // 8、投注流水(其他游戏+捕鱼+三张)
-        Long  cathecticMoney = gameInfo.getCathecticMoney() + fishInfo.getCathecticMoney()
-                + tcardService.getBettingAmt(date,parentId,channelId,null)-tcardService.getBettingAmt(date,parentId,channelId,userIds);
+        Long  cathecticMoney = gameInfo.getCathecticMoney() + fishInfo.getCathecticMoney() + getTcardBetting(date,parentId,channelId,userIds);
         // 9、返奖流水(其他游戏+捕鱼+三张)
-        Long winMoney = gameInfo.getWinMoney() + fishInfo.getWinMoney()
-                + tcardService.getAwardAmt(date,parentId,channelId,null)-tcardService.getAwardAmt(date,parentId,channelId,userIds);
+        Long winMoney = gameInfo.getWinMoney() + fishInfo.getWinMoney() + getTcardAward(date,parentId,channelId,userIds);
         // 10、返奖率
         String winMoneyRate=cathecticMoney == 0?"0%":NumberUtils.format(BigDecimalUtil.div(winMoney,cathecticMoney,4),"#.##%");
         // 11、新增用户
@@ -178,6 +178,40 @@ public class ChannelDataJob {
                 .replace("newUser", newUser.toString()).replace("newBettingRate",newBettingRate).replace("newRemainRate", newRemainRate);
         sb.append(result);
         return sb.toString();
+    }
+
+    /**
+     * 去除灰黑内(三张投注流水)
+     */
+    private Long getTcardBetting(String date,Long parentId,Long channelId,List<Long> userIds) {
+        List<TransChangeNote> list = tcardService.getBettingDetails(date,parentId,channelId);
+        double betting = 0L;
+        if(CollectionUtils.isNotEmpty(list)) {
+            for(TransChangeNote transChangeNote:list){
+                if(!userIds.contains(transChangeNote.getUserId())){
+                betting += transChangeNote.getChangeMoney();
+                }
+            }
+        }
+        return (long)betting;
+    }
+
+
+
+    /**
+     * 去除灰黑内(三张返奖流水)
+     */
+    private Long getTcardAward(String date,Long parentId,Long channelId,List<Long> userIds) {
+        List<TransChangeNote> list = tcardService.getAwardDetails(date,parentId,channelId);
+        double betting = 0L;
+        if(CollectionUtils.isNotEmpty(list)) {
+            for(TransChangeNote transChangeNote:list){
+                if(!userIds.contains(transChangeNote.getUserId())){
+                    betting += transChangeNote.getChangeMoney();
+                }
+            }
+        }
+        return (long)betting;
     }
 
     /**
