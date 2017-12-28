@@ -93,28 +93,10 @@ public class UserSignDayJob {
                     endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
                 }
 
-                try {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("beginDate", beginDate);
-                    map.put("endDate", endDate);
-                    List<DatawareUserSignDay> hourList = platUserCheckLotteryLogService.findSignList(map);
-
-                    for (DatawareUserSignDay item : hourList) {
-                        item.setUserGroup(getUserGroup(item.getUserId(), uicGroupList));
-                    }
-
-                    if (CollectionUtils.isNotEmpty(hourList)) {
-                        Map<String,Object> params = new HashMap<>();
-                        params.put("signDate",hourList.get(0).getSignDate());
-                        params.put("signHour",hourList.get(0).getSignHour());
-                        long count = datawareUserSignDayService.getCountByTime(map);
-                        if (count <= 0) {
-                            datawareUserSignDayService.batchSave(hourList);
-                        }
-                    }
-                } catch (Exception e) {
-                    logger.error("dataware_user_sign_day添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
-                }
+                Map<String, Object> map = new HashMap<>();
+                map.put("beginDate", beginDate);
+                map.put("endDate", endDate);
+                sign(map, uicGroupList);
             }
         } catch (Exception e) {
             logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
@@ -141,10 +123,15 @@ public class UserSignDayJob {
         calendar.set(Calendar.MILLISECOND, 0);
         String endDate = DateUtils.formatDate(calendar.getTime(), "yyyy-MM-dd HH:mm:ss");
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("beginDate", beginDate);
+        map.put("endDate", endDate);
+        sign(map, uicGroupList);
+    }
+
+
+    private void sign(Map<String, Object> map, List<Long> uicGroupList) {
         try {
-            Map<String, Object> map = new HashMap<>();
-            map.put("beginDate", beginDate);
-            map.put("endDate", endDate);
             List<DatawareUserSignDay> hourList = platUserCheckLotteryLogService.findSignList(map);
 
             for (DatawareUserSignDay item : hourList) {
@@ -152,7 +139,13 @@ public class UserSignDayJob {
             }
 
             if (CollectionUtils.isNotEmpty(hourList)) {
-                datawareUserSignDayService.batchSave(hourList);
+                Map<String, Object> params = new HashMap<>();
+                params.put("signDate", hourList.get(0).getSignDate());
+                params.put("signHour", hourList.get(0).getSignHour());
+                long count = datawareUserSignDayService.getCountByTime(params);
+                if (count <= 0) {
+                    datawareUserSignDayService.batchSave(hourList);
+                }
             }
         } catch (Exception e) {
             logger.error("dataware_user_sign_day添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
