@@ -64,7 +64,7 @@ public class TcardController extends ExtJsController {
 
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
                 endTime = DateUtils.getYesterdayDate();
                 datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
@@ -184,7 +184,7 @@ public class TcardController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
                 endTime = DateUtils.getYesterdayDate();
                 datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
