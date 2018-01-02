@@ -50,9 +50,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getUserCountByBettingType" resultType="Integer">
-        SELECT count(DISTINCT user_id)
+        SELECT IFNULL(count(DISTINCT user_id),0)
         FROM `tcard_user_betting_log`
         WHERE 1=1
+        <if test="parentId != null">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
         <if test="bettingType != null">
         and betting_type = #{bettingType}
         </if>
@@ -67,35 +73,18 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
-    <select id="getTableFeeByBettingType" resultType ="Long">
-        SELECT SUM(t.userNum) *
-        <if test="amount != null">
-           #{amount}
-        </if>
-        FROM (
-         SELECT room_id,phase, count(DISTINCT user_id) as userNum
-         FROM `tcard_user_betting_log`
-         WHERE 1=1
-        <if test="bettingType != null">
-            and betting_type = #{bettingType}
-        </if>
-        <if test="amount != null">
-            and amount = #{amount}
-        </if>
-        <if test="beginDate != null">
-            and create_time &gt;= #{beginDate}
-        </if>
-        <if test="endDate != null">
-            and create_time &lt;= #{endDate}
-        </if>
-         GROUP BY room_id ,phase) t
-    </select>
 
     <select id="getTablesByBettingType" resultType="Integer">
-      SELECT COUNT(1) FROM
+      SELECT IFNULL(COUNT(1),0) FROM
         (SELECT room_id,PHASE FROM
          `tcard_user_betting_log`
          WHERE 1=1
+        <if test="parentId != null">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
         <if test="bettingType != null">
             and betting_type = #{bettingType}
         </if>
@@ -112,7 +101,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getTableAmount" resultType="double">
-        SELECT sum(amount)
+        SELECT IFNULL(sum(amount),0)
         FROM tcard_user_betting_log
         where 1 = 1
         <if test="channelId != null">

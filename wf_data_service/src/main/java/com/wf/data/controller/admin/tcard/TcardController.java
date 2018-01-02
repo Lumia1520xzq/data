@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
+import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -198,20 +200,59 @@ public class TcardController extends ExtJsController {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
         Map<String, Object> params = new HashMap<>();
+        if (null != channelId) {
+            params.put("channelId", channelId);
+        }
+        if (null != parentId && null == channelId) {
+            params.put("parentId", parentId);
+        }
+        params.put("bettingType",1);
         for (String searchDate : datelist) {
             params.put("searchDate", searchDate);
-            if (null != channelId) {
-                params.put("channelId", channelId);
-            }
-            if (null != parentId && null == channelId) {
-                params.put("parentId", parentId);
-            }
-
             TcardDto dto = new TcardDto();
-
+            params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
+            params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
+            params.put("amount",20);
+            int lowBettingUser =  tcardUserBettingLogService.getUserCountByBettingType(params);
+            double lowTableFee = tcardUserBettingLogService.getTableAmount(params);
+            int lowTables = tcardUserBettingLogService.getTablesByBettingType(params);
+            double lowAvgRounds = toDouble(lowTables,lowBettingUser);
+            params.put("amount",300);
+            int midBettingUser =  tcardUserBettingLogService.getUserCountByBettingType(params);
+            double midTableFee = tcardUserBettingLogService.getTableAmount(params);
+            int midTables = tcardUserBettingLogService.getTablesByBettingType(params);
+            double midAvgRounds = toDouble(midTables,midBettingUser);
+            params.put("amount",3000);
+            int highBettingUser =  tcardUserBettingLogService.getUserCountByBettingType(params);
+            double highTableFee = tcardUserBettingLogService.getTableAmount(params);
+            int highTables = tcardUserBettingLogService.getTablesByBettingType(params);
+            double highAvgRounds = toDouble(highTables,highBettingUser);
+            dto.setLowBettingUser(lowBettingUser);
+            dto.setMidBettingUser(midBettingUser);
+            dto.setHighBettingUser(highBettingUser);
+            dto.setLowTableFee(lowTableFee);
+            dto.setMidTableFee(midTableFee);
+            dto.setHighTableFee(highTableFee);
+            dto.setLowTables(lowTables);
+            dto.setMidTables(midTables);
+            dto.setHighTables(highTables);
+            dto.setLowAvgRounds(lowAvgRounds);
+            dto.setMidAvgRounds(midAvgRounds);
+            dto.setHighAvgRounds(highAvgRounds);
             list.add(dto);
         }
         return list;
     }
+
+    private double toDouble(int one,int two){
+        if(0 == two){
+            return 0;
+        }
+        BigDecimal b1 = new BigDecimal(one);
+        BigDecimal b2 = new BigDecimal(two);
+        return b1.divide(b2,1,BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
 
 }
