@@ -13,7 +13,7 @@ Ext.define('WF.view.game.tcard.tcardOverviewMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/tcard/getList.do',
-            fields: ['searchDate', 'channelName','dauCount', 'userCount', 'bettingAmount', 'resultAmount','amountDiff','tableAmount','conversionRate','returnRate1','returnRate2','bettingArpu','bettingAsp']
+            fields: ['searchDate','dauCount', 'userCount', 'bettingAmount', 'resultAmount','amountDiff','tableAmount','conversionRate','returnRate1','returnRate2','bettingArpu','bettingAsp']
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -99,18 +99,6 @@ Ext.define('WF.view.game.tcard.tcardOverviewMain', {
                 dataIndex: 'searchDate',
                 menuDisabled: true,
                 sortable: false
-            }, {
-                text: '渠道名称',
-                width: 100,
-                dataIndex: 'channelId',
-                renderer: function (value) {
-                    var index = allChannelStore.find('id', value);
-                    if (index != -1) {
-                        var record = allChannelStore.getAt(index);
-                        return record.data.name;
-                    }
-                    return '--';
-                }
             }, {
                 text: 'DAU',
                 dataIndex: 'dauCount',

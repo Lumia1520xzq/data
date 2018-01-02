@@ -29,4 +29,8 @@ public class TcardUserBettingLogService extends CrudService<TcardUserBettingLogD
         return dao.getSummaryRecord(params);
     }
 
+    public Double getTableAmount(Map<String, Object> params){
+        return dao.getTableAmount(params);
+    }
+
 }

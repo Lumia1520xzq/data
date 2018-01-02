@@ -16,4 +16,8 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public long getCountByTime(Map<String,Object> map){
         return dao.getCountByTime(map);
     }
+
+    public Integer getGameDau(Map<String,Object> map){
+        return dao.getGameDau(map);
+    }
 }

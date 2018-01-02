@@ -33,4 +33,7 @@ public interface TcardUserBettingLogDao extends CrudDao<TcardUserBettingLog> {
      * @return
      */
     List<TcardDto> getSummaryRecord(Map<String, Object> params);
+
+
+    Double getTableAmount(Map<String, Object> params);
 }
