@@ -24,6 +24,7 @@ public class TcardDto implements Serializable{
 	private String returnRate2;
 	private Double bettingArpu;
 	private Double bettingAsp;
+	private Integer bettingCount;
 
 	private Integer lowBettingUser;
 	private Integer midBettingUser;
@@ -37,6 +38,14 @@ public class TcardDto implements Serializable{
 	private Double lowAvgRounds;
 	private Double midAvgRounds;
 	private Double highAvgRounds;
+
+	public Integer getBettingCount() {
+		return bettingCount;
+	}
+
+	public void setBettingCount(Integer bettingCount) {
+		this.bettingCount = bettingCount;
+	}
 
 	public Long getParentId() {
 		return parentId;

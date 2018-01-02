@@ -11,4 +11,6 @@ import java.util.Map;
 public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPointDay> {
 
     long getCountByTime(Map<String,Object> map);
+
+    Integer getGameDau(Map<String,Object> map);
 }

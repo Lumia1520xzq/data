@@ -111,5 +111,23 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         GROUP BY room_id ,PHASE)t
     </select>
 
+    <select id="getTableAmount" resultType="double">
+        SELECT sum(amount)
+        FROM tcard_user_betting_log
+        where 1 = 1
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="amount != null and amount != ''">
+            AND amount = #{amount}
+        </if>
+        <if test="bettingType != null and bettingType != ''">
+            AND betting_type = #{bettingType}
+        </if>
+        AND create_time BETWEEN #{beginDate} AND #{endDate}
+    </select>
 </mapper>
 

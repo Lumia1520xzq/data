@@ -40,4 +40,8 @@ public class TcardUserBettingLogService extends CrudService<TcardUserBettingLogD
     public Integer getTablesByBettingType(Map<String,Object> params){
         return dao.getTablesByBettingType(params);
     }
+    public Double getTableAmount(Map<String, Object> params){
+        return dao.getTableAmount(params);
+    }
+
 }
