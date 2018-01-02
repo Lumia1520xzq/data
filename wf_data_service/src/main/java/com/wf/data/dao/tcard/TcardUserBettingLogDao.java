@@ -33,4 +33,25 @@ public interface TcardUserBettingLogDao extends CrudDao<TcardUserBettingLog> {
      * @return
      */
     List<TcardDto> getSummaryRecord(Map<String, Object> params);
+
+    /**
+     * 获取初中高的投注人数
+     * @param params
+     * @return
+     */
+    Integer getUserCountByBettingType(Map<String,Object> params);
+
+    /**
+     * 获取初中高的桌费
+     * @param params
+     * @return
+     */
+    Long getTableFeeByBettingType(Map<String,Object> params);
+
+    /**
+     * 获取初中高的桌数
+     * @param params
+     * @return
+     */
+    Integer getTablesByBettingType(Map<String,Object> params);
 }

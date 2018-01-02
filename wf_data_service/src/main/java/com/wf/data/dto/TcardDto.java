@@ -25,6 +25,18 @@ public class TcardDto implements Serializable{
 	private Double bettingArpu;
 	private Double bettingAsp;
 
+	private Integer lowBettingUser;
+	private Integer midBettingUser;
+	private Integer highBettingUser;
+	private Double lowTableFee;
+	private Double midTableFee;
+	private Double highTableFee;
+	private Integer lowTables;
+	private Integer midTables;
+	private Integer highTables;
+	private Double lowAvgRounds;
+	private Double midAvgRounds;
+	private Double highAvgRounds;
 
 	public Long getParentId() {
 		return parentId;
@@ -160,5 +172,101 @@ public class TcardDto implements Serializable{
 
 	public void setBettingAsp(Double bettingAsp) {
 		this.bettingAsp = bettingAsp;
+	}
+
+	public Integer getLowBettingUser() {
+		return lowBettingUser;
+	}
+
+	public void setLowBettingUser(Integer lowBettingUser) {
+		this.lowBettingUser = lowBettingUser;
+	}
+
+	public Integer getMidBettingUser() {
+		return midBettingUser;
+	}
+
+	public void setMidBettingUser(Integer midBettingUser) {
+		this.midBettingUser = midBettingUser;
+	}
+
+	public Integer getHighBettingUser() {
+		return highBettingUser;
+	}
+
+	public void setHighBettingUser(Integer highBettingUser) {
+		this.highBettingUser = highBettingUser;
+	}
+
+	public Double getLowTableFee() {
+		return lowTableFee;
+	}
+
+	public void setLowTableFee(Double lowTableFee) {
+		this.lowTableFee = lowTableFee;
+	}
+
+	public Double getMidTableFee() {
+		return midTableFee;
+	}
+
+	public void setMidTableFee(Double midTableFee) {
+		this.midTableFee = midTableFee;
+	}
+
+	public Double getHighTableFee() {
+		return highTableFee;
+	}
+
+	public void setHighTableFee(Double highTableFee) {
+		this.highTableFee = highTableFee;
+	}
+
+	public Integer getLowTables() {
+		return lowTables;
+	}
+
+	public void setLowTables(Integer lowTables) {
+		this.lowTables = lowTables;
+	}
+
+	public Integer getMidTables() {
+		return midTables;
+	}
+
+	public void setMidTables(Integer midTables) {
+		this.midTables = midTables;
+	}
+
+	public Integer getHighTables() {
+		return highTables;
+	}
+
+	public void setHighTables(Integer highTables) {
+		this.highTables = highTables;
+	}
+
+	public Double getLowAvgRounds() {
+		return lowAvgRounds;
+	}
+
+	public void setLowAvgRounds(Double lowAvgRounds) {
+		this.lowAvgRounds = lowAvgRounds;
+	}
+
+	public Double getMidAvgRounds() {
+		return midAvgRounds;
+	}
+
+	public void setMidAvgRounds(Double midAvgRounds) {
+		this.midAvgRounds = midAvgRounds;
+	}
+
+	public Double getHighAvgRounds() {
+		return highAvgRounds;
+	}
+
+	public void setHighAvgRounds(Double highAvgRounds) {
+		this.highAvgRounds = highAvgRounds;
 	}
 }
