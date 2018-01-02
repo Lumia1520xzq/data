@@ -11,6 +11,7 @@
 		<module>wf_data_rpc</module>
 		<module>wf_data_rpc_api</module>
 		<module>wf_data_task</module>
+		<module>wf_data_kettle</module>
 		<module>wf_data_mqc</module>
 
     </modules>
