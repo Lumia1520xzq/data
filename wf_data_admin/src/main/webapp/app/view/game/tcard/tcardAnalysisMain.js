@@ -38,7 +38,6 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
             fields: ['id', 'name']
         });
 
-
         me.add({
             border: false,
             store: store,
@@ -84,11 +83,13 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
                 format: 'Y-m-d'
+
             },{
                 name: 'endTime',
                 fieldLabel: '结束时间',
                 xtype: 'datefield',
                 format: 'Y-m-d'
+
             }]
         });
 
