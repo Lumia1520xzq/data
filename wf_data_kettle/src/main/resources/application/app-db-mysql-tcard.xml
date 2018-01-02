@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="tcardDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.tcard.url}"/>
+        <property name="username" value="${jdbc.tcard.username}"/>
+        <property name="password" value="${jdbc.tcard.password}"/>
+        <property name="initialSize" value="3"/>
+        <property name="minIdle" value="3"/>
+        <property name="maxActive" value="500"/>
+        <property name="maxWait" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="select 'x' from dual"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="filters" value="stat"/>
+    </bean>
+    <bean id="jdbcTemplate"
+          class="org.springframework.jdbc.core.JdbcTemplate" abstract="false" lazy-init="false">
+        <property name="dataSource">
+            <ref bean="tcardDataSource"/>
+        </property>
+    </bean>
+    <bean id="tcardSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="tcardDataSource"/>
+        <property name="typeAliasesPackage" value="com.wf.data.dao.tcard.entity"/>
+        <property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity"/>
+        <property name="mapperLocations" value="classpath*:mappings/mysql/tcard/*.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+    <bean id="tcardMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="tcardSqlSessionFactory"/>
+        <property name="basePackage" value="com.wf.data.dao.tcard"/>
+        <property name="annotationClass" value="com.wf.core.persistence.MyBatisDao"/>
+    </bean>
+    <bean id="tcardSqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="tcardSqlSessionFactory"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="tcardDataSource"/>
+    </bean>
+    <tx:annotation-driven proxy-target-class="true" order="2"/>
+</beans>
