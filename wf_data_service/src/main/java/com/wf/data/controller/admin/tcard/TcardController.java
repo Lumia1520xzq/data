@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
-import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
@@ -65,7 +64,7 @@ public class TcardController extends ExtJsController {
 
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -3));
                 endTime = DateUtils.getYesterdayDate();
                 datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
@@ -121,7 +120,7 @@ public class TcardController extends ExtJsController {
                 Double bettingAsp = 0.00;
                 Double tableAmount = 0.00;
                 if (0 != dauCount) {
-                    conversionRate = dto.getUserCount() / dauCount * 100;
+                    conversionRate = BigDecimalUtil.round(BigDecimalUtil.div(dto.getUserCount().doubleValue() * 100, dauCount.doubleValue()), 2);
                 }
                 dto.setConversionRate(String.valueOf(conversionRate) + "%");
                 if (0 != dto.getBettingAmount()) {
@@ -135,11 +134,11 @@ public class TcardController extends ExtJsController {
                 }
 
                 if (0 != dto.getBettingAmount()) {
-                    returnRate1 = dto.getResultAmount() / dto.getBettingAmount();
+                    returnRate1 = dto.getResultAmount() / dto.getBettingAmount() * 100;
                 }
                 double beetingAmount = dto.getBettingAmount() - dto.getTableAmount();
                 if (beetingAmount > 0) {
-                    returnRate2 = dto.getResultAmount() / beetingAmount;
+                    returnRate2 = dto.getResultAmount() / beetingAmount * 100;
 
                     if (0 != dto.getUserCount()) {
                         bettingArpu = beetingAmount / dto.getUserCount();
@@ -206,27 +205,27 @@ public class TcardController extends ExtJsController {
         if (null != parentId && null == channelId) {
             params.put("parentId", parentId);
         }
-        params.put("bettingType",1);
+        params.put("bettingType", 1);
         for (String searchDate : datelist) {
             params.put("searchDate", searchDate);
             TcardDto dto = new TcardDto();
             params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
             params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
-            params.put("amount",20);
-            int lowBettingUser =  tcardUserBettingLogService.getUserCountByBettingType(params);
+            params.put("amount", 20);
+            int lowBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double lowTableFee = tcardUserBettingLogService.getTableAmount(params);
             int lowTables = tcardUserBettingLogService.getTablesByBettingType(params);
-            double lowAvgRounds = toDouble(lowTables,lowBettingUser);
-            params.put("amount",300);
-            int midBettingUser =  tcardUserBettingLogService.getUserCountByBettingType(params);
+            double lowAvgRounds = toDouble(lowTables, lowBettingUser);
+            params.put("amount", 300);
+            int midBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double midTableFee = tcardUserBettingLogService.getTableAmount(params);
             int midTables = tcardUserBettingLogService.getTablesByBettingType(params);
-            double midAvgRounds = toDouble(midTables,midBettingUser);
-            params.put("amount",3000);
-            int highBettingUser =  tcardUserBettingLogService.getUserCountByBettingType(params);
+            double midAvgRounds = toDouble(midTables, midBettingUser);
+            params.put("amount", 3000);
+            int highBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double highTableFee = tcardUserBettingLogService.getTableAmount(params);
             int highTables = tcardUserBettingLogService.getTablesByBettingType(params);
-            double highAvgRounds = toDouble(highTables,highBettingUser);
+            double highAvgRounds = toDouble(highTables, highBettingUser);
             dto.setLowBettingUser(lowBettingUser);
             dto.setMidBettingUser(midBettingUser);
             dto.setHighBettingUser(highBettingUser);
@@ -245,15 +244,14 @@ public class TcardController extends ExtJsController {
         return list;
     }
 
-    private double toDouble(int one,int two){
-        if(0 == two){
+    private double toDouble(int one, int two) {
+        if (0 == two) {
             return 0;
         }
         BigDecimal b1 = new BigDecimal(one);
         BigDecimal b2 = new BigDecimal(two);
-        return b1.divide(b2,1,BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2, 1, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
-
 
 
 }
