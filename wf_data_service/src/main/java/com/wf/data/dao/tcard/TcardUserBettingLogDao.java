@@ -5,6 +5,7 @@ import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.tcard.entity.TcardUserBettingLog;
+import com.wf.data.dto.TcardDto;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,28 @@ public interface TcardUserBettingLogDao extends CrudDao<TcardUserBettingLog> {
      * @return
      */
     List<DatawareBettingLogHour> getBettingAndAward(Map<String, Object> params);
+
+    /**
+     * 获取三张汇总数据
+     * @param params
+     * @return
+     */
+    List<TcardDto> getSummaryRecord(Map<String, Object> params);
+
+    /**
+     * 获取初中高的投注人数
+     * @param params
+     * @return
+     */
+    Integer getUserCountByBettingType(Map<String,Object> params);
+
+    /**
+     * 获取初中高的桌数
+     * @param params
+     * @return
+     */
+    Integer getTablesByBettingType(Map<String,Object> params);
+
+
+    Double getTableAmount(Map<String, Object> params);
 }

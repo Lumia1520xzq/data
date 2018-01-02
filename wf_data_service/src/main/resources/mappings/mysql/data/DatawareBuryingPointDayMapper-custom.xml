@@ -14,6 +14,26 @@
         </if>
 
     </select>
+    <select id="getGameDau" resultType="Integer">
+        SELECT COUNT(DISTINCT user_id)
+        FROM `dataware_burying_point_day`
+        WHERE 1=1
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND burying_date = #{searchDate}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
 
 </mapper>
 
