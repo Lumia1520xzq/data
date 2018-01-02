@@ -239,6 +239,7 @@ public class TcardController extends ExtJsController {
             dto.setLowAvgRounds(lowAvgRounds);
             dto.setMidAvgRounds(midAvgRounds);
             dto.setHighAvgRounds(highAvgRounds);
+            dto.setSearchDate(searchDate);
             list.add(dto);
         }
         return list;

@@ -70,7 +70,6 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                     }
                 }
             },{
-                id: 'channelId',
                 name: 'channelId',
                 fieldLabel: '子渠道',
                 xtype: 'combo',
