@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
-import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
@@ -185,7 +184,7 @@ public class TcardController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
                 endTime = DateUtils.getYesterdayDate();
                 datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
