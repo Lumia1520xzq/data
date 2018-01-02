@@ -75,30 +75,45 @@ public class UserRegisteredDayJob {
         }
 
         try {
-            List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
-            String beginDate = "";
-            String endDate = "";
-            for (String searchDate : datelist) {
 
-                if (datelist.get(0) == searchDate) {
-                    beginDate = searchDate;
-                    endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
-
-                } else if (searchDate == datelist.get(datelist.size() - 1)) {
-                    beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
-                    endDate = searchDate;
-                } else {
-                    beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
-                    endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
-                }
-
+            if (DateUtils.formatDate(DateUtils.parseDate(dates[0]), "yyyy-MM-dd").equals(DateUtils.formatDate(DateUtils.parseDate(dates[1]), "yyyy-MM-dd"))) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("beginDate", beginDate);
-                map.put("endDate", endDate);
+                map.put("beginDate", dates[0]);
+                map.put("endDate", dates[1]);
+                //
+                String searchDay = DateUtils.formatDate(DateUtils.parseDate(dates[0], "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
+                String searchHour = "";
+                UserInfo(map, uicGroupList, searchDay, searchHour);
+            } else {
+                List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
+                String beginDate = "";
+                String endDate = "";
+                for (String searchDate : datelist) {
 
-                UserInfo(map, uicGroupList);
+                    if (datelist.get(0) == searchDate) {
+                        beginDate = searchDate;
+                        endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
 
+                    } else if (searchDate == datelist.get(datelist.size() - 1)) {
+                        beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+                        endDate = searchDate;
+                    } else {
+                        beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
+                        endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
+                    }
+
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("beginDate", beginDate);
+                    map.put("endDate", endDate);
+                    //
+                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(beginDate, "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
+                    String searchHour = "";
+                    UserInfo(map, uicGroupList, searchDay, searchHour);
+
+                }
             }
+
+
         } catch (Exception e) {
             logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
             return;
@@ -126,11 +141,13 @@ public class UserRegisteredDayJob {
         map.put("beginDate", beginDate);
         map.put("endDate", endDate);
 
-        UserInfo(map, uicGroupList);
+        String searchDay = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
+        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
+        UserInfo(map, uicGroupList, searchDay, searchHour);
 
     }
 
-    private void UserInfo(Map<String, Object> map, List<Long> uicGroupList) {
+    private void UserInfo(Map<String, Object> map, List<Long> uicGroupList, String searchDay, String searchHour) {
         try {
 
             List<DatawareUserInfo> userInfoList = uicUserService.findUserInfoByTime(map);
@@ -147,8 +164,8 @@ public class UserRegisteredDayJob {
 
             if (CollectionUtils.isNotEmpty(userInfoList)) {
                 Map<String, Object> params = new HashMap<>();
-                params.put("registeredDate", userInfoList.get(0).getRegisteredDate());
-                params.put("registeredHour", userInfoList.get(0).getRegisteredHour());
+                params.put("registeredDate", searchDay);
+                params.put("registeredHour", searchHour);
                 long count = datawareUserInfoService.getCountByTime(params);
                 if (count <= 0) {
                     datawareUserInfoService.batchSave(userInfoList);

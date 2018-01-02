@@ -50,10 +50,10 @@
     </plugins> -->
 
 	<!-- mybatis sql 拦截器，可打印mybatis执行的sql，及计算执行时间，线上环境时建议关闭-->
-<!--	<plugins>
+	<plugins>
 		<plugin interceptor="com.wf.data.common.dal.mybatis.SQLPrintPlugin">
 			<property name="show_sql" value="true"/>
 		</plugin>
-	</plugins>-->
+	</plugins>
 
 </configuration>
