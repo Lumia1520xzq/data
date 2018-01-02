@@ -26,6 +26,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
     </select>
 
+
     <select id="getBettingAndAward" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
         SELECT
         SUM(amount) bettingAmount,
@@ -33,7 +34,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         FROM `tcard_user_betting_log`
         WHERE 1=1 AND `status` != -1
         <if test="parentId != null">
-            AND channel_id LIKE CONCAT( #{parentId}, '%')
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
         <if test="channelId != null">
             AND channel_id = #{channelId}
@@ -48,5 +49,74 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         GROUP BY DATE_FORMAT(create_time,"%Y-%m-%d")
     </select>
 
+    <select id="getUserCountByBettingType" resultType="Integer">
+        SELECT IFNULL(count(DISTINCT user_id),0)
+        FROM `tcard_user_betting_log`
+        WHERE 1=1
+        <if test="parentId != null">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="bettingType != null">
+        and betting_type = #{bettingType}
+        </if>
+        <if test="amount != null">
+        and amount = #{amount}
+        </if>
+        <if test="beginDate != null">
+        and create_time &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null">
+        and create_time &lt;= #{endDate}
+        </if>
+    </select>
+
+
+    <select id="getTablesByBettingType" resultType="Integer">
+      SELECT IFNULL(COUNT(1),0) FROM
+        (SELECT room_id,PHASE FROM
+         `tcard_user_betting_log`
+         WHERE 1=1
+        <if test="parentId != null">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="bettingType != null">
+            and betting_type = #{bettingType}
+        </if>
+        <if test="amount != null">
+            and amount = #{amount}
+        </if>
+        <if test="beginDate != null">
+            and create_time &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null">
+            and create_time &lt;= #{endDate}
+        </if>
+        GROUP BY room_id ,PHASE)t
+    </select>
+
+    <select id="getTableAmount" resultType="double">
+        SELECT IFNULL(sum(amount),0)
+        FROM tcard_user_betting_log
+        where 1 = 1
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="amount != null and amount != ''">
+            AND amount = #{amount}
+        </if>
+        <if test="bettingType != null and bettingType != ''">
+            AND betting_type = #{bettingType}
+        </if>
+        AND create_time BETWEEN #{beginDate} AND #{endDate}
+    </select>
 </mapper>
 

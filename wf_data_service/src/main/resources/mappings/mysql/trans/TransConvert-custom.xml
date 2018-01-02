@@ -149,14 +149,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         COUNT(1) rechargeCount,
         SUM(third_amount) thirdAmount,
         biz_type bizType,
-        DATE_FORMAT(create_time,"%H") convertHour,
-        DATE_FORMAT(create_time,"%Y-%m-%d") convertDate
+        DATE_FORMAT(update_time,"%H") convertHour,
+        DATE_FORMAT(update_time,"%Y-%m-%d") convertDate
         FROM `trans_convert`
         WHERE 1=1
-        AND create_time BETWEEN #{beginDate} and #{endDate}
+        AND update_time BETWEEN #{beginDate} and #{endDate}
         AND status=8
         AND delete_flag=0
-        GROUP BY user_id, channel_id,biz_type,DATE_FORMAT(create_time,"%H"),DATE_FORMAT(create_time,"%Y-%m-%d")
+        GROUP BY user_id, channel_id,biz_type,DATE_FORMAT(update_time,"%H"),DATE_FORMAT(update_time,"%Y-%m-%d")
 	</select>
 
 

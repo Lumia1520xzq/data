@@ -1,7 +1,6 @@
 package com.wf.data.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wf.core.extjs.data.DataGrid;
 import com.wf.core.persistence.Page;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
@@ -39,11 +38,6 @@ public class CommonDataController extends ExtJsController {
 	@RequestMapping("/getAllChannels")
 	public Object getAllChannels() {
 		JSONObject json = getRequestJson();
-		long start = json.getLongValue("start");
-		long length = json.getLongValue("limit");
-		if (length == 0L) {
-			length = 20L;
-		}
 
 		String keyword = null;
 		JSONObject data = json.getJSONObject("data");
@@ -60,25 +54,18 @@ public class CommonDataController extends ExtJsController {
 			}
 		}
 
-		Page<ChannelInfo> page = new Page<>(dto, start, length);
-		page = channelInfoService.findPage(page);
+		List<ChannelInfo> list = channelInfoService.findList(dto,1000);
 
-		DataGrid<ChannelInfo> dataGrid = new DataGrid<>();
-		dataGrid.setData(page.getData());
-		dataGrid.setSuccess(true);
-		dataGrid.setTotal(page.getiTotalDisplayRecords());
-		return dataGrid;
+		for (ChannelInfo cInfo :list) {
+			cInfo.setName(cInfo.getName()+"("+cInfo.getId()+")");
+		}
+		return list;
 	}
 
 
 	@RequestMapping("/getParentChannels")
 	public Object getParentChannels() {
 		JSONObject json = getRequestJson();
-		long start = json.getLongValue("start");
-		long length = json.getLongValue("limit");
-		if (length == 0L) {
-			length = 20L;
-		}
 
 		String keyword = null;
 		JSONObject data = json.getJSONObject("data");
@@ -96,51 +83,41 @@ public class CommonDataController extends ExtJsController {
 		}
 		dto.setEnable(1);
 		dto.setMainChannel(1L);
-		Page<ChannelInfo> page = new Page<>(dto, start, length);
-		page = channelInfoService.findPage(page);
+		List<ChannelInfo> list = channelInfoService.findList(dto,1000);
 
-		DataGrid<ChannelInfo> dataGrid = new DataGrid<>();
-		dataGrid.setData(page.getData());
-		dataGrid.setSuccess(true);
-		dataGrid.setTotal(page.getiTotalDisplayRecords());
-		return dataGrid;
+		for (ChannelInfo cInfo :list) {
+			cInfo.setName(cInfo.getName()+"("+cInfo.getId()+")");
+		}
+		return list;
 	}
 
 
 	@RequestMapping("/getChildChannels")
 	public Object getChildChannels() {
 		JSONObject json = getRequestJson();
-		long start = json.getLongValue("start");
-		long length = json.getLongValue("limit");
-		if (length == 0L) {
-			length = 20L;
-		}
 
 		String keyword = null;
 		JSONObject data = json.getJSONObject("data");
 		if (data != null) {
-			keyword = data.getString("data");
+			keyword = data.getString("parentId");
 		}
 		ChannelInfo dto = new ChannelInfo();
 		if (StringUtils.isNotBlank(keyword)) {
 			keyword = keyword.trim();
 			if (NumberUtils.isDigits(keyword)) {
-				dto.setId(NumberUtils.toLong(keyword));
+				dto.setParentId(Long.parseLong(keyword));
 			} else {
 				dto.setName(keyword);
 			}
 		}
 		dto.setEnable(1);
-		dto.setMainChannel(1L);
-//		dto.setParentId(Long.parseLong(channelId));
-		Page<ChannelInfo> page = new Page<>(dto, start, length);
-		page = channelInfoService.findPage(page);
+		List<ChannelInfo> list = channelInfoService.findList(dto,1000);
 
-		DataGrid<ChannelInfo> dataGrid = new DataGrid<>();
-		dataGrid.setData(page.getData());
-		dataGrid.setSuccess(true);
-		dataGrid.setTotal(page.getiTotalDisplayRecords());
-		return dataGrid;
+		for (ChannelInfo cInfo :list) {
+			cInfo.setName(cInfo.getName()+"("+cInfo.getId()+")");
+		}
+
+		return list;
 	}
 
 

@@ -2,7 +2,8 @@ package test;
 
 import com.wf.data.common.utils.DateUtils;
 
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author: lcs
@@ -46,7 +47,7 @@ public class DataTest {
 
         }*/
 
-        List<String> datelist = DateUtils.getDateList("2017-09-01 21:00:00","2017-09-10 10:59:59");
+       /* List<String> datelist = DateUtils.getDateList("2017-09-01 21:00:00","2017-09-10 10:59:59");
 
         for(String searchDate : datelist){
 
@@ -61,13 +62,24 @@ public class DataTest {
                 System.out.println(DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate,"yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
                 System.out.println(DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate,"yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
             }
-           /* String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)),DateUtils.DATE_TIME_PATTERN);
+           *//* String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)),DateUtils.DATE_TIME_PATTERN);
             String endDate =  DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)),DateUtils.DATE_TIME_PATTERN);
             System.out.println(beginDate);
-            System.out.println(endDate);*/
-        }
+            System.out.println(endDate);*//*
+        }*/
 
+        Calendar cal = Calendar.getInstance();
+        //当前日期向前推1小时，保证统计昨天数据
+        cal.add(Calendar.HOUR_OF_DAY, -10);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        String  startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
+        String searchDay = DateUtils.formatDate(cal.getTime(),DateUtils.DATE_PATTERN);
+        String searchHour = DateUtils.formatDate(cal.getTime(),"HH");
 
+        System.out.println(searchDay);
+        System.out.println(searchHour);
 
     }
 }

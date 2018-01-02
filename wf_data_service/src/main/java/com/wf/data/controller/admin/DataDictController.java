@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/data/admin/dict")
-public class UicDictController extends ExtJsController {
+public class DataDictController extends ExtJsController {
 
 	@Autowired
 	private DataDictService dataDictService;
