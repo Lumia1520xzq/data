@@ -45,7 +45,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 4,
+            columns: 2,
             buildField: "Manual",
             forceFit: true,
             items: [{
