@@ -8,7 +8,9 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DatawareUserInfo;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.UicUserService;
@@ -32,6 +34,7 @@ public class UserRegisteredDayJob {
     private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
     private final DatawareUserInfoService datawareUserInfoService = SpringContextHolder.getBean(DatawareUserInfoService.class);
     private final UicUserService uicUserService = SpringContextHolder.getBean(UicUserService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
 
     public void execute() {
         logger.info("每小时注册汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -158,6 +161,12 @@ public class UserRegisteredDayJob {
                     if (StringUtils.isNotEmpty(item.getThirdId())) {
                         String thirdId = new String(Base64.decodeBase64(item.getThirdId().getBytes("UTF-8")));
                         item.setThirdId(thirdId);
+                    }
+                    if (null != item.getChannelId()) {
+                        ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                        if (null != channelInfo) {
+                            item.setParentId(channelInfo.getParentId());
+                        }
                     }
                 }
             }

@@ -14,8 +14,17 @@ public class DatawareConvertHour extends DataEntity {
 	private Long channelId;
 	private String convertHour;
 	private String convertDate;
-
+	private Long parentId;
 	private List<Long> userList;
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
 
 	public List<Long> getUserList() {
 		return userList;

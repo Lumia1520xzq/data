@@ -17,7 +17,16 @@ public class DatawareBettingLogHour extends DataEntity {
 	private Long channelId;
 	private String bettingHour;
 	private String bettingDate;
+	private Long parentId;
 
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 
 	private List<Long> userList;
 

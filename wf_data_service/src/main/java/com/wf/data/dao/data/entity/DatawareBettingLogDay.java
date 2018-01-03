@@ -14,7 +14,16 @@ public class DatawareBettingLogDay extends DataEntity {
 	private Integer userGroup;
 	private Long channelId;
 	private String bettingDate;
+	private Long parentId;
 
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 
 	public Long getUserId() {
 		return userId;

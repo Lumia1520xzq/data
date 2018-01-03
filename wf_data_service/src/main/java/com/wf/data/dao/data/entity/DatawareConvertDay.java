@@ -11,7 +11,16 @@ public class DatawareConvertDay extends DataEntity {
 	private Integer bizType;
 	private Long channelId;
 	private String convertDate;
+	private Long parentId;
 
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 	public Long getUserId() {
 		return userId;
 	}

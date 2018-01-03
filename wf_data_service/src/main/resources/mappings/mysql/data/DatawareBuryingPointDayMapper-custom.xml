@@ -28,7 +28,7 @@
             AND burying_date = #{searchDate}
         </if>
         <if test="parentId != null and parentId != ''">
-            AND channel_id LIKE CONCAT(#{parentId}, '%')
+            AND parent_id = #{parentId}
         </if>
         AND user_group=2
         AND delete_flag=0

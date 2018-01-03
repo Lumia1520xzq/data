@@ -7,7 +7,9 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DatawareConvertDay;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareConvertDayService;
 import com.wf.data.service.data.DatawareConvertHourService;
@@ -30,6 +32,7 @@ public class ConvertDayJob {
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final DatawareConvertDayService datawareConvertDayService = SpringContextHolder.getBean(DatawareConvertDayService.class);
     private final DatawareConvertHourService datawareConvertHourService = SpringContextHolder.getBean(DatawareConvertHourService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
 
     public void execute() {
         logger.info("每小时埋点汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -89,6 +92,14 @@ public class ConvertDayJob {
             if (CollectionUtils.isNotEmpty(convertList)) {
                 long count = datawareConvertDayService.getCountByTime(map);
                 if (count <= 0) {
+                    for(DatawareConvertDay item :convertList){
+                        if (null != item.getChannelId()) {
+                            ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                            if (null != channelInfo) {
+                                item.setParentId(channelInfo.getParentId());
+                            }
+                        }
+                    }
                     datawareConvertDayService.batchSave(convertList);
                 }
             }

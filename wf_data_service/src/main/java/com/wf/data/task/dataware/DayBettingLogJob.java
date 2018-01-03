@@ -7,10 +7,14 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DatawareBettingLogDay;
 import com.wf.data.dao.data.entity.DatawareBettingLogHour;
-import com.wf.data.service.*;
+import com.wf.data.service.ChannelInfoService;
+import com.wf.data.service.DataConfigService;
+import com.wf.data.service.DataDictService;
+import com.wf.data.service.UicGroupService;
 import com.wf.data.service.data.DatawareBettingLogDayService;
 import com.wf.data.service.data.DatawareBettingLogHourService;
 import org.apache.commons.collections.CollectionUtils;
@@ -32,6 +36,8 @@ public class DayBettingLogJob {
     private final DataDictService dataDictService = SpringContextHolder.getBean(DataDictService.class);
     private final DatawareBettingLogHourService datawareBettingLogHourService = SpringContextHolder.getBean(DatawareBettingLogHourService.class);
     private final DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
+
 
     public void execute() {
         logger.info("每天投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -55,7 +61,7 @@ public class DayBettingLogJob {
             for (String bettingDate : datelist) {
                 params.put("bettingDate", bettingDate);
                 long count = datawareBettingLogDayService.getCountByTime(params);
-                if(count <=0){
+                if (count <= 0) {
                     dayBettingLog(bettingDate, uicGroupList);
                 }
             }
@@ -69,7 +75,7 @@ public class DayBettingLogJob {
             }
             params.put("bettingDate", bettingDate);
             long count = datawareBettingLogDayService.getCountByTime(params);
-            if(count <=0){
+            if (count <= 0) {
                 dayBettingLog(bettingDate, uicGroupList);
             }
         }
@@ -108,6 +114,12 @@ public class DayBettingLogJob {
                     DataDict dataDict = dataDictService.getDictByValue("game_type", logDay.getGameType());
                     if (null != dataDict) {
                         logDay.setGameName(dataDict.getLabel());
+                    }
+                    if (null != logDay.getChannelId()) {
+                        ChannelInfo channelInfo = channelInfoService.get(logDay.getChannelId());
+                        if (null != channelInfo) {
+                            logDay.setParentId(channelInfo.getParentId());
+                        }
                     }
                 }
                 datawareBettingLogDayService.batchSave(bettingList);

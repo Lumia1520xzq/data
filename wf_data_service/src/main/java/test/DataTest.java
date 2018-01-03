@@ -1,10 +1,5 @@
 package test;
 
-import com.wf.data.common.utils.DateUtils;
-
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * @author: lcs
  * @date: 2017/12/21
@@ -68,7 +63,7 @@ public class DataTest {
             System.out.println(endDate);*//*
         }*/
 
-        Calendar cal = Calendar.getInstance();
+        /*Calendar cal = Calendar.getInstance();
         //当前日期向前推1小时，保证统计昨天数据
         cal.add(Calendar.HOUR_OF_DAY, -10);
         cal.set(Calendar.SECOND, 0);
@@ -79,7 +74,13 @@ public class DataTest {
         String searchHour = DateUtils.formatDate(cal.getTime(),"HH");
 
         System.out.println(searchDay);
-        System.out.println(searchHour);
+        System.out.println(searchHour);*/
+
+
+
+        String str = "101011010001";
+
+        System.out.println(str.startsWith("10001"));
 
     }
 }

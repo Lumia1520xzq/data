@@ -16,7 +16,16 @@ public class DatawareBuryingPointHour extends DataEntity {
     private String buryingHour;
     private String buryingDate;
     private List<Long> userList;
+    private Long parentId;
 
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
     public List<Long> getUserList() {
         return userList;
     }
