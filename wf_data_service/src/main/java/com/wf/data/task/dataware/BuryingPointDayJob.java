@@ -142,7 +142,11 @@ public class BuryingPointDayJob {
                 if (null != item.getChannelId()) {
                     ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
                     if (null != channelInfo) {
-                        item.setParentId(channelInfo.getParentId());
+                        if(null == channelInfo.getParentId()){
+                            item.setParentId(item.getChannelId());
+                        }else {
+                            item.setParentId(channelInfo.getParentId());
+                        }
                     }
                 }
             }

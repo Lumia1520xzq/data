@@ -178,7 +178,11 @@ public class HourBettingLogJob {
                 if (null != logHour.getChannelId()) {
                     ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
                     if (null != channelInfo) {
-                        logHour.setParentId(channelInfo.getParentId());
+                        if(null == channelInfo.getParentId()){
+                            logHour.setParentId(logHour.getChannelId());
+                        }else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
                     }
                 }
             }
@@ -215,7 +219,11 @@ public class HourBettingLogJob {
                 if (null != logHour.getChannelId()) {
                     ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
                     if (null != channelInfo) {
-                        logHour.setParentId(channelInfo.getParentId());
+                        if(null == channelInfo.getParentId()){
+                            logHour.setParentId(logHour.getChannelId());
+                        }else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
                     }
                 }
             }
@@ -294,7 +302,11 @@ public class HourBettingLogJob {
                 if (null != logHour.getChannelId()) {
                     ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
                     if (null != channelInfo) {
-                        logHour.setParentId(channelInfo.getParentId());
+                        if(null == channelInfo.getParentId()){
+                            logHour.setParentId(logHour.getChannelId());
+                        }else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
                     }
                 }
             }

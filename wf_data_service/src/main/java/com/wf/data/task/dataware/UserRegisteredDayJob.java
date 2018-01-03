@@ -162,9 +162,13 @@ public class UserRegisteredDayJob {
                         String thirdId = new String(Base64.decodeBase64(item.getThirdId().getBytes("UTF-8")));
                         item.setThirdId(thirdId);
                     }
-                    if (null != item.getChannelId()) {
-                        ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
-                        if (null != channelInfo) {
+                }
+                if (null != item.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                    if (null != channelInfo) {
+                        if(null == channelInfo.getParentId()){
+                            item.setParentId(item.getChannelId());
+                        }else {
                             item.setParentId(channelInfo.getParentId());
                         }
                     }

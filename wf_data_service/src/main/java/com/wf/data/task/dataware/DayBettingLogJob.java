@@ -118,7 +118,11 @@ public class DayBettingLogJob {
                     if (null != logDay.getChannelId()) {
                         ChannelInfo channelInfo = channelInfoService.get(logDay.getChannelId());
                         if (null != channelInfo) {
-                            logDay.setParentId(channelInfo.getParentId());
+                            if(null == channelInfo.getParentId()){
+                                logDay.setParentId(logDay.getChannelId());
+                            }else {
+                                logDay.setParentId(channelInfo.getParentId());
+                            }
                         }
                     }
                 }
