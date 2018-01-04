@@ -104,6 +104,8 @@ public interface DataConstants {
      * 清洗渠道列表
      */
     String DATA_DESTINATION_COLLECTING_CHANNEL = "data_destination_collecting_channel";
+    String DATA_DESTINATION_COLLECTING_FLAG = "data_destination_collecting_flag";
+    String DATA_DESTINATION_COLLECTING_DATE = "data_destination_collecting_date";
 
 
 

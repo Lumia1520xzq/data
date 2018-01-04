@@ -1,5 +1,7 @@
 package test;
 
+import com.wf.core.utils.type.BigDecimalUtil;
+
 /**
  * @author: lcs
  * @date: 2017/12/21
@@ -80,7 +82,7 @@ public class DataTest {
 
         String str = "101011010001";
 
-        System.out.println(str.startsWith("10001"));
+        System.out.println( BigDecimalUtil.div(45.265 * 100,100,2));
 
     }
 }

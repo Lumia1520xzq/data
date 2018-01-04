@@ -41,5 +41,68 @@
         AND delete_flag=0
     </select>
 
+    <select id="getBettingByDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll">
+        SELECT
+        COUNT(DISTINCT t.user_id) userCount,
+        SUM(t.betting_amount) bettingAmount,
+        SUM(t.betting_count) bettingCount,
+        SUM(t.result_amount) resultAmount
+        FROM `dataware_betting_log_day` t
+        WHERE 1=1
+        AND t.user_group=2
+        AND t.delete_flag=0
+        <if test="businessDate != null and businessDate != ''">
+            AND t.betting_date = #{businessDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getBettingUserIdByDate" resultType="long">
+        SELECT
+        DISTINCT t.user_id
+        FROM `dataware_betting_log_day` t
+        WHERE 1=1
+        AND t.user_group=2
+        AND t.delete_flag=0
+        <if test="businessDate != null and businessDate != ''">
+            AND t.betting_date = #{businessDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
 </mapper>
 
