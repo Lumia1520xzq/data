@@ -13,7 +13,7 @@
         <property name="password" value="${jdbc.tcard.password}"/>
         <property name="initialSize" value="3"/>
         <property name="minIdle" value="3"/>
-        <property name="maxActive" value="500"/>
+        <property name="maxActive" value="10"/>
         <property name="maxWait" value="60000"/>
         <property name="timeBetweenEvictionRunsMillis" value="60000"/>
         <property name="minEvictableIdleTimeMillis" value="300000"/>
