@@ -96,11 +96,15 @@ public class ChannelInfoAllJob {
             return;
         }
         try {
+            Map<String, Object> mapAll = new HashMap<>();
+            mapAll.put("businessDate", searchDay);
+            dataKettle(mapAll, null, searchDay, 1);
 
             List<String> channels = Arrays.asList(channelIdList.split(","));
 
             List<Long> childChannelList = Lists.newArrayList();
             List<Long> parentChannelList = Lists.newArrayList();
+
 
             for (String channelStr : channels) {
                 Long channel = Long.valueOf(channelStr);
@@ -111,31 +115,33 @@ public class ChannelInfoAllJob {
                         Map<String, Object> map = new HashMap<>();
                         map.put("businessDate", searchDay);
                         map.put("channelId", channel);
-                        dataKettle(map, channelInfo, searchDay);
+                        dataKettle(map, channelInfo, searchDay, 0);
                     } else {
                         parentChannelList.add(channel);
                         Map<String, Object> parentMap = new HashMap<>();
                         parentMap.put("businessDate", searchDay);
                         parentMap.put("parentId", channel);
-                        dataKettle(parentMap, channelInfo, searchDay);
+                        dataKettle(parentMap, channelInfo, searchDay, 0);
                     }
                 }
 
             }
 
             //汇总其他渠道
+            parentChannelList.add(1L);
             Map<String, Object> params = new HashMap<>();
             params.put("businessDate", searchDay);
             params.put("childChannelList", childChannelList);
             params.put("parentChannelList", parentChannelList);
-            dataKettle(params, null, searchDay);
+            dataKettle(params, null, searchDay, 0);
+
 
         } catch (Exception e) {
             logger.error("添加渠道汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
     }
 
-    private void dataKettle(Map<String, Object> params, ChannelInfo channelInfo, String businessDate) {
+    private void dataKettle(Map<String, Object> params, ChannelInfo channelInfo, String businessDate, Integer flag) {
         long count = datawareFinalChannelInfoAllService.getCountByTime(params);
 
         if (count > 0) {
@@ -144,9 +150,15 @@ public class ChannelInfoAllJob {
             DatawareFinalChannelInfoAll infoAll = new DatawareFinalChannelInfoAll();
             infoAll.setBusinessDate(businessDate);
             if (null == channelInfo) {
-                infoAll.setChannelName("其他");
-                infoAll.setChannelId(0L);
-                infoAll.setParentId(0L);
+                if (flag == 0) {
+                    infoAll.setChannelId(0L);
+                    infoAll.setParentId(0L);
+                    infoAll.setChannelName("其他");
+                } else {
+                    infoAll.setChannelId(1L);
+                    infoAll.setParentId(1L);
+                    infoAll.setChannelName("全部");
+                }
             } else {
                 infoAll.setChannelName(channelInfo.getName());
                 infoAll.setChannelId(channelInfo.getId());
