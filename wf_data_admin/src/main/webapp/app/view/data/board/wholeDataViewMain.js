@@ -142,35 +142,25 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
         });
 
         me.add({
-            xtype: 'datagrid',
-            store: store,
-            buildField: "Manual",
-            forceFit: true,
-            tbar: [{
-                text: '核心指标',
-            }],
-            columns: [ {
-                text: '日期',
-                width: 100,
-                dataIndex: 'searchDate',
-                option:me.option[0],
-                menuDisabled: true,
-                sortable: false
+            type: 'vbox',
+            align: 'stretch',
+            width: 500,
+            forceFit:true,
+            items: [{
+                title: '核心指标', html: 'flex:1', height:300, type:"hbox",
+                items:[{
+                    title:'DAU',html:'1',
+                    title:'充值金额',html:'2',
+                    title:'投注人数',html:'3',
+                }]
             }, {
-                text: 'DAU',
-                dataIndex: 'dauCount',
-                width: 100,
-                option:me.option[1],
-                menuDisabled: true,
-                sortable: false
+                title: '投注数据', html: 'height:150',height:300
             }, {
-                text: '投注人数',
-                dataIndex: 'userCount',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
+                title: '付费数据', html: 'flex:2',height:300
             }]
         });
+
+
 
     }
 });
