@@ -11,6 +11,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		FROM dataware_user_info t
 		WHERE  1=1 AND t.delete_flag = 0
 		AND t.user_group =2
+		AND t.channel_id IS NOT NULL
 		<if test="businessDate != null and businessDate != ''">
 			AND t.registered_date = #{businessDate}
 		</if>
