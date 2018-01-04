@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DatawareConvertDayDao">
+
+	<select id="getConvertByDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll">
+		SELECT
+		COUNT(DISTINCT t.user_id) rechargeCount,
+		SUM(t.third_amount) rechargeAmount
+		FROM `dataware_convert_day` t
+		WHERE 1=1
+		<if test="businessDate != null and businessDate != ''">
+			AND t.convert_date = #{businessDate}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND t.parent_id = #{parentId}
+		</if>
+		<if test="parentChannelList != null and  parentChannelList.size() != 0">
+			AND t.parent_id not in
+			<foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="childChannelList != null and  childChannelList.size() != 0">
+			AND t.channel_id not in
+			<foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+</mapper>
+

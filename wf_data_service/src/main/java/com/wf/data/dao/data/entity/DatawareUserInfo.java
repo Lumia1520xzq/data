@@ -15,7 +15,16 @@ public class DatawareUserInfo extends DataEntity {
 	private String registeredHour;
 	private String registeredDate;
 	private Integer userGroup;
+	private Long parentId;
 
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 	public Integer getUserGroup() {
 		return userGroup;
 	}

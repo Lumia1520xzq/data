@@ -12,7 +12,16 @@ public class DatawareBuryingPointDay extends DataEntity {
     private Integer userGroup;
     private Long channelId;
     private String buryingDate;
+    private Long parentId;
 
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
 
 
