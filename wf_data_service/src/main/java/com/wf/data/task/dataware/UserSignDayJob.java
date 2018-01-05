@@ -8,7 +8,9 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DatawareUserSignDay;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.data.DatawareUserSignDayService;
@@ -31,6 +33,7 @@ public class UserSignDayJob {
     private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
     private final PlatUserCheckLotteryLogService platUserCheckLotteryLogService = SpringContextHolder.getBean(PlatUserCheckLotteryLogService.class);
     private final DatawareUserSignDayService datawareUserSignDayService = SpringContextHolder.getBean(DatawareUserSignDayService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
 
     public void execute() {
         logger.info("每小时签到汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -154,6 +157,17 @@ public class UserSignDayJob {
 
             for (DatawareUserSignDay item : hourList) {
                 item.setUserGroup(getUserGroup(item.getUserId(), uicGroupList));
+
+                if (null != item.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                    if (null != channelInfo) {
+                        if(null == channelInfo.getParentId()){
+                            item.setParentId(item.getChannelId());
+                        }else {
+                            item.setParentId(channelInfo.getParentId());
+                        }
+                    }
+                }
             }
 
             if (CollectionUtils.isNotEmpty(hourList)) {

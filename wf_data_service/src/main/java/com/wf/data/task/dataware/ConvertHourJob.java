@@ -7,7 +7,9 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DatawareConvertHour;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.data.DatawareConvertHourService;
@@ -31,6 +33,7 @@ public class ConvertHourJob {
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
     private final DatawareConvertHourService datawareConvertHourService = SpringContextHolder.getBean(DatawareConvertHourService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
 
     public void execute() {
         logger.info("每小时充值汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -147,6 +150,18 @@ public class ConvertHourJob {
                 params.put("convertHour", searchHour);
                 long count = datawareConvertHourService.getCountByTime(params);
                 if (count <= 0) {
+                    for (DatawareConvertHour item : hourList) {
+                        if (null != item.getChannelId()) {
+                            ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                            if (null != channelInfo) {
+                                if(null == channelInfo.getParentId()){
+                                    item.setParentId(item.getChannelId());
+                                }else {
+                                    item.setParentId(channelInfo.getParentId());
+                                }
+                            }
+                        }
+                    }
                     datawareConvertHourService.batchSave(hourList);
                 }
             }

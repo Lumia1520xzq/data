@@ -20,4 +20,8 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public Integer getGameDau(Map<String,Object> map){
         return dao.getGameDau(map);
     }
+
+    public Long getDauByChannel(Map<String,Object> map){
+        return dao.getDauByChannel(map);
+    }
 }

@@ -8,7 +8,11 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.*;
+import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.data.entity.DataDict;
+import com.wf.data.dao.data.entity.DatawareBuryingPointDay;
+import com.wf.data.dao.data.entity.DatawareBuryingPointHour;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.UicGroupService;
@@ -33,6 +37,7 @@ public class BuryingPointDayJob {
     private final DataDictService dataDictService = SpringContextHolder.getBean(DataDictService.class);
     private final DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
     private final DatawareBuryingPointHourService datawareBuryingPointHourService = SpringContextHolder.getBean(DatawareBuryingPointHourService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
 
     public void execute() {
         logger.info("每小时埋点汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -133,6 +138,16 @@ public class BuryingPointDayJob {
                 DataDict dataDict = dataDictService.getDictByValue("game_type", item.getGameType());
                 if (null != dataDict) {
                     item.setGameName(dataDict.getLabel());
+                }
+                if (null != item.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                    if (null != channelInfo) {
+                        if(null == channelInfo.getParentId()){
+                            item.setParentId(item.getChannelId());
+                        }else {
+                            item.setParentId(channelInfo.getParentId());
+                        }
+                    }
                 }
             }
 

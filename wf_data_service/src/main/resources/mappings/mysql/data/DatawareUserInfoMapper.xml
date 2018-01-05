@@ -5,12 +5,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.data.DatawareUserInfoDao">
-	
+
 	<sql id="datawareUserInfoColumns">
 		t.id,
 		t.user_id,
 		t.nickname,
 		t.third_id,
+		t.parent_id,
 		t.channel_id,
 		t.user_group,
 		t.registered_time,
@@ -49,40 +50,43 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_user_info t WHERE <include refid="datawareUserInfoWhere" />
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO dataware_user_info (
 			id, 
 			user_id, 
 			nickname, 
 			third_id, 
-			channel_id, 
-			user_group, 
-			registered_time, 
-			registered_hour, 
-			registered_date, 
-			create_time, 
-			delete_flag 
+			parent_id,
+			channel_id,
+			user_group,
+			registered_time,
+			registered_hour,
+			registered_date,
+			create_time,
+			delete_flag
 		) VALUES (
-			#{id}, 
-			#{userId}, 
-			#{nickname}, 
-			#{thirdId}, 
-			#{channelId}, 
-			#{userGroup}, 
-			#{registeredTime}, 
-			#{registeredHour}, 
-			#{registeredDate}, 
-			#{createTime}, 
-			#{deleteFlag} 
+			#{id},
+			#{userId},
+			#{nickname},
+			#{thirdId},
+			#{parentId},
+			#{channelId},
+			#{userGroup},
+			#{registeredTime},
+			#{registeredHour},
+			#{registeredDate},
+			#{createTime},
+			#{deleteFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
 		UPDATE dataware_user_info SET
-			user_id = #{userId}, 
-			nickname = #{nickname}, 
-			third_id = #{thirdId}, 
+			user_id = #{userId},
+			nickname = #{nickname},
+			third_id = #{thirdId},
+			parent_id = #{parentId},
 			channel_id = #{channelId}, 
 			user_group = #{userGroup}, 
 			registered_time = #{registeredTime}, 

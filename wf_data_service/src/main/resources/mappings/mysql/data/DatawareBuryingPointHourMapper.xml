@@ -5,7 +5,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.data.DatawareBuryingPointHourDao">
-	
+
 	<sql id="datawareBuryingPointHourColumns">
 		t.id,
 		t.user_id,
@@ -13,6 +13,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.game_name,
 		t.point_count,
 		t.user_group,
+		t.parent_id,
 		t.channel_id,
 		t.burying_hour,
 		t.burying_date,
@@ -20,14 +21,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.update_time,
 		t.delete_flag
 	</sql>
-	
+
 	<sql id="datawareBuryingPointHourWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
 	</sql>
-	
+
 	<sql id="datawareBuryingPointHourJoins">
 	</sql>
-	
+
 	<select id="get" resultType="DatawareBuryingPointHour">
 		SELECT <include refid="datawareBuryingPointHourColumns"/> FROM dataware_burying_point_hour t WHERE id = #{id}
 	</select>
@@ -38,42 +39,45 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_burying_point_hour t WHERE <include refid="datawareBuryingPointHourWhere" />
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO dataware_burying_point_hour (
-			id, 
-			user_id, 
-			game_type, 
-			game_name, 
-			point_count, 
-			user_group, 
-			channel_id, 
-			burying_hour, 
-			burying_date, 
-			create_time, 
-			delete_flag 
+		id,
+		user_id,
+		game_type,
+		game_name,
+		point_count,
+		user_group,
+		parent_id,
+		channel_id,
+		burying_hour,
+		burying_date,
+		create_time,
+		delete_flag
 		) VALUES (
-			#{id}, 
-			#{userId}, 
-			#{gameType}, 
-			#{gameName}, 
-			#{pointCount}, 
-			#{userGroup}, 
-			#{channelId}, 
-			#{buryingHour}, 
-			#{buryingDate}, 
-			#{createTime}, 
-			#{deleteFlag} 
+		#{id},
+		#{userId},
+		#{gameType},
+		#{gameName},
+		#{pointCount},
+		#{userGroup},
+		#{parentId},
+		#{channelId},
+		#{buryingHour},
+		#{buryingDate},
+		#{createTime},
+		#{deleteFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
 		UPDATE dataware_burying_point_hour SET
-			user_id = #{userId}, 
-			game_type = #{gameType}, 
-			game_name = #{gameName}, 
-			point_count = #{pointCount}, 
-			user_group = #{userGroup}, 
+			user_id = #{userId},
+			game_type = #{gameType},
+			game_name = #{gameName},
+			point_count = #{pointCount},
+			user_group = #{userGroup},
+			parent_id = #{parentId},
 			channel_id = #{channelId}, 
 			burying_hour = #{buryingHour}, 
 			burying_date = #{buryingDate}, 
