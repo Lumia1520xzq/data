@@ -1,7 +1,6 @@
 package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
@@ -41,7 +40,6 @@ public class WholeDataViewController extends ExtJsController {
         String startTime = null;
         String endTime = null;
         JSONObject data = json.getJSONObject("data");
-        List<String> datelist = Lists.newArrayList();
         if (data != null) {
             parentId = data.getLong("parentId");
             startTime = data.getString("startTime");
@@ -51,15 +49,10 @@ public class WholeDataViewController extends ExtJsController {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
                 startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
                 endTime = DateUtils.getYesterdayDate();
-                datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
                 startTime = endTime;
-                datelist.add(startTime);
             } else if (StringUtils.isNotBlank(startTime) && StringUtils.isBlank(endTime)) {
                 endTime = startTime;
-                datelist.add(startTime);
-            } else {
-                datelist = DateUtils.getDateList(startTime, endTime);
             }
         } catch (Exception e) {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
@@ -72,6 +65,7 @@ public class WholeDataViewController extends ExtJsController {
             params.put("beginDate",startTime);
             params.put("endDate",endTime);
         List<DatawareFinalChannelInfoAll>  list =  datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
+        System.out.println("list为:"+list);
         return list;
     }
 
