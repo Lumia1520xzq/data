@@ -5,7 +5,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.data.DatawareBettingLogDayDao">
-	
+
 	<sql id="datawareBettingLogDayColumns">
 		t.id,
 		t.user_id,
@@ -15,20 +15,21 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.betting_amount,
 		t.result_amount,
 		t.user_group,
+		t.parent_id,
 		t.channel_id,
 		t.betting_date,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
 	</sql>
-	
+
 	<sql id="datawareBettingLogDayWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
 	</sql>
-	
+
 	<sql id="datawareBettingLogDayJoins">
 	</sql>
-	
+
 	<select id="get" resultType="DatawareBettingLogDay">
 		SELECT <include refid="datawareBettingLogDayColumns"/> FROM dataware_betting_log_day t WHERE id = #{id}
 	</select>
@@ -39,46 +40,49 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_betting_log_day t WHERE <include refid="datawareBettingLogDayWhere" />
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO dataware_betting_log_day (
-			id, 
-			user_id, 
-			game_type, 
-			game_name, 
-			betting_count, 
-			betting_amount, 
-			result_amount, 
-			user_group, 
-			channel_id, 
-			betting_date, 
-			create_time, 
-			delete_flag 
+		id,
+		user_id,
+		game_type,
+		game_name,
+		betting_count,
+		betting_amount,
+		result_amount,
+		user_group,
+		parent_id,
+		channel_id,
+		betting_date,
+		create_time,
+		delete_flag
 		) VALUES (
-			#{id}, 
-			#{userId}, 
-			#{gameType}, 
-			#{gameName}, 
-			#{bettingCount}, 
-			#{bettingAmount}, 
-			#{resultAmount}, 
-			#{userGroup}, 
-			#{channelId}, 
-			#{bettingDate}, 
-			#{createTime}, 
-			#{deleteFlag} 
+		#{id},
+		#{userId},
+		#{gameType},
+		#{gameName},
+		#{bettingCount},
+		#{bettingAmount},
+		#{resultAmount},
+		#{userGroup},
+		#{parentId},
+		#{channelId},
+		#{bettingDate},
+		#{createTime},
+		#{deleteFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
 		UPDATE dataware_betting_log_day SET
-			user_id = #{userId}, 
-			game_type = #{gameType}, 
-			game_name = #{gameName}, 
-			betting_count = #{bettingCount}, 
-			betting_amount = #{bettingAmount}, 
-			result_amount = #{resultAmount}, 
-			user_group = #{userGroup}, 
+			user_id = #{userId},
+			game_type = #{gameType},
+			game_name = #{gameName},
+			betting_count = #{bettingCount},
+			betting_amount = #{bettingAmount},
+			result_amount = #{resultAmount},
+			user_group = #{userGroup},
+			parent_id = #{parentId},
 			channel_id = #{channelId}, 
 			betting_date = #{bettingDate}, 
 			delete_flag = #{deleteFlag} 

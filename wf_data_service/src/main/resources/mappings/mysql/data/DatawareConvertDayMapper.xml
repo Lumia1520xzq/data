@@ -5,27 +5,28 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.data.DatawareConvertDayDao">
-	
+
 	<sql id="datawareConvertDayColumns">
 		t.id,
 		t.user_id,
 		t.recharge_count,
 		t.third_amount,
 		t.biz_type,
+		t.parent_id,
 		t.channel_id,
 		t.convert_date,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
 	</sql>
-	
+
 	<sql id="datawareConvertDayWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
 	</sql>
-	
+
 	<sql id="datawareConvertDayJoins">
 	</sql>
-	
+
 	<select id="get" resultType="DatawareConvertDay">
 		SELECT <include refid="datawareConvertDayColumns"/> FROM dataware_convert_day t WHERE id = #{id}
 	</select>
@@ -45,37 +46,40 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_convert_day t WHERE <include refid="datawareConvertDayWhere" />
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO dataware_convert_day (
-			id, 
-			user_id, 
-			recharge_count, 
-			third_amount, 
-			biz_type, 
-			channel_id, 
-			convert_date, 
-			create_time, 
-			delete_flag 
+		id,
+		user_id,
+		recharge_count,
+		third_amount,
+		biz_type,
+		parent_id,
+		channel_id,
+		convert_date,
+		create_time,
+		delete_flag
 		) VALUES (
-			#{id}, 
-			#{userId}, 
-			#{rechargeCount}, 
-			#{thirdAmount}, 
-			#{bizType}, 
-			#{channelId}, 
-			#{convertDate}, 
-			#{createTime}, 
-			#{deleteFlag} 
+		#{id},
+		#{userId},
+		#{rechargeCount},
+		#{thirdAmount},
+		#{bizType},
+		#{parentId},
+		#{channelId},
+		#{convertDate},
+		#{createTime},
+		#{deleteFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
 		UPDATE dataware_convert_day SET
-			user_id = #{userId}, 
-			recharge_count = #{rechargeCount}, 
-			third_amount = #{thirdAmount}, 
-			biz_type = #{bizType}, 
+			user_id = #{userId},
+			recharge_count = #{rechargeCount},
+			third_amount = #{thirdAmount},
+			biz_type = #{bizType},
+			parent_id = #{parentId},
 			channel_id = #{channelId}, 
 			convert_date = #{convertDate}, 
 			delete_flag = #{deleteFlag} 

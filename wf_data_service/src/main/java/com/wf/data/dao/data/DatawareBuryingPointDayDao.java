@@ -13,4 +13,6 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
     long getCountByTime(Map<String,Object> map);
 
     Integer getGameDau(Map<String,Object> map);
+
+    Long getDauByChannel(Map<String,Object> map);
 }

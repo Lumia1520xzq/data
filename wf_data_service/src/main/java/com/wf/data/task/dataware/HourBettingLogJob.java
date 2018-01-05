@@ -8,6 +8,7 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.service.*;
@@ -33,6 +34,7 @@ public class HourBettingLogJob {
     private final DatawareBettingLogHourService datawareBettingLogHourService = SpringContextHolder.getBean(DatawareBettingLogHourService.class);
     private final TcardUserBettingLogService tcardUserBettingLogService = SpringContextHolder.getBean(TcardUserBettingLogService.class);
     private final RoomFishInfoService roomFishInfoService = SpringContextHolder.getBean(RoomFishInfoService.class);
+    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
 
     public void execute() {
         logger.info("每小时投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -173,6 +175,16 @@ public class HourBettingLogJob {
                 if (null != dataDict) {
                     logHour.setGameName(dataDict.getLabel());
                 }
+                if (null != logHour.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
+                    if (null != channelInfo) {
+                        if(null == channelInfo.getParentId()){
+                            logHour.setParentId(logHour.getChannelId());
+                        }else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
+                    }
+                }
             }
             try {
                 if (CollectionUtils.isNotEmpty(bettingLogHourList)) {
@@ -203,6 +215,16 @@ public class HourBettingLogJob {
                 DataDict dataDict = dataDictService.getDictByValue("game_type", logHour.getGameType());
                 if (null != dataDict) {
                     logHour.setGameName(dataDict.getLabel());
+                }
+                if (null != logHour.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
+                    if (null != channelInfo) {
+                        if(null == channelInfo.getParentId()){
+                            logHour.setParentId(logHour.getChannelId());
+                        }else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
+                    }
                 }
             }
             try {
@@ -276,6 +298,16 @@ public class HourBettingLogJob {
                 DataDict dataDict = dataDictService.getDictByValue("game_type", logHour.getGameType());
                 if (null != dataDict) {
                     logHour.setGameName(dataDict.getLabel());
+                }
+                if (null != logHour.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
+                    if (null != channelInfo) {
+                        if(null == channelInfo.getParentId()){
+                            logHour.setParentId(logHour.getChannelId());
+                        }else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
+                    }
                 }
             }
             try {

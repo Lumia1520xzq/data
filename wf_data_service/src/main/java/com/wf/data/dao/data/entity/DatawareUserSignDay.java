@@ -13,7 +13,16 @@ public class DatawareUserSignDay extends DataEntity {
     private Long channelId;
     private String signHour;
     private String signDate;
+    private Long parentId;
 
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
     public Long getUserId() {
         return userId;
