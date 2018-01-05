@@ -1,66 +1,70 @@
 Ext.define('WF.view.data.board.wholeDataViewMain', {
     extend: 'Ext.panel.Panel',
-    title: '数据概览-整体数据概览',
+    title:'服务状态',
     xtype: 'wholeDataViewMain',
     closable: true,
     autoScroll:true,
+    insetPadding : 50,
     layout: {
         type: 'vbox',
         align: 'stretch'
     },
+    legend : {
+        position : 'right'
+    },
+    initComponent: function () {
+        var me = this;
+        var store = Ext.create('DCIS.Store', {
+            autoLoad: true,
+            url:'data/board/view/getList.do',
+        });
+        var user = store.findRecord('businessDate', '2018-01-04');
+        console.log(user);
 
-initComponent: function () {
-    var me = this;
-    var store = Ext.create('DCIS.Store', {
-        autoLoad: true,
-        url:'data/board/view/getList.do',
-        fields:["businessDate"]
-    });
+        var option = [
+            {
+                title: {text: 'dau'},
+                tooltip: {},
+                legend: {data: ['日活']},
+                xAxis: {data:[1,2,3,4,5,6]},
+                yAxis: {},
+                series: [{
+                    name: '日活',
+                    type: 'line',
+                    data: [5, 20, 36, 10, 10, 100]
+                }]
+            },
+            {
+                title: {text: 'dau'},
+                tooltip: {},
+                legend: {data: ['日活']},
+                xAxis: {data: [1,1,1,1,1,1]},
+                yAxis: {},
+                series: [{
+                    name: '日活',
+                    type: 'line',
+                    data: [5, 20, 36, 10, 10, 200]
+                }]
+            },
+            {
+                title: {text: 'dau'},
+                tooltip: {},
+                legend: {data: ['日活']},
+                xAxis: {data: [1,1,1,1,1,1]},
+                yAxis: {},
+                series: [{
+                    name: '日活',
+                    type: 'line',
+                    data: [5, 20, 36, 10, 10, 200]
+                }]
+            },
+        ];
 
-    var option = [
-        {
-        title: {text: 'dau'},
-        tooltip: {},
-        legend: {data: ['日活']},
-        xAxis: {data:[1,2,3,4,5,6]},
-        yAxis: {},
-        series: [{
-            name: '日活',
-            type: 'line',
-            data: [5, 20, 36, 10, 10, 100]
-        }]
-      },
-        {
-        title: {text: 'dau'},
-        tooltip: {},
-        legend: {data: ['日活']},
-        xAxis: {data: [1,1,1,1,1,1]},
-        yAxis: {},
-        series: [{
-            name: '日活',
-            type: 'line',
-            data: [5, 20, 36, 10, 10, 200]
-        }]
-        },
-        {
-            title: {text: 'dau'},
-            tooltip: {},
-            legend: {data: ['日活']},
-            xAxis: {data: [1,1,1,1,1,1]},
-            yAxis: {},
-            series: [{
-                name: '日活',
-                type: 'line',
-                data: [5, 20, 36, 10, 10, 200]
-            }]
-        },
-    ];
-
-    me.on("boxready", function () {
-            for (var i = 0; i <= 2; i++) {
-                me.echarts = echarts.init(Ext.get("kpi"+i).dom);
-                me.echarts.setOption(option[i]);
-            }
+        me.on("boxready", function () {
+            // for (var i = 0; i <= 2; i++) {
+            //     me.echarts = echarts.init(Ext.get("kpi"+i).dom);
+            //     me.echarts.setOption(option[i]);
+            // }
         });
         me.callParent(arguments);
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -121,15 +125,59 @@ initComponent: function () {
                     {title:'每日投注流水',html:'11111',width:"33.33%",bodyStyle:'border-width:0 0 0 0;'},
                     {title:'返奖率',html:'2222',width:"33.33%",bodyStyle:'border-width:0 0 0 0;'},
                     // {title:'投注人数',html:'3333',width:"33.33%",bodyStyle:'border-width:0 0 0 0;'}
-                    ]
+                ]
             },  {
                 title: '付费数据', html: 'flex:2',height:300, align : 'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                 items:[
                     {title:'DAU',html:'11111',width:"33.33%",bodyStyle:'border-width:0 0 0 0;'},
                     {title:'充值金额',html:'2222',width:"33.33%",bodyStyle:'border-width:0 0 0 0;'},
                     {title:'投注人数',html:'3333',width:"33.33%",bodyStyle:'border-width:0 0 0 0;'}
-                    ]
+                ]
             }]
         });
+    },
+
+    listeners:{
+                boxready:function() {
+                // Ext.Ajax.request({
+                //     url : 'data/board/view/getList.do',
+                //     method : 'post',
+                //     success: function(response,options){
+                //         var result = Ext.JSON.decode(response.responseText);
+                //         console.log("result的结果是:"+ result);
+                //
+                //     }
+
+                var option = [
+                    {
+                        title: {text: 'dau'},
+                        tooltip: {},
+                        legend: {data: ['日活']},
+                        xAxis: {data: [1, 2, 3, 4, 5, 6]},
+                        yAxis: {},
+                        series: [{
+                            name: '日活',
+                            type: 'line',
+                            data: [5, 20, 36, 10, 10, 200]
+                        }]
+                    },
+                    {
+                        title: {text: 'dau'},
+                        tooltip: {},
+                        legend: {data: ['日活']},
+                        xAxis: {data: [7, 8, 9, 10, 11, 12]},
+                        yAxis: {},
+                        series: [{
+                            name: '日活',
+                            type: 'line',
+                            data: [5, 20, 36, 10, 10, 200]
+                        }]
+                    },
+                ];
+                for (var i = 0; i <= 1; i++) {
+                    var e = echarts.init(Ext.get("kpi" + i).dom);
+                    e.setOption(option[i]);
+                }
+        }
     }
 });
