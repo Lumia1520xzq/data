@@ -20,31 +20,16 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
         me.callParent(arguments);
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
-            url: 'data/admin/tcard/getAnalysisList.do',
-            fields: ['searchDate',
-                'lowBettingUser','midBettingUser', 'highBettingUser',
-                'lowTableFee', 'midTableFee', 'highTableFee',
-                'lowTables','midTables', 'highTables',
-                'lowAvgRounds','midAvgRounds','highAvgRounds']
+            url: 'data/board/view/getList.do',
+            fields: ['businessDate']
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
-            url: 'data/admin/common/data/getParentChannels.do',
+            url: 'data/admin/common/data/getViewChannels.do',
             autoLoad: true,
             fields: ['id', 'name']
         });
 
-        var allChannelStore = Ext.create('DCIS.Store', {
-            autoLoad: true,
-            url: 'data/admin/common/data/getAllChannels.do',
-            fields: ['id', 'name']
-        });
-
-        var childChannelStore = Ext.create('DCIS.Store', {
-            autoLoad: true,
-            url: 'data/admin/common/data/getChildChannels.do',
-            fields: ['id', 'name']
-        });
 
         me.add({
             border: false,
@@ -53,7 +38,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 2,
+            columns: 3,
             buildField: "Manual",
             forceFit: true,
             items: [{
@@ -66,26 +51,6 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 editable: true,
                 queryMode: "local",
                 store: parentChannelStore,
-                listeners :{
-                    change:function(obj,val){
-                        childChannelStore.load({
-                            params: {
-                                parentId : val
-                            }
-                        });
-                        me.down('#channelId').setValue('')
-                    }
-                }
-            },{
-                name: 'channelId',
-                fieldLabel: '子渠道',
-                xtype: 'combo',
-                emptyText: "--请选择--",
-                displayField: 'name',
-                valueField: "id",
-                editable: true,
-                queryMode: "local",
-                store: childChannelStore
             },{
                 name: 'startTime',
                 fieldLabel: '开始时间',
@@ -97,7 +62,6 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 fieldLabel: '结束时间',
                 xtype: 'datefield',
                 format: 'Y-m-d'
-
             }]
         });
 
@@ -136,7 +100,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                title: {text: 'dau'},
                tooltip: {},
                legend: {data: ['日活']},
-               xAxis: {data: [1, 2, 3, 4, 5, 6]},
+               xAxis: {data: 'businessDate'},
                yAxis: {},
                series: [{
                    name: '日活',
