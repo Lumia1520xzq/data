@@ -65,9 +65,7 @@ public class WholeDataViewController extends ExtJsController {
             params.put("beginDate",startTime);
             params.put("endDate",endTime);
         List<DatawareFinalChannelInfoAll>  list =  datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
-        Map<String,Object> map = new HashMap<>(4);
-        map.put("list",list);
-        return map;
+        return list;
     }
 
 
