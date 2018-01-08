@@ -48,12 +48,14 @@ initComponent: function () {
                 editable: true,
                 queryMode: "local",
                 store: parentChannelStore
-            },{
-                xtype:'searchfield',
-                store:parentChannelStore,
-                displayField : 'name',
-                valueField : 'id'
-            },{
+            },
+                // {
+                // xtype:'searchfield',
+                // store:parentChannelStore,
+                // displayField : 'name',
+                // valueField : 'id'
+                // },
+                {
                 name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
@@ -110,460 +112,471 @@ initComponent: function () {
             ]
         });
 
-        store.load ({
+
+    store.addListener('datachanged',function(){
+        fun1();
+    }
+    );
+
+    store.load ({
             callback:function(){
-                var businessDate=[];
-                var dau=[];
-                var rechargeAmount=[];
-                var rechargeCount=[];
-                var newUsers=[];
-                var userCount=[];
-                var bettingRate=[];
-                var dauPayRate=[];
-                var bettingPayRate=[];
-                var userBettingRate=[];
-                var bettingAmount=[];
-                var resultRate=[];
-                var payArpu=[];
-                var payArppu=[];
-                for(var i=0;i<store.getCount();i++){
-                    var re=store.getAt(i);
-                    businessDate[i]=re.data.businessDate;
-                    dau[i]=re.data.dau;
-                    rechargeAmount[i]=re.data.rechargeAmount;
-                    rechargeCount[i]=re.data.rechargeCount;
-                    newUsers[i]=re.data.newUsers;
-                    userCount[i]=re.data.userCount;
-                    bettingRate[i]=re.data.bettingRate;
-                    dauPayRate[i]=re.data.dauPayRate;
-                    bettingPayRate[i]=re.data.bettingPayRate;
-                    userBettingRate[i]=re.data.userBettingRate;
-                    bettingAmount[i]=re.data.bettingAmount;
-                    resultRate[i]=re.data.resultRate;
-                    payArpu[i]=re.data.payArpu;
-                    payArppu[i]=re.data.payArppu;
-                }
-                var option = [
-                    {
-                        title: {text: 'DAU'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['DAU']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate},
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
+               fun1();
+            }
+    });
+
+        function fun1(){
+            var businessDate=[];
+            var dau=[];
+            var rechargeAmount=[];
+            var rechargeCount=[];
+            var newUsers=[];
+            var userCount=[];
+            var bettingRate=[];
+            var dauPayRate=[];
+            var bettingPayRate=[];
+            var userBettingRate=[];
+            var bettingAmount=[];
+            var resultRate=[];
+            var payArpu=[];
+            var payArppu=[];
+            for(var i=0;i<store.getCount();i++){
+                var re=store.getAt(i);
+                businessDate[i]=re.get('businessDate');
+                dau[i]=re.get('dau');
+                rechargeAmount[i]=re.get('rechargeAmount');
+                rechargeCount[i]=re.get('rechargeCount');
+                newUsers[i]=re.get('newUsers');
+                userCount[i]=re.get('userCount');
+                bettingRate[i]=re.get('bettingRate');
+                dauPayRate[i]=re.get('dauPayRate');
+                bettingPayRate[i]=re.get('bettingPayRate');
+                userBettingRate[i]=re.get('userBettingRate');
+                bettingAmount[i]=re.get('bettingAmount');
+                resultRate[i]=re.get('resultRate');
+                payArpu[i]=re.get('payArpu');
+                payArppu[i]=re.get('payArppu');
+            }
+            var option = [
+                {
+                    title: {text: 'DAU'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['DAU']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate},
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
                             formatter: '{value}'
                         }},
-                        series: [{
-                            name: 'DAU',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: dau
-                        }]
+                    series: [{
+                        name: 'DAU',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: dau
+                    }]
+                },
+                {
+                    title: {text: '充值金额'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['充值金额']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: '充值金额'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['充值金额']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate},
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '充值金额',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: rechargeAmount
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate},
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '充值金额',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: rechargeAmount
+                    }]
+                },
+                {
+                    title: {text: '充值人数'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['充值人数']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: '充值人数'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['充值人数']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate},
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '充值人数',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: rechargeCount
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate},
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '充值人数',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: rechargeCount
+                    }]
+                },
+                {
+                    title: {text: '新增用户'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['新增用户']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: '新增用户'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['新增用户']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '新增用户',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: newUsers
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
                     },
-                    {
-                        title: {text: '投注人数'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['投注人数']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '投注人数',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: userCount
-                        }]
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '新增用户',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: newUsers
+                    }]
+                },
+                {
+                    title: {text: '投注人数'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['投注人数']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: '投注转化率'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['投注转化率']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '投注转化率',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: bettingRate
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
                     },
-                    {
-                        title: {text: 'DAU付费转化率'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['DAU付费转化率']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: 'DAU付费转化率',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: dauPayRate
-                        }]
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '投注人数',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: userCount
+                    }]
+                },
+                {
+                    title: {text: '投注转化率'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['投注转化率']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: '投注付费转化率'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['投注付费转化率']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '投注付费转化率',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: bettingPayRate
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
                     },
-                    {
-                        title: {text: '新用户投注转化率'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['新用户投注转化率']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '新用户投注转化率',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: userBettingRate
-                        }]
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '投注转化率',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: bettingRate
+                    }]
+                },
+                {
+                    title: {text: 'DAU付费转化率'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['DAU付费转化率']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: '投注流水'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['投注流水']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '投注流水',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: bettingAmount
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
                     },
-                    {
-                        title: {text: '返奖率'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['返奖率']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: '返奖率',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: resultRate
-                        }]
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: 'DAU付费转化率',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: dauPayRate
+                    }]
+                },
+                {
+                    title: {text: '投注付费转化率'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['投注付费转化率']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
                     },
-                    {
-                        title: {text: 'ARPU'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['ARPU']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: 'ARPU',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: payArpu
-                        }]
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
                     },
-                    {
-                        title: {text: 'ARPPU'},
-                        tooltip: {trigger: 'axis'},
-                        // legend: {data: ['ARPPU']},
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                // dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']},
-                                saveAsImage : {show: true}
-                            }
-                        },
-                        calculable : true,
-                        xAxis: {
-                            type : 'category',
-                            boundaryGap : false,
-                            data: businessDate
-                        },
-                        yAxis: {
-                            type : 'value',
-                            axisLabel : {
-                                formatter: '{value}'
-                            }},
-                        series: [{
-                            name: 'ARPPU',
-                            type: 'line',
-                            smooth:true,
-                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            itemStyle: {normal: {}},
-                            data: payArppu
-                        }]
-                    }
-                ];
-                for (var j=0;j<option.length;j++) {
-                    me.echarts = echarts.init(Ext.get("kpi"+j).dom);
-                    me.echarts.setOption(option[j]);
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '投注付费转化率',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: bettingPayRate
+                    }]
+                },
+                {
+                    title: {text: '新用户投注转化率'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['新用户投注转化率']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '新用户投注转化率',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: userBettingRate
+                    }]
+                },
+                {
+                    title: {text: '投注流水'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['投注流水']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '投注流水',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: bettingAmount
+                    }]
+                },
+                {
+                    title: {text: '返奖率'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['返奖率']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '返奖率',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: resultRate
+                    }]
+                },
+                {
+                    title: {text: 'ARPU'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['ARPU']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: 'ARPU',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: payArpu
+                    }]
+                },
+                {
+                    title: {text: 'ARPPU'},
+                    tooltip: {trigger: 'axis'},
+                    // legend: {data: ['ARPPU']},
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: 'ARPPU',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        itemStyle: {normal: {}},
+                        data: payArppu
+                    }]
                 }
+            ];
+            for (var j=0;j<option.length;j++) {
+                me.echarts = echarts.init(Ext.get("kpi"+j).dom);
+                me.echarts.setOption(option[j]);
             }
-        });
+        }
     }
 });
+

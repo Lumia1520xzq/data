@@ -6,6 +6,8 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,8 @@ public class WholeDataViewController extends ExtJsController {
 
     @Autowired
     private DatawareFinalChannelInfoAllService datawareFinalChannelInfoAllService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
 
     /**
      * 整体数据概览
@@ -59,7 +63,16 @@ public class WholeDataViewController extends ExtJsController {
         if(null == parentId){
             parentId = 1L;
         }
+        ChannelInfo channelInfo = channelInfoService.get(parentId);
+        if (null != channelInfo) {
+            if (null != channelInfo.getParentId()) {
+                params.put("channelId", parentId);
+            } else {
+                params.put("parentId", parentId);
+            }
+        }else {
             params.put("parentId", parentId);
+        }
             params.put("beginDate",startTime);
             params.put("endDate",endTime);
         return  datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
