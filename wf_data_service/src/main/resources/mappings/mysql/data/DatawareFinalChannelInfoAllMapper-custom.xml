@@ -14,10 +14,10 @@
         <if test="businessDate != null and businessDate != ''">
             AND t.business_date = #{businessDate}
         </if>
-        <if test="channelId != null and channelId != ''">
+        <if test="channelId != null">
             AND t.channel_id = #{channelId}
         </if>
-        <if test="parentId != null and parentId != ''">
+        <if test="parentId != null">
             AND t.parent_id = #{parentId}
         </if>
         <if test="parentChannelList != null and  parentChannelList.size() != 0">

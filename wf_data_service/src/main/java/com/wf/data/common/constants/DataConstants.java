@@ -107,8 +107,11 @@ public interface DataConstants {
     String DATA_DESTINATION_COLLECTING_FLAG = "data_destination_collecting_flag";
     String DATA_DESTINATION_COLLECTING_DATE = "data_destination_collecting_date";
 
-
-    String DATA_BETTING_GAMETYPE_CONFINE = "data_betting_gametype_confine";
+    /**
+     * 用户留存清洗
+     */
+    String DATA_DESTINATION_RETENTION_FLAG = "data_destination_retention_flag";
+    String DATA_DESTINATION_RETENTION_DATE = "data_destination_retention_date";
 
 
 
