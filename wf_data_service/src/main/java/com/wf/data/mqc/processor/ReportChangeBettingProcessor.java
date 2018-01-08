@@ -23,6 +23,12 @@ public class ReportChangeBettingProcessor {
         if (userId == null) {
             return;
         }
+        if (null == event.getBettingAmount()) {
+            event.setBettingAmount(0L);
+        }
+        if (null == event.getResturnAmount()) {
+            event.setResturnAmount(0L);
+        }
         if (event.getBettingAmount() == 0 && event.getResturnAmount() == 0) {
             return;
         }
@@ -33,7 +39,9 @@ public class ReportChangeBettingProcessor {
         if (event.getGameType() != null) {
             changeNote.setGameType(event.getGameType().longValue());
         }
-        changeNote.setChannelId(event.getChannelId());
+        if (event.getChannelId() != null) {
+            changeNote.setChannelId(event.getChannelId());
+        }
 
         if (event.getBettingAmount() != null) {
             changeNote.setBettingAmount(event.getBettingAmount().doubleValue());
@@ -41,15 +49,14 @@ public class ReportChangeBettingProcessor {
         if (event.getResturnAmount() != null) {
             changeNote.setResultAmount(event.getResturnAmount().doubleValue());
         }
-        if(null != event.getCreateTime()){
+        if (null != event.getCreateTime()) {
             changeNote.setCreateTime(event.getCreateTime());
         }
         try {
             reportChangeNoteService.save(changeNote);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("保存单笔投注流水失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
-
 
 
     }
