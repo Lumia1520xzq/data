@@ -12,6 +12,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
 initComponent: function () {
     var me = this;
     me.callParent(arguments);
+
     var store= Ext.create('DCIS.Store', {
         url:'data/board/view/getList.do',
         autoload:false,

@@ -6,7 +6,6 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,15 +55,14 @@ public class WholeDataViewController extends ExtJsController {
         } catch (Exception e) {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(3);
         if(null == parentId){
             parentId = 1L;
         }
             params.put("parentId", parentId);
             params.put("beginDate",startTime);
             params.put("endDate",endTime);
-        List<DatawareFinalChannelInfoAll>  list =  datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
-        return list;
+        return  datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
     }
 
 
