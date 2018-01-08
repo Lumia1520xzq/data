@@ -108,6 +108,8 @@ public interface DataConstants {
     String DATA_DESTINATION_COLLECTING_DATE = "data_destination_collecting_date";
 
 
+    String DATA_BETTING_GAMETYPE_CONFINE = "data_betting_gametype_confine";
+
 
 
     /**

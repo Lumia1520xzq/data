@@ -30,6 +30,7 @@ Ext.define("DCIS.Store", {
                     type: "dcisproxy",
                     url: config.url,
                     extraParams:config.baseParams,
+                    timeout:90000,
                     reader: {
                         type: "json",
                         idProperty: "ID",

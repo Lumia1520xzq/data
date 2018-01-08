@@ -12,6 +12,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		SUM(t.third_amount) rechargeAmount
 		FROM `dataware_convert_day` t
 		WHERE 1=1
+		AND t.channel_id IS NOT NULL
 		<if test="businessDate != null and businessDate != ''">
 			AND t.convert_date = #{businessDate}
 		</if>
