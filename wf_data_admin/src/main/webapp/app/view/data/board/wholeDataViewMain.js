@@ -143,7 +143,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var payArppu=[];
             for(var i=0;i<store.getCount();i++){
                 var re=store.getAt(i);
-                businessDate[i]=re.get('businessDate');
+                var d = re.get('businessDate');
+                var x = d.indexOf('-');
+                var subString = d.substring(x+1);
+                businessDate[i]= subString;
                 dau[i]=re.get('dau');
                 rechargeAmount[i]=re.get('rechargeAmount');
                 rechargeCount[i]=re.get('rechargeCount');
