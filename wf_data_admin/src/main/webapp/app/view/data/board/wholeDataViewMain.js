@@ -456,6 +456,9 @@ initComponent: function () {
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'17%',//组件距离容器左边的距离
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
