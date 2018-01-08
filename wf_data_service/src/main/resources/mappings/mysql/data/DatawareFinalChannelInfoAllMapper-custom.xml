@@ -48,6 +48,7 @@
         <if test="endDate != null and endDate != ''">
             AND t.business_date &lt;= #{endDate}
         </if>
+        order by t.business_date asc
     </select>
 
 </mapper>
