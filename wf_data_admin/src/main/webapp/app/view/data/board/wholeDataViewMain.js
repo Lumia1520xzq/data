@@ -9,25 +9,24 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
         align: 'stretch'
     },
 
-initComponent: function () {
-    var me = this;
-    me.callParent(arguments);
-
-    var store= Ext.create('DCIS.Store', {
-        url:'data/board/view/getList.do',
-        autoload:false,
-        fields: ['businessDate','dau','rechargeAmount','rechargeCount',
-                  'newUsers','userCount','bettingRate',
-                  'dauPayRate','bettingPayRate','userBettingRate',
-                  'bettingAmount','resultRate',
-                  'payArpu','payArppu'
-        ]
-    });
-    var parentChannelStore = Ext.create('DCIS.Store', {
-        url: 'data/admin/common/data/getViewChannels.do',
-        autoLoad: true,
-        fields: ['id', 'name']
-    });
+    initComponent: function () {
+        var me = this;
+        me.callParent(arguments);
+        var store= Ext.create('DCIS.Store', {
+            url:'data/board/view/getList.do',
+            autoload:false,
+            fields: ['businessDate','dau','rechargeAmount','rechargeCount',
+                'newUsers','userCount','bettingRate',
+                'dauPayRate','bettingPayRate','userBettingRate',
+                'bettingAmount','resultRate',
+                'payArpu','payArppu'
+            ]
+        });
+        var parentChannelStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getViewChannels.do',
+            autoLoad: true,
+            fields: ['id', 'name']
+        });
         me.add({
             border: false,
             store: store,
@@ -56,17 +55,20 @@ initComponent: function () {
                 // valueField : 'id'
                 // },
                 {
-                name: 'startTime',
-                fieldLabel: '开始时间',
-                xtype: 'datefield',
-                format: 'Y-m-d'
-
-            },{
-                name: 'endTime',
-                fieldLabel: '结束时间',
-                xtype: 'datefield',
-                format: 'Y-m-d'
-            }]
+                    name: 'startTime',
+                    id:"viewStart",
+                    fieldLabel: '开始时间',
+                    xtype: 'datefield',
+                    format: 'Y-m-d',
+                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-7),"Y-m-d")
+                },{
+                    name: 'endTime',
+                    id:"viewEnd",
+                    fieldLabel: '结束时间',
+                    xtype: 'datefield',
+                    format: 'Y-m-d',
+                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
+                }]
         });
 
         me.add({
@@ -96,33 +98,33 @@ initComponent: function () {
                         {title:'',width:"33.33%",height:300,id:"kpi8"}]
                 },
                 {
-                title: '投注数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
-                items:[
-                    {title:'',width:"33.33%",height:300,id:"kpi9"},
-                    {title:'',width:"33.33%",height:300,id:"kpi10"}
+                    title: '投注数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {title:'',width:"33.33%",height:300,id:"kpi9"},
+                        {title:'',width:"33.33%",height:300,id:"kpi10"}
                     ]
                 },
                 {
-                title: '付费数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
-                items:[
-                    {title:'',width:"33.33%",height:300,id:"kpi11"},
-                    {title:'',width:"33.33%",height:300,id:"kpi12"}
+                    title: '付费数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {title:'',width:"33.33%",height:300,id:"kpi11"},
+                        {title:'',width:"33.33%",height:300,id:"kpi12"}
                     ]
                 }
             ]
         });
 
 
-    store.addListener('datachanged',function(){
-        fun1();
-    }
-    );
-
-    store.load ({
-            callback:function(){
-               fun1();
+        store.addListener('datachanged',function(){
+                fun1();
             }
-    });
+        );
+
+        store.load ({
+            callback:function(){
+                fun1();
+            }
+        });
 
         function fun1(){
             var businessDate=[];
@@ -163,6 +165,7 @@ initComponent: function () {
                     // legend: {data: ['DAU']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -174,7 +177,11 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate},
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
+                    },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
@@ -194,6 +201,7 @@ initComponent: function () {
                     // legend: {data: ['充值金额']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -205,7 +213,11 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate},
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
+                    },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
@@ -225,6 +237,7 @@ initComponent: function () {
                     // legend: {data: ['充值人数']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -236,7 +249,11 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate},
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
+                    },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
@@ -256,6 +273,7 @@ initComponent: function () {
                     // legend: {data: ['新增用户']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -267,7 +285,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -288,6 +309,7 @@ initComponent: function () {
                     // legend: {data: ['投注人数']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -299,7 +321,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -320,6 +345,7 @@ initComponent: function () {
                     // legend: {data: ['投注转化率']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -331,7 +357,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -352,6 +381,7 @@ initComponent: function () {
                     // legend: {data: ['DAU付费转化率']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -363,7 +393,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -384,6 +417,7 @@ initComponent: function () {
                     // legend: {data: ['投注付费转化率']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -395,7 +429,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -416,6 +453,7 @@ initComponent: function () {
                     // legend: {data: ['新用户投注转化率']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -427,7 +465,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -448,6 +489,7 @@ initComponent: function () {
                     // legend: {data: ['投注流水']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -462,7 +504,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -483,6 +528,7 @@ initComponent: function () {
                     // legend: {data: ['返奖率']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -494,7 +540,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -515,6 +564,7 @@ initComponent: function () {
                     // legend: {data: ['ARPU']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -526,7 +576,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
@@ -547,6 +600,7 @@ initComponent: function () {
                     // legend: {data: ['ARPPU']},
                     toolbox: {
                         show : true,
+                        x:450,
                         feature : {
                             mark : {show: true},
                             // dataView : {show: true, readOnly: false},
@@ -558,7 +612,10 @@ initComponent: function () {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate,
+                        axisLabel:{
+                            interval:0
+                        }
                     },
                     yAxis: {
                         type : 'value',
