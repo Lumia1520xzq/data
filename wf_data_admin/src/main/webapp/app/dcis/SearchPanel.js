@@ -119,7 +119,7 @@ Ext.define("DCIS.SearchPanel", {
         });
         buttonPanel.items.push({
             xtype: "panel",
-            width: 50,
+            width: 20,
             border: false,
             height: "auto"
         });

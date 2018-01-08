@@ -215,17 +215,17 @@ public class TcardController extends ExtJsController {
             int lowBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double lowTableFee = tcardUserBettingLogService.getTableAmount(params);
             int lowTables = tcardUserBettingLogService.getTablesByBettingType(params);
-            double lowAvgRounds = toDouble(lowTables, lowBettingUser);
+            double lowAvgRounds = toDouble(lowTableFee, lowBettingUser,20);
             params.put("amount", 300);
             int midBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double midTableFee = tcardUserBettingLogService.getTableAmount(params);
             int midTables = tcardUserBettingLogService.getTablesByBettingType(params);
-            double midAvgRounds = toDouble(midTables, midBettingUser);
+            double midAvgRounds = toDouble(midTableFee, midBettingUser,300);
             params.put("amount", 3000);
             int highBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double highTableFee = tcardUserBettingLogService.getTableAmount(params);
             int highTables = tcardUserBettingLogService.getTablesByBettingType(params);
-            double highAvgRounds = toDouble(highTables, highBettingUser);
+            double highAvgRounds = toDouble(highTableFee, highBettingUser,3000);
             dto.setLowBettingUser(lowBettingUser);
             dto.setMidBettingUser(midBettingUser);
             dto.setHighBettingUser(highBettingUser);
@@ -244,14 +244,13 @@ public class TcardController extends ExtJsController {
         return list;
     }
 
-    private double toDouble(int one, int two) {
-        if (0 == two) {
+    private static double toDouble(double one, int two,int three) {
+        if (0 == two || 0 == three) {
             return 0;
         }
         BigDecimal b1 = new BigDecimal(one);
-        BigDecimal b2 = new BigDecimal(two);
+        BigDecimal b2 = new BigDecimal(two*three);
         return b1.divide(b2, 1, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
-
 
 }

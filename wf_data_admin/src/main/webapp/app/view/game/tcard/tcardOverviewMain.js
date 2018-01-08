@@ -42,7 +42,7 @@ Ext.define('WF.view.game.tcard.tcardOverviewMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 4,
+            columns: 2,
             buildField: "Manual",
             forceFit: true,
             items: [{
@@ -92,6 +92,14 @@ Ext.define('WF.view.game.tcard.tcardOverviewMain', {
             store: store,
             buildField: "Manual",
             forceFit: true,
+            tbar: [{
+                text: '指标说明',
+                iconCls: "icon-add",
+                handler: function () {
+                    var doRefresh = me.down('datagrid').store;
+                    Ext.create('WF.view.game.tcard.showTips', {doRefresh: doRefresh}).show();
+                }
+            }],
             columns: [ {
                 text: '日期',
                 width: 100,
