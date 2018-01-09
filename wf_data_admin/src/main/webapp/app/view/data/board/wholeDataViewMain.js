@@ -34,7 +34,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 3,
+            columns: 2,
             buildField: "Manual",
             forceFit: true,
             items: [{
@@ -102,6 +102,13 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     items:[
                         {title:'',width:"33.33%",height:300,id:"kpi9"},
                         {title:'',width:"33.33%",height:300,id:"kpi10"}
+                    ]
+                },
+                {
+                    title: '留存数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {title:'',width:"33.33%",height:300,id:"kpi13"},
+                        {title:'',width:"33.33%",height:300,id:"kpi14"}
                     ]
                 },
                 {
@@ -175,6 +182,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             magicType : {show: true, type: ['line', 'bar']},
                             saveAsImage : {show: true}
                         }
+                    },
+                    grid:{
+                        left:'10%',//组件距离容器左边的距离
                     },
                     calculable : true,
                     xAxis: {
