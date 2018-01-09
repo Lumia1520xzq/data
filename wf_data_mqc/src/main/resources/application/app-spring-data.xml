@@ -63,5 +63,6 @@
     <import resource="app-db-mycat-uic.xml" />
     <import resource="app-db-mysql-tcard.xml" />
     <import resource="app-db-mysql-platform.xml" />
+    <import resource="app-db-mysql-mall.xml" />
 
 </beans>

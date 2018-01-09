@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mall.InventoryPhyAwardsSendlogDao">
+	
+	<sql id="inventoryPhyAwardsSendlogColumns">
+		t.id,
+		t.awards_entity,
+		t.phy_awards_id,
+		t.user_id,
+		t.receiver_name,
+		t.receiver_mobile,
+		t.receiver_address,
+		t.receive_status,
+		t.receive_remark,
+		t.business_id,
+		t.activity_id,
+		t.callback_queue,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="inventoryPhyAwardsSendlogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.receiveStatus != null">
+			AND t.receive_status = #{p.receiveStatus}
+		</if>
+		<if test="p.phyAwardsId != null">
+			AND t.phy_awards_id = #{p.phyAwardsId}
+		</if>
+		<if test="p.userId != null">
+			AND t.user_id = #{p.userId}
+		</if>
+		
+		<!-- <if test="p.activityId != null">
+			AND t.activity_id = #{p.activityId}
+		</if> -->
+		
+  		<if test="p.activityIds != null and p.activityIds.size() !=0">
+		AND t.activity_id in
+		<foreach collection="p.activityIds" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>  
+		
+		<if test="p.beginDate != null and p.beginDate !=''">
+			AND t.create_time >= CONCAT(#{p.beginDate} , ':00')
+		</if>
+		<if test="p.endDate != null and p.endDate !=''">
+			AND t.create_time &lt;= CONCAT(#{p.endDate} , ':59')
+		</if>
+	</sql>
+	
+	<sql id="inventoryPhyAwardsSendlogJoins">
+	</sql>
+	
+	<select id="get" resultType="InventoryPhyAwardsSendlog">
+		SELECT <include refid="inventoryPhyAwardsSendlogColumns"/> FROM inventory_phy_awards_sendlog t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="InventoryPhyAwardsSendlog">
+		SELECT <include refid="inventoryPhyAwardsSendlogColumns"/> FROM inventory_phy_awards_sendlog t <include refid="inventoryPhyAwardsSendlogJoins"/>
+		WHERE <include refid="inventoryPhyAwardsSendlogWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM inventory_phy_awards_sendlog t WHERE <include refid="inventoryPhyAwardsSendlogWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO inventory_phy_awards_sendlog (
+			id, 
+			awards_entity, 
+			phy_awards_id, 
+			user_id, 
+			receiver_name, 
+			receiver_mobile, 
+			receiver_address, 
+			receive_status, 
+			receive_remark, 
+			business_id, 
+			activity_id, 
+			callback_queue, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{awardsEntity}, 
+			#{phyAwardsId}, 
+			#{userId}, 
+			#{receiverName}, 
+			#{receiverMobile}, 
+			#{receiverAddress}, 
+			#{receiveStatus}, 
+			#{receiveRemark}, 
+			#{businessId}, 
+			#{activityId}, 
+			#{callbackQueue}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE inventory_phy_awards_sendlog SET
+			awards_entity = #{awardsEntity}, 
+			phy_awards_id = #{phyAwardsId}, 
+			user_id = #{userId}, 
+			receiver_name = #{receiverName}, 
+			receiver_mobile = #{receiverMobile}, 
+			receiver_address = #{receiverAddress}, 
+			receive_status = #{receiveStatus}, 
+			receive_remark = #{receiveRemark}, 
+			business_id = #{businessId}, 
+			activity_id = #{activityId}, 
+			callback_queue = #{callbackQueue}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE inventory_phy_awards_sendlog SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>

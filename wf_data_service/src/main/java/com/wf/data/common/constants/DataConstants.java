@@ -113,7 +113,8 @@ public interface DataConstants {
     String DATA_DESTINATION_RETENTION_FLAG = "data_destination_retention_flag";
     String DATA_DESTINATION_RETENTION_DATE = "data_destination_retention_date";
 
-
+    String DATA_DESTINATION_COST_FLAG = "data_destination_cost_flag";
+    String DATA_DESTINATION_COST_DATE = "data_destination_cost_date";
 
     /**
      * 每日推送

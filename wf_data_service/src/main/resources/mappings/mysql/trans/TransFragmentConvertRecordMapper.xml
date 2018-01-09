@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.trans.TransFragmentConvertRecordDao">
+	
+	<sql id="transFragmentConvertRecordColumns">
+		t.id,
+		t.user_id,
+		t.fragment_id,
+		t.phy_awards_id,
+		t.num,
+		t.receiver_name,
+		t.receiver_address,
+		t.receiver_mobile,
+		t.receive_status,
+		t.receive_remark,
+		t.channel_id,
+		t.status,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="transFragmentConvertRecordWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="transFragmentConvertRecordJoins">
+	</sql>
+	
+	<select id="get" resultType="TransFragmentConvertRecord">
+		SELECT <include refid="transFragmentConvertRecordColumns"/> FROM trans_fragment_convert_record t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="TransFragmentConvertRecord">
+		SELECT <include refid="transFragmentConvertRecordColumns"/> FROM trans_fragment_convert_record t <include refid="transFragmentConvertRecordJoins"/>
+		WHERE <include refid="transFragmentConvertRecordWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM trans_fragment_convert_record t WHERE <include refid="transFragmentConvertRecordWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO trans_fragment_convert_record (
+			id, 
+			user_id, 
+			fragment_id, 
+			phy_awards_id, 
+			num, 
+			receiver_name, 
+			receiver_address, 
+			receiver_mobile, 
+			receive_status, 
+			receive_remark, 
+			channel_id, 
+			status, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{fragmentId}, 
+			#{phyAwardsId}, 
+			#{num}, 
+			#{receiverName}, 
+			#{receiverAddress}, 
+			#{receiverMobile}, 
+			#{receiveStatus}, 
+			#{receiveRemark}, 
+			#{channelId}, 
+			#{status}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE trans_fragment_convert_record SET
+			user_id = #{userId}, 
+			fragment_id = #{fragmentId}, 
+			phy_awards_id = #{phyAwardsId}, 
+			num = #{num}, 
+			receiver_name = #{receiverName}, 
+			receiver_address = #{receiverAddress}, 
+			receiver_mobile = #{receiverMobile}, 
+			receive_status = #{receiveStatus}, 
+			receive_remark = #{receiveRemark}, 
+			channel_id = #{channelId}, 
+			status = #{status}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE trans_fragment_convert_record SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
