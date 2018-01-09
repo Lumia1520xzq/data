@@ -5,6 +5,7 @@ import com.wf.data.dao.data.DatawareFinalChannelInfoAllDao;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,5 +16,9 @@ public class DatawareFinalChannelInfoAllService extends CrudService<DatawareFina
 
     public long getCountByTime(Map<String,Object> map){
         return dao.getCountByTime(map);
+    }
+
+    public List<DatawareFinalChannelInfoAll> getListByChannelAndDate(Map<String,Object> params){
+        return dao.getListByChannelAndDate(params);
     }
 }

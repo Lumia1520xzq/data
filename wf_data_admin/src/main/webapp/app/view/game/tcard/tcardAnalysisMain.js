@@ -45,7 +45,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 4,
+            columns: 2,
             buildField: "Manual",
             forceFit: true,
             items: [{
@@ -103,80 +103,109 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                 width: 100,
                 dataIndex: 'searchDate',
                 menuDisabled: true,
-                sortable: false
-            }, {
-                text: '投注人数(初级)',
-                dataIndex: 'lowBettingUser',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '投注人数(中级)',
-                dataIndex: 'midBettingUser',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '投注人数(高级)',
-                dataIndex: 'highBettingUser',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '桌费(初级)',
-                dataIndex: 'lowTableFee',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '桌费(中级)',
-                dataIndex: 'midTableFee',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '桌费(高级)',
-                dataIndex: 'highTableFee',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '桌数(初级)',
-                dataIndex: 'lowTables',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '桌数(中级)',
-                dataIndex: 'midTables',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '桌数(高级)',
-                dataIndex: 'highTables',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '人均局数(初级)',
-                dataIndex: 'lowAvgRounds',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '人均局数(中级)',
-                dataIndex: 'midAvgRounds',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }, {
-                text: '人均局数(高级)',
-                dataIndex: 'highAvgRounds',
-                width: 100,
-                menuDisabled: true,
-                sortable: false
-            }]
+                sortable: false,
+            },
+                {
+                   text:'投注人数',
+                    width:390,
+                    columns:[
+                        {
+                            text: '初级',
+                            dataIndex: 'lowBettingUser',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '中级',
+                            dataIndex: 'midBettingUser',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '高级',
+                            dataIndex: 'highBettingUser',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        },
+                    ]
+                },
+                {
+                    text:'桌费',
+                    width:390,
+                    columns:[
+                        {
+                            text: '初级',
+                            dataIndex: 'lowTableFee',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '中级',
+                            dataIndex: 'midTableFee',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '高级',
+                            dataIndex: 'highTableFee',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }
+                    ]
+                },
+                {
+                    text:'桌数',
+                    width:390,
+                    columns:[
+                        {
+                            text: '初级',
+                            dataIndex: 'lowTables',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '中级',
+                            dataIndex: 'midTables',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '高级',
+                            dataIndex: 'highTables',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }
+                    ]
+                },
+                {
+                    text: '人均局数',
+                    width:390,
+                    columns:[
+                        {
+                            text: '初级',
+                            dataIndex: 'lowAvgRounds',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '中级',
+                            dataIndex: 'midAvgRounds',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }, {
+                            text: '高级',
+                            dataIndex: 'highAvgRounds',
+                            width: 130,
+                            menuDisabled: true,
+                            sortable: false
+                        }
+                    ]
+                }
+                ]
         });
     }
 });
