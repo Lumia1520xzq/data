@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mall.InventoryPhyAwardsInfoDao">
+	
+	<sql id="inventoryPhyAwardsInfoColumns">
+		t.id,
+		t.name,
+		t.type,
+		t.description,
+		t.gold_amount,
+		t.rmb_amount,
+		t.awards_size,
+		t.total_num,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="inventoryPhyAwardsInfoWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.type != null">
+			AND t.type = #{p.type}
+		</if>
+		<if test="p.name != null and p.name !=''">
+			AND t.name = #{p.name}
+		</if>
+	</sql>
+	
+	<sql id="inventoryPhyAwardsInfoJoins">
+	</sql>
+	
+	<select id="get" resultType="InventoryPhyAwardsInfo">
+		SELECT <include refid="inventoryPhyAwardsInfoColumns"/> FROM inventory_phy_awards_info t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="InventoryPhyAwardsInfo">
+		SELECT <include refid="inventoryPhyAwardsInfoColumns"/> FROM inventory_phy_awards_info t <include refid="inventoryPhyAwardsInfoJoins"/>
+		WHERE <include refid="inventoryPhyAwardsInfoWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM inventory_phy_awards_info t WHERE <include refid="inventoryPhyAwardsInfoWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO inventory_phy_awards_info (
+			id, 
+			name, 
+			type, 
+			description, 
+			gold_amount, 
+			rmb_amount, 
+			awards_size, 
+			total_num, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{type}, 
+			#{description}, 
+			#{goldAmount}, 
+			#{rmbAmount}, 
+			#{awardsSize}, 
+			#{totalNum}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE inventory_phy_awards_info SET
+			name = #{name}, 
+			type = #{type}, 
+			description = #{description}, 
+			gold_amount = #{goldAmount}, 
+			rmb_amount = #{rmbAmount}, 
+			awards_size = #{awardsSize}, 
+			total_num = #{totalNum}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE inventory_phy_awards_info SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

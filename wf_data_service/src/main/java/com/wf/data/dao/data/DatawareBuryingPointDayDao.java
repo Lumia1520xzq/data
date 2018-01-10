@@ -5,6 +5,7 @@ import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.DatawareBuryingPointDay;
 
+import java.util.List;
 import java.util.Map;
 
 @MyBatisDao(tableName = "dataware_burying_point_day")
@@ -15,4 +16,6 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
     Integer getGameDau(Map<String,Object> map);
 
     Long getDauByChannel(Map<String,Object> map);
+
+    List<Long> getUserIdListByChannel(Map<String,Object> map);
 }

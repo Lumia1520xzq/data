@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.trans.TransFragmentConvertRecordDao">
+
+    <select id="getFragmentCostByDate" resultType="Double">
+        SELECT SUM(t1.num*t2.rmb_amount)
+        FROM `trans_fragment_convert_record` t1
+        LEFT JOIN trans_fragment t2
+        ON t1.fragment_id = t2.id
+        WHERE 1=1
+        AND t1.`status`=8
+        AND t1.receive_status=3
+        AND t1.delete_flag =0
+        AND t1.channel_id IS NOT NULL
+        AND t1.update_time BETWEEN #{beginDate} AND #{endDate}
+        <if test="channelId != null">
+            AND t1.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND t1.channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+    </select>
+</mapper>
+

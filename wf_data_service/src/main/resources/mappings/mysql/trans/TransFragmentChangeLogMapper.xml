@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.trans.TransFragmentChangeLogDao">
+	
+	<sql id="transFragmentChangeLogColumns">
+		t.id,
+		t.user_id,
+		t.fragment_id,
+		t.phy_awards_id,
+		t.change_type,
+		t.change_num,
+		t.business_type,
+		t.remark,
+		t.activity_id,
+		t.business_id,
+		t.channel_id,
+		t.source_type,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="transFragmentChangeLogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.userId != null">
+			AND t.user_id = #{p.userId}
+		</if>
+		<if test="p.changeType != null">
+			AND t.change_type = #{p.changeType}
+		</if>
+		<if test="p.businessType != null and p.businessType !=''">
+			AND t.business_type = #{p.businessType}
+		</if>
+		<if test="p.activityIds != null and p.activityIds.size() !=0">
+			AND t.activity_id in
+			<foreach collection="p.activityIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+		<if test="p.beginDate != null and p.beginDate !=''">
+			AND t.create_time >= CONCAT(#{p.beginDate} , ':00')
+		</if>
+		<if test="p.endDate != null and p.endDate !=''">
+			AND t.create_time &lt;= CONCAT(#{p.endDate} , ':59')
+		</if>
+	</sql>
+	
+	<sql id="transFragmentChangeLogJoins">
+	</sql>
+	
+	<select id="get" resultType="TransFragmentChangeLog">
+		SELECT <include refid="transFragmentChangeLogColumns"/> FROM trans_fragment_change_log t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="TransFragmentChangeLog">
+		SELECT <include refid="transFragmentChangeLogColumns"/> FROM trans_fragment_change_log t <include refid="transFragmentChangeLogJoins"/>
+		WHERE <include refid="transFragmentChangeLogWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM trans_fragment_change_log t WHERE <include refid="transFragmentChangeLogWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO trans_fragment_change_log (
+			id, 
+			user_id, 
+			fragment_id, 
+			phy_awards_id, 
+			change_type, 
+			change_num, 
+			business_type, 
+			remark, 
+			activity_id, 
+			business_id, 
+			channel_id, 
+			source_type, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{fragmentId}, 
+			#{phyAwardsId}, 
+			#{changeType}, 
+			#{changeNum}, 
+			#{businessType}, 
+			#{remark}, 
+			#{activityId}, 
+			#{businessId}, 
+			#{channelId}, 
+			#{sourceType}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE trans_fragment_change_log SET
+			user_id = #{userId}, 
+			fragment_id = #{fragmentId}, 
+			phy_awards_id = #{phyAwardsId}, 
+			change_type = #{changeType}, 
+			change_num = #{changeNum}, 
+			business_type = #{businessType}, 
+			remark = #{remark}, 
+			activity_id = #{activityId}, 
+			business_id = #{businessId}, 
+			channel_id = #{channelId}, 
+			source_type = #{sourceType}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE trans_fragment_change_log SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
