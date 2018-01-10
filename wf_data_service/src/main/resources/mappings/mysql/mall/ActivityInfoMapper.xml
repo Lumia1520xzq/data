@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mall.ActivityInfoDao">
+	
+	<sql id="activityInfoColumns">
+		t.id,
+		t.name,
+		t.description,
+		t.activity_type,
+		t.channel_id,
+		t.source_type,
+		t.enable,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="activityInfoWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="activityInfoJoins">
+	</sql>
+	
+	<select id="get" resultType="ActivityInfo">
+		SELECT <include refid="activityInfoColumns"/> FROM activity_info t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="ActivityInfo">
+		SELECT <include refid="activityInfoColumns"/> FROM activity_info t <include refid="activityInfoJoins"/>
+		WHERE <include refid="activityInfoWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM activity_info t WHERE <include refid="activityInfoWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO activity_info (
+			id, 
+			name, 
+			description, 
+			activity_type, 
+			channel_id, 
+			source_type, 
+			enable, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{description}, 
+			#{activityType}, 
+			#{channelId}, 
+			#{sourceType}, 
+			#{enable}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE activity_info SET
+			name = #{name}, 
+			description = #{description}, 
+			activity_type = #{activityType}, 
+			channel_id = #{channelId}, 
+			source_type = #{sourceType}, 
+			enable = #{enable}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE activity_info SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

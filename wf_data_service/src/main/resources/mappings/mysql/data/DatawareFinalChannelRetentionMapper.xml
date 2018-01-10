@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelRetentionDao">
+	
+	<sql id="datawareFinalChannelRetentionColumns">
+		t.id,
+		t.dau,
+		t.new_users,
+		t.users_rate,
+		t.day_retention,
+		t.users_day_retention,
+		t.channel_name,
+		t.parent_id,
+		t.channel_id,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareFinalChannelRetentionWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareFinalChannelRetentionJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareFinalChannelRetention">
+		SELECT <include refid="datawareFinalChannelRetentionColumns"/> FROM dataware_final_channel_retention t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalChannelRetention">
+		SELECT <include refid="datawareFinalChannelRetentionColumns"/> FROM dataware_final_channel_retention t <include refid="datawareFinalChannelRetentionJoins"/>
+		WHERE <include refid="datawareFinalChannelRetentionWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_channel_retention t WHERE <include refid="datawareFinalChannelRetentionWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_final_channel_retention (
+			id, 
+			dau, 
+			new_users, 
+			users_rate, 
+			day_retention, 
+			users_day_retention, 
+			channel_name, 
+			parent_id, 
+			channel_id, 
+			business_date, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{dau}, 
+			#{newUsers}, 
+			#{usersRate}, 
+			#{dayRetention}, 
+			#{usersDayRetention}, 
+			#{channelName}, 
+			#{parentId}, 
+			#{channelId}, 
+			#{businessDate}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_final_channel_retention SET
+			dau = #{dau}, 
+			new_users = #{newUsers}, 
+			users_rate = #{usersRate}, 
+			day_retention = #{dayRetention}, 
+			users_day_retention = #{usersDayRetention}, 
+			channel_name = #{channelName}, 
+			parent_id = #{parentId}, 
+			channel_id = #{channelId}, 
+			business_date = #{businessDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_channel_retention SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

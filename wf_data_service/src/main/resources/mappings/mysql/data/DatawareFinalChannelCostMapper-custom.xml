@@ -4,10 +4,9 @@
         "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelInfoAllDao">
-
+<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelCostDao">
     <select id="getCountByTime" resultType="long">
-        SELECT COUNT(*) FROM dataware_final_channel_info_all t
+        SELECT COUNT(*) FROM dataware_final_channel_cost t
         WHERE 1=1
         AND t.delete_flag =0
         AND t.channel_id IS NOT NULL
@@ -32,25 +31,6 @@
                 #{item}
             </foreach>
         </if>
-    </select>
-
-
-    <select id="getListByChannelAndDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll">
-        SELECT <include refid="datawareFinalChannelInfoAllColumns"/> FROM dataware_final_channel_info_all t
-        WHERE 1=1 AND t.delete_flag =0
-        <if test="channelId != null">
-            AND t.channel_id = #{channelId}
-        </if>
-        <if test="parentId != null">
-            AND t.parent_id = #{parentId}
-        </if>
-        <if test="beginDate != null and beginDate != ''">
-            AND t.business_date &gt;= #{beginDate}
-        </if>
-        <if test="endDate != null and endDate != ''">
-            AND t.business_date &lt;= #{endDate}
-        </if>
-        order by t.business_date asc
     </select>
 
 </mapper>

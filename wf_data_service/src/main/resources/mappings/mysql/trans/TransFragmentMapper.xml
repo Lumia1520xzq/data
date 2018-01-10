@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.trans.TransFragmentDao">
+
+    <sql id="transFragmentColumns">
+		t.id,
+		t.phy_awards_id,
+		t.name,
+		t.gold_amount,
+		t.rmb_amount,
+		t.image,
+		t.image_app,
+		t.fragment_source,
+		t.change_num,
+		t.awards_type,
+		t.awards_name,
+		t.awards_image,
+		t.awards_image_app,
+		t.create_time,
+		t.update_time,
+		t.delete_flag,
+		t.channel_id
+	</sql>
+
+    <sql id="transFragmentWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+    <sql id="transFragmentJoins">
+    </sql>
+
+    <select id="get" resultType="TransFragment">
+        SELECT
+        <include refid="transFragmentColumns"/>
+        FROM trans_fragment t WHERE id = #{id}
+    </select>
+    <select id="findList" resultType="TransFragment">
+        SELECT
+        <include refid="transFragmentColumns"/>
+        FROM trans_fragment t
+        <include refid="transFragmentJoins"/>
+        WHERE
+        <include refid="transFragmentWhere"/>
+        ORDER BY id desc LIMIT #{start}, #{length}
+    </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM trans_fragment t WHERE
+        <include refid="transFragmentWhere"/>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO trans_fragment (
+			id, 
+			phy_awards_id, 
+			name, 
+			gold_amount, 
+			rmb_amount, 
+			image, 
+			image_app, 
+			fragment_source, 
+			change_num, 
+			awards_type, 
+			awards_name, 
+			awards_image, 
+			awards_image_app, 
+			create_time, 
+			delete_flag, 
+			channel_id 
+		) VALUES (
+			#{id}, 
+			#{phyAwardsId}, 
+			#{name}, 
+			#{goldAmount}, 
+			#{rmbAmount}, 
+			#{image}, 
+			#{imageApp}, 
+			#{fragmentSource}, 
+			#{changeNum}, 
+			#{awardsType}, 
+			#{awardsName}, 
+			#{awardsImage}, 
+			#{awardsImageApp}, 
+			#{createTime}, 
+			#{deleteFlag}, 
+			#{channelId} 
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE trans_fragment SET
+			phy_awards_id = #{phyAwardsId}, 
+			name = #{name}, 
+			gold_amount = #{goldAmount}, 
+			rmb_amount = #{rmbAmount}, 
+			image = #{image}, 
+			image_app = #{imageApp}, 
+			fragment_source = #{fragmentSource}, 
+			change_num = #{changeNum}, 
+			awards_type = #{awardsType}, 
+			awards_name = #{awardsName}, 
+			awards_image = #{awardsImage}, 
+			awards_image_app = #{awardsImageApp}, 
+			delete_flag = #{deleteFlag}, 
+			channel_id = #{channelId} 
+		WHERE id = #{id}
+	</update>
+
+    <delete id="delete">
+		UPDATE trans_fragment SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
