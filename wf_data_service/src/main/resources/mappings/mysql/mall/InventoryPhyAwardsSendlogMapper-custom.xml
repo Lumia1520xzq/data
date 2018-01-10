@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- 存放手写的sql -->
+<mapper namespace="com.wf.data.dao.mall.InventoryPhyAwardsSendlogDao">
+
+    <select id="getByActivityIdBusinessId" resultType="InventoryPhyAwardsSendlog">
+        SELECT
+        <include refid="inventoryPhyAwardsSendlogColumns"/>
+        FROM inventory_phy_awards_sendlog t
+        WHERE t.delete_flag = 0 and t.activity_id = #{activityId} and t.business_id = #{businessId}
+        order by t.id ASC LIMIT 1
+    </select>
+
+    <select id="getRmbAmountByUserId" resultType="Double">
+        SELECT
+        sum(IFNULL(i.rmb_amount,0)) rmbAmount
+        FROM inventory_phy_awards_sendlog t
+        LEFT JOIN inventory_phy_awards_info i ON t.phy_awards_id = i.id
+        WHERE
+        t.delete_flag=0
+        <if test="userId != null">
+            AND t.user_id = #{userId}
+        </if>
+    </select>
+
+    <select id="getRmbAmountByChannel" resultType="Double">
+        SELECT SUM(IFNULL(t2.rmb_amount,0))
+        FROM `inventory_phy_awards_sendlog` t1
+        LEFT JOIN inventory_phy_awards_info t2
+        ON t1.phy_awards_id=t2.id
+        WHERE 1=1
+        AND t1.delete_flag=0
+        AND t1.update_time BETWEEN #{beginDate} AND #{endDate}
+        AND t1.receive_status=3
+        <if test="activityIds != null and activityIds.size() !=0">
+            AND t1.activity_id in
+            <foreach collection="activityIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>
