@@ -28,6 +28,8 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double usersDayRetention;
 	private Double dayRetention;
 	private Double usersRate;
+	private Double totalCost;
+	private Double costRate;
 
 	public Long getUserBettingCount() {
 		return userBettingCount;
@@ -211,5 +213,21 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	public void setUsersRate(Double usersRate) {
 		this.usersRate = usersRate;
+	}
+
+	public Double getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public Double getCostRate() {
+		return costRate;
+	}
+
+	public void setCostRate(Double costRate) {
+		this.costRate = costRate;
 	}
 }

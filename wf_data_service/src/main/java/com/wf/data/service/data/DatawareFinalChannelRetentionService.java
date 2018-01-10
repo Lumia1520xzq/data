@@ -20,8 +20,8 @@ public class DatawareFinalChannelRetentionService extends CrudService<DatawareFi
         return dao.getCountByTime(map);
     }
 
-    public DatawareFinalChannelRetention findByDate(String date) {
-        return dao.findByDate(date);
+    public DatawareFinalChannelRetention findByDate(Map<String,Object> params) {
+        return dao.findByDate(params);
     }
 
 }

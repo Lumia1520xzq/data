@@ -7,9 +7,11 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.data.entity.DatawareFinalChannelCost;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dao.data.entity.DatawareFinalChannelRetention;
 import com.wf.data.service.ChannelInfoService;
+import com.wf.data.service.data.DatawareFinalChannelCostService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import com.wf.data.service.data.DatawareFinalChannelRetentionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class WholeDataViewController extends ExtJsController {
     private ChannelInfoService channelInfoService;
     @Autowired
     private DatawareFinalChannelRetentionService datawareFinalChannelRetentionService;
+    @Autowired
+    private DatawareFinalChannelCostService datawareFinalChannelCostService;
 
     /**
      * 整体数据概览
@@ -83,7 +87,8 @@ public class WholeDataViewController extends ExtJsController {
             List<DatawareFinalChannelInfoAll> allList = datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
             for(DatawareFinalChannelInfoAll info:allList) {
                 String date = info.getBusinessDate();
-                DatawareFinalChannelRetention retention = datawareFinalChannelRetentionService.findByDate(date);
+                params.put("date",date);
+                DatawareFinalChannelRetention retention = datawareFinalChannelRetentionService.findByDate(params);
                 if(null != retention) {
                     Double usersDayRetention = retention.getUsersDayRetention();
                     Double dayRetention = retention.getDayRetention();
@@ -91,9 +96,24 @@ public class WholeDataViewController extends ExtJsController {
                     info.setUsersDayRetention(usersDayRetention);
                     info.setDayRetention(dayRetention);
                     info.setUsersRate(usersRate);
+                }else{
+                    info.setUsersDayRetention(0.0);
+                    info.setDayRetention(0.0);
+                    info.setUsersRate(0.0);
+                }
+                DatawareFinalChannelCost cost = datawareFinalChannelCostService.findByDate(params);
+                if(null != cost){
+                    Double totalCost = cost.getTotalCost();
+                    Double costRate = cost.getCostRate();
+                    info.setTotalCost(totalCost);
+                    info.setCostRate(costRate);
+                }
+                else{
+                    info.setTotalCost(0.0);
+                    info.setCostRate(0.0);
                 }
             }
-            return  datawareFinalChannelInfoAllService.getListByChannelAndDate(params);
+            return  allList;
     }
 
 

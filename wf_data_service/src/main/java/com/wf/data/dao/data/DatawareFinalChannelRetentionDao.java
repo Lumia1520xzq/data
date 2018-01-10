@@ -12,5 +12,5 @@ public interface DatawareFinalChannelRetentionDao extends CrudDao<DatawareFinalC
 
     long getCountByTime(Map<String,Object> map);
 
-    DatawareFinalChannelRetention findByDate(@Param("date")  String date);
+    DatawareFinalChannelRetention findByDate(Map<String,Object> params);
 }

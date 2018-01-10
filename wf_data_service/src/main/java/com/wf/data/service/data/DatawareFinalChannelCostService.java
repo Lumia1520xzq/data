@@ -19,4 +19,8 @@ public class DatawareFinalChannelCostService extends CrudService<DatawareFinalCh
         return dao.getCountByTime(map);
     }
 
+    public DatawareFinalChannelCost findByDate(Map<String,Object> params){
+        return dao.findByDate(params);
+    }
+
 }
