@@ -106,7 +106,7 @@ public class WholeDataViewController extends ExtJsController {
                     Double totalCost = cost.getTotalCost();
                     Double costRate = cost.getCostRate();
                     info.setTotalCost(totalCost);
-                    info.setCostRate(costRate);
+                    info.setCostRate(costRate*100);
                 }
                 else{
                     info.setTotalCost(0.0);

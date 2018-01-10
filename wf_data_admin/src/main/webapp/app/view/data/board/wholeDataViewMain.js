@@ -904,49 +904,6 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     }]
                 },
                 {
-                    title: {text: '成本'},
-                    tooltip: {trigger: 'axis',
-                        formatter: function (params) {
-                            var str='';
-                            for(var i = 0; i < params.length; i++){
-                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
-                            }
-                            return str;
-                        }
-                    },
-                    // legend: {data: ['成本']},
-                    toolbox: {
-                        show : true,
-                        x : 450,
-                        feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
-                        }
-                    },
-                    calculable : true,
-                    xAxis: {
-                        type : 'category',
-                        boundaryGap : false,
-                        data: businessDate
-                    },
-                    yAxis: {
-                        type : 'value',
-                        axisLabel : {
-                            formatter: '{value}'
-                        }
-                    },
-                    series: [{
-                        name: '成本',
-                        type: 'line',
-                        smooth: true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                        itemStyle: {normal: {}},
-                        data:totalCost
-                    }]
-                },
-                {
                     title: {text: '成本占比'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
@@ -977,7 +934,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     yAxis: {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}%'
+                            formatter: '{value}'+'%'
                         }
                     },
                     series: [{
