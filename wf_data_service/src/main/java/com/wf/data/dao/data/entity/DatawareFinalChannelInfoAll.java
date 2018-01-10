@@ -25,6 +25,11 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Long channelId;
 	private String businessDate;
 	private Long userBettingCount;
+	private Double usersDayRetention;
+	private Double dayRetention;
+	private Double usersRate;
+	private Double totalCost;
+	private Double costRate;
 
 	public Long getUserBettingCount() {
 		return userBettingCount;
@@ -184,5 +189,45 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	public void setBusinessDate(String businessDate) {
 		this.businessDate = businessDate;
+	}
+
+	public Double getUsersDayRetention() {
+		return usersDayRetention;
+	}
+
+	public void setUsersDayRetention(Double usersDayRetention) {
+		this.usersDayRetention = usersDayRetention;
+	}
+
+	public Double getDayRetention() {
+		return dayRetention;
+	}
+
+	public void setDayRetention(Double dayRetention) {
+		this.dayRetention = dayRetention;
+	}
+
+	public Double getUsersRate() {
+		return usersRate;
+	}
+
+	public void setUsersRate(Double usersRate) {
+		this.usersRate = usersRate;
+	}
+
+	public Double getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public Double getCostRate() {
+		return costRate;
+	}
+
+	public void setCostRate(Double costRate) {
+		this.costRate = costRate;
 	}
 }

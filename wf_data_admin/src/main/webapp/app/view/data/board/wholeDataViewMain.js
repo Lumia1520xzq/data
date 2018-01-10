@@ -19,7 +19,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 'newUsers','userCount','bettingRate',
                 'dauPayRate','bettingPayRate','userBettingRate',
                 'bettingAmount','resultRate',
-                'payArpu','payArppu'
+                'payArpu','payArppu',
+                'usersDayRetention','dayRetention','usersRate',
+                'totalCost','costRate'
             ]
         });
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -34,7 +36,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 3,
+            columns: 2,
             buildField: "Manual",
             forceFit: true,
             items: [{
@@ -105,10 +107,25 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     ]
                 },
                 {
+                    title: '留存数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {title:'',width:"33.33%",height:300,id:"kpi13"},
+                        {title:'',width:"33.33%",height:300,id:"kpi14"},
+                        {title:'',width:"33.33%",height:300,id:"kpi15"}
+                    ]
+                },
+                {
                     title: '付费数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
                         {title:'',width:"33.33%",height:300,id:"kpi11"},
                         {title:'',width:"33.33%",height:300,id:"kpi12"}
+                    ]
+                },
+                {
+                    title: '成本数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {title:'',width:"33.33%",height:300,id:"kpi16"},
+                        {title:'',width:"33.33%",height:300,id:"kpi17"}
                     ]
                 }
             ]
@@ -141,12 +158,16 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var resultRate=[];
             var payArpu=[];
             var payArppu=[];
+            var usersDayRetention=[];
+            var dayRetention=[];
+            var usersRate=[];
+            var totalCost=[];
+            var costRate=[];
             for(var i=0;i<store.getCount();i++){
                 var re=store.getAt(i);
                 var d = re.get('businessDate');
                 var x = d.indexOf('-');
-                var subString = d.substring(x+1);
-                businessDate[i]= subString;
+                businessDate[i] = d.substring(x+1);
                 dau[i]=re.get('dau');
                 rechargeAmount[i]=re.get('rechargeAmount');
                 rechargeCount[i]=re.get('rechargeCount');
@@ -160,11 +181,25 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 resultRate[i]=re.get('resultRate');
                 payArpu[i]=re.get('payArpu');
                 payArppu[i]=re.get('payArppu');
+                usersDayRetention[i]=re.get('usersDayRetention');
+                dayRetention[i]=re.get('dayRetention');
+                usersRate[i]=re.get('usersRate');
+                totalCost[i]=re.get('totalCost');
+                costRate[i]=re.get('costRate');
             }
+
             var option = [
                 {
                     title: {text: 'DAU'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                        },
                     // legend: {data: ['DAU']},
                     toolbox: {
                         show : true,
@@ -177,13 +212,13 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -200,7 +235,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '充值金额'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['充值金额']},
                     toolbox: {
                         show : true,
@@ -216,10 +259,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -236,7 +276,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '充值人数'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['充值人数']},
                     toolbox: {
                         show : true,
@@ -252,10 +300,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -272,7 +317,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '新增用户'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['新增用户']},
                     toolbox: {
                         show : true,
@@ -288,10 +341,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -308,7 +358,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '投注人数'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['投注人数']},
                     toolbox: {
                         show : true,
@@ -324,10 +382,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -344,7 +399,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '投注转化率'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                    formatter: function (params) {
+                        var str='';
+                        for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value +'%';
+                        }
+                        return str;
+                    }
+                        },
                     // legend: {data: ['投注转化率']},
                     toolbox: {
                         show : true,
@@ -360,15 +423,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}%'
                         }},
                     series: [{
                         name: '投注转化率',
@@ -380,7 +440,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: 'DAU付费转化率'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['DAU付费转化率']},
                     toolbox: {
                         show : true,
@@ -396,15 +464,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}%'
                         }},
                     series: [{
                         name: 'DAU付费转化率',
@@ -416,7 +481,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '投注付费转化率'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['投注付费转化率']},
                     toolbox: {
                         show : true,
@@ -432,15 +505,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}%'
                         }},
                     series: [{
                         name: '投注付费转化率',
@@ -452,7 +522,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '新用户投注转化率'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['新用户投注转化率']},
                     toolbox: {
                         show : true,
@@ -468,15 +546,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}%'
                         }},
                     series: [{
                         name: '新用户投注转化率',
@@ -488,7 +563,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '投注流水'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['投注流水']},
                     toolbox: {
                         show : true,
@@ -502,15 +585,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     },
                     calculable : true,
                     grid:{
-                        left:'17%',//组件距离容器左边的距离
+                        left:'17%'//组件距离容器左边的距离
                     },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -527,7 +607,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: '返奖率'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['返奖率']},
                     toolbox: {
                         show : true,
@@ -543,16 +631,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
+                        min:60,
                         axisLabel : {
-                            formatter: '{value}'
-                        }},
+                            formatter: '{value}%'
+                        }
+                        },
                     series: [{
                         name: '返奖率',
                         type: 'line',
@@ -563,7 +650,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: 'ARPU'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['ARPU']},
                     toolbox: {
                         show : true,
@@ -579,10 +674,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -599,7 +691,15 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 },
                 {
                     title: {text: 'ARPPU'},
-                    tooltip: {trigger: 'axis'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
                     // legend: {data: ['ARPPU']},
                     toolbox: {
                         show : true,
@@ -615,10 +715,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate,
-                        axisLabel:{
-                            interval:0
-                        }
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -632,6 +729,221 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data: payArppu
+                    }]
+                },
+                {
+                    title: {text: '新用户留存'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    // legend: {data: ['新用户留存']},
+                    toolbox: {
+                        show : true,
+                        x : 450,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }
+                    },
+                    series: [{
+                        name: '新用户留存',
+                        type: 'line',
+                        smooth:true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        itemStyle: {normal: {}},
+                        data: usersDayRetention
+                    }]
+                },
+                {
+                    title: {text: '全量用户留存'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    // legend: {data: ['全量用户留存']},
+                    toolbox: {
+                        show : true,
+                        x : 450,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }
+                    },
+                    series: [{
+                        name: '全量用户留存',
+                        type: 'line',
+                        smooth: true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        itemStyle: {normal: {}},
+                        data: dayRetention
+                    }]
+                },
+                {
+                    title: {text: '新用户占比'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    // legend: {data: ['新用户占比']},
+                    toolbox: {
+                        show : true,
+                        x : 450,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }
+                    },
+                    series: [{
+                        name: '新用户占比',
+                        type: 'line',
+                        smooth: true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        itemStyle: {normal: {}},
+                        data: usersRate
+                    }]
+                },
+                {
+                    title: {text: '成本'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
+                    // legend: {data: ['成本']},
+                    toolbox: {
+                        show : true,
+                        x : 450,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [{
+                        name: '成本',
+                        type: 'line',
+                        smooth: true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        itemStyle: {normal: {}},
+                        data:totalCost
+                    }]
+                },
+                {
+                    title: {text: '成本占比'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    // legend: {data: ['成本占比']},
+                    toolbox: {
+                        show : true,
+                        x : 450,
+                        feature : {
+                            mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'+'%'
+                        }
+                    },
+                    series: [{
+                        name: '成本占比',
+                        type: 'line',
+                        smooth: true,
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        itemStyle: {normal: {}},
+                        data:costRate
                     }]
                 }
             ];
