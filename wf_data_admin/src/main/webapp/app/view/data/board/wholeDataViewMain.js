@@ -79,53 +79,488 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             align : 'stretch',
             bodyStyle:'border-width:0 0 0 0;',
             items: [{
-                title: '核心指标',align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                title: '核心指标',align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
                 items:[
-                    {title:'',width:"33.33%",height:300,id:"kpi0"},
-                    {title:'',width:"33.33%",height:300,id:"kpi1"},
-                    {title:'',width:"33.33%",height:300,id:"kpi2"}]
+                    {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                        items:[
+                               {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                items:[
+                                    {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                    {width:"34.33%",height:60,html:'<h2>DAU</h2>',bodyStyle:'border-width:0'},
+                                    {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                            {id:'date0',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {id:'dau',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                        ]
+                                    },
+                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                        ]
+                                    }
+                                ]
+                               },
+                               {width:"100%",height:240,id:"kpi0"}
+                        ]
+                    },
+                    {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                        items:[
+                            {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                items:[
+                                    {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                    {width:"34.33%",height:60,html:'<h2>充值金额</h2>',bodyStyle:'border-width:0'},
+                                    {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                            {id:'date1',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {id:'rechargeAmount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                        ]
+                                    },
+                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                        ]
+                                    }
+                                ]
+                            },
+                            {width:"100%",height:240,id:"kpi1"}
+                        ]
+                    },
+                    {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                        items:[
+                            {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                items:[
+                                    {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                    {width:"34.33%",height:60,html:'<h2>充值人数</h2>',bodyStyle:'border-width:0'},
+                                    {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                            {id:'date2',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {id:'rechargeCount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                        ]
+                                    },
+                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                        ]
+                                    }
+                                ]
+                            },
+                            {width:"100%",height:240,id:"kpi2"}
+                        ]
+                      }
+                    ]
             },
                 {
                     align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {title:'',width:"33.33%",height:300,id:"kpi3"},
-                        {title:'',width:"33.33%",height:300,id:"kpi4"},
-                        {title:'',width:"33.33%",height:300,id:"kpi5"}]
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>新增用户</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date3',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'newUsers',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi3"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>投注人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date4',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'userCount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi4"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date5',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'bettingRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi5"}
+                            ]
+                        }
+                    ]
                 },
                 {
                     align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {title:'',width:"33.33%",height:300,id:"kpi6"},
-                        {title:'',width:"33.33%",height:300,id:"kpi7"},
-                        {title:'',width:"33.33%",height:300,id:"kpi8"}]
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>DAU付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date6',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dauPayRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi6"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>投注付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date7',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'bettingPayRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi7"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>新用户投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date8',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'userBettingRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi8"}
+                            ]
+                        }
+                        ]
                 },
                 {
                     title: '投注数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {title:'',width:"33.33%",height:300,id:"kpi9"},
-                        {title:'',width:"33.33%",height:300,id:"kpi10"}
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>投注流水</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date9',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'bettingAmount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi9"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>返奖率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date10',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'resultRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi10"}
+                            ]
+                        }
                     ]
                 },
                 {
                     title: '留存数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {title:'',width:"33.33%",height:300,id:"kpi13"},
-                        {title:'',width:"33.33%",height:300,id:"kpi14"},
-                        {title:'',width:"33.33%",height:300,id:"kpi15"}
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>新用户留存</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date13',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'usersDayRetention',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi13"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>全量用户留存</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date14',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayRetention',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi14"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>新用户占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date15',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'usersRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi15"}
+                            ]
+                        }
                     ]
                 },
                 {
                     title: '付费数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {title:'',width:"33.33%",height:300,id:"kpi11"},
-                        {title:'',width:"33.33%",height:300,id:"kpi12"}
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>ARPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date11',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'payArpu',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi11"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>ARPPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date12',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'payArppu',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi12"}
+                            ]
+                        }
                     ]
                 },
                 {
                     title: '成本数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {title:'',width:"33.33%",height:300,id:"kpi16"},
-                        {title:'',width:"33.33%",height:300,id:"kpi17"}
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>成本</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date16',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'totalCost',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi16"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"34.33%",height:60,html:'<h2>成本占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date17',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'costRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
+                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi17"}
+                            ]
+                        }
                     ]
                 }
             ]
@@ -190,7 +625,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
 
             var option = [
                 {
-                    title: {text: 'DAU'},
+                    // title: {text: 'DAU'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -200,20 +635,16 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                         },
-                    // legend: {data: ['DAU']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
                     grid:{
-                        left:'11%'
+                        left:'11%',
+                        y:'2.8%'
                     },
                     xAxis: {
                         type : 'category',
@@ -229,12 +660,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: 'DAU',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: dau
                     }]
                 },
                 {
-                    title: {text: '充值金额'},
+                    // title: {text: '充值金额'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -244,18 +674,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['充值金额']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -270,12 +699,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '充值金额',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: rechargeAmount
                     }]
                 },
                 {
-                    title: {text: '充值人数'},
+                    // title: {text: '充值人数'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -285,18 +713,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['充值人数']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -311,12 +738,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '充值人数',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: rechargeCount
                     }]
                 },
                 {
-                    title: {text: '新增用户'},
+                    // title: {text: '新增用户'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -326,18 +752,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['新增用户']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -352,12 +777,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '新增用户',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: newUsers
                     }]
                 },
                 {
-                    title: {text: '投注人数'},
+                    // title: {text: '投注人数'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -367,18 +791,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['投注人数']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -393,12 +816,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '投注人数',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: userCount
                     }]
                 },
                 {
-                    title: {text: '投注转化率'},
+                    // title: {text: '投注转化率'},
                     tooltip: {trigger: 'axis',
                     formatter: function (params) {
                         var str='';
@@ -408,18 +830,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         return str;
                     }
                         },
-                    // legend: {data: ['投注转化率']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -434,12 +855,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '投注转化率',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: bettingRate
                     }]
                 },
                 {
-                    title: {text: 'DAU付费转化率'},
+                    // title: {text: 'DAU付费转化率'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -449,18 +869,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['DAU付费转化率']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -475,12 +894,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: 'DAU付费转化率',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: dauPayRate
                     }]
                 },
                 {
-                    title: {text: '投注付费转化率'},
+                    // title: {text: '投注付费转化率'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -490,18 +908,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['投注付费转化率']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -516,12 +933,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '投注付费转化率',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: bettingPayRate
                     }]
                 },
                 {
-                    title: {text: '新用户投注转化率'},
+                    // title: {text: '新用户投注转化率'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -531,18 +947,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['新用户投注转化率']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -557,12 +972,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '新用户投注转化率',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: userBettingRate
                     }]
                 },
                 {
-                    title: {text: '投注流水'},
+                    // title: {text: '投注流水'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -572,20 +986,16 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['投注流水']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
                     grid:{
-                        left:'17%'//组件距离容器左边的距离
+                        left:'17%',//组件距离容器左边的距离
+                        y:'2.8%'
                     },
                     xAxis: {
                         type : 'category',
@@ -601,12 +1011,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '投注流水',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: bettingAmount
                     }]
                 },
                 {
-                    title: {text: '返奖率'},
+                    // title: {text: '返奖率'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -616,18 +1025,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['返奖率']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -644,12 +1052,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '返奖率',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: resultRate
                     }]
                 },
                 {
-                    title: {text: 'ARPU'},
+                    // title: {text: 'ARPU'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -659,18 +1066,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['ARPU']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -685,12 +1091,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: 'ARPU',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         data: payArpu
                     }]
                 },
                 {
-                    title: {text: 'ARPPU'},
+                    // title: {text: 'ARPPU'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -700,18 +1105,16 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['ARPPU']},
                     toolbox: {
                         show : true,
-                        x:450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -726,13 +1129,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: 'ARPPU',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data: payArppu
                     }]
                 },
                 {
-                    title: {text: '新用户留存'},
+                    // title: {text: '新用户留存'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -742,18 +1144,16 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['新用户留存']},
                     toolbox: {
                         show : true,
-                        x : 450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -769,13 +1169,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '新用户留存',
                         type: 'line',
                         smooth:true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data: usersDayRetention
                     }]
                 },
                 {
-                    title: {text: '全量用户留存'},
+                    // title: {text: '全量用户留存'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -785,18 +1184,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['全量用户留存']},
                     toolbox: {
                         show : true,
-                        x : 450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -812,13 +1210,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '全量用户留存',
                         type: 'line',
                         smooth: true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data: dayRetention
                     }]
                 },
                 {
-                    title: {text: '新用户占比'},
+                    // title: {text: '新用户占比'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -828,18 +1225,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['新用户占比']},
                     toolbox: {
                         show : true,
-                        x : 450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -855,13 +1251,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '新用户占比',
                         type: 'line',
                         smooth: true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data: usersRate
                     }]
                 },
                 {
-                    title: {text: '成本'},
+                    // title: {text: '成本'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -871,18 +1266,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['成本']},
                     toolbox: {
                         show : true,
-                        x : 450,
                         feature : {
-                            mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -898,13 +1292,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '成本',
                         type: 'line',
                         smooth: true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data:totalCost
                     }]
                 },
                 {
-                    title: {text: '成本占比'},
+                    // title: {text: '成本占比'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -914,18 +1307,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             return str;
                         }
                     },
-                    // legend: {data: ['成本占比']},
                     toolbox: {
                         show : true,
-                        x : 450,
                         feature : {
                             mark : {show: true},
-                            // dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar']},
-                            saveAsImage : {show: true}
                         }
                     },
                     calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
@@ -941,7 +1333,6 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         name: '成本占比',
                         type: 'line',
                         smooth: true,
-                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
                         itemStyle: {normal: {}},
                         data:costRate
                     }]
@@ -951,6 +1342,31 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 me.echarts = echarts.init(Ext.get("kpi"+j).dom);
                 me.echarts.setOption(option[j]);
             }
+
+            var r = store.getAt(store.getCount()-1);
+            for(var k=0;k<option.length;k++){
+                var date = Ext.get('date'+k).dom;
+                date.innerHTML = r.get('businessDate');
+            }
+
+             Ext.get('dau').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dau')+"</strong>";
+             Ext.get('rechargeAmount').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('rechargeAmount')+"</strong>";
+             Ext.get('rechargeCount').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;&nbsp;"+r.get('rechargeCount')+"</strong>";
+             Ext.get('newUsers').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;&nbsp;"+r.get('newUsers')+"</strong>";
+             Ext.get('userCount').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;"+r.get('userCount')+"</strong>";
+             Ext.get('bettingRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('bettingRate')+"%</strong>";
+             Ext.get('dauPayRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dauPayRate')+"%</strong>";
+             Ext.get('bettingPayRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('bettingPayRate')+"%</strong>";
+             Ext.get('userBettingRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('userBettingRate')+"%</strong>";
+             Ext.get('bettingAmount').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('bettingAmount')+"</strong>";
+            Ext.get('resultRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('resultRate')+"%</strong>";
+            Ext.get('payArpu').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;"+r.get('payArpu')+"</strong>";
+            Ext.get('payArppu').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;"+r.get('payArppu')+"</strong>";
+            Ext.get('usersDayRetention').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('usersDayRetention')+"%</strong>";
+            Ext.get('dayRetention').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dayRetention')+"%</strong>";
+            Ext.get('usersRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('usersRate')+"%</strong>";
+            Ext.get('totalCost').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('totalCost')+"</strong>";
+            Ext.get('costRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('costRate')+"%</strong>";
         }
     }
 });

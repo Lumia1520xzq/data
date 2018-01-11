@@ -31,6 +31,25 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double totalCost;
 	private Double costRate;
 
+	private Long lastDau;
+	private Double lastRechargeAmount;
+	private Long lastRechargeCount;
+	private Long lastNewUsers;
+	private Long lastUserCount;
+	private Double lastBettingRate;
+	private Double lastDauPayRate;
+	private Double lastBettingPayRate;
+	private Double lastUserBettingRate;
+	private Double lastBettingAmount;
+	private Double lastResultRate;
+	private Double lastPayArpu;
+	private Double lastPayArppu;
+	private Double lastUsersDayRetention;
+
+
+
+
+
 	public Long getUserBettingCount() {
 		return userBettingCount;
 	}
@@ -229,5 +248,117 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	public void setCostRate(Double costRate) {
 		this.costRate = costRate;
+	}
+
+	public Long getLastDau() {
+		return lastDau;
+	}
+
+	public void setLastDau(Long lastDau) {
+		this.lastDau = lastDau;
+	}
+
+	public Double getLastRechargeAmount() {
+		return lastRechargeAmount;
+	}
+
+	public void setLastRechargeAmount(Double lastRechargeAmount) {
+		this.lastRechargeAmount = lastRechargeAmount;
+	}
+
+	public Long getLastRechargeCount() {
+		return lastRechargeCount;
+	}
+
+	public void setLastRechargeCount(Long lastRechargeCount) {
+		this.lastRechargeCount = lastRechargeCount;
+	}
+
+	public Long getLastNewUsers() {
+		return lastNewUsers;
+	}
+
+	public void setLastNewUsers(Long lastNewUsers) {
+		this.lastNewUsers = lastNewUsers;
+	}
+
+	public Long getLastUserCount() {
+		return lastUserCount;
+	}
+
+	public void setLastUserCount(Long lastUserCount) {
+		this.lastUserCount = lastUserCount;
+	}
+
+	public Double getLastBettingRate() {
+		return lastBettingRate;
+	}
+
+	public void setLastBettingRate(Double lastBettingRate) {
+		this.lastBettingRate = lastBettingRate;
+	}
+
+	public Double getLastDauPayRate() {
+		return lastDauPayRate;
+	}
+
+	public void setLastDauPayRate(Double lastDauPayRate) {
+		this.lastDauPayRate = lastDauPayRate;
+	}
+
+	public Double getLastBettingPayRate() {
+		return lastBettingPayRate;
+	}
+
+	public void setLastBettingPayRate(Double lastBettingPayRate) {
+		this.lastBettingPayRate = lastBettingPayRate;
+	}
+
+	public Double getLastUserBettingRate() {
+		return lastUserBettingRate;
+	}
+
+	public void setLastUserBettingRate(Double lastUserBettingRate) {
+		this.lastUserBettingRate = lastUserBettingRate;
+	}
+
+	public Double getLastBettingAmount() {
+		return lastBettingAmount;
+	}
+
+	public void setLastBettingAmount(Double lastBettingAmount) {
+		this.lastBettingAmount = lastBettingAmount;
+	}
+
+	public Double getLastResultRate() {
+		return lastResultRate;
+	}
+
+	public void setLastResultRate(Double lastResultRate) {
+		this.lastResultRate = lastResultRate;
+	}
+
+	public Double getLastPayArpu() {
+		return lastPayArpu;
+	}
+
+	public void setLastPayArpu(Double lastPayArpu) {
+		this.lastPayArpu = lastPayArpu;
+	}
+
+	public Double getLastPayArppu() {
+		return lastPayArppu;
+	}
+
+	public void setLastPayArppu(Double lastPayArppu) {
+		this.lastPayArppu = lastPayArppu;
+	}
+
+	public Double getLastUsersDayRetention() {
+		return lastUsersDayRetention;
+	}
+
+	public void setLastUsersDayRetention(Double lastUsersDayRetention) {
+		this.lastUsersDayRetention = lastUsersDayRetention;
 	}
 }

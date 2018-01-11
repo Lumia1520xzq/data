@@ -14,6 +14,7 @@ import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelCostService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import com.wf.data.service.data.DatawareFinalChannelRetentionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -112,6 +113,12 @@ public class WholeDataViewController extends ExtJsController {
                     info.setTotalCost(0.0);
                     info.setCostRate(0.0);
                 }
+            }
+            if(CollectionUtils.isNotEmpty(allList)) {
+                //最后一条记录
+                DatawareFinalChannelInfoAll lastRecord =  allList.get(allList.size()-1);
+                //1、日期
+                params.put("date",endTime);
             }
             return  allList;
     }
