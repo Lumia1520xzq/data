@@ -55,7 +55,7 @@
         <include refid="datawareThirdBettingRecordJoins"/>
         WHERE
         <include refid="datawareThirdBettingRecordWhere"/>
-        ORDER BY id desc LIMIT #{start}, #{length}
+        ORDER BY business_date,id desc LIMIT #{start}, #{length}
     </select>
     <select id="count" resultType="long">
         SELECT COUNT(*) FROM dataware_third_betting_record t WHERE
