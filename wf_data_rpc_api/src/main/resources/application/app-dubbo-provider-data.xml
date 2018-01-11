@@ -32,7 +32,7 @@
                    ref="datawareThirdBettingRecordRpcService" registry="registry" delay="-1"/>
 
 
-    <bean id="dataDictRpcService" class="com.wf.data.rpc.impl.DataDictRpcServiceRpcImpl"/>
+    <bean id="dataDictRpcService" class="com.wf.data.rpc.impl.DataDictRpcServiceImpl"/>
     <dubbo:service interface="com.wf.data.rpc.DataDictRpcService"
                    ref="dataDictRpcService" registry="registry" delay="-1"/>
 </beans>

@@ -5,13 +5,13 @@ package com.wf.data.rpc.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
-import com.wf.base.rpc.DictRpcService;
 import com.wf.base.rpc.dto.BaseDictDto;
-import com.wf.base.rpc.dto.DictValueLabelDto;
 import com.wf.core.cache.CacheHander;
 import com.wf.core.cache.CacheKey;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.dao.data.entity.DataDict;
+import com.wf.data.rpc.DataDictRpcService;
+import com.wf.data.rpc.dto.DataDictDto;
 import com.wf.data.service.DataDictService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.List;
  * @author chris
  * @version 2014-05-16
  */
-public class DataDictRpcServiceRpcImpl implements DictRpcService {
+public class DataDictRpcServiceImpl implements DataDictRpcService {
     @Autowired
     private CacheHander cacheHander;
     @Autowired
@@ -38,8 +38,8 @@ public class DataDictRpcServiceRpcImpl implements DictRpcService {
     }
 
     @Override
-    public BaseDictDto getDict(final String type, final int value) {
-        return BaseDictDto.toDto(dataDictService.getDictByValue(type, value));
+    public DataDictDto getDict(final String type, final int value) {
+        return DataDictDto.toDto(dataDictService.getDictByValue(type, value));
     }
 
     /**
@@ -124,34 +124,19 @@ public class DataDictRpcServiceRpcImpl implements DictRpcService {
         });
     }
 
-    @Override
-    public List<DictValueLabelDto> getDictKeyValueList(String type) {
-        return cacheHander.cache(DataCacheKey.SYS_DICT_BY_TYPE_MAP.key(type), () -> {
-            List<DataDict> list = dataDictService.getDictList(type);
-            List<DictValueLabelDto> labelList = new ArrayList<>(list.size());
-            DictValueLabelDto kv;
-            for (DataDict dict : list) {
-                kv = new DictValueLabelDto();
-                kv.setKey(dict.getValue());
-                kv.setValue(dict.getLabel());
-                labelList.add(kv);
-            }
-            return labelList;
-        });
-    }
 
     @Override
-    public List<BaseDictDto> getDictList(final String type) {
+    public List<DataDictDto> getDictList(final String type) {
         List<DataDict> baseDicts = dataDictService.getDictList(type);
-        List<BaseDictDto> dtos = new ArrayList<>(baseDicts.size());
+        List<DataDictDto> dtos = new ArrayList<>(baseDicts.size());
         for (DataDict dict : baseDicts) {
-            dtos.add(BaseDictDto.toDto(dict));
+            dtos.add(DataDictDto.toDto(dict));
         }
         return dtos;
     }
 
     @Override
-    public List<BaseDictDto> getSpecValueDictList(final String type, final String specValues) {
+    public List<DataDictDto> getSpecValueDictList(final String type, final String specValues) {
         return cacheHander.cache(DataCacheKey.SYS_DICT_BY_TYPE.key(type, specValues), () -> {
             List<DataDict> dictList = dataDictService.getDictList(type);
             List<BaseDictDto> returnList = new ArrayList<>(dictList.size());

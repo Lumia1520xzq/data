@@ -3,7 +3,6 @@ package com.wf.data.service.data;
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.DatawareThirdBettingRecordDao;
 import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatawareThirdBettingRecordService extends CrudService<DatawareThirdBettingRecordDao, DatawareThirdBettingRecord> {
 
-    @Async
     public void saveRecord(DatawareThirdBettingRecord entity) {
 
         DatawareThirdBettingRecord record = dao.findBettingRecord(entity);
