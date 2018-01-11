@@ -26,6 +26,18 @@
 
     <sql id="datawareThirdBettingRecordWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.channelId != null ">
+			AND t.channel_id = #{p.channelId}
+		</if>
+		<if test="p.gameType != null ">
+			AND t.game_type = #{p.gameType}
+		</if>
+		<if test="p.startTime != null and p.startTime !=''">
+			AND t.business_date >=#{p.startTime}
+		</if>
+		<if test="p.endTime != null and p.endTime !=''">
+			AND t.business_date &lt;=#{p.endTime}
+		</if>
 	</sql>
 
     <sql id="datawareThirdBettingRecordJoins">
