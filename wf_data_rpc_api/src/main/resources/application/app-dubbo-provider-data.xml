@@ -30,4 +30,9 @@
     <bean id="datawareThirdBettingRecordRpcService" class="com.wf.data.rpc.impl.DatawareThirdBettingRecordRpcServiceImpl"/>
     <dubbo:service interface="com.wf.data.rpc.DatawareThirdBettingRecordRpcService"
                    ref="datawareThirdBettingRecordRpcService" registry="registry" delay="-1"/>
+
+
+    <bean id="dataDictRpcService" class="com.wf.data.rpc.impl.DataDictRpcServiceRpcImpl"/>
+    <dubbo:service interface="com.wf.data.rpc.DataDictRpcService"
+                   ref="dataDictRpcService" registry="registry" delay="-1"/>
 </beans>
