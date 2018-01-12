@@ -199,7 +199,7 @@ public class ChannelCostJob {
         }
 
         channelCost.setKindCost(kindCost);
-        channelCost.setTotalCost(BigDecimalUtil.add(kindCost, fragmentCost));
+        channelCost.setTotalCost(kindCost);
         //成本占比=当日成本/当日充值金额
         if (channelCost.getRechargeAmount() > 0) {
             channelCost.setCostRate(BigDecimalUtil.div(channelCost.getTotalCost(), channelCost.getRechargeAmount(), 2));
