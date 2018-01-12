@@ -21,4 +21,9 @@ public class DatawareFinalChannelInfoAllService extends CrudService<DatawareFina
     public List<DatawareFinalChannelInfoAll> getListByChannelAndDate(Map<String,Object> params){
         return dao.getListByChannelAndDate(params);
     }
+
+    public DatawareFinalChannelInfoAll findByDate(Map<String,Object> params){
+        return dao.findByDate(params);
+    }
+
 }
