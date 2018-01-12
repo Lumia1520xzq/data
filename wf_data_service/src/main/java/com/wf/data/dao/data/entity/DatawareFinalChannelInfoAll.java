@@ -36,34 +36,55 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	private String dayRechargeAmountRate;
 	private String weekRechargeAmountRate;
+
 	private String dayRechargeCountRate;
 	private String weekRechargeCountRate;
+
+
 	private String dayNewUsersRate;
 	private String weekNewUsersRate;
+
+
 	private String dayUserCountRate;
 	private String weekUserCountRate;
+
+
+
 	private String dayBettingRate;
 	private String weekBettingRate;
+
 	private String dayDauPayRate;
 	private String weekDauPayRate;
+
+
 	private String dayBettingPayRate;
 	private String weekBettingPayRate;
+
+
 	private String dayUserBettingRate;
 	private String weekUserBettingRate;
+
+
 	private String dayBettingAmountRate;
 	private String weekBettingAmountRate;
+
+
 	private String dayResultRate;
 	private String weekResultRate;
+
+
 	private String dayPayArpuRate;
 	private String weekPayArpuRate;
 	private String dayPayArppuRate;
 	private String weekPayArppuRate;
+
 	private String dayUsersDayRetentionRate;
 	private String weekUsersDayRetentionRate;
 	private String dayDayRetentionRate;
 	private String weekDayRetentionRate;
 	private String dayUsersRate;
 	private String weekUsersRate;
+
 	private String dayTotalCost;
 	private String weekTotalCost;
 	private String dayCostRate;

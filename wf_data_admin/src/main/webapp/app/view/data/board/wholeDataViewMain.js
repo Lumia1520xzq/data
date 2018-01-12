@@ -141,8 +141,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                     {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            {id:'dayRechargeAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {id:'weekRechargeAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                         ]
                                     }
                                 ]
@@ -166,8 +166,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                     {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            {id:'dayRechargeCountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {id:'weekRechargeCountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                         ]
                                     }
                                 ]
@@ -196,8 +196,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayNewUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekNewUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -221,8 +221,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayUserCountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekUserCountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -246,8 +246,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayBettingRate', width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekBettingRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -276,8 +276,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayDauPayRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekDauPayRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -301,8 +301,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayBettingPayRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekBettingPayRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -326,8 +326,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayUserBettingRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekUserBettingRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -356,8 +356,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayBettingAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekBettingAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -381,8 +381,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayResultRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekResultRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -411,8 +411,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayUsersDayRetentionRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekUsersDayRetentionRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -436,8 +436,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayDayRetentionRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekDayRetentionRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -461,8 +461,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -491,8 +491,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayPayArpuRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekPayArpuRate', width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -516,8 +516,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayPayArppuRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekPayArppuRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -546,8 +546,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayTotalCost',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekTotalCost',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -571,8 +571,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                                {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                                {id:'dayCostRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekCostRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -1329,7 +1329,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     toolbox: {
                         show : true,
                         feature : {
-                            mark : {show: true},
+                            mark : {show: true}
                         }
                     },
                     calculable : true,
@@ -1362,31 +1362,133 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 me.echarts.setOption(option[j]);
             }
             var r = store.getAt(store.getCount()-1);
-            for(var k=0;k<option.length;k++){
-                var date = Ext.get('date'+k).dom;
-                date.innerHTML = r.get('businessDate');
+
+            if(r == undefined){
+                for (var k = 0; k < option.length; k++) {
+                    var date = Ext.get('date' + k).dom;
+                    date.innerHTML = '';
+                }
+                Ext.get('dau').dom.innerHTML = "";
+                Ext.get('rechargeAmount').dom.innerHTML = "";
+                Ext.get('rechargeCount').dom.innerHTML = "";
+                Ext.get('newUsers').dom.innerHTML = "";
+                Ext.get('userCount').dom.innerHTML = "";
+                Ext.get('bettingRate').dom.innerHTML = "";
+                Ext.get('dauPayRate').dom.innerHTML = "";
+                Ext.get('bettingPayRate').dom.innerHTML = "";
+                Ext.get('userBettingRate').dom.innerHTML = "";
+                Ext.get('bettingAmount').dom.innerHTML = "";
+                Ext.get('resultRate').dom.innerHTML = "";
+                Ext.get('payArpu').dom.innerHTML = "";
+                Ext.get('payArppu').dom.innerHTML = "";
+                Ext.get('usersDayRetention').dom.innerHTML = "";
+                Ext.get('dayRetention').dom.innerHTML = "";
+                Ext.get('usersRate').dom.innerHTML = "";
+                Ext.get('totalCost').dom.innerHTML = "";
+                Ext.get('costRate').dom.innerHTML = "";
+
+                Ext.get('dayDauRate').dom.innerHTML = "";
+                Ext.get('weekDauRate').dom.innerHTML = "";
+                Ext.get('dayRechargeAmountRate').dom.innerHTML = "";
+                Ext.get('weekRechargeAmountRate').dom.innerHTML = "";
+                Ext.get('dayRechargeCountRate').dom.innerHTML = "";
+                Ext.get('weekRechargeCountRate').dom.innerHTML = "";
+                Ext.get('dayNewUsersRate').dom.innerHTML = "";
+                Ext.get('weekNewUsersRate').dom.innerHTML = "";
+                Ext.get('dayUserCountRate').dom.innerHTML = "";
+                Ext.get('weekUserCountRate').dom.innerHTML = "";
+                Ext.get('dayBettingRate').dom.innerHTML = "";
+                Ext.get('weekBettingRate').dom.innerHTML = "";
+                Ext.get('dayDauPayRate').dom.innerHTML = "";
+                Ext.get('weekDauPayRate').dom.innerHTML = "";
+                Ext.get('dayBettingPayRate').dom.innerHTML = "";
+                Ext.get('weekBettingPayRate').dom.innerHTML = "";
+                Ext.get('dayUserBettingRate').dom.innerHTML = "";
+                Ext.get('weekUserBettingRate').dom.innerHTML = "";
+                Ext.get('dayBettingAmountRate').dom.innerHTML = "";
+                Ext.get('weekBettingAmountRate').dom.innerHTML = "";
+                Ext.get('dayResultRate').dom.innerHTML = "";
+                Ext.get('weekResultRate').dom.innerHTML = "";
+                Ext.get('dayPayArpuRate').dom.innerHTML = "";
+                Ext.get('weekPayArpuRate').dom.innerHTML = "";
+                Ext.get('dayPayArppuRate').dom.innerHTML = "";
+                Ext.get('weekPayArppuRate').dom.innerHTML = "";
+                Ext.get('dayUsersDayRetentionRate').dom.innerHTML = "";
+                Ext.get('weekUsersDayRetentionRate').dom.innerHTML = "";
+                Ext.get('dayDayRetentionRate').dom.innerHTML = "";
+                Ext.get('weekDayRetentionRate').dom.innerHTML = "";
+                Ext.get('dayUsersRate').dom.innerHTML = "";
+                Ext.get('weekUsersRate').dom.innerHTML = "";
+                Ext.get('dayTotalCost').dom.innerHTML = "";
+                Ext.get('weekTotalCost').dom.innerHTML = "";
+                Ext.get('dayCostRate').dom.innerHTML = "";
+                Ext.get('weekCostRate').dom.innerHTML = "";
             }
-             Ext.get('dau').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dau')+"</strong>";
-             Ext.get('rechargeAmount').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('rechargeAmount')+"</strong>";
-             Ext.get('rechargeCount').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;&nbsp;"+r.get('rechargeCount')+"</strong>";
-             Ext.get('newUsers').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;&nbsp;"+r.get('newUsers')+"</strong>";
-             Ext.get('userCount').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;"+r.get('userCount')+"</strong>";
-             Ext.get('bettingRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('bettingRate')+"%</strong>";
-             Ext.get('dauPayRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dauPayRate')+"%</strong>";
-             Ext.get('bettingPayRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('bettingPayRate')+"%</strong>";
-             Ext.get('userBettingRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('userBettingRate')+"%</strong>";
-             Ext.get('bettingAmount').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('bettingAmount')+"</strong>";
-            Ext.get('resultRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('resultRate')+"%</strong>";
-            Ext.get('payArpu').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;"+r.get('payArpu')+"</strong>";
-            Ext.get('payArppu').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;"+r.get('payArppu')+"</strong>";
-            Ext.get('usersDayRetention').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('usersDayRetention')+"%</strong>";
-            Ext.get('dayRetention').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dayRetention')+"%</strong>";
-            Ext.get('usersRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('usersRate')+"%</strong>";
-            Ext.get('totalCost').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('totalCost')+"</strong>";
-            Ext.get('costRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('costRate')+"%</strong>";
+            else {
+                for (var k = 0; k < option.length; k++) {
+                    var date = Ext.get('date' + k).dom;
+                    var dd = r.get('businessDate');
+                    var xx = dd.indexOf('-');
+                    date.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + dd.substring(xx + 1);
+                    // date.innerHTML = '<div align="center">' + dd.substring(xx + 1)+'</div>';
+                    Ext.get('date9').dom.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + dd.substring(xx + 1);
+                }
+                Ext.get('dau').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('dau') + "</strong>";
+                Ext.get('rechargeAmount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeAmount') + "</strong>";
+                Ext.get('rechargeCount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('rechargeCount') + "</strong>";
+                Ext.get('newUsers').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('newUsers') + "</strong>";
+                Ext.get('userCount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('userCount') + "</strong>";
+                Ext.get('bettingRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('bettingRate') + "%</strong>";
+                Ext.get('dauPayRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('dauPayRate') + "%</strong>";
+                Ext.get('bettingPayRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('bettingPayRate') + "%</strong>";
+                Ext.get('userBettingRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong>";
+                Ext.get('bettingAmount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('bettingAmount') + "</strong>";
+                Ext.get('resultRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('resultRate') + "%</strong>";
+                Ext.get('payArpu').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('payArpu') + "</strong>";
+                Ext.get('payArppu').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong>";
+                Ext.get('usersDayRetention').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('usersDayRetention') + "%</strong>";
+                Ext.get('dayRetention').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('dayRetention') + "%</strong>";
+                Ext.get('usersRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong>";
+                Ext.get('totalCost').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('totalCost') + "</strong>";
+                Ext.get('costRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong>";
 
-            Ext.get('dayDauRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dayDauRate')+"</strong>";
-
+                Ext.get('dayDauRate').dom.innerHTML = "日环比：" + r.get('dayDauRate');
+                Ext.get('weekDauRate').dom.innerHTML = "周同比：" + r.get('weekDauRate');
+                Ext.get('dayRechargeAmountRate').dom.innerHTML = "日环比：" + r.get('dayRechargeAmountRate');
+                Ext.get('weekRechargeAmountRate').dom.innerHTML = "周同比：" + r.get('weekRechargeAmountRate');
+                Ext.get('dayRechargeCountRate').dom.innerHTML = "日环比：" + r.get('dayRechargeCountRate');
+                Ext.get('weekRechargeCountRate').dom.innerHTML = "周同比：" + r.get('weekRechargeCountRate');
+                Ext.get('dayNewUsersRate').dom.innerHTML = "日环比：" + r.get('dayNewUsersRate');
+                Ext.get('weekNewUsersRate').dom.innerHTML = "周同比：" + r.get('weekNewUsersRate');
+                Ext.get('dayUserCountRate').dom.innerHTML = "日环比：" + r.get('dayUserCountRate');
+                Ext.get('weekUserCountRate').dom.innerHTML = "周同比：" + r.get('weekUserCountRate');
+                Ext.get('dayBettingRate').dom.innerHTML = "日环比：" + r.get('dayBettingRate');
+                Ext.get('weekBettingRate').dom.innerHTML = "周同比：" + r.get('weekBettingRate');
+                Ext.get('dayDauPayRate').dom.innerHTML = "日环比：" + r.get('dayDauPayRate');
+                Ext.get('weekDauPayRate').dom.innerHTML = "周同比：" + r.get('weekDauPayRate');
+                Ext.get('dayBettingPayRate').dom.innerHTML = "日环比：" + r.get('dayBettingPayRate');
+                Ext.get('weekBettingPayRate').dom.innerHTML = "周同比：" + r.get('weekBettingPayRate');
+                Ext.get('dayUserBettingRate').dom.innerHTML = "日环比：" + r.get('dayUserBettingRate');
+                Ext.get('weekUserBettingRate').dom.innerHTML = "周同比：" + r.get('weekUserBettingRate');
+                Ext.get('dayBettingAmountRate').dom.innerHTML = "日环比：" + r.get('dayBettingAmountRate');
+                Ext.get('weekBettingAmountRate').dom.innerHTML = "周同比：" + r.get('weekBettingAmountRate');
+                Ext.get('dayResultRate').dom.innerHTML = "日环比：" + r.get('dayResultRate');
+                Ext.get('weekResultRate').dom.innerHTML = "周同比：" + r.get('weekResultRate');
+                Ext.get('dayPayArpuRate').dom.innerHTML = "日环比：" + r.get('dayPayArpuRate');
+                Ext.get('weekPayArpuRate').dom.innerHTML = "周同比：" + r.get('weekPayArpuRate');
+                Ext.get('dayPayArppuRate').dom.innerHTML = "日环比：" + r.get('dayPayArppuRate');
+                Ext.get('weekPayArppuRate').dom.innerHTML = "周同比：" + r.get('weekPayArppuRate');
+                Ext.get('dayUsersDayRetentionRate').dom.innerHTML = "日环比：" + r.get('dayUsersDayRetentionRate');
+                Ext.get('weekUsersDayRetentionRate').dom.innerHTML = "周同比：" + r.get('weekUsersDayRetentionRate');
+                Ext.get('dayDayRetentionRate').dom.innerHTML = "日环比：" + r.get('dayDayRetentionRate');
+                Ext.get('weekDayRetentionRate').dom.innerHTML = "周同比：" + r.get('weekDayRetentionRate');
+                Ext.get('dayUsersRate').dom.innerHTML = "日环比：" + r.get('dayUsersRate');
+                Ext.get('weekUsersRate').dom.innerHTML = "周同比：" + r.get('weekUsersRate');
+                Ext.get('dayTotalCost').dom.innerHTML = "日环比：" + r.get('dayTotalCost');
+                Ext.get('weekTotalCost').dom.innerHTML = "周同比：" + r.get('weekTotalCost');
+                Ext.get('dayCostRate').dom.innerHTML = "日环比：" + r.get('dayCostRate');
+                Ext.get('weekCostRate').dom.innerHTML = "周同比：" + r.get('weekCostRate');
+            }
 
 
         }
