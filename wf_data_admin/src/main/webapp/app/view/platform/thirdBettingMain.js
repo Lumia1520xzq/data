@@ -57,6 +57,16 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 queryMode: "local",
                 store: gameChannelStore
             },{
+                name: 'gameType',
+                fieldLabel: '游戏类型',
+                xtype: 'combo',
+                emptyText: "--请选择--",
+                displayField: 'label',
+                valueField: "value",
+                editable: true,
+                queryMode: "local",
+                store: gameTypeStore
+            },{
                 name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'datefield',

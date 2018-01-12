@@ -34,10 +34,12 @@ public class ThirdBettingRecordController extends ExtJsController {
 
         JSONObject json = getRequestJson();
         Long channelId = null;
+        Integer gameType = null;
         String startTime = null;
         String endTime = null;
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
+            gameType = data.getInteger("gameType");
             channelId = data.getLong("channelId");
             startTime = data.getString("startTime");
             endTime = data.getString("endTime");
@@ -50,6 +52,7 @@ public class ThirdBettingRecordController extends ExtJsController {
         record.setStartTime(startTime);
         record.setEndTime(endTime);
         record.setChannelId(channelId);
+        record.setGameType(gameType);
 
         Page<DatawareThirdBettingRecord> page = new Page<DatawareThirdBettingRecord>(record);
         return dataGrid(datawareThirdBettingRecordService.findPage(page));
