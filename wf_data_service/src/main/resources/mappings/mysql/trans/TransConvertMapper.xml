@@ -16,6 +16,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.source,
 		t.pay_type,
 		t.status,
+		t.biz_type,
+		t.request_order_id,
+		t.request_order_notify_status,
 		t.audit_version,
 		t.channel_id,
 		t.create_time,
@@ -25,11 +28,24 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<sql id="transConvertWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
+		AND t.status=8
 		<if test="p.userId!=null">
 			AND t.user_id = #{p.userId}
 		</if>
-		<if test="p.status!=null">
-			AND t.status = #{p.status}
+		<if test="p.bizType!=null and p.bizType!=''">
+			AND t.biz_type = #{p.bizType}
+		</if>
+		<if test="p.startTime!=null and p.startTime!=''">
+			AND t.update_time &gt;= #{p.startTime}
+		</if>
+		<if test="p.endTime!=null and p.endTime!=''">
+			AND t.update_time &lt;= #{p.endTime}
+		</if>
+		<if test="p.channelId != null">
+			AND channel_id = #{p.channelId}
+		</if>
+		<if test="p.parentId != null ">
+			AND channel_id LIKE CONCAT(#{p.parentId}, '%')
 		</if>
 	</sql>
 	
@@ -44,7 +60,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		WHERE <include refid="transConvertWhere"/> ORDER BY update_time desc LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
-		SELECT COUNT(*) FROM trans_convert WHERE <include refid="transConvertWhere" />
+		SELECT COUNT(*) FROM trans_convert t WHERE <include refid="transConvertWhere" />
 	</select>
 	
 	<insert id="insert">

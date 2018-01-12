@@ -135,7 +135,7 @@ public class CommonDataController extends ExtJsController {
 
 		String keyword = null;
 		JSONObject data = json.getJSONObject("data");
-		if (data != null) {
+		if (data != null && data.size() > 0 ) {
 			keyword = data.getString("data");
 		}
 
@@ -147,11 +147,8 @@ public class CommonDataController extends ExtJsController {
 				user.setNickname(keyword);
 			}
 		}
-		List<UicUser> list = uicUserService.findList(new Page<UicUser>(user));
-		for (UicUser uicUser : list) {
-			uicUser.setNickname(uicUser.getNickname()+"("+uicUser.getId()+")");
-		}
-		return list;
+		Page<UicUser> page = uicUserService.findPage(new Page<UicUser>(user));
+		return page;
 	}
 
 	@RequestMapping("/getViewChannels")

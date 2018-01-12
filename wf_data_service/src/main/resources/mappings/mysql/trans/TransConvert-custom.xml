@@ -159,7 +159,38 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         GROUP BY user_id, channel_id,biz_type,DATE_FORMAT(update_time,"%H"),DATE_FORMAT(update_time,"%Y-%m-%d")
 	</select>
 
-
+	<select id="sumDataByConds" resultType="Double">
+		SELECT SUM(third_amount)
+		FROM trans_convert t
+		WHERE t.delete_flag=0 AND t.status=8
+		<if test="userId!=null and userId!=''">
+			AND t.user_id = #{userId}
+		</if>
+		<if test="status!=null and status!=''">
+			AND t.status = #{status}
+		</if>
+		<if test="orderSn!=null and orderSn!=''">
+			AND t.order_sn = #{orderSn}
+		</if>
+		<if test="bizType!=null and bizType!=''">
+			AND t.biz_type = #{bizType}
+		</if>
+		<if test="thirdOrderSn!=null and thirdOrderSn!=''">
+			AND t.third_order_sn = #{thirdOrderSn}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND t.update_time &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND t.update_time &lt;= #{endTime}
+		</if>
+		<if test="channelId != null">
+			AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null ">
+			AND channel_id LIKE CONCAT(#{parentId}, '%')
+		</if>
+	</select>
 
 </mapper>
 

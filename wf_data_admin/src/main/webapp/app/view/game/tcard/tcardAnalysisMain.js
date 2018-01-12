@@ -65,7 +65,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                                 parentId : val
                             }
                         });
-                        me.down('#channelId').setValue('')
+                        // me.down('#channelId').setValue('')
                     }
                 }
             },{

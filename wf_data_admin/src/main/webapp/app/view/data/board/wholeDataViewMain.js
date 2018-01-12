@@ -105,8 +105,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
                                     {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"34.33%",height:60,html:'<h2>DAU</h2>',bodyStyle:'border-width:0'},
-                                    {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                    {width:"31.33%",height:60,html:'<h2>DAU</h2>',bodyStyle:'border-width:0'},
+                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:10,bodyStyle:'border-width:0'},
                                             {id:'date0',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -130,8 +130,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
                                     {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"34.33%",height:60,html:'<h2>充值金额</h2>',bodyStyle:'border-width:0'},
-                                    {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                    {width:"31.33%",height:60,html:'<h2>充值金额</h2>',bodyStyle:'border-width:0'},
+                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:10,bodyStyle:'border-width:0'},
                                             {id:'date1',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -155,8 +155,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
                                     {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"34.33%",height:60,html:'<h2>充值人数</h2>',bodyStyle:'border-width:0'},
-                                    {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                    {width:"31.33%",height:60,html:'<h2>充值人数</h2>',bodyStyle:'border-width:0'},
+                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:10,bodyStyle:'border-width:0'},
                                             {id:'date2',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -185,8 +185,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>新增用户</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>新增用户</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date3',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -210,8 +210,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>投注人数</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>投注人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date4',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -235,8 +235,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>投注转化率</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date5',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -265,8 +265,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>DAU付费转化率</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>DAU付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date6',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -290,8 +290,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>投注付费转化率</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>投注付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date7',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -315,8 +315,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>新用户投注转化率</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>新用户投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date8',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -345,8 +345,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>投注流水</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>投注流水</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date9',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -370,8 +370,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>返奖率</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>返奖率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date10',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -400,8 +400,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>新用户留存</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>新用户留存</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date13',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -425,8 +425,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>全量用户留存</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>全量用户留存</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date14',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -450,8 +450,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>新用户占比</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>新用户占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date15',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -480,8 +480,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>ARPU</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>ARPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date11',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -505,8 +505,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>ARPPU</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>ARPPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date12',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -535,8 +535,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>成本</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>成本</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date16',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -560,8 +560,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"34.33%",height:60,html:'<h2>成本占比</h2>',bodyStyle:'border-width:0'},
-                                        {width:"30.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                        {width:"31.33%",height:60,html:'<h2>成本占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
                                                 {id:'date17',width:"100%",height:20,bodyStyle:'border-width:0'},
@@ -612,6 +612,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var resultRate=[];
             var payArpu=[];
             var payArppu=[];
+
             var usersDayRetention=[];
             var dayRetention=[];
             var usersRate=[];
@@ -640,6 +641,24 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 usersRate[i]=re.get('usersRate');
                 totalCost[i]=re.get('totalCost');
                 costRate[i]=re.get('costRate');
+            }
+
+            //最后一天日期是否为昨天以后的数据
+            var lastRecord = store.getAt(store.getCount()-1);
+            var businessDate1 = [];
+            if(lastRecord != undefined) {
+               var lastDay = lastRecord.get("businessDate");
+               var now = new Date();
+                now.setTime(now.getTime()-24*60*60*1000);
+                var yesterday = now.getFullYear()+"-"+(now.getMonth()+1) + "-" + now.getDate();
+                if(new Date(lastDay)>=new Date(yesterday)){
+                     usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
+                     dayRetention = dayRetention.slice(0,store.getCount()-1);
+                     usersRate = usersRate.slice(0,store.getCount()-1);
+                     businessDate1 = businessDate.slice(0,store.getCount()-1);
+                }else{
+                     businessDate1 = businessDate;
+                }
             }
 
             var option = [
@@ -1176,7 +1195,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate1
                     },
                     yAxis: {
                         type : 'value',
@@ -1217,7 +1236,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate1
                     },
                     yAxis: {
                         type : 'value',
@@ -1258,7 +1277,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate1
                     },
                     yAxis: {
                         type : 'value',
@@ -1365,8 +1384,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
 
             if(r == undefined){
                 for (var k = 0; k < option.length; k++) {
-                    var date = Ext.get('date' + k).dom;
-                    date.innerHTML = '';
+                    var date1 = Ext.get('date' + k).dom;
+                    date1.innerHTML = '';
                 }
                 Ext.get('dau').dom.innerHTML = "";
                 Ext.get('rechargeAmount').dom.innerHTML = "";
@@ -1425,32 +1444,60 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekCostRate').dom.innerHTML = "";
             }
             else {
-                for (var k = 0; k < option.length; k++) {
-                    var date = Ext.get('date' + k).dom;
+
+                // var lastRecord = store.getAt(store.getCount()-1);
+                // var businessDate1 = [];
+                // if(lastRecord != undefined) {
+                //     var lastDay = lastRecord.get("businessDate");
+                //     var now = new Date();
+                //     now.setTime(now.getTime()-24*60*60*1000);
+                //     var yesterday = now.getFullYear()+"-"+(now.getMonth()+1) + "-" + now.getDate();
+                //     if(new Date(lastDay)>=new Date(yesterday)){
+                //         usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
+                //         dayRetention = dayRetention.slice(0,store.getCount()-1);
+                //         usersRate = usersRate.slice(0,store.getCount()-1);
+                //         businessDate1 = businessDate.slice(0,store.getCount()-1);
+                //     }else{
+                //         businessDate1 = businessDate;
+                //     }
+                // }
+
+                for (var p = 0; p < option.length; p++) {
+                    var date = Ext.get('date' + p).dom;
                     var dd = r.get('businessDate');
                     var xx = dd.indexOf('-');
-                    date.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + dd.substring(xx + 1);
-                    // date.innerHTML = '<div align="center">' + dd.substring(xx + 1)+'</div>';
-                    Ext.get('date9').dom.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + dd.substring(xx + 1);
+                    date.innerHTML = '<div align="center">' + dd.substring(xx + 1)+'</div>';
                 }
-                Ext.get('dau').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('dau') + "</strong>";
-                Ext.get('rechargeAmount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeAmount') + "</strong>";
-                Ext.get('rechargeCount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('rechargeCount') + "</strong>";
-                Ext.get('newUsers').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('newUsers') + "</strong>";
-                Ext.get('userCount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('userCount') + "</strong>";
-                Ext.get('bettingRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('bettingRate') + "%</strong>";
-                Ext.get('dauPayRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('dauPayRate') + "%</strong>";
-                Ext.get('bettingPayRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('bettingPayRate') + "%</strong>";
-                Ext.get('userBettingRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong>";
-                Ext.get('bettingAmount').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('bettingAmount') + "</strong>";
-                Ext.get('resultRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('resultRate') + "%</strong>";
-                Ext.get('payArpu').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('payArpu') + "</strong>";
-                Ext.get('payArppu').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong>";
-                Ext.get('usersDayRetention').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('usersDayRetention') + "%</strong>";
-                Ext.get('dayRetention').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('dayRetention') + "%</strong>";
-                Ext.get('usersRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong>";
-                Ext.get('totalCost').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>&nbsp;" + r.get('totalCost') + "</strong>";
-                Ext.get('costRate').dom.innerHTML = "<strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong>";
+
+                for (var q = 0; q < option.length; q++) {
+                    if(q==13||q==14||q==15){
+                    var date = Ext.get('date' + q).dom;
+                    var rentionDate =  businessDate1[businessDate1.length-1];
+                    date.innerHTML = '<div align="center">'+ rentionDate +'</div>';
+                    }
+                }
+
+
+                Ext.get('dau').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dau') + "</strong></div>";
+                Ext.get('rechargeAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeAmount') + "</strong></div>";
+                Ext.get('rechargeCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeCount') + "</strong></div>";
+                Ext.get('newUsers').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('newUsers') + "</strong></div>";
+                Ext.get('userCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userCount') + "</strong></div>";
+                Ext.get('bettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('bettingRate') + "%</strong></div>";
+                Ext.get('dauPayRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dauPayRate') + "%</strong></div>";
+                Ext.get('bettingPayRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('bettingPayRate') + "%</strong></div>";
+                Ext.get('userBettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong></div>";
+                Ext.get('bettingAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('bettingAmount') + "</strong></div>";
+                Ext.get('resultRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('resultRate') + "%</strong></div>";
+                Ext.get('payArpu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArpu') + "</strong></div>";
+                Ext.get('payArppu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong></div>";
+
+                Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" +  usersDayRetention[usersDayRetention.length-1] +"%</strong></div>";
+                Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length-1] + "%</strong></div>";
+                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersRate[usersRate.length-1]  + "%</strong></div>";
+
+                Ext.get('totalCost').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('totalCost') + "</strong></div>";
+                Ext.get('costRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong></div>";
 
                 Ext.get('dayDauRate').dom.innerHTML = "日环比：" + r.get('dayDauRate');
                 Ext.get('weekDauRate').dom.innerHTML = "周同比：" + r.get('weekDauRate');
