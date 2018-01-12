@@ -612,6 +612,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var resultRate=[];
             var payArpu=[];
             var payArppu=[];
+
             var usersDayRetention=[];
             var dayRetention=[];
             var usersRate=[];
@@ -640,6 +641,24 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 usersRate[i]=re.get('usersRate');
                 totalCost[i]=re.get('totalCost');
                 costRate[i]=re.get('costRate');
+            }
+
+            //最后一天日期是否为昨天以后的数据
+            var lastRecord = store.getAt(store.getCount()-1);
+            var businessDate1 = [];
+            if(lastRecord != undefined) {
+               var lastDay = lastRecord.get("businessDate");
+               var now = new Date();
+                now.setTime(now.getTime()-24*60*60*1000);
+                var yesterday = now.getFullYear()+"-"+(now.getMonth()+1) + "-" + now.getDate();
+                if(new Date(lastDay)>=new Date(yesterday)){
+                     usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
+                     dayRetention = dayRetention.slice(0,store.getCount()-1);
+                     usersRate = usersRate.slice(0,store.getCount()-1);
+                     businessDate1 = businessDate.slice(0,store.getCount()-1);
+                }else{
+                     businessDate1 = businessDate;
+                }
             }
 
             var option = [
@@ -1176,7 +1195,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate1
                     },
                     yAxis: {
                         type : 'value',
@@ -1217,7 +1236,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate1
                     },
                     yAxis: {
                         type : 'value',
@@ -1258,7 +1277,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate
+                        data: businessDate1
                     },
                     yAxis: {
                         type : 'value',
@@ -1365,8 +1384,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
 
             if(r == undefined){
                 for (var k = 0; k < option.length; k++) {
-                    var date = Ext.get('date' + k).dom;
-                    date.innerHTML = '';
+                    var date1 = Ext.get('date' + k).dom;
+                    date1.innerHTML = '';
                 }
                 Ext.get('dau').dom.innerHTML = "";
                 Ext.get('rechargeAmount').dom.innerHTML = "";
@@ -1425,12 +1444,40 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekCostRate').dom.innerHTML = "";
             }
             else {
-                for (var j = 0; j < option.length; j++) {
-                    var date = Ext.get('date' + j).dom;
+
+                // var lastRecord = store.getAt(store.getCount()-1);
+                // var businessDate1 = [];
+                // if(lastRecord != undefined) {
+                //     var lastDay = lastRecord.get("businessDate");
+                //     var now = new Date();
+                //     now.setTime(now.getTime()-24*60*60*1000);
+                //     var yesterday = now.getFullYear()+"-"+(now.getMonth()+1) + "-" + now.getDate();
+                //     if(new Date(lastDay)>=new Date(yesterday)){
+                //         usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
+                //         dayRetention = dayRetention.slice(0,store.getCount()-1);
+                //         usersRate = usersRate.slice(0,store.getCount()-1);
+                //         businessDate1 = businessDate.slice(0,store.getCount()-1);
+                //     }else{
+                //         businessDate1 = businessDate;
+                //     }
+                // }
+
+                for (var p = 0; p < option.length; p++) {
+                    var date = Ext.get('date' + p).dom;
                     var dd = r.get('businessDate');
                     var xx = dd.indexOf('-');
                     date.innerHTML = '<div align="center">' + dd.substring(xx + 1)+'</div>';
                 }
+
+                for (var q = 0; q < option.length; q++) {
+                    if(q==13||q==14||q==15){
+                    var date = Ext.get('date' + q).dom;
+                    var rentionDate =  businessDate1[businessDate1.length-1];
+                    date.innerHTML = '<div align="center">'+ rentionDate +'</div>';
+                    }
+                }
+
+
                 Ext.get('dau').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dau') + "</strong></div>";
                 Ext.get('rechargeAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeAmount') + "</strong></div>";
                 Ext.get('rechargeCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeCount') + "</strong></div>";
@@ -1444,9 +1491,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('resultRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('resultRate') + "%</strong></div>";
                 Ext.get('payArpu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArpu') + "</strong></div>";
                 Ext.get('payArppu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong></div>";
-                Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersDayRetention') + "%</strong></div>";
-                Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dayRetention') + "%</strong></div>";
-                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong></div>";
+
+                Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" +  usersDayRetention[usersDayRetention.length-1] +"%</strong></div>";
+                Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length-1] + "%</strong></div>";
+                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersRate[usersRate.length-1]  + "%</strong></div>";
+
                 Ext.get('totalCost').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('totalCost') + "</strong></div>";
                 Ext.get('costRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong></div>";
 

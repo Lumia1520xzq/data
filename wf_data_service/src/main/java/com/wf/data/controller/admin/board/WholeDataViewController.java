@@ -112,7 +112,7 @@ public class WholeDataViewController extends ExtJsController {
                     Double totalCost = cost.getTotalCost();
                     Double costRate = cost.getCostRate();
                     info.setTotalCost(totalCost);
-                    info.setCostRate(costRate*100);
+                    info.setCostRate( BigDecimalUtil.round(BigDecimalUtil.mul(costRate,100),2));
                 }
                 else{
                     info.setTotalCost(0.0);
@@ -124,14 +124,13 @@ public class WholeDataViewController extends ExtJsController {
                 DatawareFinalChannelInfoAll lastInfoAll =  allList.get(allList.size()-1);
                 //获取最后一天的日期
                 String endDate = lastInfoAll.getBusinessDate();
-
                 //前一天的日期
                 String beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
                 //前一天的数据
                 params.put("date",beforeDate);
                 DatawareFinalChannelInfoAll lastButOneInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
-                DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
                 DatawareFinalChannelCost lastButOneCost = datawareFinalChannelCostService.findByDate(params);
+
                 //1、日环比
                 if(null != lastButOneInfoAll) {
                 String dayDauRate = cal(lastInfoAll.getDau(),lastButOneInfoAll.getDau());
@@ -147,18 +146,45 @@ public class WholeDataViewController extends ExtJsController {
                 String dayResultRate = cal(lastInfoAll.getResultRate(),lastButOneInfoAll.getResultRate());
                 String dayPayArpuRate = cal(lastInfoAll.getPayArpu(),lastButOneInfoAll.getPayArpu());
                 String dayPayArppuRate = cal(lastInfoAll.getPayArppu(),lastButOneInfoAll.getPayArppu());
-                if(null != lastButOneRetention){
-                    String dayUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
-                    String dayDayRetentionRate = cal(lastInfoAll.getDayRetention(),lastButOneRetention.getDayRetention());
-                    String dayUsersRate = cal(lastInfoAll.getUsersRate(),lastButOneRetention.getUsersRate());
-                    lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
-                    lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
-                    lastInfoAll.setDayUsersRate(dayUsersRate);
+
+                //比较最后一天和昨天
+                Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
+                if(DateUtils.parseDate(endDate).before(yesterday)){
+                    DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
+                    if(null != lastButOneRetention){
+                        String dayUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
+                        String dayDayRetentionRate = cal(lastInfoAll.getDayRetention(),lastButOneRetention.getDayRetention());
+                        String dayUsersRate = cal(lastInfoAll.getUsersRate(),lastButOneRetention.getUsersRate());
+                        lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
+                        lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
+                        lastInfoAll.setDayUsersRate(dayUsersRate);
+                    }else{
+                        lastInfoAll.setDayUsersDayRetentionRate("0%");
+                        lastInfoAll.setDayDayRetentionRate("0%");
+                        lastInfoAll.setDayUsersRate("0%");
+                    }
                 }else{
-                    lastInfoAll.setDayUsersDayRetentionRate("0%");
-                    lastInfoAll.setDayDayRetentionRate("0%");
-                    lastInfoAll.setDayUsersRate("0%");
+                    beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
+                    params.put("date",beforeDate);
+                    DatawareFinalChannelRetention lastRetention = datawareFinalChannelRetentionService.findByDate(params);
+                    beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),2));
+                    params.put("date",beforeDate);
+                    DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
+
+                    if(null != lastButOneRetention){
+                        String dayUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
+                        String dayDayRetentionRate = cal(lastRetention.getDayRetention(),lastButOneRetention.getDayRetention());
+                        String dayUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
+                        lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
+                        lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
+                        lastInfoAll.setDayUsersRate(dayUsersRate);
+                    }else{
+                        lastInfoAll.setDayUsersDayRetentionRate("0%");
+                        lastInfoAll.setDayDayRetentionRate("0%");
+                        lastInfoAll.setDayUsersRate("0%");
+                    }
                 }
+
                 if(null != lastButOneCost){
                     String dayTotalCost = cal(lastInfoAll.getTotalCost(),lastButOneCost.getTotalCost());
                     String dayCostRate = cal(lastInfoAll.getCostRate()/100,lastButOneCost.getCostRate());
@@ -187,7 +213,6 @@ public class WholeDataViewController extends ExtJsController {
                 //一周前的数据
                 params.put("date",weekBeforeDate);
                 DatawareFinalChannelInfoAll weekInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
-                DatawareFinalChannelRetention weekRetention = datawareFinalChannelRetentionService.findByDate(params);
                 DatawareFinalChannelCost weekCost = datawareFinalChannelCostService.findByDate(params);
                 //1、周同比
                 if(null != weekInfoAll) {
@@ -204,18 +229,47 @@ public class WholeDataViewController extends ExtJsController {
                     String weekResultRate = cal(lastInfoAll.getResultRate(),weekInfoAll.getResultRate());
                     String weekPayArpuRate = cal(lastInfoAll.getPayArpu(),weekInfoAll.getPayArpu());
                     String weekPayArppuRate = cal(lastInfoAll.getPayArppu(),weekInfoAll.getPayArppu());
-                    if(null != weekRetention) {
-                        String weekUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(), weekRetention.getUsersDayRetention());
-                        String weekDayRetentionRate = cal(lastInfoAll.getDayRetention(), weekRetention.getDayRetention());
-                        String weekUsersRate = cal(lastInfoAll.getUsersRate(), weekRetention.getUsersRate());
-                        lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
-                        lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
-                        lastInfoAll.setWeekUsersRate(weekUsersRate);
-                    }else{
-                        lastInfoAll.setWeekUsersDayRetentionRate("0%");
-                        lastInfoAll.setWeekDayRetentionRate("0%");
-                        lastInfoAll.setWeekUsersRate("0%");
+
+
+
+                    //比较最后一天和昨天
+                    Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
+                    if(DateUtils.parseDate(endDate).before(yesterday)){
+                        DatawareFinalChannelRetention weekRetention = datawareFinalChannelRetentionService.findByDate(params);
+                        if(null != weekRetention){
+                            String weekUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),weekRetention.getUsersDayRetention());
+                            String weekDayRetentionRate = cal(lastInfoAll.getDayRetention(),weekRetention.getDayRetention());
+                            String weekUsersRate = cal(lastInfoAll.getUsersRate(),weekRetention.getUsersRate());
+                            lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
+                            lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
+                            lastInfoAll.setWeekUsersRate(weekUsersRate);
+                        }else{
+                            lastInfoAll.setWeekUsersDayRetentionRate("0%");
+                            lastInfoAll.setWeekDayRetentionRate("0%");
+                            lastInfoAll.setWeekUsersRate("0%");
+                        }
+                    } else {
+                        beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
+                        params.put("date",beforeDate);
+                        DatawareFinalChannelRetention lastRetention = datawareFinalChannelRetentionService.findByDate(params);
+                        beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),8));
+                        params.put("date",beforeDate);
+                        DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
+                        if(null != lastButOneRetention){
+                            String weekUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
+                            String weekDayRetentionRate = cal(lastRetention.getDayRetention(),lastButOneRetention.getDayRetention());
+                            String weekUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
+                            lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
+                            lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
+                            lastInfoAll.setWeekUsersRate(weekUsersRate);
+                        }else{
+                            lastInfoAll.setWeekUsersDayRetentionRate("0%");
+                            lastInfoAll.setWeekDayRetentionRate("0%");
+                            lastInfoAll.setWeekUsersRate("0%");
+                        }
                     }
+
+
                     if(null != weekCost) {
                         String weekTotalCost = cal(lastInfoAll.getTotalCost(), weekCost.getTotalCost());
                         String weekCostRate = cal(lastInfoAll.getCostRate()/100, weekCost.getCostRate());
@@ -256,5 +310,6 @@ public class WholeDataViewController extends ExtJsController {
         }
         return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
     }
+
 
 }
