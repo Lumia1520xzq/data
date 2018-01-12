@@ -62,7 +62,7 @@ Ext.define('WF.view.game.tcard.tcardOverviewMain', {
                                 parentId : val
                             }
                         });
-                        me.down('#channelId').setValue('')
+                        // me.down('#channelId').setValue('')
                     }
                 }
             },{

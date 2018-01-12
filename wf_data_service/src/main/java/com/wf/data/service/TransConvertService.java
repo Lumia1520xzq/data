@@ -1,6 +1,8 @@
 
 package com.wf.data.service;
 
+import com.wf.core.db.DataSource;
+import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.DatawareConvertHour;
@@ -68,6 +70,16 @@ public class TransConvertService extends CrudService<TransConvertDao, TransConve
 
 	public List<DatawareConvertHour> findConvertList(Map<String,Object> map){
 		return dao.findConvertList(map);
+	}
+
+	/**
+	 *
+	 * @return
+	 * @param dataParam
+	 */
+	@DataSource(name = DataSourceContext.DATA_SOURCE_READ)
+	public Double sumDataByConds(Map<String, Object> dataParam) {
+		return dao.sumDataByConds(dataParam);
 	}
 
 }

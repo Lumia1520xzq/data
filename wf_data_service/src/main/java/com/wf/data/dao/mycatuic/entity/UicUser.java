@@ -27,6 +27,34 @@ public class UicUser extends DataEntity {
 	private Long lastLoginChannelId;
 	private Long regChannelId;
 	private Long regParentChannel;
+	private String invitationCode;
+	private String parentInvitationCode;
+	private Double backAwardPercent;
+
+
+	public String getInvitationCode() {
+		return invitationCode;
+	}
+
+	public void setInvitationCode(String invitationCode) {
+		this.invitationCode = invitationCode;
+	}
+
+	public String getParentInvitationCode() {
+		return parentInvitationCode;
+	}
+
+	public void setParentInvitationCode(String parentInvitationCode) {
+		this.parentInvitationCode = parentInvitationCode;
+	}
+
+	public Double getBackAwardPercent() {
+		return backAwardPercent;
+	}
+
+	public void setBackAwardPercent(Double backAwardPercent) {
+		this.backAwardPercent = backAwardPercent;
+	}
 
 	public String getLoginname() {
 		return loginname;
