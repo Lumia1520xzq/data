@@ -3,6 +3,8 @@ package com.wf.data.controller.admin.board;
 import com.alibaba.fastjson.JSONObject;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
+import com.wf.core.utils.type.BigDecimalUtil;
+import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
@@ -15,10 +17,13 @@ import com.wf.data.service.data.DatawareFinalChannelCostService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import com.wf.data.service.data.DatawareFinalChannelRetentionService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.annotation.Retention;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,13 +120,123 @@ public class WholeDataViewController extends ExtJsController {
                 }
             }
             if(CollectionUtils.isNotEmpty(allList)) {
-                //最后一条记录
-                DatawareFinalChannelInfoAll lastRecord =  allList.get(allList.size()-1);
-                //1、日期
-                params.put("date",endTime);
+                //获取最后一条记录
+                DatawareFinalChannelInfoAll lastInfoAll =  allList.get(allList.size()-1);
+                //获取最后一天的日期
+                String endDate = lastInfoAll.getBusinessDate();
+
+                //前一天的日期
+                String beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
+                //前一天的数据
+                params.put("date",beforeDate);
+                DatawareFinalChannelInfoAll lastButOneInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
+                DatawareFinalChannelRetention lastBueOneRetention = datawareFinalChannelRetentionService.findByDate(params);
+                DatawareFinalChannelCost lastButOneCost = datawareFinalChannelCostService.findByDate(params);
+                //1、日环比
+                if(null != lastButOneInfoAll) {
+                String dayDauRate = cal(lastInfoAll.getDau(),lastButOneInfoAll.getDau());
+                String dayRechargeAmountRate = cal(lastInfoAll.getRechargeAmount(),lastButOneInfoAll.getRechargeAmount());
+                String dayRechargeCountRate = cal(lastInfoAll.getRechargeCount(),lastButOneInfoAll.getRechargeCount());
+                String dayNewUsersRate = cal(lastInfoAll.getNewUsers(),lastButOneInfoAll.getNewUsers());
+                String dayUserCountRate = cal(lastInfoAll.getUserCount(),lastButOneInfoAll.getUserCount());
+                String dayBettingRate = cal(lastInfoAll.getBettingRate(),lastButOneInfoAll.getBettingRate());
+                String dayDauPayRate = cal(lastInfoAll.getDauPayRate(),lastButOneInfoAll.getDauPayRate());
+                String dayBettingPayRate = cal(lastInfoAll.getBettingPayRate(),lastButOneInfoAll.getBettingPayRate());
+                String dayUserBettingRate = cal(lastInfoAll.getUserBettingRate(),lastButOneInfoAll.getUserBettingRate());
+                String dayBettingAmountRate = cal(lastInfoAll.getBettingAmount(),lastButOneInfoAll.getBettingAmount());
+                String dayResultRate = cal(lastInfoAll.getResultRate(),lastButOneInfoAll.getResultRate());
+                String dayPayArpuRate = cal(lastInfoAll.getPayArpu(),lastButOneInfoAll.getPayArpu());
+                String dayPayArppuRate = cal(lastInfoAll.getPayArppu(),lastButOneInfoAll.getPayArppu());
+                String dayUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),lastBueOneRetention.getUsersDayRetention());
+                String dayDayRetentionRate = cal(lastInfoAll.getDayRetention(),lastBueOneRetention.getDayRetention());
+                String dayUsersRate = cal(lastInfoAll.getUsersRate(),lastBueOneRetention.getUsersRate());
+                String dayTotalCost = cal(lastInfoAll.getTotalCost(),lastButOneCost.getTotalCost());
+                String dayCostRate = cal(lastInfoAll.getCostRate(),lastButOneCost.getCostRate());
+
+                lastInfoAll.setDayDauRate(dayDauRate);
+                lastInfoAll.setDayRechargeAmountRate(dayRechargeAmountRate);
+                lastInfoAll.setDayRechargeCountRate(dayRechargeCountRate);
+                lastInfoAll.setDayNewUsersRate(dayNewUsersRate);
+                lastInfoAll.setDayUserCountRate(dayUserCountRate);
+                lastInfoAll.setDayBettingRate(dayBettingRate);
+                lastInfoAll.setDayDauPayRate(dayDauPayRate);
+                lastInfoAll.setDayBettingPayRate(dayBettingPayRate);
+                lastInfoAll.setDayUserBettingRate(dayUserBettingRate);
+                lastInfoAll.setDayBettingAmountRate(dayBettingAmountRate);
+                lastInfoAll.setDayResultRate(dayResultRate);
+                lastInfoAll.setDayPayArpuRate(dayPayArpuRate);
+                lastInfoAll.setDayPayArppuRate(dayPayArppuRate);
+                lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
+                lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
+                lastInfoAll.setDayUsersRate(dayUsersRate);
+                lastInfoAll.setDayTotalCost(dayTotalCost);
+                lastInfoAll.setDayCostRate(dayCostRate);
+
+                }
+                //一周前的日期
+                String weekBeforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),7));
+                //一周前的数据
+                params.put("date",weekBeforeDate);
+                DatawareFinalChannelInfoAll weekInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
+                DatawareFinalChannelRetention weekRetention = datawareFinalChannelRetentionService.findByDate(params);
+                DatawareFinalChannelCost weekCost = datawareFinalChannelCostService.findByDate(params);
+                //1、周同比
+                if(null != weekInfoAll) {
+                    String weekDauRate = cal(lastInfoAll.getDau(),weekInfoAll.getDau());
+                    String weekRechargeAmountRate = cal(lastInfoAll.getRechargeAmount(),weekInfoAll.getRechargeAmount());
+                    String weekRechargeCountRate = cal(lastInfoAll.getRechargeCount(),weekInfoAll.getRechargeCount());
+                    String weekNewUsersRate = cal(lastInfoAll.getNewUsers(),weekInfoAll.getNewUsers());
+                    String weekUserCountRate = cal(lastInfoAll.getUserCount(),weekInfoAll.getUserCount());
+                    String weekBettingRate = cal(lastInfoAll.getBettingRate(),weekInfoAll.getBettingRate());
+                    String weekDauPayRate = cal(lastInfoAll.getDauPayRate(),weekInfoAll.getDauPayRate());
+                    String weekBettingPayRate = cal(lastInfoAll.getBettingPayRate(),weekInfoAll.getBettingPayRate());
+                    String weekUserBettingRate = cal(lastInfoAll.getUserBettingRate(),weekInfoAll.getUserBettingRate());
+                    String weekBettingAmountRate = cal(lastInfoAll.getBettingAmount(),weekInfoAll.getBettingAmount());
+                    String weekResultRate = cal(lastInfoAll.getResultRate(),weekInfoAll.getResultRate());
+                    String weekPayArpuRate = cal(lastInfoAll.getPayArpu(),weekInfoAll.getPayArpu());
+                    String weekPayArppuRate = cal(lastInfoAll.getPayArppu(),weekInfoAll.getPayArppu());
+                    String weekUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),weekRetention.getUsersDayRetention());
+                    String weekDayRetentionRate = cal(lastInfoAll.getDayRetention(),weekRetention.getDayRetention());
+                    String weekUsersRate = cal(lastInfoAll.getUsersRate(),weekRetention.getUsersRate());
+                    String weekTotalCost = cal(lastInfoAll.getTotalCost(),weekCost.getTotalCost());
+                    String weekCostRate = cal(lastInfoAll.getCostRate(),weekCost.getCostRate());
+
+                    lastInfoAll.setWeekDauRate(weekDauRate);
+                    lastInfoAll.setWeekRechargeAmountRate(weekRechargeAmountRate);
+                    lastInfoAll.setWeekRechargeCountRate(weekRechargeCountRate);
+                    lastInfoAll.setWeekNewUsersRate(weekNewUsersRate);
+                    lastInfoAll.setWeekUserCountRate(weekUserCountRate);
+                    lastInfoAll.setWeekBettingRate(weekBettingRate);
+                    lastInfoAll.setWeekDauPayRate(weekDauPayRate);
+                    lastInfoAll.setWeekBettingPayRate(weekBettingPayRate);
+                    lastInfoAll.setWeekUserBettingRate(weekUserBettingRate);
+                    lastInfoAll.setWeekBettingAmountRate(weekBettingAmountRate);
+                    lastInfoAll.setWeekResultRate(weekResultRate);
+                    lastInfoAll.setWeekPayArpuRate(weekPayArpuRate);
+                    lastInfoAll.setWeekPayArppuRate(weekPayArppuRate);
+                    lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
+                    lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
+                    lastInfoAll.setWeekUsersRate(weekUsersRate);
+                    lastInfoAll.setWeekTotalCost(weekTotalCost);
+                    lastInfoAll.setWeekCostRate(weekCostRate);
+                }
+
             }
             return  allList;
     }
 
+
+    private  String cal(Long last,Long notlast){
+        if(0 == notlast){
+            return "";
+        }
+        return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
+    }
+    private  String cal(Double last,Double notlast){
+        if(0 == notlast){
+            return "";
+        }
+        return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
+    }
 
 }

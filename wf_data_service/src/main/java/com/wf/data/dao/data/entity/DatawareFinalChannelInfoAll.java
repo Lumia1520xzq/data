@@ -31,23 +31,43 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double totalCost;
 	private Double costRate;
 
-	private Long lastDau;
-	private Double lastRechargeAmount;
-	private Long lastRechargeCount;
-	private Long lastNewUsers;
-	private Long lastUserCount;
-	private Double lastBettingRate;
-	private Double lastDauPayRate;
-	private Double lastBettingPayRate;
-	private Double lastUserBettingRate;
-	private Double lastBettingAmount;
-	private Double lastResultRate;
-	private Double lastPayArpu;
-	private Double lastPayArppu;
-	private Double lastUsersDayRetention;
+	private String dayDauRate;
+	private String weekDauRate;
 
-
-
+	private String dayRechargeAmountRate;
+	private String weekRechargeAmountRate;
+	private String dayRechargeCountRate;
+	private String weekRechargeCountRate;
+	private String dayNewUsersRate;
+	private String weekNewUsersRate;
+	private String dayUserCountRate;
+	private String weekUserCountRate;
+	private String dayBettingRate;
+	private String weekBettingRate;
+	private String dayDauPayRate;
+	private String weekDauPayRate;
+	private String dayBettingPayRate;
+	private String weekBettingPayRate;
+	private String dayUserBettingRate;
+	private String weekUserBettingRate;
+	private String dayBettingAmountRate;
+	private String weekBettingAmountRate;
+	private String dayResultRate;
+	private String weekResultRate;
+	private String dayPayArpuRate;
+	private String weekPayArpuRate;
+	private String dayPayArppuRate;
+	private String weekPayArppuRate;
+	private String dayUsersDayRetentionRate;
+	private String weekUsersDayRetentionRate;
+	private String dayDayRetentionRate;
+	private String weekDayRetentionRate;
+	private String dayUsersRate;
+	private String weekUsersRate;
+	private String dayTotalCost;
+	private String weekTotalCost;
+	private String dayCostRate;
+	private String weekCostRate;
 
 
 	public Long getUserBettingCount() {
@@ -250,115 +270,291 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 		this.costRate = costRate;
 	}
 
-	public Long getLastDau() {
-		return lastDau;
+	public String getDayDauRate() {
+		return dayDauRate;
 	}
 
-	public void setLastDau(Long lastDau) {
-		this.lastDau = lastDau;
+	public void setDayDauRate(String dayDauRate) {
+		this.dayDauRate = dayDauRate;
 	}
 
-	public Double getLastRechargeAmount() {
-		return lastRechargeAmount;
+	public String getWeekDauRate() {
+		return weekDauRate;
 	}
 
-	public void setLastRechargeAmount(Double lastRechargeAmount) {
-		this.lastRechargeAmount = lastRechargeAmount;
+	public void setWeekDauRate(String weekDauRate) {
+		this.weekDauRate = weekDauRate;
 	}
 
-	public Long getLastRechargeCount() {
-		return lastRechargeCount;
+	public String getDayRechargeAmountRate() {
+		return dayRechargeAmountRate;
 	}
 
-	public void setLastRechargeCount(Long lastRechargeCount) {
-		this.lastRechargeCount = lastRechargeCount;
+	public void setDayRechargeAmountRate(String dayRechargeAmountRate) {
+		this.dayRechargeAmountRate = dayRechargeAmountRate;
 	}
 
-	public Long getLastNewUsers() {
-		return lastNewUsers;
+	public String getWeekRechargeAmountRate() {
+		return weekRechargeAmountRate;
 	}
 
-	public void setLastNewUsers(Long lastNewUsers) {
-		this.lastNewUsers = lastNewUsers;
+	public void setWeekRechargeAmountRate(String weekRechargeAmountRate) {
+		this.weekRechargeAmountRate = weekRechargeAmountRate;
 	}
 
-	public Long getLastUserCount() {
-		return lastUserCount;
+	public String getDayRechargeCountRate() {
+		return dayRechargeCountRate;
 	}
 
-	public void setLastUserCount(Long lastUserCount) {
-		this.lastUserCount = lastUserCount;
+	public void setDayRechargeCountRate(String dayRechargeCountRate) {
+		this.dayRechargeCountRate = dayRechargeCountRate;
 	}
 
-	public Double getLastBettingRate() {
-		return lastBettingRate;
+	public String getWeekRechargeCountRate() {
+		return weekRechargeCountRate;
 	}
 
-	public void setLastBettingRate(Double lastBettingRate) {
-		this.lastBettingRate = lastBettingRate;
+	public void setWeekRechargeCountRate(String weekRechargeCountRate) {
+		this.weekRechargeCountRate = weekRechargeCountRate;
 	}
 
-	public Double getLastDauPayRate() {
-		return lastDauPayRate;
+	public String getDayNewUsersRate() {
+		return dayNewUsersRate;
 	}
 
-	public void setLastDauPayRate(Double lastDauPayRate) {
-		this.lastDauPayRate = lastDauPayRate;
+	public void setDayNewUsersRate(String dayNewUsersRate) {
+		this.dayNewUsersRate = dayNewUsersRate;
 	}
 
-	public Double getLastBettingPayRate() {
-		return lastBettingPayRate;
+	public String getWeekNewUsersRate() {
+		return weekNewUsersRate;
 	}
 
-	public void setLastBettingPayRate(Double lastBettingPayRate) {
-		this.lastBettingPayRate = lastBettingPayRate;
+	public void setWeekNewUsersRate(String weekNewUsersRate) {
+		this.weekNewUsersRate = weekNewUsersRate;
 	}
 
-	public Double getLastUserBettingRate() {
-		return lastUserBettingRate;
+	public String getDayUserCountRate() {
+		return dayUserCountRate;
 	}
 
-	public void setLastUserBettingRate(Double lastUserBettingRate) {
-		this.lastUserBettingRate = lastUserBettingRate;
+	public void setDayUserCountRate(String dayUserCountRate) {
+		this.dayUserCountRate = dayUserCountRate;
 	}
 
-	public Double getLastBettingAmount() {
-		return lastBettingAmount;
+	public String getWeekUserCountRate() {
+		return weekUserCountRate;
 	}
 
-	public void setLastBettingAmount(Double lastBettingAmount) {
-		this.lastBettingAmount = lastBettingAmount;
+	public void setWeekUserCountRate(String weekUserCountRate) {
+		this.weekUserCountRate = weekUserCountRate;
 	}
 
-	public Double getLastResultRate() {
-		return lastResultRate;
+	public String getDayBettingRate() {
+		return dayBettingRate;
 	}
 
-	public void setLastResultRate(Double lastResultRate) {
-		this.lastResultRate = lastResultRate;
+	public void setDayBettingRate(String dayBettingRate) {
+		this.dayBettingRate = dayBettingRate;
 	}
 
-	public Double getLastPayArpu() {
-		return lastPayArpu;
+	public String getWeekBettingRate() {
+		return weekBettingRate;
 	}
 
-	public void setLastPayArpu(Double lastPayArpu) {
-		this.lastPayArpu = lastPayArpu;
+	public void setWeekBettingRate(String weekBettingRate) {
+		this.weekBettingRate = weekBettingRate;
 	}
 
-	public Double getLastPayArppu() {
-		return lastPayArppu;
+	public String getDayDauPayRate() {
+		return dayDauPayRate;
 	}
 
-	public void setLastPayArppu(Double lastPayArppu) {
-		this.lastPayArppu = lastPayArppu;
+	public void setDayDauPayRate(String dayDauPayRate) {
+		this.dayDauPayRate = dayDauPayRate;
 	}
 
-	public Double getLastUsersDayRetention() {
-		return lastUsersDayRetention;
+	public String getWeekDauPayRate() {
+		return weekDauPayRate;
 	}
 
-	public void setLastUsersDayRetention(Double lastUsersDayRetention) {
-		this.lastUsersDayRetention = lastUsersDayRetention;
+	public void setWeekDauPayRate(String weekDauPayRate) {
+		this.weekDauPayRate = weekDauPayRate;
+	}
+
+	public String getDayBettingPayRate() {
+		return dayBettingPayRate;
+	}
+
+	public void setDayBettingPayRate(String dayBettingPayRate) {
+		this.dayBettingPayRate = dayBettingPayRate;
+	}
+
+	public String getWeekBettingPayRate() {
+		return weekBettingPayRate;
+	}
+
+	public void setWeekBettingPayRate(String weekBettingPayRate) {
+		this.weekBettingPayRate = weekBettingPayRate;
+	}
+
+	public String getDayUserBettingRate() {
+		return dayUserBettingRate;
+	}
+
+	public void setDayUserBettingRate(String dayUserBettingRate) {
+		this.dayUserBettingRate = dayUserBettingRate;
+	}
+
+	public String getWeekUserBettingRate() {
+		return weekUserBettingRate;
+	}
+
+	public void setWeekUserBettingRate(String weekUserBettingRate) {
+		this.weekUserBettingRate = weekUserBettingRate;
+	}
+
+	public String getDayBettingAmountRate() {
+		return dayBettingAmountRate;
+	}
+
+	public void setDayBettingAmountRate(String dayBettingAmountRate) {
+		this.dayBettingAmountRate = dayBettingAmountRate;
+	}
+
+	public String getWeekBettingAmountRate() {
+		return weekBettingAmountRate;
+	}
+
+	public void setWeekBettingAmountRate(String weekBettingAmountRate) {
+		this.weekBettingAmountRate = weekBettingAmountRate;
+	}
+
+	public String getDayResultRate() {
+		return dayResultRate;
+	}
+
+	public void setDayResultRate(String dayResultRate) {
+		this.dayResultRate = dayResultRate;
+	}
+
+	public String getWeekResultRate() {
+		return weekResultRate;
+	}
+
+	public void setWeekResultRate(String weekResultRate) {
+		this.weekResultRate = weekResultRate;
+	}
+
+	public String getDayPayArpuRate() {
+		return dayPayArpuRate;
+	}
+
+	public void setDayPayArpuRate(String dayPayArpuRate) {
+		this.dayPayArpuRate = dayPayArpuRate;
+	}
+
+	public String getWeekPayArpuRate() {
+		return weekPayArpuRate;
+	}
+
+	public void setWeekPayArpuRate(String weekPayArpuRate) {
+		this.weekPayArpuRate = weekPayArpuRate;
+	}
+
+	public String getDayPayArppuRate() {
+		return dayPayArppuRate;
+	}
+
+	public void setDayPayArppuRate(String dayPayArppuRate) {
+		this.dayPayArppuRate = dayPayArppuRate;
+	}
+
+	public String getWeekPayArppuRate() {
+		return weekPayArppuRate;
+	}
+
+	public void setWeekPayArppuRate(String weekPayArppuRate) {
+		this.weekPayArppuRate = weekPayArppuRate;
+	}
+
+	public String getDayUsersDayRetentionRate() {
+		return dayUsersDayRetentionRate;
+	}
+
+	public void setDayUsersDayRetentionRate(String dayUsersDayRetentionRate) {
+		this.dayUsersDayRetentionRate = dayUsersDayRetentionRate;
+	}
+
+	public String getWeekUsersDayRetentionRate() {
+		return weekUsersDayRetentionRate;
+	}
+
+	public void setWeekUsersDayRetentionRate(String weekUsersDayRetentionRate) {
+		this.weekUsersDayRetentionRate = weekUsersDayRetentionRate;
+	}
+
+	public String getDayDayRetentionRate() {
+		return dayDayRetentionRate;
+	}
+
+	public void setDayDayRetentionRate(String dayDayRetentionRate) {
+		this.dayDayRetentionRate = dayDayRetentionRate;
+	}
+
+	public String getWeekDayRetentionRate() {
+		return weekDayRetentionRate;
+	}
+
+	public void setWeekDayRetentionRate(String weekDayRetentionRate) {
+		this.weekDayRetentionRate = weekDayRetentionRate;
+	}
+
+	public String getDayUsersRate() {
+		return dayUsersRate;
+	}
+
+	public void setDayUsersRate(String dayUsersRate) {
+		this.dayUsersRate = dayUsersRate;
+	}
+
+	public String getWeekUsersRate() {
+		return weekUsersRate;
+	}
+
+	public void setWeekUsersRate(String weekUsersRate) {
+		this.weekUsersRate = weekUsersRate;
+	}
+
+	public String getDayTotalCost() {
+		return dayTotalCost;
+	}
+
+	public void setDayTotalCost(String dayTotalCost) {
+		this.dayTotalCost = dayTotalCost;
+	}
+
+	public String getWeekTotalCost() {
+		return weekTotalCost;
+	}
+
+	public void setWeekTotalCost(String weekTotalCost) {
+		this.weekTotalCost = weekTotalCost;
+	}
+
+	public String getDayCostRate() {
+		return dayCostRate;
+	}
+
+	public void setDayCostRate(String dayCostRate) {
+		this.dayCostRate = dayCostRate;
+	}
+
+	public String getWeekCostRate() {
+		return weekCostRate;
+	}
+
+	public void setWeekCostRate(String weekCostRate) {
+		this.weekCostRate = weekCostRate;
 	}
 }

@@ -21,7 +21,26 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 'bettingAmount','resultRate',
                 'payArpu','payArppu',
                 'usersDayRetention','dayRetention','usersRate',
-                'totalCost','costRate'
+                'totalCost','costRate',
+                //以下是环比的数据字段
+                "dayDauRate", "weekDauRate",
+                "dayRechargeAmountRate", "weekRechargeAmountRate",
+                "dayRechargeCountRate", "weekRechargeCountRate",
+                "dayNewUsersRate", "weekNewUsersRate",
+                "dayUserCountRate", "weekUserCountRate",
+                "dayBettingRate", "weekBettingRate",
+                "dayDauPayRate", "weekDauPayRate",
+                "dayBettingPayRate", "weekBettingPayRate",
+                "dayUserBettingRate", "weekUserBettingRate",
+                "dayBettingAmountRate", "weekBettingAmountRate",
+                "dayResultRate", "weekResultRate",
+                "dayPayArpuRate", "weekPayArpuRate",
+                "dayPayArppuRate", "weekPayArppuRate",
+                "dayUsersDayRetentionRate", "weekUsersDayRetentionRate",
+                "dayDayRetentionRate", "weekDayRetentionRate",
+                "dayUsersRate", "weekUsersRate",
+                "dayTotalCost", "weekTotalCost",
+                "dayCostRate", "weekCostRate"
             ]
         });
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -97,8 +116,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                     {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'日环比:333'},
-                                            {width:"100%",height:20,bodyStyle:'border-width:0',html:'周同比:444'}
+                                            {id:'dayDauRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                            {id:'weekDauRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                         ]
                                     }
                                 ]
@@ -1342,13 +1361,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 me.echarts = echarts.init(Ext.get("kpi"+j).dom);
                 me.echarts.setOption(option[j]);
             }
-
             var r = store.getAt(store.getCount()-1);
             for(var k=0;k<option.length;k++){
                 var date = Ext.get('date'+k).dom;
                 date.innerHTML = r.get('businessDate');
             }
-
              Ext.get('dau').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dau')+"</strong>";
              Ext.get('rechargeAmount').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('rechargeAmount')+"</strong>";
              Ext.get('rechargeCount').dom.innerHTML = "<strong style='font-size:18px'>&nbsp;&nbsp;"+r.get('rechargeCount')+"</strong>";
@@ -1367,6 +1384,11 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             Ext.get('usersRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('usersRate')+"%</strong>";
             Ext.get('totalCost').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('totalCost')+"</strong>";
             Ext.get('costRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('costRate')+"%</strong>";
+
+            Ext.get('dayDauRate').dom.innerHTML = "<strong style='font-size:18px'>"+r.get('dayDauRate')+"</strong>";
+
+
+
         }
     }
 });
