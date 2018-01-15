@@ -10,4 +10,6 @@ import java.util.Map;
 public interface DatawareFinalChannelCostDao extends CrudDao<DatawareFinalChannelCost> {
 
     long getCountByTime(Map<String, Object> map);
+
+    DatawareFinalChannelCost findByDate(Map<String,Object> params);
 }

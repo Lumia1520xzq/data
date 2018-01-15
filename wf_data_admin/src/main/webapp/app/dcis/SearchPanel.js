@@ -117,6 +117,22 @@ Ext.define("DCIS.SearchPanel", {
                 }
             }
         });
+        if (config.sumData) {
+            buttonPanel.items.push({
+                xtype: "panel",
+                width: 50,
+                border: false,
+                height: "auto"
+            });
+            buttonPanel.items.push({
+                xtype: "button",
+                text: "汇总查询",
+                iconCls: 'icon-search',
+                width: 100,
+                handler: config.sumData,
+                scope: me
+            });
+        }
         buttonPanel.items.push({
             xtype: "panel",
             width: 20,

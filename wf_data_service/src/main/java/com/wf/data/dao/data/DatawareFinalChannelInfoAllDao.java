@@ -13,4 +13,6 @@ public interface DatawareFinalChannelInfoAllDao extends CrudDao<DatawareFinalCha
     long getCountByTime(Map<String,Object> map);
 
     List<DatawareFinalChannelInfoAll> getListByChannelAndDate(Map<String,Object> params);
+
+    DatawareFinalChannelInfoAll findByDate(Map<String,Object> params);
 }

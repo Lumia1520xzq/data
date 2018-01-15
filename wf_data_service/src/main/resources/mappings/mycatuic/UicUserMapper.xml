@@ -14,16 +14,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.phone,
 		t.head_img,
 		t.user_source,
-		t.invitation_code,
-		t.parent_invitation_code,
-		t.back_award_percent,
 		t.third_id,
 		t.third_head_img,
 		t.third_params,
 		t.sound_flag,
 		t.status,
-		t.last_login_channel_id,
+		t.visitor_token,
 		t.reg_channel_id,
+		t.reg_parent_channel,
+		t.last_login_channel_id,
+		t.invitation_code,
+		t.parent_invitation_code,
+		t.back_award_percent,
+		t.source_nickname,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
@@ -42,9 +45,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="p.nickname != null and p.nickname != '' and p.id != null">
 			AND t.nickname LIKE CONCAT('%', #{p.nickname}, '%') OR t.id = #{p.id}
-		</if>
-		<if test="p.parentInvitationCode != null and p.parentInvitationCode != ''">
-			AND t.parent_invitation_code = #{p.parentInvitationCode}
 		</if>
        <!-- <if test="p.regChannelId != null and p.regChannelId != ''">
 			AND t.reg_channel_id LIKE CONCAT('%', #{p.regChannelId}, '%')
