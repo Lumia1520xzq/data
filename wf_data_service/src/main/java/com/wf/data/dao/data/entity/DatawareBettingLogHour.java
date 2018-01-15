@@ -18,7 +18,8 @@ public class DatawareBettingLogHour extends DataEntity {
 	private String bettingHour;
 	private String bettingDate;
 	private Long parentId;
-
+	//投注人数
+	private Integer bettingUserCount;
 
 	public Long getParentId() {
 		return parentId;
@@ -116,5 +117,13 @@ public class DatawareBettingLogHour extends DataEntity {
 
 	public void setBettingDate(String bettingDate) {
 		this.bettingDate = bettingDate;
+	}
+
+	public Integer getBettingUserCount() {
+		return bettingUserCount;
+	}
+
+	public void setBettingUserCount(Integer bettingUserCount) {
+		this.bettingUserCount = bettingUserCount;
 	}
 }

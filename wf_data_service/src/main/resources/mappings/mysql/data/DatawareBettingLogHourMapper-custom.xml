@@ -52,5 +52,25 @@
         </if>
         GROUP BY user_id,channel_id,game_type,betting_date
     </select>
+
+    <select id="getSumByDateAndHour" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+        SELECT
+        SUM(betting_amount) bettingAmount,
+        SUM(result_amount) resultAmount,
+        COUNT(DISTINCT user_id) bettingUserCount,
+        SUM(betting_count) bettingCount
+        FROM `dataware_betting_log_hour`
+        WHERE 1=1 AND delete_flag = 0 AND user_group = 2
+        <if test="bettingDate != null and bettingDate != ''">
+        AND betting_date = #{bettingDate}
+        </if>
+        <if test="bettingHour != null and bettingHour != ''">
+        AND betting_hour = #{bettingHour}
+        </if>
+        <if test="gameType != null and gameType != ''">
+        AND game_type = #{gameType}
+        </if>
+    </select>
+
 </mapper>
 
