@@ -126,4 +126,23 @@ public class DatawareBettingLogHour extends DataEntity {
 	public void setBettingUserCount(Integer bettingUserCount) {
 		this.bettingUserCount = bettingUserCount;
 	}
+
+	@Override
+	public String toString() {
+		return "DatawareBettingLogHour{" +
+				"userId=" + userId +
+				", gameType=" + gameType +
+				", gameName='" + gameName + '\'' +
+				", bettingCount=" + bettingCount +
+				", bettingAmount=" + bettingAmount +
+				", resultAmount=" + resultAmount +
+				", userGroup=" + userGroup +
+				", channelId=" + channelId +
+				", bettingHour='" + bettingHour + '\'' +
+				", bettingDate='" + bettingDate + '\'' +
+				", parentId=" + parentId +
+				", bettingUserCount=" + bettingUserCount +
+				", userList=" + userList +
+				'}';
+	}
 }

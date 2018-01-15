@@ -212,14 +212,23 @@ public class BettingAnalyseJob {
         DatawareBettingLogHour dayInfo = hourBettingService.getSumByDateAndHour(bettingParams(cal,gameType,false));
         if (dayInfo == null) {
             dayInfo = new DatawareBettingLogHour();
+            dayInfo.setBettingAmount(0.0);
+            dayInfo.setResultAmount(0.0);
+            dayInfo.setBettingUserCount(0);
+            dayInfo.setBettingCount(0);
         }
         //过去一小时的投注情况
         DatawareBettingLogHour hourInfo = hourBettingService.getSumByDateAndHour(bettingParams(cal,gameType,true));
         if (hourInfo == null) {
             hourInfo = new DatawareBettingLogHour();
+            hourInfo.setBettingAmount(0.0);
+            hourInfo.setResultAmount(0.0);
+            hourInfo.setBettingUserCount(0);
+            hourInfo.setBettingCount(0);
         }
         //DAU
         Integer dailyActive = hourBuryingPointService.getDauByDateAndHour(buryingParams(cal,gameType));
+        System.out.println(dayInfo.toString());
         return CONTENT_TEMP
                 .replace("TODAY", (today < 10 ? ("0" + today) : String.valueOf(today)))
                 .replace("DAILY_ACTIVE", format(dailyActive))
@@ -227,19 +236,23 @@ public class BettingAnalyseJob {
                 .replaceFirst("AWARD_AMOUNT", format((dayInfo.getResultAmount())))
                 .replaceFirst("BETTING_USER", format((dayInfo.getBettingUserCount())))
                 .replaceFirst("BETTING_NUM", format((dayInfo.getBettingCount())))
-                .replaceFirst("AWARD_RATE", dayInfo.getBettingAmount() == 0L ? "0%" :
+                .replaceFirst("AWARD_RATE", dayInfo.getBettingAmount() == null || dayInfo.getBettingAmount() == 0 ? "0%" :
                         NumberUtils.format(BigDecimalUtil.div(dayInfo.getResultAmount(), dayInfo.getBettingAmount(), 4), "#.##%"))
                 .replace("TIME_SECTION", timeSection)
                 .replace("HOUR_BETTING_AMOUNT", format((hourInfo.getBettingAmount())))
                 .replace("HOUR_AWARD_AMOUNT", format((hourInfo.getResultAmount())))
                 .replace("HOUR_BETTING_USER", format((hourInfo.getBettingUserCount())))
                 .replace("HOUR_BETTING_NUM", format((hourInfo.getBettingCount())))
-                .replace("HOUR_AWARD_RATE", hourInfo.getBettingAmount() == 0L ? "0%" :
-                        NumberUtils.format(BigDecimalUtil.div(hourInfo.getResultAmount(), hourInfo.getBettingAmount(), 4), "#.##%"));
+                .replace("HOUR_AWARD_RATE",hourInfo.getBettingAmount() == null || hourInfo.getBettingAmount() == 0 ? "0%" :
+                        NumberUtils.format(BigDecimalUtil.div(hourInfo.getResultAmount(),hourInfo.getBettingAmount(), 4), "#.##%"));
     }
 
     private String format(Object obj) {
         DecimalFormat df = new DecimalFormat("#,###");
+        if(null == obj){
+            return "0";
+        }
         return  df.format(obj);
     }
+
 }
