@@ -1,7 +1,7 @@
-Ext.define('WF.view.business.convertMain', {
+Ext.define('WF.view.business.csConvertMain', {
     extend: 'Ext.panel.Panel',
     title: '充值查询',
-    xtype: 'convertMain',
+    xtype: 'csConvertMain',
     closable: true,
     layout: {
         type: 'vbox',
@@ -53,12 +53,7 @@ Ext.define('WF.view.business.convertMain', {
             collapsed: false,
             columns: 2,
             buildField: "Manual",
-            forceFit: false,
-            sumData: function () {
-                callapi("data/admin/business/convert/sumData.do", me.down('dataform').form.getValues(), function (response) {
-                    me.down("[name='sumData']").setValue(response + " 元");
-                });
-            },
+            forceFit: true,
             items: [{
                 name: 'parentId',
                 fieldLabel: '主渠道',
@@ -120,16 +115,6 @@ Ext.define('WF.view.business.convertMain', {
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '结束时间',
             }]
-        });
-        me.add({
-            items: [{
-                xtype: 'displayfield',
-                name: 'sumData',
-                value: 0,
-                fieldLabel: '<span style="font-size:14px;font-weight:bold">充值金额合计：</span>',
-                padding: 5
-            }],
-            layout: 'hbox'
         });
         me.add({
             xtype: 'datagrid',
