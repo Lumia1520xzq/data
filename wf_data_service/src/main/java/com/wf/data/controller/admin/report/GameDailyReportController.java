@@ -35,6 +35,7 @@ public class GameDailyReportController extends ExtJsController {
     private DatawareBettingLogDayService datawareBettingLogDayService;
 
     /**
+     * 返回日报表列表
      * @return
      */
     @RequestMapping("/getList")
@@ -55,7 +56,7 @@ public class GameDailyReportController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
                 endTime = DateUtils.getYesterdayDate();
                 datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
@@ -70,7 +71,7 @@ public class GameDailyReportController extends ExtJsController {
         } catch (Exception e) {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(5);
         params.put("gameType", gameType);
         params.put("parentId",parentId);
         for (String searchDate : datelist) {
@@ -105,13 +106,17 @@ public class GameDailyReportController extends ExtJsController {
             //13、人均频率(投注笔数/投注人数)
             Double avgBettingCount = BigDecimalUtil.round(BigDecimalUtil.div(bettingCount,bettingUserCount),1);
             //14、新增用户
+
             //历史活跃用户id
             List<Long> historyDauIds = datawareBuryingPointDayService.getHistoryDauIds(params);
             //当天活跃用户
             List<Long> todayDauIds = datawareBuryingPointDayService.getGameDauIds(params);
             //新增用户
             List<Long> newUserIds = getNewIds(historyDauIds,todayDauIds);
+
+
             Integer newUserCount = newUserIds.size();
+
             //15、新增投注转化率(新增且投注用户/新增用户)
             //投注用户id
             List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(params);
@@ -122,7 +127,6 @@ public class GameDailyReportController extends ExtJsController {
             params.put("searchDate", nextDay);
             List<Long> nextDauIds = datawareBuryingPointDayService.getGameDauIds(params);
             String newUserRemain = getTransRate(newUserIds,nextDauIds);
-
             dto.setGameType(gameType);
             dto.setSearchDate(searchDate);
             dto.setDau(dau);
@@ -144,15 +148,15 @@ public class GameDailyReportController extends ExtJsController {
         return list;
     }
 
-    public String getTransRate(List<Long> newIds,List<Long> bettingIds){
-        if(CollectionUtils.isNotEmpty(newIds)||CollectionUtils.isNotEmpty(bettingIds)){
+    private String getTransRate(List<Long> newIds,List<Long> bettingIds){
+        if(CollectionUtils.isEmpty(newIds)||CollectionUtils.isEmpty(bettingIds)){
             return "0%";
         }
         List<Long> newAndBettingIds = (List<Long>)CollectionUtils.intersection(newIds,bettingIds);
         return cal(newAndBettingIds.size(),newIds.size());
     }
 
-    public List<Long> getNewIds(List<Long> historyDauIds,List<Long> todayDauIds){
+    private List<Long> getNewIds(List<Long> historyDauIds,List<Long> todayDauIds){
         if(null == historyDauIds){
             historyDauIds = new ArrayList<>();
         }
