@@ -146,12 +146,18 @@ Ext.define('WF.view.business.csConvertMain', {
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
-                    var index = productTypeStore.find('value', value);
+                    /*var index = productTypeStore.find('value', value);
                     if (index != -1) {
                         var record = productTypeStore.getAt(index);
                         return record.data.label;
                     }
-                    return '--';
+                    return '--';*/
+                    var record = productTypeStore.findRecord('value', value,0,false,false,true);
+                    if(record == null){
+                        return '--';
+                    }else {
+                        return record.data.label;
+                    }
                 }
             }, {
                 text: '订单号',

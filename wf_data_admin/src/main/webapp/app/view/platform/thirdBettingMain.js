@@ -13,7 +13,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/platform/record/getList.do',
-            fields: ['businessDate','channelName','gameType','userCount', 'bettingCount', 'bettingAmount','bettingArpu','bettingAsp', 'resultAmount','resultRate']
+            fields: ['businessDate', 'channelName', 'gameType', 'userCount', 'bettingCount', 'bettingAmount', 'bettingArpu', 'bettingAsp', 'resultAmount', 'resultRate']
         });
 
         var gameChannelStore = Ext.create('DCIS.Store', {
@@ -33,7 +33,6 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 type: 'game_type'
             }
         });
-
 
 
         me.add({
@@ -56,7 +55,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 editable: true,
                 queryMode: "local",
                 store: gameChannelStore
-            },{
+            }, {
                 name: 'gameType',
                 fieldLabel: '游戏类型',
                 xtype: 'combo',
@@ -66,18 +65,18 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 editable: true,
                 queryMode: "local",
                 store: gameTypeStore
-            },{
+            }, {
                 name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
                 format: 'Y-m-d',
-                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
-            },{
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
+            }, {
                 name: 'endTime',
                 fieldLabel: '结束时间',
                 xtype: 'datefield',
                 format: 'Y-m-d',
-                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
             }]
         });
         me.add({
@@ -85,7 +84,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             store: store,
             buildField: "Manual",
             forceFit: true,
-            columns: [ {
+            columns: [{
                 text: '日期',
                 width: 100,
                 dataIndex: 'businessDate',
@@ -97,19 +96,19 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 width: 100,
                 menuDisabled: true,
                 sortable: false
-            },{
+            }, {
                 text: '游戏名称',
                 dataIndex: 'gameType',
                 width: 100,
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
-                    var index = gameTypeStore.find('value', value);
-                    if (index != -1) {
-                        var record = gameTypeStore.getAt(index);
+                    var record = gameTypeStore.findRecord('value', value,0,false,false,true);
+                    if(record == null){
+                        return '--';
+                    }else {
                         return record.data.label;
                     }
-                    return '--';
                 }
             }, {
                 text: '投注人数',
@@ -129,7 +128,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 width: 100,
                 menuDisabled: true,
                 sortable: false
-            },{
+            }, {
                 text: '投注ARPU',
                 dataIndex: 'bettingArpu',
                 width: 100,
@@ -147,11 +146,11 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 width: 100,
                 menuDisabled: true,
                 sortable: false
-            },  {
+            }, {
                 text: '返奖率',
                 dataIndex: 'resultRate',
-                renderer:function(value){
-                    return value+"%"
+                renderer: function (value) {
+                    return value + "%"
                 },
                 width: 100,
                 menuDisabled: true,
