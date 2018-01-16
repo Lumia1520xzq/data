@@ -228,7 +228,6 @@ public class BettingAnalyseJob {
         }
         //DAU
         Integer dailyActive = hourBuryingPointService.getDauByDateAndHour(buryingParams(cal,gameType));
-        System.out.println(dayInfo.toString());
         return CONTENT_TEMP
                 .replace("TODAY", (today < 10 ? ("0" + today) : String.valueOf(today)))
                 .replace("DAILY_ACTIVE", format(dailyActive))
