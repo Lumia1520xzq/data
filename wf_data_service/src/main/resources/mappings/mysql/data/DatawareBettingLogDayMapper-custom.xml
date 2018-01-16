@@ -19,10 +19,32 @@
     <select id="getTcardBettingByday" resultType="com.wf.data.dto.TcardDto">
         SELECT
         betting_date searchDate,
-        COUNT(DISTINCT user_id) userCount,
-        SUM(betting_amount) bettingAmount,
-        SUM(betting_count) bettingCount,
-        SUM(result_amount) resultAmount
+        IFNULL(COUNT(DISTINCT user_id),0) userCount,
+        IFNULL(SUM(betting_amount),0) bettingAmount,
+        IFNULL(SUM(betting_count),0) bettingCount,
+        IFNULL(SUM(result_amount),0) resultAmount
+        FROM `dataware_betting_log_day`
+        WHERE 1=1
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND betting_date = #{searchDate}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+
+    <select id="getBettingUserIds" resultType="Long">
+        SELECT
+        DISTINCT user_id
         FROM `dataware_betting_log_day`
         WHERE 1=1
         <if test="gameType != null and gameType != ''">
