@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 每日任务调度总job
+ * 每日基础数据任务调度总job
  *
  * @author chengsheng.liu
  * @date 2018年01月15日
