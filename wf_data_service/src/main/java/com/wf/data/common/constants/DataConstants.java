@@ -100,6 +100,9 @@ public interface DataConstants {
     String DATA_DATAWARE_CONVERT_HISTORY_HOUR = "data_dataware_convert_history_hour";
 
 
+    String DATA_DATAWARE_CONVERSION_FLAG = "data_dataware_conversion_flag";
+    String DATA_DATAWARE_CONVERSION_HISTORY = "data_dataware_conversion_history";
+
     /**
      * 清洗渠道列表
      */

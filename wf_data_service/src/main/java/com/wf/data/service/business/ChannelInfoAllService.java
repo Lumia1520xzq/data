@@ -1,10 +1,9 @@
-package com.wf.data.task.dataware;
+package com.wf.data.service.business;
 
 import com.google.common.collect.Lists;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
@@ -17,6 +16,8 @@ import com.wf.data.service.data.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -24,19 +25,26 @@ import java.util.*;
  * @author chengsheng.liu
  * @date 2018年01月03日
  */
-public class ChannelInfoAllJob {
+@Service
+public class ChannelInfoAllService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private DataConfigService dataConfigService;
+    @Autowired
+    private DatawareFinalChannelInfoAllService datawareFinalChannelInfoAllService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
+    @Autowired
+    private DatawareBuryingPointDayService datawareBuryingPointDayService;
+    @Autowired
+    private DatawareConvertDayService datawareConvertDayService;
+    @Autowired
+    private DatawareUserInfoService datawareUserInfoService;
+    @Autowired
+    private DatawareBettingLogDayService datawareBettingLogDayService;
 
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final DatawareFinalChannelInfoAllService datawareFinalChannelInfoAllService = SpringContextHolder.getBean(DatawareFinalChannelInfoAllService.class);
-    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
-    private final DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
-    private final DatawareConvertDayService datawareConvertDayService = SpringContextHolder.getBean(DatawareConvertDayService.class);
-    private final DatawareUserInfoService datawareUserInfoService = SpringContextHolder.getBean(DatawareUserInfoService.class);
-    private final DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
-
-    public void execute() {
+    public void toDoChannelInfoAllAnalysis() {
         logger.info("每天数据汇总开始:traceId={}", TraceIdUtils.getTraceId());
 
         boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DESTINATION_COLLECTING_FLAG);
