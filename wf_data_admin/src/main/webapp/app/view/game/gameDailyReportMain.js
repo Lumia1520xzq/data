@@ -96,12 +96,12 @@ Ext.define('WF.view.game.gameDailyReportMain', {
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
-                    var index = gameTypeStore.find('value', value);
-                    if (index != -1) {
-                        var record = gameTypeStore.getAt(index);
+                    var record = gameTypeStore.findRecord('value', value,0,false,false,true);
+                    if(record == null){
+                        return '全部';
+                    }else {
                         return record.data.label;
                     }
-                    return '--';
                 }
             },
             {

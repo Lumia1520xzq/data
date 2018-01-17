@@ -13,6 +13,7 @@ import com.wf.data.dto.DailyReportDto;
 import com.wf.data.dto.TcardDto;
 import com.wf.data.service.data.DatawareBettingLogDayService;
 import com.wf.data.service.data.DatawareBuryingPointDayService;
+import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,8 @@ public class GameDailyReportController extends ExtJsController {
     private DatawareBuryingPointDayService datawareBuryingPointDayService;
     @Autowired
     private DatawareBettingLogDayService datawareBettingLogDayService;
+    @Autowired
+    private EsUicAllGameService esUicAllGameService;
 
     /**
      * 返回日报表列表
@@ -56,7 +59,7 @@ public class GameDailyReportController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
                 endTime = DateUtils.getYesterdayDate();
                 datelist = DateUtils.getDateList(startTime, endTime);
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
@@ -106,17 +109,14 @@ public class GameDailyReportController extends ExtJsController {
             //13、人均频率(投注笔数/投注人数)
             Double avgBettingCount = BigDecimalUtil.round(BigDecimalUtil.div(bettingCount,bettingUserCount),1);
             //14、新增用户
-
             //历史活跃用户id
-            List<Long> historyDauIds = datawareBuryingPointDayService.getHistoryDauIds(params);
+            //List<Long> historyDauIds = datawareBuryingPointDayService.getHistoryDauIds(params);
             //当天活跃用户
-            List<Long> todayDauIds = datawareBuryingPointDayService.getGameDauIds(params);
+            //List<Long> todayDauIds = datawareBuryingPointDayService.getGameDauIds(params);
             //新增用户
-            List<Long> newUserIds = getNewIds(historyDauIds,todayDauIds);
-
-
+            //List<Long> newUserIds = getNewIds(historyDauIds,todayDauIds);
+            List<Long> newUserIds = esUicAllGameService.getNewUserIds(gameType,searchDate,parentId);
             Integer newUserCount = newUserIds.size();
-
             //15、新增投注转化率(新增且投注用户/新增用户)
             //投注用户id
             List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(params);
