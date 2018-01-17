@@ -1,9 +1,8 @@
-package com.wf.data.task.dataware;
+package com.wf.data.service.business;
 
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
@@ -16,6 +15,8 @@ import com.wf.data.service.data.DatawareConvertHourService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +26,22 @@ import java.util.Map;
  * @author chengsheng.liu
  * @date 2017年9月25日
  */
-public class ConvertDayJob {
+@Service
+public class ConvertDayService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final DatawareConvertDayService datawareConvertDayService = SpringContextHolder.getBean(DatawareConvertDayService.class);
-    private final DatawareConvertHourService datawareConvertHourService = SpringContextHolder.getBean(DatawareConvertHourService.class);
-    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
+    @Autowired
+    private DataConfigService dataConfigService;
+    @Autowired
+    private DatawareConvertDayService datawareConvertDayService;
+    @Autowired
+    private DatawareConvertHourService datawareConvertHourService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
 
-    public void execute() {
-        logger.info("每小时埋点汇总开始:traceId={}", TraceIdUtils.getTraceId());
+    public void toDoConvertAnalysis() {
+        logger.info("每小时充值汇总开始:traceId={}", TraceIdUtils.getTraceId());
 
         boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DATAWARE_CONVERT_FLAG_DAY);
         if (false == flag) {
@@ -46,7 +52,7 @@ public class ConvertDayJob {
         }
 
 
-        logger.info("每小时埋点汇总结束:traceId={}", TraceIdUtils.getTraceId());
+        logger.info("每小时充值汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
 
@@ -92,13 +98,13 @@ public class ConvertDayJob {
             if (CollectionUtils.isNotEmpty(convertList)) {
                 long count = datawareConvertDayService.getCountByTime(map);
                 if (count <= 0) {
-                    for(DatawareConvertDay item :convertList){
+                    for (DatawareConvertDay item : convertList) {
                         if (null != item.getChannelId()) {
                             ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
                             if (null != channelInfo) {
-                                if(null == channelInfo.getParentId()){
+                                if (null == channelInfo.getParentId()) {
                                     item.setParentId(item.getChannelId());
-                                }else {
+                                } else {
                                     item.setParentId(channelInfo.getParentId());
                                 }
                             }

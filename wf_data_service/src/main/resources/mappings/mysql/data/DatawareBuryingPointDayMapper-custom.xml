@@ -78,6 +78,9 @@
         <if test="parentId != null">
             AND t.parent_id = #{parentId}
         </if>
+        <if test="gameFlag != null">
+            AND game_type != 0
+        </if>
         <if test="parentChannelList != null and  parentChannelList.size() != 0">
             AND t.parent_id not in
             <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">

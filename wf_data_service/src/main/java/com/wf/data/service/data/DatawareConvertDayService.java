@@ -6,6 +6,7 @@ import com.wf.data.dao.data.entity.DatawareConvertDay;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +22,9 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
 
     public DatawareFinalChannelInfoAll getConvertByDate(Map<String, Object> map) {
         return dao.getConvertByDate(map);
+    }
+
+    public List<Long> getUserIdByDate(Map<String, Object> map){
+      return dao.getUserIdByDate(map);
     }
 }

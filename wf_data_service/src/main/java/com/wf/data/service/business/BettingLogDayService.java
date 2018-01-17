@@ -1,9 +1,8 @@
-package com.wf.data.task.dataware;
+package com.wf.data.service.business;
 
 import com.google.common.collect.Lists;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
@@ -20,26 +19,32 @@ import com.wf.data.service.data.DatawareBettingLogHourService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 /**
- * @author chengsheng.liu
- * @date 2017年9月25日
+ * @author: lcs
+ * @date: 2018/01/16
  */
-public class DayBettingLogJob {
-
+@Service
+public class BettingLogDayService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private DataConfigService dataConfigService;
+    @Autowired
+    private UicGroupService uicGroupService;
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private DatawareBettingLogHourService datawareBettingLogHourService;
+    @Autowired
+    private DatawareBettingLogDayService datawareBettingLogDayService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
 
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
-    private final DataDictService dataDictService = SpringContextHolder.getBean(DataDictService.class);
-    private final DatawareBettingLogHourService datawareBettingLogHourService = SpringContextHolder.getBean(DatawareBettingLogHourService.class);
-    private final DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
-    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
-
-
-    public void execute() {
+    public void toDoBettingLogAnalysis() {
         logger.info("每天投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
         List<Long> uicGroupList = Lists.newArrayList();
         String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
@@ -118,9 +123,9 @@ public class DayBettingLogJob {
                     if (null != logDay.getChannelId()) {
                         ChannelInfo channelInfo = channelInfoService.get(logDay.getChannelId());
                         if (null != channelInfo) {
-                            if(null == channelInfo.getParentId()){
+                            if (null == channelInfo.getParentId()) {
                                 logDay.setParentId(logDay.getChannelId());
-                            }else {
+                            } else {
                                 logDay.setParentId(channelInfo.getParentId());
                             }
                         }
@@ -132,6 +137,4 @@ public class DayBettingLogJob {
             logger.error("更新datawareBettingLogDay失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
     }
-
-
 }
