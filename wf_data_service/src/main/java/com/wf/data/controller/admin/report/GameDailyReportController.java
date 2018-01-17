@@ -103,11 +103,11 @@ public class GameDailyReportController extends ExtJsController {
             //10、返奖率(返奖流水/投注流水)
             String returnRate = cal(returnAmount,bettingAmount);
             //11、投注ARPU(投注流水/投注人数)
-            Double arpu = BigDecimalUtil.round(BigDecimalUtil.div(bettingAmount,bettingUserCount),1);
+            Double arpu =  bettingUserCount == 0?0:BigDecimalUtil.round(BigDecimalUtil.div(bettingAmount,bettingUserCount),1);
             //12、投注ASP(投注流水/投注笔数)
-            Double asp = BigDecimalUtil.round(BigDecimalUtil.div(bettingAmount,bettingCount),1);
+            Double asp = bettingCount == 0?0:BigDecimalUtil.round(BigDecimalUtil.div(bettingAmount,bettingCount),1);
             //13、人均频率(投注笔数/投注人数)
-            Double avgBettingCount = BigDecimalUtil.round(BigDecimalUtil.div(bettingCount,bettingUserCount),1);
+            Double avgBettingCount = bettingUserCount == 0?0:BigDecimalUtil.round(BigDecimalUtil.div(bettingCount,bettingUserCount),1);
             //14、新增用户
             //历史活跃用户id
             //List<Long> historyDauIds = datawareBuryingPointDayService.getHistoryDauIds(params);
