@@ -11,8 +11,8 @@
 		user_id userId,
 		channel_id channelId,
 		check_date checkDate,
-		DATE_FORMAT(check_date,"%H") signHour,
-		DATE_FORMAT(check_date,"%Y-%m-%d") signDate
+		DATE_FORMAT(create_time,"%H") signHour,
+		DATE_FORMAT(create_time,"%Y-%m-%d") signDate
 		FROM `plat_user_check_lottery_log`
 		WHERE 1=1
 		AND create_time BETWEEN #{beginDate} AND #{endDate}
