@@ -1,5 +1,6 @@
 package com.wf.data.service.elasticsearch;
 
+import com.google.common.collect.Lists;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.data.common.constants.BuryingPointContents;
@@ -7,6 +8,8 @@ import com.wf.data.common.constants.EsContents;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
+import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.service.ChannelInfoService;
 import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -33,6 +36,8 @@ public class EsUicAllGameService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private EsClientFactory esClientFactory;
+	@Autowired
+	private ChannelInfoService channelInfoService;
 
 	/**
 	 * 1、新增用户
@@ -128,7 +133,28 @@ public class EsUicAllGameService {
 	private List<Long> getUserIds(AggregationBuilder aggsBuilder,Integer gameType,String begin,String end,Integer buryingType){
 		List<Long> list=new ArrayList<>();
 		Aggregations aggs = esClientFactory.getAggregation(
-		EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(gameType,begin,end,buryingType));
+		EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(gameType,begin,end,buryingType,null));
+		LongTerms agg = (LongTerms)aggs.get("userCount");
+		Iterator<Bucket> it=agg.getBuckets().iterator();
+		while(it.hasNext()) {
+			Bucket buck=it.next();
+			list.add((Long)buck.getKey());
+		}
+		return list;
+	}
+
+	public List<Long> getNewUserIds(Integer gameType,String date,Long parentId){
+		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
+		List<Long> oldUsers = getUserIds(aggsBuilder,gameType,null,date+" 00:00:00", BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE,parentId);
+		Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date),1);
+		List<Long> newUsers = getUserIds(aggsBuilder,gameType,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE,parentId);
+		return getNewUsers(oldUsers, newUsers);
+	}
+
+	private List<Long> getUserIds(AggregationBuilder aggsBuilder,Integer gameType,String begin,String end,Integer buryingType,Long parentId){
+		List<Long> list=new ArrayList<>();
+		Aggregations aggs = esClientFactory.getAggregation(
+				EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(gameType,begin,end,buryingType,parentId));
 		LongTerms agg = (LongTerms)aggs.get("userCount");
 		Iterator<Bucket> it=agg.getBuckets().iterator();
 		while(it.hasNext()) {
@@ -149,6 +175,20 @@ public class EsUicAllGameService {
 			return newUsers.size();
 		}
 		return CollectionUtils.disjunction(CollectionUtils.intersection(oldUsers,newUsers),newUsers).size();
+	}
+
+	/**
+	 * 计算新增用户ID
+	 */
+	private static List<Long> getNewUsers(List<Long> oldUsers, List<Long> newUsers) {
+		List<Long> list = new ArrayList<>();
+		if(CollectionUtils.isEmpty(newUsers)){
+			return list;
+		}
+		if(CollectionUtils.isEmpty(oldUsers)) {
+			return list;
+		}
+		return (List<Long>)CollectionUtils.disjunction(CollectionUtils.intersection(oldUsers,newUsers),newUsers);
 	}
 
 	/**
@@ -176,7 +216,7 @@ public class EsUicAllGameService {
 	/**
 	 * 日活用户查询条件
 	 */
-	private QueryBuilder getActiveQuery(Integer gameType,String beginTime,String endTime,Integer buryingType) {
+	private QueryBuilder getActiveQuery(Integer gameType,String beginTime,String endTime,Integer buryingType,Long parentId) {
 		Map<String, Object> map = new HashMap<>();
 		QueryBuilder query;
 		if (gameType != null) {
@@ -190,6 +230,15 @@ public class EsUicAllGameService {
 		}
 		if(endTime!=null){
 			boolQuery.must(QueryBuilders.rangeQuery("create_time").lt(DateUtils.formatUTCDate(endTime,DateUtils.DATE_TIME_PATTERN)));
+		}
+		if (parentId != null) {
+			List<ChannelInfo> dtoList = channelInfoService.findSubChannel(parentId);
+			List<Long> channelIds = Lists.newArrayList();
+			for(ChannelInfo dto : dtoList){
+				channelIds.add(dto.getId());
+			}
+			channelIds.add(0, parentId);
+			boolQuery.must(QueryBuilders.termsQuery("channel_id", channelIds));
 		}
 		query = boolQuery;
 		logger.debug("query" + query);

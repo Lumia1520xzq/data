@@ -30,4 +30,8 @@ public class DatawareBettingLogHourService extends CrudService<DatawareBettingLo
     public long getCountByTime(Map<String,Object> map){
         return dao.getCountByTime(map);
     }
+
+    public DatawareBettingLogHour getSumByDateAndHour(Map<String,Object> params){
+        return dao.getSumByDateAndHour(params);
+    }
 }

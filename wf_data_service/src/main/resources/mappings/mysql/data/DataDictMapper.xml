@@ -42,7 +42,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="findList" resultType="DataDict">
 		SELECT <include refid="dataDictColumns"/> FROM data_dict t <include refid="dataDictJoins"/>
-		WHERE <include refid="dataDictWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+		WHERE <include refid="dataDictWhere"/> ORDER BY id asc LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM data_dict t WHERE <include refid="dataDictWhere" />
