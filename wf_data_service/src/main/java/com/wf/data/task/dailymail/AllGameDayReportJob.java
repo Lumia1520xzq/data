@@ -183,7 +183,6 @@ public class AllGameDayReportJob {
         return  getTempOne(gameType, date) + getTempTwo(gameType, date) + tableEnd;
     }
 
-
     /**
      * 基础+流水数据
      */
