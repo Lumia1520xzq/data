@@ -190,4 +190,40 @@ public class CommonDataController extends ExtJsController {
 		}
 		return list;
 	}
+
+	@RequestMapping("/getFilterChannels")
+	public Object getFilterChannels() {
+		JSONObject json = getRequestJson();
+		String keyword = null;
+		JSONObject data = json.getJSONObject("data");
+		if (data != null) {
+			keyword = data.getString("data");
+		}
+		ChannelInfo dto = new ChannelInfo();
+		List<ChannelInfo> list = new ArrayList<>();
+		if (StringUtils.isNotBlank(keyword)) {
+			keyword = keyword.trim();
+			if (NumberUtils.isDigits(keyword)) {
+				dto.setId(NumberUtils.toLong(keyword));
+			} else {
+				dto.setName(keyword);
+			}
+			dto.setEnable(1);
+			dto.setMainChannel(1L);
+			list = channelInfoService.findList(dto,1000);
+		}else{
+			String channelIdList = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_CHANNEL);
+			if(StringUtils.isNotBlank(channelIdList)){
+				List<String> channels = Arrays.asList(channelIdList.split(","));
+				for(String channel:channels){
+					ChannelInfo info = channelInfoService.get(Long.parseLong(channel));
+					list.add(info);
+				}
+			}
+		}
+		for (ChannelInfo cInfo :list) {
+			cInfo.setName(cInfo.getName()+"("+cInfo.getId()+")");
+		}
+		return list;
+	}
 }
