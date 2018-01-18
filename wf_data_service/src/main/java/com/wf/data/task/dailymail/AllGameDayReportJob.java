@@ -14,6 +14,8 @@ import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
+import com.wf.data.service.data.DatawareBettingLogDayService;
+import com.wf.data.service.data.DatawareBuryingPointDayService;
 import com.wf.data.service.elasticsearch.EsTransChangeNoteService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
@@ -27,9 +29,8 @@ import java.util.Map;
 
 /**
  * 游戏数据报表
- *
- * @author jianjian.huang
- *         2017年8月23日
+ * @author JoeH
+ * 2018.01.18
  */
 public class AllGameDayReportJob {
 
@@ -47,7 +48,6 @@ public class AllGameDayReportJob {
     private final String TABLE_END = "</table><br/>";
     private static final String COMMA = ",";
     private static final int TIMES = 5;
-
 
     public void execute() {
         logger.info("开始游戏数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
@@ -233,17 +233,23 @@ public class AllGameDayReportJob {
      */
     private String getTempOne(Integer gameType, String date) {
         EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
-        // 1、新增用户数
+        DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
+        DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
+
+        // 1、新增用户数(不变)
         Integer newUser = gameService.getNewUser(gameType, date);
-        // 2、活跃用户
-        Integer activeUser = gameService.getActiveUser(gameType, date);
-        // 3、平台日活
-        Integer dailyActive = gameService.getDailyActive(date);
+        Map<String,Object> map = new HashMap<>();
+        // 3、平台日活(清洗表)
+        map.put("searchDate",date);
+        Integer dailyActive = datawareBuryingPointDayService.getGameDau(map);
+        // 2、活跃用户(清洗表)
+        map.put("gameType",gameType);
+        Integer activeUser = datawareBuryingPointDayService.getGameDau(map);
         // 4、导入率
         String importRate = dailyActive == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(activeUser, dailyActive, 4), "#.##%");
         // 5、累计用户
         Integer sumUser = gameService.getSumUser(gameType);
-        // 投注信息
+        // 投注信息(从清洗表中取)
         ReportGameInfo info = getBettingInfo(gameType, date);
         if (info == null) {
             info = new ReportGameInfo();
@@ -364,7 +370,6 @@ public class AllGameDayReportJob {
                 .replace("dailyActive", dailyActive.toString())
                 .replace("importRate", importRate)
                 .replace("sumUser", sumUser.toString())
-
                 .replace("cathecticMoney", cathecticMoney.toString())
                 .replaceFirst("winMoney", winMoney.toString())
                 .replace("moneyGap", moneyGap.toString())
