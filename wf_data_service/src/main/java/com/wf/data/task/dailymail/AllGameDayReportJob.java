@@ -9,6 +9,7 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.GameTypeContents;
 import com.wf.data.dto.TcardDto;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareBettingLogDayService;
@@ -62,16 +63,16 @@ public class AllGameDayReportJob {
                 String receivers = dataConfigService.findByName(DataConstants.GAME_DATA_RECEIVER).getValue();
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
-                    content.append(buildTcardGameInfo(date));
-                    content.append(buildFishGameInfo(date));
-                    content.append(buildNewThreeGameInfo(date));
-                    content.append(buildBilliardsGameInfo(date));
-                    content.append(buildDartGameInfo(date));
-                    content.append(buildMotorGameInfo(date));
-                    content.append(buildWarsGameInfo(date));
-                    content.append(buildArrowsGameInfo(date));
-                    content.append(buildKingdomGameInfo(date));
-                    content.append(buildCandyGameInfo(date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_TCARD,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_FISH,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_NEW_THREE_KINGDOM,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_BILLIARDS,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_DART,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_BIKE,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_WARS,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_ARROWS,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_KINGDOM,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_CANDY,date));
                     content.insert(0, date + "数据如下" + "<br/><br/>");
                     // 发送邮件
                     for (String to : receivers.split(COMMA)) {
@@ -97,113 +98,25 @@ public class AllGameDayReportJob {
         }
     }
 
-    /**
-     *  捕鱼
-     */
-    private String buildFishGameInfo(String date) {
-        String temp = getTemp(10, date);
-        temp = temp.replace("gameName", "捕鱼");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
 
-    /**
-     * 真.热血无双
-     */
-    private String buildNewThreeGameInfo(String date) {
-        String temp = getTemp(13, date);
-        temp = temp.replace("gameName", "真.热血无双");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 飞镖
-     */
-    private String buildDartGameInfo(String date) {
-        String temp = getTemp(1, date);
-        temp = temp.replace("gameName", "梦想飞镖");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 桌球
-     */
-    private String buildBilliardsGameInfo(String date) {
-        String temp = getTemp(2, date);
-        temp = temp.replace("gameName", "梦想桌球");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 军团
-     */
-    private String buildWarsGameInfo(String date) {
-        String temp = getTemp(4, date);
-        temp = temp.replace("gameName", "铁血军团");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 三国
-     */
-    private String buildArrowsGameInfo(String date) {
-        String temp = getTemp(5, date);
-        temp = temp.replace("gameName", "貂蝉保卫战");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 热血摩托
-     */
-    private String buildMotorGameInfo(String date) {
-        String temp = getTemp(8, date);
-        temp = temp.replace("gameName", "热血摩托");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 多多三国
-     */
-    private String buildKingdomGameInfo(String date) {
-        String temp = getTemp(9, date);
-        temp = temp.replace("gameName", "多多三国");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 糖果夺宝
-     */
-    private String buildCandyGameInfo(String date) {
-        String temp = getTemp(12, date);
-        temp = temp.replace("gameName", "糖果夺宝");
-        temp = temp.replace("dateTime", date);
-        return temp;
-    }
-
-    /**
-     * 乐赢三张
-     */
-    private String buildTcardGameInfo(String date){
-        String temp = getTemp(11,date);
-        temp = temp.replace("gameName","乐赢三张");
-        temp = temp.replace("dateTime",date);
-        return temp;
-    }
-
-
-    /**
-     * 整合
-     */
-    private String getTemp(Integer gameType,String date) {
+    private String buildGameInfo(Integer gameType,String date) {
         String tableEnd = "</table><br/>";
-        return  getTempOne(gameType, date) + getTempTwo(gameType, date) + tableEnd;
+        String demo = getTempOne(gameType, date) + getTempTwo(gameType, date) + tableEnd;
+        String gameName;
+        switch(gameType){
+            case GameTypeContents.GAME_TYPE_TCARD:gameName="乐赢三张";break;
+            case GameTypeContents.GAME_TYPE_FISH:gameName="捕鱼大冒险";break;
+            case GameTypeContents.GAME_TYPE_NEW_THREE_KINGDOM:gameName="真.热血无双";break;
+            case GameTypeContents.GAME_TYPE_BILLIARDS:gameName="梦想桌球";break;
+            case GameTypeContents.GAME_TYPE_DART:gameName="梦想飞镖";break;
+            case GameTypeContents.GAME_TYPE_BIKE:gameName="热血摩托";break;
+            case GameTypeContents.GAME_TYPE_WARS:gameName="热血军团";break;
+            case GameTypeContents.GAME_TYPE_ARROWS:gameName="貂蝉保卫战";break;
+            case GameTypeContents.GAME_TYPE_KINGDOM:gameName="热血三国";break;
+            case GameTypeContents.GAME_TYPE_CANDY:gameName="糖果夺宝";break;
+            default:gameName="";break;
+        }
+        return demo.replace("gameName",gameName).replace("dateTime",date);
     }
 
     /**
@@ -264,7 +177,7 @@ public class AllGameDayReportJob {
     /**
      * 趋势(前7天~前1天)
      */
-    private String getTempTwo(Integer gameType, String date) {
+    private String getTempTwo(Integer gameType, String date){
         StringBuffer sb = new StringBuffer();
         String beginDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 7));
         String endDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 1));
@@ -275,7 +188,7 @@ public class AllGameDayReportJob {
         for (String dat : list) {
             // 1、日期
             // 2、活跃用户(清洗表)
-            map.put("searchDate",date);
+            map.put("searchDate",dat);
             Integer activeUser = datawareBuryingPointDayService.getGameDau(map);
             // 3、投注用户数
             List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(map);

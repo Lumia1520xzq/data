@@ -123,7 +123,7 @@ public class BettingAnalyseJob {
 
     private String buildSumInfo(Calendar cal) {
         String temp = getTemp(cal,null);
-        return temp.replace("GAME_NAME", "多多游戏");
+        return temp.replace("GAME_NAME", "各游戏汇总");
     }
 
     private String buildDartInfo(Calendar cal) {
@@ -153,12 +153,12 @@ public class BettingAnalyseJob {
 
     private String buildKingdomInfo(Calendar cal) {
         String temp = getTemp(cal, 9);
-        return temp.replace("GAME_NAME", "多多三国");
+        return temp.replace("GAME_NAME", "热血三国");
     }
 
     private String buildFishInfo(Calendar cal) {
         String temp = getTemp(cal,10);
-        return temp.replace("GAME_NAME", "多多捕鱼");
+        return temp.replace("GAME_NAME", "捕鱼大冒险");
     }
 
     private String buildTcardInfo(Calendar cal) {
