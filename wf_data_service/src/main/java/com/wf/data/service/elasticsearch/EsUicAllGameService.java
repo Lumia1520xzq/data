@@ -50,6 +50,14 @@ public class EsUicAllGameService {
 		return getNewUserCount(oldUsers, newUsers);
 	}
 
+	public List<Long> getNewUserList(Integer gameType,String date) {
+		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
+		List<Long> oldUsers = getUserIds(aggsBuilder,gameType,null,date+" 00:00:00", BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
+		Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date),1);
+		List<Long> newUsers = getUserIds(aggsBuilder,gameType,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
+		return getNewList(oldUsers, newUsers);
+	}
+
 	/**
 	 * 2、活跃用户(游戏)
 	 */
@@ -177,19 +185,6 @@ public class EsUicAllGameService {
 		return CollectionUtils.disjunction(CollectionUtils.intersection(oldUsers,newUsers),newUsers).size();
 	}
 
-	/**
-	 * 计算新增用户ID
-	 */
-	private static List<Long> getNewUsers(List<Long> oldUsers, List<Long> newUsers) {
-		List<Long> list = new ArrayList<>();
-		if(CollectionUtils.isEmpty(newUsers)){
-			return list;
-		}
-		if(CollectionUtils.isEmpty(oldUsers)) {
-			return list;
-		}
-		return (List<Long>)CollectionUtils.disjunction(CollectionUtils.intersection(oldUsers,newUsers),newUsers);
-	}
 
 	/**
 	 *  新增用户list
@@ -205,12 +200,19 @@ public class EsUicAllGameService {
 		return (List<Long>)CollectionUtils.disjunction(CollectionUtils.intersection(oldUsers,newUsers),newUsers);
 	}
 
-	public List<Long> getNewUserList(Integer gameType,String date) {
-		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
-		List<Long> oldUsers = getUserIds(aggsBuilder,gameType,null,date+" 00:00:00", BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
-		Date nextDate = DateUtils.getNextDate(DateUtils.parseDate(date),1);
-		List<Long> newUsers = getUserIds(aggsBuilder,gameType,date+" 00:00:00",DateUtils.formatDateTime(nextDate),BuryingPointContents.POINT_TYPE_GAME_MAIN_PAGE);
-		return getNewList(oldUsers, newUsers);
+
+	/**
+	 * 计算新增用户ID
+	 */
+	private static List<Long> getNewUsers(List<Long> oldUsers, List<Long> newUsers) {
+		List<Long> list = new ArrayList<>();
+		if(CollectionUtils.isEmpty(newUsers)){
+			return list;
+		}
+		if(CollectionUtils.isEmpty(oldUsers)) {
+			return list;
+		}
+		return (List<Long>)CollectionUtils.disjunction(CollectionUtils.intersection(oldUsers,newUsers),newUsers);
 	}
 
 	/**

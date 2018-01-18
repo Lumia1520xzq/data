@@ -11,6 +11,7 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dto.TcardDto;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
@@ -33,8 +34,10 @@ import java.util.Map;
  * 2018.01.18
  */
 public class AllGameDayReportJob {
-
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
+    private final DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
+    private final DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
             + "<tr style='font-weight:bold'><td rowspan='30' bgcolor='#DDDDDD' width='120'><span>gameName</span><br/><span>dateTime日</span></td><td colspan='8' bgcolor='#DDDDDD'>基础数据</td></tr>"
@@ -176,19 +179,6 @@ public class AllGameDayReportJob {
     }
 
     /**
-     * 投注信息
-     */
-    private ReportGameInfo getBettingInfo(Integer gameType, String date) {
-        ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
-        Map<String, Object> params = new HashMap<>(5);
-        params.put("beginDate", date + " 00:00:00");
-        params.put("endDate", date + " 23:59:59");
-        params.put("gameType", gameType);
-        params.put("userIds", getInternalUserIds());
-        return reportChangeNoteService.findCathecticListByDate(params);
-    }
-
-    /**
      * 投注用户数
      */
     private Integer getCathecticUserNum(Integer gameType, String date) {
@@ -232,10 +222,6 @@ public class AllGameDayReportJob {
      * 基础+流水数据
      */
     private String getTempOne(Integer gameType, String date) {
-        EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
-        DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
-        DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
-
         // 1、新增用户数(不变)
         Integer newUser = gameService.getNewUser(gameType, date);
         Map<String,Object> map = new HashMap<>();
@@ -250,24 +236,25 @@ public class AllGameDayReportJob {
         // 5、累计用户
         Integer sumUser = gameService.getSumUser(gameType);
         // 投注信息(从清洗表中取)
-        ReportGameInfo info = getBettingInfo(gameType, date);
+        // ReportGameInfo info = getBettingInfo(gameType, date);
+        TcardDto info = datawareBettingLogDayService.getTcardBettingByday(map);
         if (info == null) {
-            info = new ReportGameInfo();
+            info = new TcardDto();
         }
         // 6、投注流水
-        Long cathecticMoney = info.getCathecticMoney();
+        Double cathecticMoney = info.getBettingAmount();
         // 7、返奖流水
-        Long winMoney = info.getWinMoney();
+        Double winMoney = info.getResultAmount();
         // 8、应用流水差
-        Long moneyGap = cathecticMoney - winMoney;
+        Double moneyGap = cathecticMoney - winMoney;
         // 9、返奖率
         String winMoneyRate = cathecticMoney == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(winMoney, cathecticMoney, 4), "#.##%");
         // 10、投注人数
-        Integer cathecticUserCount = info.getCathecticUserNum();
+        Integer cathecticUserCount = info.getUserCount();
         // 11、投注ARPU
         String cathecticARPU = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticMoney, cathecticUserCount, 4), "#.#");
         // 12、投注笔数
-        Long cathecticNum = info.getCathecticNum();
+        Integer cathecticNum = info.getBettingCount();
         // 13、人均频次
         String averageNum = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticNum, cathecticUserCount, 4), "#.#");
          return CONTENT_TEMP_ONE
@@ -291,23 +278,25 @@ public class AllGameDayReportJob {
      * 趋势(前7天~前1天)
      */
     private String getTempTwo(Integer gameType, String date) {
-        EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
-        EsTransChangeNoteService changeNoteService = SpringContextHolder.getBean(EsTransChangeNoteService.class);
         StringBuffer sb = new StringBuffer();
         String beginDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 7));
         String endDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 1));
         List<String> list = DateUtils.getDateList(beginDate,endDate);
         String temp = "<tr><td>date</td><td>activeUser</td><td>bettingUser</td><td>bettingRate</td><td>newUser</td><td>newBettingUser</td><td>newBettingRate</td><td>newRemainRate</td></tr>";
+        Map<String,Object> map = new HashMap<>();
+        map.put("gameType",gameType);
         for (String dat : list) {
             // 1、日期
-            // 2、活跃用户
-            Integer activeUser = gameService.getActiveUser(gameType, dat);
+            // 2、活跃用户(清洗表)
+            map.put("searchDate",date);
+            Integer activeUser = datawareBuryingPointDayService.getGameDau(map);
             // 3、投注用户数
+            List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(map);
             Integer bettingUser;
-            if(gameType == 11){
-                bettingUser = changeNoteService.getBettingUserCount(dat,null,gameType);
+            if(CollectionUtils.isEmpty(bettingUserIds)){
+                bettingUser = 0;
             }else{
-                bettingUser = getCathecticUserNum(gameType,dat);
+                bettingUser = bettingUserIds.size();
             }
             // 4、投注转化率
             String bettingRate = activeUser == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(bettingUser, activeUser, 4), "#.##%");
@@ -317,7 +306,7 @@ public class AllGameDayReportJob {
             // 新增用户列表
             List<Long> newUserList = gameService.getNewUserList(gameType,dat);
             // 投注列表
-            List<Long> bettingUserList = changeNoteService.getBettingUserIds(dat,null,gameType);
+            List<Long> bettingUserList = bettingUserIds;
             Integer newBettingUser = CollectionUtils.intersection(newUserList,bettingUserList).size();
             // 7、新增投注转化率
             String newBettingRate = newUser == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(newBettingUser, newUser, 4), "#.##%");
