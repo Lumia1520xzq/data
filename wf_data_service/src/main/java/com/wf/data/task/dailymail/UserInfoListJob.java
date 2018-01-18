@@ -253,6 +253,7 @@ public class UserInfoListJob {
             logger.info("查询第8日的活跃用户条件: traceId={}, jsonObject={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(note));
             List<Long> users = esUicCommonService.getDauList(note);
             note.setBeginDate(DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.getPrevDate(DateUtils.parseDate(DateUtils.getYesterdayDate()), 6)), DateUtils.DATE_TIME_PATTERN));
+            note.setEndDate(DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(DateUtils.getYesterdayDate())), DateUtils.DATE_TIME_PATTERN));
             // 从昨天到第7天的日活
             logger.info("从昨天到第7天的日活条件: traceId={}, jsonObject={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(note));
             List<Long> usersList = esUicCommonService.getDauList(note);

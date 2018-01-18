@@ -30,4 +30,8 @@ public class DatawareBuryingPointHourService extends CrudService<DatawareBurying
     public long getCountByTime(Map<String,Object> map){
         return dao.getCountByTime(map);
     }
+
+    public Integer getDauByDateAndHour(Map<String,Object> params){
+            return dao.getDauByDateAndHour(params);
+    }
 }

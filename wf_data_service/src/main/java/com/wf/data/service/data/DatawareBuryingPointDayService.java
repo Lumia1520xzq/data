@@ -29,4 +29,12 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public List<Long> getUserIdListByChannel(Map<String, Object> map) {
         return dao.getUserIdListByChannel(map);
     }
+
+    public List<Long> getHistoryDauIds(Map<String,Object> map){
+        return dao.getHistoryDauIds(map);
+    }
+
+     public List<Long> getGameDauIds(Map<String,Object> map){
+        return dao.getGameDauIds(map);
+    }
 }

@@ -20,4 +20,5 @@ public interface DatawareBettingLogHourDao extends CrudDao<DatawareBettingLogHou
 
     long getCountByTime(Map<String,Object> map);
 
+    DatawareBettingLogHour getSumByDateAndHour(Map<String,Object> params);
 }
