@@ -54,7 +54,7 @@ public class FilterDataViewController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(searchDate)) {
-                searchDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
+                searchDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
             }
         } catch (Exception e) {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
