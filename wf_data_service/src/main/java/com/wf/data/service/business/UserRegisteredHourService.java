@@ -1,10 +1,9 @@
-package com.wf.data.task.dataware;
+package com.wf.data.service.business;
 
 import com.google.common.collect.Lists;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
@@ -19,6 +18,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -26,17 +27,23 @@ import java.util.*;
  * @author chengsheng.liu
  * @date 2017年9月25日
  */
-public class UserRegisteredDayJob {
+@Service
+public class UserRegisteredHourService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
-    private final DatawareUserInfoService datawareUserInfoService = SpringContextHolder.getBean(DatawareUserInfoService.class);
-    private final UicUserService uicUserService = SpringContextHolder.getBean(UicUserService.class);
-    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
+    @Autowired
+    private DataConfigService dataConfigService;
+    @Autowired
+    private UicGroupService uicGroupService;
+    @Autowired
+    private DatawareUserInfoService datawareUserInfoService;
+    @Autowired
+    private UicUserService uicUserService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
 
-    public void execute() {
+    public void toDoAnalysis() {
         logger.info("每小时注册汇总开始:traceId={}", TraceIdUtils.getTraceId());
         List<Long> uicGroupList = Lists.newArrayList();
         String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
@@ -166,9 +173,9 @@ public class UserRegisteredDayJob {
                     }
                     ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
                     if (null != channelInfo) {
-                        if(null == channelInfo.getParentId()){
+                        if (null == channelInfo.getParentId()) {
                             item.setParentId(item.getChannelId());
-                        }else {
+                        } else {
                             item.setParentId(channelInfo.getParentId());
                         }
                     }

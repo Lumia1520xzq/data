@@ -1,10 +1,9 @@
-package com.wf.data.task.dataware;
+package com.wf.data.service.business;
 
 import com.google.common.collect.Lists;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
@@ -19,6 +18,8 @@ import com.wf.data.service.data.DatawareUserInfoService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -26,17 +27,23 @@ import java.util.*;
  * @author chengsheng.liu
  * @date 2018年01月03日
  */
-public class ChannelRetentionJob {
+@Service
+public class ChannelRetentionService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final ChannelInfoService channelInfoService = SpringContextHolder.getBean(ChannelInfoService.class);
-    private final DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
-    private final DatawareUserInfoService datawareUserInfoService = SpringContextHolder.getBean(DatawareUserInfoService.class);
-    private final DatawareFinalChannelRetentionService datawareFinalChannelRetentionService = SpringContextHolder.getBean(DatawareFinalChannelRetentionService.class);
+    @Autowired
+    private DataConfigService dataConfigService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
+    @Autowired
+    private DatawareBuryingPointDayService datawareBuryingPointDayService;
+    @Autowired
+    private DatawareUserInfoService datawareUserInfoService;
+    @Autowired
+    private DatawareFinalChannelRetentionService datawareFinalChannelRetentionService;
 
-    public void execute() {
+    public void toDoChannelRetentionAnalysis() {
         logger.info("用户留存分析开始:traceId={}", TraceIdUtils.getTraceId());
 
         boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DESTINATION_RETENTION_FLAG);
