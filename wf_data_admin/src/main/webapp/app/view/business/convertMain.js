@@ -56,7 +56,7 @@ Ext.define('WF.view.business.convertMain', {
             forceFit: false,
             sumData: function () {
                 callapi("data/admin/business/convert/sumData.do", me.down('dataform').form.getValues(), function (response) {
-                    me.down("[name='sumData']").setValue(response + " 元");
+                    me.down("[name='sumData']").setValue(Ext.util.Format.number(response, "0,000.00") + " 元");
                 });
             },
             items: [{

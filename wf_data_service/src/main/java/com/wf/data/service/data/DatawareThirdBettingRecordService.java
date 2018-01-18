@@ -5,6 +5,8 @@ import com.wf.data.dao.data.DatawareThirdBettingRecordDao;
 import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @author lcs
  */
@@ -27,5 +29,10 @@ public class DatawareThirdBettingRecordService extends CrudService<DatawareThird
             super.save(entity);
         }
 
+    }
+
+
+    public DatawareThirdBettingRecord sumDataByConds(Map<String, Object> dataParam) {
+        return dao.sumDataByConds(dataParam);
     }
 }
