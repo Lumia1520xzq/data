@@ -9,21 +9,17 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
-import com.wf.data.common.constants.UserGroupContents;
-import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.dto.TcardDto;
 import com.wf.data.service.DataConfigService;
-import com.wf.data.service.ReportChangeNoteService;
-import com.wf.data.service.UicGroupService;
 import com.wf.data.service.data.DatawareBettingLogDayService;
 import com.wf.data.service.data.DatawareBuryingPointDayService;
-import com.wf.data.service.elasticsearch.EsTransChangeNoteService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +44,7 @@ public class AllGameDayReportJob {
             + "<tr><td >cathecticMoney</td><td>winMoney</td><td>moneyGap</td><td>winMoneyRate</td><td>cathecticUserCount</td><td>cathecticARPU</td><td>cathecticNum</td><td>averageNum</td></tr>"
             + "<tr style='font-weight:bold'><td colspan='8'  bgcolor='#DDDDDD'>趋势</td></tr>"
             + "<tr style='font-weight:bold' ><td>日期(向前7天)</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>新增用户</td><td>新增用户投注人数</td><td>新增投注转化率</td><td>新增次留</td></tr>";
-    private final String TABLE_END = "</table><br/>";
+
     private static final String COMMA = ",";
     private static final int TIMES = 5;
 
@@ -172,51 +168,21 @@ public class AllGameDayReportJob {
      * 乐赢三张
      */
     private String buildTcardGameInfo(String date){
-        String temp = getTcardTemp(11,date);
+        String temp = getTemp(11,date);
         temp = temp.replace("gameName","乐赢三张");
         temp = temp.replace("dateTime",date);
         return temp;
     }
 
-    /**
-     * 投注用户数
-     */
-    private Integer getCathecticUserNum(Integer gameType, String date) {
-        ReportChangeNoteService reportChangeNoteService = SpringContextHolder.getBean(ReportChangeNoteService.class);
-        Map<String, Object> params = new HashMap<>(5);
-        params.put("beginDate", date + " 00:00:00");
-        params.put("endDate", date + " 23:59:59");
-        params.put("gameType", gameType);
-        params.put("userIds", getInternalUserIds());
-        return reportChangeNoteService.getCathecticUserNum(params);
-    }
-
-    private List<Long> getInternalUserIds() {
-        UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
-        return uicGroupService.findGroupUsers(String.valueOf(UserGroupContents.INTERNAL_LIST_GROUP));
-    }
 
     /**
      * 整合
      */
-    private String getTemp(Integer gameType, String date) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getTempOne(gameType, date));
-        sb.append(getTempTwo(gameType, date));
-        sb.append(TABLE_END);
-        return sb.toString();
+    private String getTemp(Integer gameType,String date) {
+        String tableEnd = "</table><br/>";
+        return  getTempOne(gameType, date) + getTempTwo(gameType, date) + tableEnd;
     }
 
-    /**
-     * 整合三张
-     */
-     private String getTcardTemp(Integer gameType,String date){
-         StringBuffer sb = new StringBuffer();
-         sb.append(tempTcard(gameType,date));
-         sb.append(getTempTwo(gameType, date));
-         sb.append(TABLE_END);
-         return sb.toString();
-     }
 
     /**
      * 基础+流水数据
@@ -224,7 +190,7 @@ public class AllGameDayReportJob {
     private String getTempOne(Integer gameType, String date) {
         // 1、新增用户数(不变)
         Integer newUser = gameService.getNewUser(gameType, date);
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(5);
         // 3、平台日活(清洗表)
         map.put("searchDate",date);
         Integer dailyActive = datawareBuryingPointDayService.getGameDau(map);
@@ -294,6 +260,7 @@ public class AllGameDayReportJob {
             List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(map);
             Integer bettingUser;
             if(CollectionUtils.isEmpty(bettingUserIds)){
+                bettingUserIds = new ArrayList<>();
                 bettingUser = 0;
             }else{
                 bettingUser = bettingUserIds.size();
@@ -306,67 +273,19 @@ public class AllGameDayReportJob {
             // 新增用户列表
             List<Long> newUserList = gameService.getNewUserList(gameType,dat);
             // 投注列表
-            List<Long> bettingUserList = bettingUserIds;
-            Integer newBettingUser = CollectionUtils.intersection(newUserList,bettingUserList).size();
+            Integer newBettingUser = CollectionUtils.intersection(newUserList,bettingUserIds).size();
             // 7、新增投注转化率
             String newBettingRate = newUser == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(newBettingUser, newUser, 4), "#.##%");
             // 8、新增次日留存
             String newRemainRate = gameService.getRemainRate(gameType, dat);
             String result = temp
-                    .replace("date", dat).replace("activeUser", activeUser.toString()).replace("bettingUser", bettingUser.toString())
-                    .replace("bettingRate", bettingRate).replace("newUser", newUser.toString()).replace("newBettingUser", newBettingUser.toString())
-                    .replace("newBettingRate", newBettingRate).replace("newRemainRate", newRemainRate);
+            .replace("date", dat).replace("activeUser", activeUser.toString())
+            .replace("bettingUser", bettingUser.toString()).replace("bettingRate", bettingRate)
+            .replace("newUser", newUser.toString()).replace("newBettingUser", newBettingUser.toString())
+            .replace("newBettingRate", newBettingRate).replace("newRemainRate", newRemainRate);
             sb.append(result);
         }
         return sb.toString();
-    }
-
-    /**
-     * (乐赢三张)基础+流水数据
-     */
-    private String tempTcard(Integer gameType, String date) {
-        EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
-        EsTransChangeNoteService changeNoteService = SpringContextHolder.getBean(EsTransChangeNoteService.class);
-        // 1、新增用户数
-        Integer newUser = gameService.getNewUser(gameType, date);
-        // 2、活跃用户
-        Integer activeUser = gameService.getActiveUser(gameType, date);
-        // 3、平台日活
-        Integer dailyActive = gameService.getDailyActive(date);
-        // 4、导入率
-        String importRate = dailyActive == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(activeUser, dailyActive, 4), "#.##%");
-        // 5、累计用户
-        Integer sumUser = gameService.getSumUser(gameType);
-        // 6、投注流水
-        Long cathecticMoney = changeNoteService.getBettingAmt(date,null,gameType);
-        // 7、返奖流水
-        Long winMoney = changeNoteService.getAwardAmt(date,null,gameType);
-        // 8、应用流水差
-        Long moneyGap = cathecticMoney - winMoney;
-        // 9、返奖率
-        String winMoneyRate = cathecticMoney == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(winMoney, cathecticMoney, 4), "#.##%");
-        // 10、投注人数
-        Integer cathecticUserCount = changeNoteService.getBettingUserCount(date,null,gameType);
-        // 11、投注ARPU
-        String cathecticARPU = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticMoney, cathecticUserCount, 4), "#.#");
-        // 12、投注笔数
-        Integer cathecticNum = changeNoteService.getBettingCount(date,null, gameType);
-        // 13、人均频次
-        String averageNum = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticNum, cathecticUserCount, 4), "#.#");
-        return CONTENT_TEMP_ONE
-                .replace("newUser", newUser.toString())
-                .replace("activeUser", activeUser.toString())
-                .replace("dailyActive", dailyActive.toString())
-                .replace("importRate", importRate)
-                .replace("sumUser", sumUser.toString())
-                .replace("cathecticMoney", cathecticMoney.toString())
-                .replaceFirst("winMoney", winMoney.toString())
-                .replace("moneyGap", moneyGap.toString())
-                .replace("winMoneyRate", winMoneyRate)
-                .replace("cathecticUserCount", cathecticUserCount.toString())
-                .replace("cathecticARPU", cathecticARPU)
-                .replace("cathecticNum", cathecticNum.toString())
-                .replace("averageNum", averageNum);
     }
 
 }
