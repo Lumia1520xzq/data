@@ -18,4 +18,8 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
     Long getDauByChannel(Map<String,Object> map);
 
     List<Long> getUserIdListByChannel(Map<String,Object> map);
+
+    List<Long> getHistoryDauIds(Map<String,Object> map);
+
+    List<Long> getGameDauIds(Map<String,Object> map);
 }

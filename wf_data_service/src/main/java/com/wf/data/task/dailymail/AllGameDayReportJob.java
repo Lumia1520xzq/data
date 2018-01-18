@@ -364,7 +364,6 @@ public class AllGameDayReportJob {
                 .replace("dailyActive", dailyActive.toString())
                 .replace("importRate", importRate)
                 .replace("sumUser", sumUser.toString())
-
                 .replace("cathecticMoney", cathecticMoney.toString())
                 .replaceFirst("winMoney", winMoney.toString())
                 .replace("moneyGap", moneyGap.toString())
