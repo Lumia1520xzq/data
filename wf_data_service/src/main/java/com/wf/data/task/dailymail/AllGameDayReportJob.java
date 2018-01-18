@@ -34,27 +34,28 @@ public class AllGameDayReportJob {
     private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
     private final DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
     private final DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
+    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
             + "<tr style='font-weight:bold'><td rowspan='30' bgcolor='#DDDDDD' width='120'><span>gameName</span><br/><span>dateTime日</span></td><td colspan='8' bgcolor='#DDDDDD'>基础数据</td></tr>"
-            + "<tr style='font-weight:bold' ><td>新增用户</td><td>活跃用户</td><td>平台日活人数</td><td>导入率</td><td>累计用户</td><td>&nbsp </td> <td>&nbsp </td><td>&nbsp </td></tr>"
+            + "<tr style='font-weight:bold'><td>新增用户</td><td>活跃用户</td><td>平台日活人数</td><td>导入率</td><td>累计用户</td><td>&nbsp </td> <td>&nbsp </td><td>&nbsp </td></tr>"
             + "<tr><td>newUser</td><td>activeUser</td><td>dailyActive</td><td>importRate</td><td>sumUser</td><td> &nbsp</td> <td> &nbsp</td><td> &nbsp</td></tr>"
-            + "<tr style='font-weight:bold'><td colspan='8'  bgcolor='#DDDDDD'>流水数据</td></tr>"
+            + "<tr style='font-weight:bold'><td colspan='8' bgcolor='#DDDDDD'>流水数据</td></tr>"
             + "<tr style='font-weight:bold'><td >投注流水</td><td>返奖流水</td><td>应用流水差 </td><td>返奖率</td><td>投注人数</td><td>投注ARPU</td><td>投注笔数</td><td>人均频次</td> </tr>"
             + "<tr><td >cathecticMoney</td><td>winMoney</td><td>moneyGap</td><td>winMoneyRate</td><td>cathecticUserCount</td><td>cathecticARPU</td><td>cathecticNum</td><td>averageNum</td></tr>"
-            + "<tr style='font-weight:bold'><td colspan='8'  bgcolor='#DDDDDD'>趋势</td></tr>"
-            + "<tr style='font-weight:bold' ><td>日期(向前7天)</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>新增用户</td><td>新增用户投注人数</td><td>新增投注转化率</td><td>新增次留</td></tr>";
+            + "<tr style='font-weight:bold'><td colspan='8' bgcolor='#DDDDDD'>趋势</td></tr>"
+            + "<tr style='font-weight:bold'><td>日期(向前7天)</td><td>日活</td><td>投注用户数</td><td>投注转化率</td><td>新增用户</td><td>新增用户投注人数</td><td>新增投注转化率</td><td>新增次留</td></tr>";
 
     private static final String COMMA = ",";
     private static final int TIMES = 5;
 
     public void execute() {
         logger.info("开始游戏数据日报表分析:traceId={}", TraceIdUtils.getTraceId());
-        DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-        EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
+        date = "2018-01-15";
         while (count <= TIMES) {
             try {
                 // 获取收件人
@@ -62,6 +63,8 @@ public class AllGameDayReportJob {
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
                     content.append(buildTcardGameInfo(date));
+                    content.append(buildFishGameInfo(date));
+                    content.append(buildNewThreeGameInfo(date));
                     content.append(buildBilliardsGameInfo(date));
                     content.append(buildDartGameInfo(date));
                     content.append(buildMotorGameInfo(date));
@@ -92,6 +95,26 @@ public class AllGameDayReportJob {
                 }
             }
         }
+    }
+
+    /**
+     *  捕鱼
+     */
+    private String buildFishGameInfo(String date) {
+        String temp = getTemp(10, date);
+        temp = temp.replace("gameName", "捕鱼");
+        temp = temp.replace("dateTime", date);
+        return temp;
+    }
+
+    /**
+     * 真.热血无双
+     */
+    private String buildNewThreeGameInfo(String date) {
+        String temp = getTemp(13, date);
+        temp = temp.replace("gameName", "真.热血无双");
+        temp = temp.replace("dateTime", date);
+        return temp;
     }
 
     /**
@@ -223,20 +246,19 @@ public class AllGameDayReportJob {
         // 13、人均频次
         String averageNum = cathecticUserCount == 0 ? "0" : NumberUtils.format(BigDecimalUtil.div(cathecticNum, cathecticUserCount, 4), "#.#");
          return CONTENT_TEMP_ONE
-                .replace("newUser", newUser.toString())
-                .replace("activeUser", activeUser.toString())
-                .replace("dailyActive", dailyActive.toString())
-                .replace("importRate", importRate)
-                .replace("sumUser", sumUser.toString())
-
-                .replace("cathecticMoney", cathecticMoney.toString())
-                .replaceFirst("winMoney", winMoney.toString())
-                .replace("moneyGap", moneyGap.toString())
-                .replace("winMoneyRate", winMoneyRate)
-                .replace("cathecticUserCount", cathecticUserCount.toString())
-                .replace("cathecticARPU", cathecticARPU)
-                .replace("cathecticNum", cathecticNum.toString())
-                .replace("averageNum", averageNum);
+        .replace("newUser", newUser.toString())
+        .replace("activeUser", activeUser.toString())
+        .replace("dailyActive", dailyActive.toString())
+        .replace("importRate", importRate)
+        .replace("sumUser", sumUser.toString())
+        .replace("cathecticMoney", cathecticMoney.toString())
+        .replaceFirst("winMoney", winMoney.toString())
+        .replace("moneyGap", moneyGap.toString())
+        .replace("winMoneyRate", winMoneyRate)
+        .replace("cathecticUserCount", cathecticUserCount.toString())
+        .replace("cathecticARPU", cathecticARPU)
+        .replace("cathecticNum", cathecticNum.toString())
+        .replace("averageNum", averageNum);
     }
 
     /**
@@ -248,7 +270,7 @@ public class AllGameDayReportJob {
         String endDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date), 1));
         List<String> list = DateUtils.getDateList(beginDate,endDate);
         String temp = "<tr><td>date</td><td>activeUser</td><td>bettingUser</td><td>bettingRate</td><td>newUser</td><td>newBettingUser</td><td>newBettingRate</td><td>newRemainRate</td></tr>";
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(5);
         map.put("gameType",gameType);
         for (String dat : list) {
             // 1、日期

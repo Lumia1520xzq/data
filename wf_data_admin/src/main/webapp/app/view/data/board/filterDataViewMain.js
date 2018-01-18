@@ -75,19 +75,25 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                     {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
                         {width:"47%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
-                                {width:'100%',height:80,forceFit:true,id:'filterRate0',bodyStyle:'border-width:0'},
+                                {width:'100%',height:80,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:'40%',height:80,forceFit:true,bodyStyle:'border-width:0'},
+                                        {width:'20%',height:80,forceFit:true,id:'filterRate0',bodyStyle:'border-width:0'},
+                                        {width:'40%',height:80,forceFit:true,bodyStyle:'border-width:0'}
+                                    ]
+                                },
                                 {width:'100%',height:320,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                     items:[
                                         {width:"90%",height:320,forceFit:true,id:"filter0",bodyStyle:'border-width:0'},
                                         {width:"9%",height:320,forceFit:true,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn0"},
-                                                {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn1"},
-                                                {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn2"},
-                                                {width:'100%',height:140,forceFit:true,bodyStyle:'border-width:0'}
+                                                {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn0"},
+                                                {width:'100%',height:35,forceFit:true,bodyStyle:'border-width:0'},
+                                                {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn1"},
+                                                {width:'100%',height:35,forceFit:true,bodyStyle:'border-width:0'},
+                                                {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn2"},
+                                                {width:'100%',height:120,forceFit:true,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
@@ -104,7 +110,6 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                      ] }
                    ]
                 },
-
                 {
                     title: '新用户转化漏斗分析',align:'stretch',height:420,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
                     items:[
@@ -112,21 +117,27 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                         {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
                             {width:"47%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
-                                    {width:'100%',height:80,forceFit:true,id:'filterRate1',bodyStyle:'border-width:0'},
+                                    {width:'100%',height:80,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:'40%',height:80,forceFit:true,bodyStyle:'border-width:0'},
+                                            {width:'20%',height:80,forceFit:true,id:'filterRate1',bodyStyle:'border-width:0'},
+                                            {width:'40%',height:80,forceFit:true,bodyStyle:'border-width:0'}
+                                        ]
+                                    },
                                     {width:'100%',height:320,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"90%",height:320,forceFit:true,id:"filter1",bodyStyle:'border-width:0'},
                                             {width:"9%",height:320,forceFit:true,layout:'vbox',bodyStyle:'border-width:0',
                                                 items:[
                                                     {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn3"},
-                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn4"},
-                                                    {width:'100%',height:25,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn5"},
-                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn6"},
-                                                    {width:'100%',height:115,forceFit:true,bodyStyle:'border-width:0'}
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn3"},
+                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0'},
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn4"},
+                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0'},
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn5"},
+                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0'},
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn6"},
+                                                    {width:'100%',height:100,forceFit:true,bodyStyle:'border-width:0'}
                                                 ]
                                             }
                                         ]
@@ -151,19 +162,25 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                         {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
                             {width:"47%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
-                                    {width:'100%',height:80,forceFit:true,id:'filterRate2',bodyStyle:'border-width:0'},
+                                    {width:'100%',height:80,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
+                                        items:[
+                                            {width:'40%',height:80,forceFit:true,bodyStyle:'border-width:0'},
+                                            {width:'20%',height:80,forceFit:true,id:'filterRate2',bodyStyle:'border-width:0'},
+                                            {width:'40%',height:80,forceFit:true,bodyStyle:'border-width:0'}
+                                        ]
+                                    },
                                     {width:'100%',height:320,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"90%",height:320,forceFit:true,id:"filter2",bodyStyle:'border-width:0'},
                                             {width:"9%",height:320,forceFit:true,layout:'vbox',bodyStyle:'border-width:0',
                                                 items:[
                                                     {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn7"},
-                                                    {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn8"},
-                                                    {width:'100%',height:40,forceFit:true,bodyStyle:'border-width:0'},
-                                                    {width:'100%',height:20,forceFit:true,bodyStyle:'border-width:0',xtype:"button",id:"filterBtn9"},
-                                                    {width:'100%',height:140,forceFit:true,bodyStyle:'border-width:0'}
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn7"},
+                                                    {width:'100%',height:35,forceFit:true,bodyStyle:'border-width:0'},
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn8"},
+                                                    {width:'100%',height:35,forceFit:true,bodyStyle:'border-width:0'},
+                                                    {width:'100%',height:30,forceFit:true,bodyStyle:'border-width:0',id:"filterBtn9"},
+                                                    {width:'100%',height:120,forceFit:true,bodyStyle:'border-width:0'}
                                                 ]
                                             }
                                         ]
@@ -260,22 +277,22 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                 lastRechargeOlderRate = last.get("rechargeOlderRate");
                 lastPayOlderRate = last.get("payOlderRate");
             }
-            Ext.get('filterRate0').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRate +"%</strong></div>";
-            Ext.get('filterRate1').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRegisteredRate +"%</strong></div>";
-            Ext.get('filterRate2').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayOlderRate +"%</strong></div>";
+            Ext.get('filterRate0').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRate +"%</strong></div>";
+            Ext.get('filterRate1').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRegisteredRate +"%</strong></div>";
+            Ext.get('filterRate2').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayOlderRate +"%</strong></div>";
 
-            Ext.get('filterBtn0').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastGamedauRate+"%</strong></div>";
-            Ext.get('filterBtn1').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastBettingRate+"%</strong></div>";
-            Ext.get('filterBtn2').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastRechargeRate+"%</strong></div>";
+            Ext.get('filterBtn0').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastGamedauRate+"%</strong></div>";
+            Ext.get('filterBtn1').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastBettingRate+"%</strong></div>";
+            Ext.get('filterBtn2').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastRechargeRate+"%</strong></div>";
 
-            Ext.get('filterBtn3').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastDauRegisteredRate+"%</strong></div>";
-            Ext.get('filterBtn4').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastGamedauRegisteredRate+"%</strong></div>";
-            Ext.get('filterBtn5').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastBettingRegisteredRate+"%</strong></div>";
-            Ext.get('filterBtn6').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastRechargeRegisteredRate+"%</strong></div>";
+            Ext.get('filterBtn3').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastDauRegisteredRate+"%</strong></div>";
+            Ext.get('filterBtn4').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastGamedauRegisteredRate+"%</strong></div>";
+            Ext.get('filterBtn5').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastBettingRegisteredRate+"%</strong></div>";
+            Ext.get('filterBtn6').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastRechargeRegisteredRate+"%</strong></div>";
 
-            Ext.get('filterBtn7').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastGamedauOlderRate+"%</strong></div>";
-            Ext.get('filterBtn8').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastBettingOlderRate+"%</strong></div>";
-            Ext.get('filterBtn9').dom.innerHTML = "<div align='center' style='line-height:15px;'>"+lastRechargeOlderRate+"%</strong></div>";
+            Ext.get('filterBtn7').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastGamedauOlderRate+"%</strong></div>";
+            Ext.get('filterBtn8').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastBettingOlderRate+"%</strong></div>";
+            Ext.get('filterBtn9').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastRechargeOlderRate+"%</strong></div>";
 
 
             var option = [
@@ -603,6 +620,28 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
             me.echarts.setOption(option3);
             Ext.get('filterBoardTitle2').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
 
+            Ext.get("filterRate0").on("click", function(){
+                var option = fun2(businessDate,payRate,title);
+                me.echarts = echarts.init(Ext.get("filterBoard0").dom);
+                me.echarts.setOption(option);
+                Ext.get('filterBoardTitle0').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
+            });
+
+            Ext.get("filterRate1").on("click", function(){
+                var option = fun2(businessDate,payRegisteredRate,title);
+                me.echarts = echarts.init(Ext.get("filterBoard1").dom);
+                me.echarts.setOption(option);
+                Ext.get('filterBoardTitle1').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
+            });
+
+            Ext.get("filterRate2").on("click", function(){
+                var option = fun2(businessDate,payOlderRate,title);
+                me.echarts = echarts.init(Ext.get("filterBoard2").dom);
+                me.echarts.setOption(option);
+                Ext.get('filterBoardTitle2').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
+            });
+
+
             //按钮点击事件
             Ext.get("filterBtn0").on("click", function(){
                 var title = "进入游戏>DAU转化率";
@@ -679,8 +718,6 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle2').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
-
-
         }
 
         function fun2(businessDate,data,name){
@@ -713,8 +750,12 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                 yAxis: {
                     type : 'value',
                     axisLabel : {
-                        formatter: '{value}'
-                    }},
+                        formatter: '{value}%'
+                    },
+                    // min: function(value) {
+                    //      return value.min;
+                    // }
+                },
                 series: [{
                     name: name,
                     type: 'line',
@@ -727,7 +768,7 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                                 color: "cornflowerblue"
                             }
                         }
-                    },
+                    }
                 }]
             };
             return singleOption;
