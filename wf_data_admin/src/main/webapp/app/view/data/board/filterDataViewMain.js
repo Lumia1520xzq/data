@@ -760,6 +760,8 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                     name: name,
                     type: 'line',
                     smooth:true,
+                    symbol:'diamond',
+                    symbolSize: 8,
                     data: data,
                     itemStyle: {
                         normal: {

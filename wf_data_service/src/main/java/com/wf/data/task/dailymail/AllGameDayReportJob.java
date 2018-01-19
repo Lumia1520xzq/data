@@ -56,7 +56,6 @@ public class AllGameDayReportJob {
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
-        date = "2018-01-15";
         while (count <= TIMES) {
             try {
                 // 获取收件人
