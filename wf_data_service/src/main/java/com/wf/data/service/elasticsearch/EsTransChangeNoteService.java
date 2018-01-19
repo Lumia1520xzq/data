@@ -12,12 +12,19 @@ import com.wf.data.service.ChannelInfoService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.LongTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +49,33 @@ public class EsTransChangeNoteService {
 				TransChangeNote.class);
 	}
 
+	public Map<String ,Object> getAmount(TransChangeNote note){
+		Double amount = 0.0;
+		double businessAmount = 0.0;
+		Map<String,Object> resultMap = new HashMap<>();
+		AggregationBuilder aggsBuilder = EsQueryBuilders.addAggregation("changeType", "change_type", null);
+		aggsBuilder.subAggregation(EsQueryBuilders.sumAggregation("changeAmount", "change_money"));
+		aggsBuilder.subAggregation(EsQueryBuilders.sumAggregation("businessAmount", "business_money"));
+		logger.debug("aggsBuilder:" + aggsBuilder);
+		Aggregations aggs = esClientFactory.getAggregation(EsContents.TRANS_CHANGE_NOTE, EsContents.TRANS_CHANGE_NOTE, aggsBuilder, getQuery(note));
+		Map<String, Aggregation> aggMap = aggs.asMap();
+		LongTerms teamAgg= (LongTerms) aggMap.get("changeType");
+		Iterator<Terms.Bucket> teamBucketIt = teamAgg.getBuckets().iterator();
+		while (teamBucketIt .hasNext()) {
+			Terms.Bucket buck = teamBucketIt .next();
+			Long key = (Long)buck.getKey();
+			//得到所有子聚合
+			Map<String, Aggregation> aggmap = buck.getAggregations().asMap();
+			double changeAmount = ((InternalSum) aggmap.get("changeAmount")).getValue();
+			amount += key*changeAmount;
+			businessAmount += ((InternalSum) aggmap.get("businessAmount")).getValue();
+		}
+		amount = Math.abs(amount);
+		resultMap.put("changeAmount", amount);
+		resultMap.put("businessAmount", businessAmount);
+		return resultMap;
+	}
+
 	private QueryBuilder getQuery(TransChangeNote note){
 		Map<String, Object> map = new HashMap<>(10);
 		QueryBuilder query;
@@ -56,11 +90,11 @@ public class EsTransChangeNoteService {
 			map.put("business_type", note.getBusinessType());
 		}
 		BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
-		if (!"".equals(note.getBeginDate())) {
+		if (null != note.getBeginDate() && !"".equals(note.getBeginDate())) {
 			String beginTime = DateUtils.formatUTCDate(note.getBeginDate(), DateUtils.DATE_T_PATTERN);
 			boolQuery.must(QueryBuilders.rangeQuery("create_time").gte(beginTime));
 		}
-		if (!"".equals(note.getEndDate())) {
+		if (null != note.getEndDate() && !"".equals(note.getEndDate())) {
 			String endTime = DateUtils.formatUTCDate(note.getEndDate(), DateUtils.DATE_T_PATTERN);
 			boolQuery.must(QueryBuilders.rangeQuery("create_time").lte(endTime));
 		}

@@ -3,6 +3,7 @@ package com.wf.data.controller.admin.business;
 import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.web.base.ExtJsController;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.ChannelInfoService;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -33,16 +33,17 @@ public class TransChangeNoteController extends ExtJsController {
     /**
      * 查询合计
      */
-    @RequestMapping("/sumData")
-    public Object sumData() {
-          return null;
-    }
+//    @RequestMapping("/sumData")
+//    public Object sumData(@RequestBody TransChangeNote note) {
+//        Double data = esTransChangeNoteService.getAmount(note);
+//        return data == null ? 0D : data;
+//    }
 
     /**
      * 查询列表
      */
     @RequestMapping("/list")
-    public Object list(HttpServletRequest request) {
+    public Object list() {
         JSONObject json = getRequestJson();
         Long parentId = null;
         Long channelId = null;
@@ -59,8 +60,8 @@ public class TransChangeNoteController extends ExtJsController {
             beginDate = data.getString("startTime");
             endDate = data.getString("endTime");
         }
-        String sStart = request.getParameter("start");
-        String sLength = request.getParameter("limit");
+        String sStart = json.getString("start");
+        String sLength = json.getString("limit");
         Integer start = 0;
         Integer length = 0;
         if (sStart != null) {
@@ -80,18 +81,19 @@ public class TransChangeNoteController extends ExtJsController {
         List<TransChangeNote> pageData = page.getData();
         for (TransChangeNote temp : pageData) {
             if(temp.getChannelId() != null){
-//                ChannelInfo info =	ChannelInfoService.get(temp.getChannelId());
-//                if(info != null) {
-//                    temp.setChannelName(info.getName() + "(" + info.getId() + ")");
-//                }
+                ChannelInfo info =	channelInfoService.get(temp.getChannelId());
+                if(info != null) {
+                    temp.setChannelName(info.getName() + "(" + info.getId() + ")");
+                }
             }
-            UicUser user = uicUserService.get(temp.getUserId());
-            if (null != user) {
-                temp.setUserName(user.getNickname());
+            Long id = temp.getUserId();
+            if(null != id){
+                UicUser user = uicUserService.get(id);
+                if (null != user) {
+                    temp.setUserName(user.getNickname());
+                }
             }
         }
-
         return dataGrid(page);
     }
-
 }
