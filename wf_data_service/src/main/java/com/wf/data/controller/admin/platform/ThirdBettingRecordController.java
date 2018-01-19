@@ -8,8 +8,12 @@ import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
 import com.wf.data.service.data.DatawareThirdBettingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 第三方投注数据
@@ -56,6 +60,32 @@ public class ThirdBettingRecordController extends ExtJsController {
 
         Page<DatawareThirdBettingRecord> page = new Page<DatawareThirdBettingRecord>(record);
         return dataGrid(datawareThirdBettingRecordService.findPage(page));
+    }
+
+    /**
+     * 查询列表
+     */
+    @RequestMapping("/sumData")
+    public Object sumData(@RequestBody Map<String, Object> dataParam) {
+        Map<String, Object> data = new HashMap<>();
+        DatawareThirdBettingRecord record = datawareThirdBettingRecordService.sumDataByConds(dataParam);
+        if (null == record) {
+            data.put("bettingData", 0.00);
+            data.put("returnData", 0.00);
+        } else {
+            if (null == record.getBettingAmount()) {
+                data.put("bettingData", 0.00);
+            } else {
+                data.put("bettingData", record.getBettingAmount());
+            }
+            if (null == record.getResultAmount()) {
+                data.put("returnData", 0.00);
+            } else {
+                data.put("returnData", record.getResultAmount());
+            }
+
+        }
+        return data;
     }
 
 
