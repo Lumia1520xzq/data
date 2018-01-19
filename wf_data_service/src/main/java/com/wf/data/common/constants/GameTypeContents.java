@@ -56,8 +56,17 @@ public interface GameTypeContents {
 	 * 炸金花
 	 */
 	int GAME_TYPE_TCARD = 11;
+    /**
+     * 糖果夺宝
+     */
+    int GAME_TYPE_CANDY = 12;
+    /**
+     * 真.热血无双
+     */
+    int GAME_TYPE_NEW_THREE_KINGDOM = 13;
 
-	/**
+
+    /**
 	 * WAP平台
 	 */
     int GAME_TYPE_WAP = 101;
