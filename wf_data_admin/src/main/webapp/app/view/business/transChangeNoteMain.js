@@ -12,17 +12,22 @@ Ext.define('WF.view.business.transChangeNoteMain', {
         var me = this;
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
-            // url: 'data/admin/business/convert/list.do',
-            // fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'updateTime']
+            url: 'data/admin/business/transChangeNote/list.do',
+            fields: [
+                'userName', 'userId','changeType',
+                'changeMoney', 'changeBefore', 'changeAfter',
+                'businessType', 'businessId','businessMoney',
+                'channelId','remark','createTime'
+            ]
         });
 
-        var productTypeStore = Ext.create('DCIS.Store', {
+        var businessTypeStore = Ext.create('DCIS.Store', {
             autoLoad: true,
-            // url: 'data/admin/dict/getListByType.do',
-            // fields: ['value', 'label'],
-            // baseParams: {
-            //     type: 'product_type'
-            // }
+            url: 'data/admin/dict/getListByType.do',
+            fields: ['value', 'label'],
+            baseParams: {
+                type: 'business_type'
+            }
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -30,7 +35,6 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             autoLoad: true,
             fields: ['id', 'name']
         });
-
 
         var allChannelStore = Ext.create('DCIS.Store', {
             autoLoad: true,
@@ -55,30 +59,33 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             buildField: "Manual",
             forceFit: false,
             sumData: function () {
-                callapi("data/admin/business/convert/sumData.do", me.down('dataform').form.getValues(), function (response) {
-                    me.down("[name='sumData']").setValue(response + " 元");
+                callapi("data/admin/business/transChangeNote/sumData.do", me.down('dataform').form.getValues(), function (response) {
+                    me.down("[name='changeAmount']").setValue(Ext.util.Format.number(response.changeAmount, "0,000"));
+                    me.down("[name='businessAmount']").setValue(Ext.util.Format.number(response.businessAmount, "0,000"));
                 });
             },
-            items: [{
-                name: 'parentId',
-                fieldLabel: '主渠道',
-                xtype: 'combo',
-                emptyText: "--请选择--",
-                displayField: 'name',
-                valueField: "id",
-                editable: true,
-                queryMode: "local",
-                store: parentChannelStore,
-                listeners :{
-                    change:function(obj,val){
-                        childChannelStore.load({
-                            params: {
-                                parentId : val
-                            }
-                        });
+            items: [
+                {
+                    name: 'parentId',
+                    fieldLabel: '主渠道',
+                    xtype: 'combo',
+                    emptyText: "--请选择--",
+                    displayField: 'name',
+                    valueField: "id",
+                    editable: true,
+                    queryMode: "local",
+                    store: parentChannelStore,
+                    listeners :{
+                        change:function(obj,val) {
+                            childChannelStore.load({
+                                params: {
+                                    parentId:val
+                                }
+                            });
+                        }
                     }
-                }
-            },{
+                },
+                {
                 name: 'channelId',
                 fieldLabel: '子渠道',
                 xtype: 'combo',
@@ -120,13 +127,21 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             }]
         });
         me.add({
-            items: [{
-                xtype: 'displayfield',
-                name: 'sumData',
-                value: 0,
-                fieldLabel: '<span style="font-size:14px;font-weight:bold">充值金额合计：</span>',
-                padding: 5
-            }],
+            items: [
+                {
+                    xtype: 'displayfield',
+                    name: 'changeAmount',
+                    value: 0,
+                    fieldLabel: '<span style="font-size:14px;font-weight:bold">变动金额合计：</span>',
+                    padding: 5
+                },{
+                    xtype: 'displayfield',
+                    name: 'businessAmount',
+                    value: 0,
+                    fieldLabel: '<span style="font-size:14px;font-weight:bold">业务金额合计：</span>',
+                    padding: 5
+                }
+            ],
             layout: 'hbox'
         });
         me.add({
@@ -134,52 +149,80 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             store: store,
             buildField: "Manual",
             forceFit: true,
-            columns: [{
-                text: '游戏用户ID',
-                dataIndex: 'userId',
-                width: 80,
-                menuDisabled: true,
-                sortable: false
-            }, {
+            columns: [
+            {
                 text: '用户昵称',
                 width: 100,
                 dataIndex: 'userName',
                 menuDisabled: true,
                 sortable: false
-            }, {
-                text: '充值金额',
-                width: 30,
-                dataIndex: 'thirdAmount',
+            },
+            {
+                text: '游戏用户ID',
+                dataIndex: 'userId',
+                width: 80,
                 menuDisabled: true,
                 sortable: false
-            }, {
+            },
+            // {
+            //     text: '资金变动类型',
+            //     width: 30,
+            //     dataIndex: 'changeType',
+            //     menuDisabled: true,
+            //     sortable: false
+            // },
+            {
+                text: '变动金额',
+                width: 30,
+                dataIndex: 'changeMoney',
+                menuDisabled: true,
+                sortable: false
+            },
+            {
+                text: '变动前金额',
+                width: 30,
+                dataIndex: 'changeBefore',
+                menuDisabled: true,
+                sortable: false
+            },
+            {
+                text: '变动后金额',
+                width: 30,
+                dataIndex: 'changeAfter',
+                menuDisabled: true,
+                sortable: false
+            },
+            {
                 text: '业务类型',
                 width: 50,
-                dataIndex: 'bizType',
+                dataIndex: 'businessType',
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
-                    /*var index = productTypeStore.find('value', value);
-                    if (index != -1) {
-                        var record = productTypeStore.getAt(index);
-                        return record.data.label;
-                    }
-                    return '--';*/
-                    var record = productTypeStore.findRecord('value', value,0,false,false,true);
+                    var record = businessTypeStore.findRecord('value', value,0,false,false,true);
                     if(record == null){
                         return '--';
                     }else {
                         return record.data.label;
                     }
                 }
-            }, {
-                text: '订单号',
+            },
+            {
+                text: '业务ID',
                 width: 120,
-                dataIndex: 'orderSn',
+                dataIndex: 'businessId',
                 menuDisabled: true,
                 sortable: false
-            }, {
-                text: '充值渠道',
+            },
+            {
+                text: '业务金额',
+                width: 120,
+                dataIndex: 'businessMoney',
+                menuDisabled: true,
+                sortable: false
+            },
+            {
+                text: '渠道',
                 width: 100,
                 dataIndex: 'channelId',
                 menuDisabled: true,
@@ -192,19 +235,22 @@ Ext.define('WF.view.business.transChangeNoteMain', {
                     }
                     return '--';
                 }
-            }, {
+            },
+            {
+                text: '备注',
+                width: 100,
+                dataIndex: 'remark',
+                menuDisabled: true,
+                sortable: false
+            },
+            {
                 text: '创建时间',
                 width: 100,
                 dataIndex: 'createTime',
                 menuDisabled: true,
                 sortable: false
-            }, {
-                text: '到账时间',
-                width: 100,
-                dataIndex: 'updateTime',
-                menuDisabled: true,
-                sortable: false
-            }]
+            }
+            ]
         });
     }
 });
