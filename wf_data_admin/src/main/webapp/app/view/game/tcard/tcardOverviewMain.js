@@ -111,37 +111,79 @@ Ext.define('WF.view.game.tcard.tcardOverviewMain', {
                 dataIndex: 'dauCount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注人数',
                 dataIndex: 'userCount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注流水',
                 dataIndex: 'bettingAmount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '返奖流水',
                 dataIndex: 'resultAmount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '流水差',
                 dataIndex: 'amountDiff',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '桌费金额',
                 dataIndex: 'tableAmount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注转化率',
                 dataIndex: 'conversionRate',

@@ -45,6 +45,12 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             columns: 3,
             buildField: "Manual",
             forceFit: true,
+            sumData: function () {
+            callapi("data/admin/platform/record/sumData.do", me.down('dataform').form.getValues(), function (response) {
+                me.down("[name='bettingData']").setValue(Ext.util.Format.number(response.bettingData, "0,000"));
+                me.down("[name='returnData']").setValue(Ext.util.Format.number(response.returnData, "0,000"));
+            });
+        },
             items: [{
                 name: 'channelId',
                 fieldLabel: '渠道',
@@ -78,6 +84,23 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 format: 'Y-m-d',
                 value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
             }]
+        });
+
+        me.add({
+            items: [{
+                xtype: 'displayfield',
+                name: 'bettingData',
+                value: 0,
+                fieldLabel: '<span style="font-size:14px;font-weight:bold">投注金额合计：</span>',
+                padding: 5
+            },{
+                xtype: 'displayfield',
+                name: 'returnData',
+                value: 0,
+                fieldLabel: '<span style="font-size:14px;font-weight:bold">返奖金额合计：</span>',
+                padding: 5
+            }],
+            layout: 'hbox'
         });
         me.add({
             xtype: 'datagrid',
@@ -115,37 +138,79 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 dataIndex: 'userCount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                       return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注笔数',
                 dataIndex: 'bettingCount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注流水',
                 dataIndex: 'bettingAmount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注ARPU',
                 dataIndex: 'bettingArpu',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注ASP',
                 dataIndex: 'bettingAsp',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '返奖金额',
                 dataIndex: 'resultAmount',
                 width: 100,
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '返奖率',
                 dataIndex: 'resultRate',
