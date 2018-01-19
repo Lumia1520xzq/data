@@ -5,21 +5,19 @@ import com.wf.core.persistence.Page;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dao.trans.entity.TransChangeNote;
-import com.wf.data.dao.trans.entity.TransConvert;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.UicUserService;
 import com.wf.data.service.elasticsearch.EsTransChangeNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author JoeH
- * @date 2018/01/19
+ * 2018/01/19
  */
 @RestController
 @RequestMapping(value = "/data/admin/business/transChangeNote")
@@ -29,14 +27,14 @@ public class TransChangeNoteController extends ExtJsController {
     private UicUserService uicUserService;
     @Autowired
     private EsTransChangeNoteService esTransChangeNoteService;
+    @Autowired
+    private ChannelInfoService channelInfoService;
 
     /**
-     * 查询列表
+     * 查询合计
      */
     @RequestMapping("/sumData")
-    public Object sumData(@RequestBody Map<String, Object> dataParam) {
-//        Double data = transConvertService.sumDataByConds(dataParam);
-//        return data == null ? 0D : data;
+    public Object sumData() {
           return null;
     }
 
@@ -45,24 +43,6 @@ public class TransChangeNoteController extends ExtJsController {
      */
     @RequestMapping("/list")
     public Object list(HttpServletRequest request) {
-//        TransConvert record = new TransConvert();
-//        record.setStartTime(startTime);
-//        record.setEndTime(endTime);
-//        record.setChannelId(channelId);
-//        record.setParentId(parentId);
-//        record.setUserId(userId);
-//        record.setBizType(bizType);
-//        Page<TransConvert> page = new Page<>(record);
-//        Page<TransConvert> result = transConvertService.findPage(page);
-//        for (TransConvert item : result.getData()) {
-//            if (item.getUserId() != null) {
-//                UicUser user = uicUserService.get(item.getUserId());
-//                if (null != user) {
-//                    item.setUserName(user.getNickname());
-//                }
-//            }
-//        }
-
         JSONObject json = getRequestJson();
         Long parentId = null;
         Long channelId = null;
@@ -79,34 +59,39 @@ public class TransChangeNoteController extends ExtJsController {
             beginDate = data.getString("startTime");
             endDate = data.getString("endTime");
         }
-        //JSONObject start = json.getJSONObject("start");
-        //JSONObject length = json.getJSONObject("limit");
-//        String sStart = request.getParameter("start");
-//        String sLength = request.getParameter("limit");
-//        Integer start = 0;
-//        Integer length = 0;
-//        if (sStart != null) {
-//            start = Integer.parseInt(sStart);
-//        }
-//        if (sLength != null) {
-//            length = Integer.parseInt(sLength);
-//        }
-//
-//        Page<TransChangeNote> page = esTransChangeNoteService.findPage(start,length,note);
-//        List<TransChangeNote> pageData = page.getData();
-//        for (TransChangeNote temp : pageData) {
-//            if(temp.getChannelId() != null){
-//                InventoryChannelInfo info =	inventoryChannelInfoService.get(temp.getChannelId());
-//                if(info != null) temp.setChannelName(info.getName()+"("+info.getId()+")");
-//            }
-//            UicUser user = uicUserService.getByUserId(temp.getUserId());
-//            if (user != null) {
-//                temp.setUserName(user.getNickname());
-//            }
-//        }
-//
-//        return dataGrid(result);
-          return null;
+        String sStart = request.getParameter("start");
+        String sLength = request.getParameter("limit");
+        Integer start = 0;
+        Integer length = 0;
+        if (sStart != null) {
+            start = Integer.parseInt(sStart);
+        }
+        if (sLength != null) {
+            length = Integer.parseInt(sLength);
+        }
+        TransChangeNote note = new TransChangeNote();
+        note.setParentId(parentId);
+        note.setChannelId(channelId);
+        note.setUserId(userId);
+        note.setBusinessType(businessType);
+        note.setBeginDate(beginDate);
+        note.setEndDate(endDate);
+        Page<TransChangeNote> page = esTransChangeNoteService.findPage(start,length,note);
+        List<TransChangeNote> pageData = page.getData();
+        for (TransChangeNote temp : pageData) {
+            if(temp.getChannelId() != null){
+//                ChannelInfo info =	ChannelInfoService.get(temp.getChannelId());
+//                if(info != null) {
+//                    temp.setChannelName(info.getName() + "(" + info.getId() + ")");
+//                }
+            }
+            UicUser user = uicUserService.get(temp.getUserId());
+            if (null != user) {
+                temp.setUserName(user.getNickname());
+            }
+        }
+
+        return dataGrid(page);
     }
 
 }
