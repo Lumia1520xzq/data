@@ -4,16 +4,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.UicUserService;
 import com.wf.data.service.elasticsearch.EsTransChangeNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author JoeH
@@ -33,11 +37,10 @@ public class TransChangeNoteController extends ExtJsController {
     /**
      * 查询合计
      */
-//    @RequestMapping("/sumData")
-//    public Object sumData(@RequestBody TransChangeNote note) {
-//        Double data = esTransChangeNoteService.getAmount(note);
-//        return data == null ? 0D : data;
-//    }
+    @RequestMapping("/sumData")
+    public Object sumData(@RequestBody TransChangeNote note) {
+        return esTransChangeNoteService.getAmount(note);
+    }
 
     /**
      * 查询列表
@@ -51,6 +54,9 @@ public class TransChangeNoteController extends ExtJsController {
         Integer businessType = null;
         String beginDate = null;
         String endDate = null;
+        Double changeMoneyLow = null;
+        Double changeMoneyHigh = null;
+        Integer changeType = null;
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             parentId = data.getLong("parentId");
@@ -59,6 +65,9 @@ public class TransChangeNoteController extends ExtJsController {
             businessType = data.getInteger("businessType");
             beginDate = data.getString("startTime");
             endDate = data.getString("endTime");
+            changeMoneyLow = data.getDouble("changeMoneyLow");
+            changeMoneyHigh = data.getDouble("changeMoneyHigh");
+            changeType = data.getInteger("changeType");
         }
         String sStart = json.getString("start");
         String sLength = json.getString("limit");
@@ -77,6 +86,9 @@ public class TransChangeNoteController extends ExtJsController {
         note.setBusinessType(businessType);
         note.setBeginDate(beginDate);
         note.setEndDate(endDate);
+        note.setChangeMoneyLow(changeMoneyLow);
+        note.setChangeMoneyHigh(changeMoneyHigh);
+        note.setChangeType(changeType);
         Page<TransChangeNote> page = esTransChangeNoteService.findPage(start,length,note);
         List<TransChangeNote> pageData = page.getData();
         for (TransChangeNote temp : pageData) {

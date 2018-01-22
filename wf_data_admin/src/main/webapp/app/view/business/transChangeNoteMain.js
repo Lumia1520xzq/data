@@ -48,6 +48,15 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             fields: ['id', 'name']
         });
 
+        var changeTypeStore = Ext.create('DCIS.Store', {
+            autoLoad: true,
+            fields: ['value','name'],
+            data:[
+                {value:1,name:"增加"},
+                {value:-1,name:"减少"}
+            ]
+        });
+
         me.add({
             border: false,
             store: store,
@@ -115,6 +124,12 @@ Ext.define('WF.view.business.transChangeNoteMain', {
                 valueField: "value",
                 editable: false
             }, {
+                name: 'changeMoneyLow',
+                fieldLabel: '变动金额下限'
+            }, {
+                name: 'changeMoneyHigh',
+                fieldLabel: '变动金额上限'
+            }, {
                 xtype: 'datetimefield',
                 name: 'startTime',
                 format: 'Y-m-d H:i:s',
@@ -124,6 +139,16 @@ Ext.define('WF.view.business.transChangeNoteMain', {
                 name: 'endTime',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '结束时间'
+            },
+            {
+                name: 'changeType',
+                fieldLabel: '资金变动类型',
+                xtype: 'combobox',
+                store: changeTypeStore,
+                emptyText: "--请选择--",
+                displayField: 'name',
+                valueField: "value",
+                editable: false
             }]
         });
         me.add({
@@ -152,7 +177,7 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             columns: [
             {
                 text: '用户昵称',
-                width: 100,
+                width: 50,
                 dataIndex: 'userName',
                 menuDisabled: true,
                 sortable: false
@@ -160,34 +185,42 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             {
                 text: '游戏用户ID',
                 dataIndex: 'userId',
-                width: 80,
+                width: 50,
                 menuDisabled: true,
                 sortable: false
             },
-            // {
-            //     text: '资金变动类型',
-            //     width: 30,
-            //     dataIndex: 'changeType',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },
+            {
+                text: '资金变动类型',
+                width: 50,
+                dataIndex: 'changeType',
+                menuDisabled: true,
+                sortable: false,
+                renderer: function (value) {
+                    var record = changeTypeStore.findRecord('value', value,0,false,false,true);
+                    if(record == null){
+                        return '--';
+                    }else {
+                        return record.data.name;
+                    }
+                }
+            },
             {
                 text: '变动金额',
-                width: 30,
+                width: 50,
                 dataIndex: 'changeMoney',
                 menuDisabled: true,
                 sortable: false
             },
             {
                 text: '变动前金额',
-                width: 30,
+                width: 50,
                 dataIndex: 'changeBefore',
                 menuDisabled: true,
                 sortable: false
             },
             {
                 text: '变动后金额',
-                width: 30,
+                width: 50,
                 dataIndex: 'changeAfter',
                 menuDisabled: true,
                 sortable: false
@@ -209,14 +242,14 @@ Ext.define('WF.view.business.transChangeNoteMain', {
             },
             {
                 text: '业务ID',
-                width: 120,
+                width: 30,
                 dataIndex: 'businessId',
                 menuDisabled: true,
                 sortable: false
             },
             {
                 text: '业务金额',
-                width: 120,
+                width: 50,
                 dataIndex: 'businessMoney',
                 menuDisabled: true,
                 sortable: false
