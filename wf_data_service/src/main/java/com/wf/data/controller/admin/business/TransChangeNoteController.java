@@ -63,8 +63,8 @@ public class TransChangeNoteController extends ExtJsController {
             channelId = data.getLong("channelId");
             userId = data.getLong("userId");
             businessType = data.getInteger("businessType");
-            beginDate = data.getString("startTime");
-            endDate = data.getString("endTime");
+            beginDate = data.getString("beginDate");
+            endDate = data.getString("endDate");
             changeMoneyLow = data.getDouble("changeMoneyLow");
             changeMoneyHigh = data.getDouble("changeMoneyHigh");
             changeType = data.getInteger("changeType");

@@ -131,12 +131,12 @@ Ext.define('WF.view.business.transChangeNoteMain', {
                 fieldLabel: '变动金额上限'
             }, {
                 xtype: 'datetimefield',
-                name: 'startTime',
+                name: 'beginDate',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '开始时间'
             }, {
                 xtype: 'datetimefield',
-                name: 'endTime',
+                name: 'endDate',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '结束时间'
             },
