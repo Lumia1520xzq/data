@@ -69,7 +69,7 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
             align : 'stretch',
             bodyStyle:'border-width:0 0 0 0;',
             items: [{
-                title: '转化漏斗分析',align:'stretch',height:420,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
+                title: '全量用户转化漏斗分析',align:'stretch',height:420,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
                 items:[
                     {width:"100%",height:20,xtype:"panel",forceFit:true,bodyStyle:'border-width:0'},
                     {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
@@ -277,9 +277,9 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
                 lastRechargeOlderRate = last.get("rechargeOlderRate");
                 lastPayOlderRate = last.get("payOlderRate");
             }
-            Ext.get('filterRate0').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRate +"%</strong></div>";
-            Ext.get('filterRate1').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRegisteredRate +"%</strong></div>";
-            Ext.get('filterRate2').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>活跃>充值转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayOlderRate +"%</strong></div>";
+            Ext.get('filterRate0').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>(DAU-->充值) 转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRate +"%</strong></div>";
+            Ext.get('filterRate1').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>(DAU-->充值) 转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRegisteredRate +"%</strong></div>";
+            Ext.get('filterRate2').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>(DAU-->充值) 转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayOlderRate +"%</strong></div>";
 
             Ext.get('filterBtn0').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastGamedauRate+"%</strong></div>";
             Ext.get('filterBtn1').dom.innerHTML = "<div align='center' style='height:30px;line-height:30px;background-color:darkorange;color:white;cursor:pointer;'>"+lastBettingRate+"%</strong></div>";
@@ -604,7 +604,7 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
             payOlderRate[i]=re.get('payOlderRate');
             }
             //初始化数据
-            var title = "活跃>充值转化率";
+            var title = "(DAU-->充值) 转化率";
             var option1 = fun2(businessDate,payRate,title);
             me.echarts = echarts.init(Ext.get("filterBoard0").dom);
             me.echarts.setOption(option1);
@@ -644,21 +644,21 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
 
             //按钮点击事件
             Ext.get("filterBtn0").on("click", function(){
-                var title = "进入游戏>DAU转化率";
+                var title = "(DAU-->进入游戏) 转化率";
                 var option = fun2(businessDate,gamedauRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard0").dom);
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle0').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
             Ext.get("filterBtn1").on("click", function(){
-                var title = "投注>进入游戏转化率";
+                var title = "(进入游戏-->投注) 转化率";
                 var option = fun2(businessDate,bettingRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard0").dom);
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle0').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
             Ext.get("filterBtn2").on("click", function(){
-                var title = "充值>投注转化率";
+                var title = "(投注-->充值) 转化率";
                 var option = fun2(businessDate,rechargeRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard0").dom);
                 me.echarts.setOption(option);
@@ -667,14 +667,14 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
 
 
             Ext.get("filterBtn3").on("click", function(){
-                var title = "DAU>注册转化率";
+                var title = "(注册-->DAU) 转化率";
                 var option = fun2(businessDate,dauRegisteredRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard1").dom);
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle1').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
             Ext.get("filterBtn4").on("click", function(){
-                var title = "进入游戏>DAU转化率";
+                var title = "(DAU-->进入游戏) 转化率";
                 var option = fun2(businessDate,gamedauRegisteredRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard1").dom);
                 me.echarts.setOption(option);
@@ -682,14 +682,14 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
             });
 
             Ext.get("filterBtn5").on("click", function(){
-                var title = "投注>进入游戏转化率";
+                var title = "(进入游戏-->投注) 转化率";
                 var option = fun2(businessDate,bettingRegisteredRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard1").dom);
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle1').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
             Ext.get("filterBtn6").on("click", function(){
-                var title = "充值>投注转化率";
+                var title = "(投注-->充值) 转化率";
                 var option = fun2(businessDate,rechargeRegisteredRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard1").dom);
                 me.echarts.setOption(option);
@@ -698,21 +698,21 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
 
 
             Ext.get("filterBtn7").on("click", function(){
-                var title = "进入游戏>DAU转化率";
+                var title = "(DAU-->进入游戏) 转化率";
                 var option = fun2(businessDate,gamedauOlderRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard2").dom);
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle2').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
             Ext.get("filterBtn8").on("click", function(){
-                var title = "投注>进入游戏转化率";
+                var title = "(进入游戏-->投注) 转化率";
                 var option = fun2(businessDate,bettingOlderRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard2").dom);
                 me.echarts.setOption(option);
                 Ext.get('filterBoardTitle2').dom.innerHTML = "<div align='center' style='line-height:70px;font-size:25px'>"+title+"</strong></div>";
             });
             Ext.get("filterBtn9").on("click", function(){
-                var title = "充值>投注转化率";
+                var title = "(投注-->充值) 转化率";
                 var option = fun2(businessDate,rechargeOlderRate,title);
                 me.echarts = echarts.init(Ext.get("filterBoard2").dom);
                 me.echarts.setOption(option);
