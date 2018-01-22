@@ -1,6 +1,5 @@
 package com.wf.data.controller.admin.business;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.mycatuic.entity.UicUser;
@@ -40,31 +39,7 @@ public class ConvertController extends ExtJsController {
      */
     @RequestMapping("/list")
     public Object list() {
-        JSONObject json = getRequestJson();
-        Long channelId = null;
-        Long parentId = null;
-        Long userId = null;
-        Integer bizType = null;
-        String startTime = null;
-        String endTime = null;
-        JSONObject data = json.getJSONObject("data");
-        if (data != null) {
-            parentId = data.getLong("parentId");
-            channelId = data.getLong("channelId");
-            userId = data.getLong("userId");
-            bizType = data.getInteger("bizType");
-            startTime = data.getString("startTime");
-            endTime = data.getString("endTime");
-        }
-
-        TransConvert record = new TransConvert();
-        record.setStartTime(startTime);
-        record.setEndTime(endTime);
-        record.setChannelId(channelId);
-        record.setParentId(parentId);
-        record.setUserId(userId);
-        record.setBizType(bizType);
-        Page<TransConvert> page = new Page<TransConvert>(record);
+        Page<TransConvert> page = getPage(TransConvert.class);
         Page<TransConvert> result = transConvertService.findPage(page);
         for (TransConvert item : result.getData()) {
             if (item.getUserId() != null) {

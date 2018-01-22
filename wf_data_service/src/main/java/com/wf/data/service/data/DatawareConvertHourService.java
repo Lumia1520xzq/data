@@ -4,6 +4,7 @@ import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.DatawareConvertHourDao;
 import com.wf.data.dao.data.entity.DatawareConvertDay;
 import com.wf.data.dao.data.entity.DatawareConvertHour;
+import com.wf.data.dao.data.entity.DatawareFinalChannelInfoHour;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,15 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
         return dao.findConvertList(map);
     }
 
-    public long getCountByTime(Map<String,Object> map){
+    public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
+    }
+
+    public DatawareFinalChannelInfoHour findRechargeByDate(Map<String, Object> map) {
+        return dao.findRechargeByDate(map);
+    }
+
+    public DatawareFinalChannelInfoHour findRechargeByTime(Map<String, Object> map) {
+        return dao.findRechargeByTime(map);
     }
 }

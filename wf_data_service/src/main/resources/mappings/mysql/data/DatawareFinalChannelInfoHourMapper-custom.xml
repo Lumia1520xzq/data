@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelInfoHourDao">
+
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*) FROM dataware_final_channel_info_hour t
+        WHERE 1=1
+        AND t.delete_flag =0
+        AND t.channel_id IS NOT NULL
+        <if test="businessHour != null and businessHour != ''">
+            AND t.business_hour = #{businessHour}
+        </if>
+        <if test="businessDate != null and businessDate != ''">
+            AND t.business_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
+</mapper>
+
