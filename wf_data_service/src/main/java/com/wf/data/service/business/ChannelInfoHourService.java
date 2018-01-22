@@ -57,6 +57,7 @@ public class ChannelInfoHourService {
             Map<String, Object> params = new HashMap<>();
             params.put("businessDate", businessDate);
             params.put("businessHour", businessHour);
+            dataKettle(null, businessDate, businessHour);
             List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
             //判断数据是否存在
             for (ChannelInfo item : channelInfoList) {
@@ -77,14 +78,23 @@ public class ChannelInfoHourService {
         DatawareFinalChannelInfoHour info = new DatawareFinalChannelInfoHour();
         info.setBusinessDate(businessDate);
         info.setBusinessHour(businessHour);
-        info.setChannelName(channelInfo.getName());
-        info.setChannelId(channelInfo.getId());
-        info.setParentId(channelInfo.getId());
+        if(channelInfo != null){
+            info.setChannelName(channelInfo.getName());
+            info.setChannelId(channelInfo.getId());
+            info.setParentId(channelInfo.getId());
+
+        }else {
+            info.setChannelName("全部");
+            info.setChannelId(1L);
+            info.setParentId(1L);
+        }
         //日活
         Map<String, Object> params = new HashMap<>();
         params.put("buryingDate", businessDate);
         params.put("buryingHour", businessHour);
-        params.put("parentId", info.getParentId());
+        if(null != channelInfo){
+            params.put("parentId", info.getParentId());
+        }
         Integer hourDau = buryingPointHourService.getDauByDateAndHour(params);
         if (null == hourDau) hourDau = 0;
         info.setHourDau(Long.valueOf(hourDau));
@@ -97,7 +107,9 @@ public class ChannelInfoHourService {
         Map<String, Object> regParams = new HashMap<>();
         regParams.put("convertDate", businessDate);
         regParams.put("convertHour", businessHour);
-        regParams.put("parentId", info.getParentId());
+        if(null != channelInfo){
+            regParams.put("parentId", info.getParentId());
+        }
         DatawareFinalChannelInfoHour convertInfo = convertHourService.findRechargeByTime(regParams);
         if (null != convertInfo) {
             if (null == convertInfo.getRechargeCount()) {
@@ -130,7 +142,9 @@ public class ChannelInfoHourService {
         Map<String, Object> userParams = new HashMap<>();
         userParams.put("businessDate", businessDate);
         userParams.put("businessHour", businessHour);
-        userParams.put("parentId", info.getParentId());
+        if(null != channelInfo){
+            userParams.put("parentId", info.getParentId());
+        }
         List<Long> newUserList = datawareUserInfoService.getNewUserByDate(userParams);
         if (CollectionUtils.isNotEmpty(newUserList)) {
             info.setHourNewUsers(Long.valueOf(newUserList.size()));
@@ -139,7 +153,7 @@ public class ChannelInfoHourService {
 
         }
 
-        List<Long> dayNewUserList = datawareUserInfoService.getNewUserByDate(userParams);
+        List<Long> dayNewUserList = datawareUserInfoService.getNewUserByTime(userParams);
         if (CollectionUtils.isNotEmpty(dayNewUserList)) {
             info.setNewUsers(Long.valueOf(dayNewUserList.size()));
         } else {
@@ -152,7 +166,9 @@ public class ChannelInfoHourService {
         DatawareBettingLogHour hour = new DatawareBettingLogHour();
         hour.setBettingDate(businessDate);
         hour.setBettingHour(businessHour);
-        hour.setParentId(info.getParentId());
+        if(null != channelInfo){
+            hour.setParentId(info.getParentId());
+        }
         hour.setUserGroup(2);
         List<Long> beetingUserIdList = bettingLogHourService.findUserId(hour);
         Collection interColl = CollectionUtils.intersection(beetingUserIdList, newUserList);
@@ -178,7 +194,9 @@ public class ChannelInfoHourService {
         Map<String, Object> bettingParams = new HashMap<>();
         bettingParams.put("bettingDate", businessDate);
         bettingParams.put("bettingHour", businessHour);
-        bettingParams.put("parentId", info.getParentId());
+        if(null != channelInfo){
+            bettingParams.put("parentId", info.getParentId());
+        }
         DatawareBettingLogHour bettingInfo = bettingLogHourService.getSumByDateAndHour(bettingParams);
         if (null != bettingInfo) {
             if (null == bettingInfo.getBettingAmount()) {
@@ -205,7 +223,7 @@ public class ChannelInfoHourService {
             info.setHourDiffAmount(BigDecimalUtil.round(BigDecimalUtil.sub(info.getHourBettingAmount(), info.getHourResultAmount()), 2));
         }
 
-        DatawareBettingLogHour dayBettingInfo = bettingLogHourService.getSumByDateAndHour(bettingParams);
+        DatawareBettingLogHour dayBettingInfo = bettingLogHourService.getBettingByDate(bettingParams);
         if (null != dayBettingInfo) {
             if (null == dayBettingInfo.getBettingAmount()) {
                 info.setBettingAmount(0.00);
