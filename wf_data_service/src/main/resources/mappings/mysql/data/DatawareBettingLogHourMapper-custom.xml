@@ -27,8 +27,38 @@
         <if test="bettingDate != null and bettingDate != ''">
             AND betting_date = #{bettingDate}
         </if>
+        <if test="bettingHour != null and bettingHour != ''">
+            AND betting_hour = #{bettingHour}
+        </if>
         <if test="userGroup != null and userGroup != ''">
             AND user_group = #{userGroup}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
+        </if>
+    </select>
+
+    <select id="findUserIdByTime" resultType="long">
+        SELECT DISTINCT user_id
+        FROM dataware_betting_log_hour
+        WHERE 1=1 AND delete_flag = 0
+        <if test="bettingDate != null and bettingDate != ''">
+            AND betting_date = #{bettingDate}
+        </if>
+        <if test="bettingHour != null and bettingHour != ''">
+            AND betting_hour &lt;= #{bettingHour}
+        </if>
+        <if test="userGroup != null and userGroup != ''">
+            AND user_group = #{userGroup}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
         </if>
     </select>
 
@@ -56,8 +86,8 @@
     <select id="getSumByDateAndHour" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
         SELECT
         SUM(betting_amount) bettingAmount,
-        SUM(result_amount) resultAmount,
         COUNT(DISTINCT user_id) bettingUserCount,
+        SUM(result_amount) resultAmount,
         SUM(betting_count) bettingCount
         FROM `dataware_betting_log_hour`
         WHERE 1=1 AND delete_flag = 0 AND user_group = 2
@@ -70,7 +100,36 @@
         <if test="gameType != null and gameType != ''">
         AND game_type = #{gameType}
         </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
+        </if>
     </select>
 
+    <select id="getBettingByDate" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+        SELECT
+        COUNT(DISTINCT t.user_id) bettingUserCount,
+        SUM(t.betting_amount) bettingAmount,
+        SUM(t.betting_count) bettingCount,
+        SUM(t.result_amount) resultAmount
+        FROM `dataware_betting_log_hour` t
+        WHERE 1=1
+        AND t.user_group=2
+        AND t.delete_flag=0
+        <if test="bettingDate != null and bettingDate != ''">
+            AND t.betting_date = #{bettingDate}
+        </if>
+        <if test="bettingHour != null and bettingHour != ''">
+            AND t.betting_hour &lt;= #{bettingHour}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
 </mapper>
 

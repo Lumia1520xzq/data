@@ -68,7 +68,10 @@ public class CommonDataController extends ExtJsController {
 		return list;
 	}
 
-
+    /**
+     * 获取主渠道
+     * @return
+     */
 	@RequestMapping("/getParentChannels")
 	public Object getParentChannels() {
 		JSONObject json = getRequestJson();
@@ -98,6 +101,10 @@ public class CommonDataController extends ExtJsController {
 	}
 
 
+    /**
+     * 获取子渠道
+     * @return
+     */
 	@RequestMapping("/getChildChannels")
 	public Object getChildChannels() {
 		JSONObject json = getRequestJson();
@@ -118,7 +125,10 @@ public class CommonDataController extends ExtJsController {
 		}
 		dto.setEnable(1);
 		List<ChannelInfo> list = channelInfoService.findList(dto,1000);
-
+        if (null != dto.getParentId()) {
+            ChannelInfo info = channelInfoService.get(dto.getParentId());
+            list.add(0,info);
+        }
 		for (ChannelInfo cInfo :list) {
 			cInfo.setName(cInfo.getName()+"("+cInfo.getId()+")");
 		}
@@ -126,7 +136,47 @@ public class CommonDataController extends ExtJsController {
 		return list;
 	}
 
+    /**
+     * 获取渠道注册用户列表
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = {"channelUserList"})
+    public Object channelUserList(HttpServletRequest request) {
+        UicUser user = new UicUser();
+        JSONObject json = getRequestJson();
 
+        String keyword = null;
+        Long parentId = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null && data.size() > 0) {
+            keyword = data.getString("data");
+            parentId = data.getLong("parentId");
+        }
+
+        if (null != parentId){
+            user.setRegParentChannel(parentId);
+        }
+
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = keyword.trim();
+            if (NumberUtils.isDigits(keyword)) {
+                user.setId(NumberUtils.toLong(keyword));
+            } else {
+                user.setNickname(keyword);
+            }
+        }
+        Page<UicUser> page = uicUserService.findPage(new Page<UicUser>(user));
+        return page;
+    }
+
+
+    /**
+     * 获取用户列表
+     * @param request
+     * @return
+     */
 	@ResponseBody
 	@RequestMapping(value = { "userList" })
 	public Object findUserList(HttpServletRequest request) {

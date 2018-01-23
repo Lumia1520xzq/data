@@ -27,11 +27,15 @@ public class DatawareBuryingPointHourService extends CrudService<DatawareBurying
         return dao.findUserId(pointDay);
     }
 
-    public long getCountByTime(Map<String,Object> map){
+    public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
 
-    public Integer getDauByDateAndHour(Map<String,Object> params){
-            return dao.getDauByDateAndHour(params);
+    public Integer getDauByDateAndHour(Map<String, Object> params) {
+        return dao.getDauByDateAndHour(params);
+    }
+
+    public Long getDauByTime(Map<String, Object> params) {
+        return dao.getDauByTime(params);
     }
 }

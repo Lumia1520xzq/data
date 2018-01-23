@@ -23,6 +23,10 @@ public class DatawareBettingLogHourService extends CrudService<DatawareBettingLo
         return dao.findUserId(log);
     }
 
+    public List<Long> findUserIdByTime(DatawareBettingLogHour log) {
+        return dao.findUserIdByTime(log);
+    }
+
     public List<DatawareBettingLogDay> findBettingList(Map<String, Object> params) {
         return dao.findBettingList(params);
     }
@@ -33,5 +37,8 @@ public class DatawareBettingLogHourService extends CrudService<DatawareBettingLo
 
     public DatawareBettingLogHour getSumByDateAndHour(Map<String,Object> params){
         return dao.getSumByDateAndHour(params);
+    }
+    public DatawareBettingLogHour getBettingByDate(Map<String,Object> params){
+        return dao.getBettingByDate(params);
     }
 }
