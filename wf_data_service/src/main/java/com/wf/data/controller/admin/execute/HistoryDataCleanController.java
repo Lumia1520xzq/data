@@ -47,9 +47,7 @@ public class HistoryDataCleanController extends ExtJsController {
         }
 
         List<String> datelist = DateUtils.getDateList(startTime, endTime);
-        System.out.println(System.currentTimeMillis() +"before");
         channelInfoHourService.dataClean(datelist);
-        System.out.println(System.currentTimeMillis() +"after");
         return success("清洗开始执行");
     }
 

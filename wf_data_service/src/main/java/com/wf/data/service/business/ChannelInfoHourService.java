@@ -280,7 +280,6 @@ public class ChannelInfoHourService {
                 }
             }
 
-            System.out.println(System.currentTimeMillis() +"inner");
         } else {
             for (String searchDate : datelist) {
                 if (datelist.get(0) == searchDate) {
@@ -325,6 +324,5 @@ public class ChannelInfoHourService {
             }
         }
 
-        System.out.println(System.currentTimeMillis() + "inner");
     }
 }
