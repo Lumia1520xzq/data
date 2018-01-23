@@ -26,7 +26,7 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_final_channel_info_hour历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data = {
+                        var data= {
                             startTime: Ext.util.Format.date(me.down("[name='startDate']").getValue(),'Y-m-d H:i:s'),
                             endTime: Ext.util.Format.date(me.down("[name='endDate']").getValue(),'Y-m-d H:i:s')
                         };
@@ -42,7 +42,7 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
                             } else {
                                 Ext.Msg.show({
                                     title: '错误',
-                                    msg: result.data.msg + "失败",
+                                    msg: result.data.msg,
                                     buttons: Ext.Msg.OK,
                                     icon: Ext.Msg.ERROR,
                                     modal: true
