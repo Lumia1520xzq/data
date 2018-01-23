@@ -14,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -78,12 +79,12 @@ public class ChannelInfoHourService {
         DatawareFinalChannelInfoHour info = new DatawareFinalChannelInfoHour();
         info.setBusinessDate(businessDate);
         info.setBusinessHour(businessHour);
-        if(channelInfo != null){
+        if (channelInfo != null) {
             info.setChannelName(channelInfo.getName());
             info.setChannelId(channelInfo.getId());
             info.setParentId(channelInfo.getId());
 
-        }else {
+        } else {
             info.setChannelName("全部");
             info.setChannelId(1L);
             info.setParentId(1L);
@@ -92,7 +93,7 @@ public class ChannelInfoHourService {
         Map<String, Object> params = new HashMap<>();
         params.put("buryingDate", businessDate);
         params.put("buryingHour", businessHour);
-        if(null != channelInfo){
+        if (null != channelInfo) {
             params.put("parentId", info.getParentId());
         }
         Integer hourDau = buryingPointHourService.getDauByDateAndHour(params);
@@ -107,7 +108,7 @@ public class ChannelInfoHourService {
         Map<String, Object> regParams = new HashMap<>();
         regParams.put("convertDate", businessDate);
         regParams.put("convertHour", businessHour);
-        if(null != channelInfo){
+        if (null != channelInfo) {
             regParams.put("parentId", info.getParentId());
         }
         DatawareFinalChannelInfoHour convertInfo = convertHourService.findRechargeByTime(regParams);
@@ -142,7 +143,7 @@ public class ChannelInfoHourService {
         Map<String, Object> userParams = new HashMap<>();
         userParams.put("businessDate", businessDate);
         userParams.put("businessHour", businessHour);
-        if(null != channelInfo){
+        if (null != channelInfo) {
             userParams.put("parentId", info.getParentId());
         }
         List<Long> newUserList = datawareUserInfoService.getNewUserByDate(userParams);
@@ -166,7 +167,7 @@ public class ChannelInfoHourService {
         DatawareBettingLogHour hour = new DatawareBettingLogHour();
         hour.setBettingDate(businessDate);
         hour.setBettingHour(businessHour);
-        if(null != channelInfo){
+        if (null != channelInfo) {
             hour.setParentId(info.getParentId());
         }
         hour.setUserGroup(2);
@@ -194,7 +195,7 @@ public class ChannelInfoHourService {
         Map<String, Object> bettingParams = new HashMap<>();
         bettingParams.put("bettingDate", businessDate);
         bettingParams.put("bettingHour", businessHour);
-        if(null != channelInfo){
+        if (null != channelInfo) {
             bettingParams.put("parentId", info.getParentId());
         }
         DatawareBettingLogHour bettingInfo = bettingLogHourService.getSumByDateAndHour(bettingParams);
@@ -258,4 +259,72 @@ public class ChannelInfoHourService {
     }
 
 
+    @Async
+    public void dataClean(List<String> datelist) {
+        if (DateUtils.formatDate(DateUtils.parseDate(datelist.get(0)), "yyyy-MM-dd").equals(DateUtils.formatDate(DateUtils.parseDate(datelist.get(datelist.size() - 1)), "yyyy-MM-dd"))) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.parseDate(datelist.get(0), DateUtils.DATE_TIME_PATTERN));
+            String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(datelist.get(0), DateUtils.DATE_PATTERN)), DateUtils.DATE_PATTERN);
+            String beginHour = DateUtils.formatDate(calendar.getTime(), "HH");
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(DateUtils.parseDate(datelist.get(datelist.size() - 1), DateUtils.DATE_TIME_PATTERN));
+            String endHour = DateUtils.formatDate(cal.getTime(), "HH");
+            if (beginHour.equals(endHour)) {
+                channelInfo(beginDate, beginHour);
+            } else {
+                while (!beginHour.equals(endHour)) {
+                    channelInfo(beginDate, beginHour);
+                    calendar.add(Calendar.HOUR_OF_DAY, 1);
+                    beginHour = DateUtils.formatDate(calendar.getTime(), "HH");
+                }
+            }
+
+            System.out.println(System.currentTimeMillis() +"inner");
+        } else {
+            for (String searchDate : datelist) {
+                if (datelist.get(0) == searchDate) {
+
+                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN), DateUtils.DATE_PATTERN);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN));
+                    String date = searchDay;
+                    while (searchDay.equals(date)) {
+
+                        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
+                        channelInfo(searchDay, searchHour);
+                        calendar.add(Calendar.HOUR_OF_DAY, 1);
+                        date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
+                    }
+
+                } else if (searchDate == datelist.get(datelist.size() - 1)) {
+                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN), DateUtils.DATE_PATTERN);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN));
+                    String date = searchDay;
+                    while (searchDay.equals(date)) {
+
+                        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
+                        channelInfo(searchDay, searchHour);
+                        calendar.add(Calendar.HOUR_OF_DAY, -1);
+                        date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
+                    }
+                } else {
+                    String searchDay = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, DateUtils.DATE_PATTERN)), DateUtils.DATE_PATTERN);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, DateUtils.DATE_PATTERN)));
+                    String date = searchDay;
+                    while (searchDay.equals(date)) {
+
+                        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
+                        channelInfo(searchDay, searchHour);
+                        calendar.add(Calendar.HOUR_OF_DAY, 1);
+                        date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
+                    }
+                }
+            }
+        }
+
+        System.out.println(System.currentTimeMillis() + "inner");
+    }
 }

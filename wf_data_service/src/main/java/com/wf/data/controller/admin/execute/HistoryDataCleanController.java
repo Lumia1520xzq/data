@@ -23,6 +23,7 @@ public class HistoryDataCleanController extends ExtJsController {
 
     @Autowired
     private ChannelInfoHourService channelInfoHourService;
+
     /**
      * 清洗channelInfoHour表
      *
@@ -34,23 +35,21 @@ public class HistoryDataCleanController extends ExtJsController {
         String startTime = request.getParameter("startTime");
         String endTime = request.getParameter("endTime");
 
-        if(StringUtil.isBlank(startTime)){
+        if (StringUtil.isBlank(startTime)) {
             return error("开始时间为空");
         }
-        if(StringUtil.isBlank(endTime)){
+        if (StringUtil.isBlank(endTime)) {
             return error("结束时间为空");
         }
 
-        List<String> datelist = DateUtils.getDateList(startTime, endTime);
-
-        for(String searchDate : datelist){
-            if (datelist.get(0) == searchDate) {
-
-            } else if (searchDate == datelist.get(datelist.size() - 1)) {
-            } else {
-            }
+        if(DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()){
+            return error("开始时间大于结束时间");
         }
 
+        List<String> datelist = DateUtils.getDateList(startTime, endTime);
+        System.out.println(System.currentTimeMillis() +"before");
+        channelInfoHourService.dataClean(datelist);
+        System.out.println(System.currentTimeMillis() +"after");
         return success("清洗开始执行");
     }
 
