@@ -272,9 +272,11 @@ public class ChannelInfoHourService {
             String endHour = DateUtils.formatDate(cal.getTime(), "HH");
             if (beginHour.equals(endHour)) {
                 channelInfo(beginDate, beginHour);
+                logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(beginDate),GfJsonUtil.toJSONString(beginHour));
             } else {
                 while (!beginHour.equals(endHour)) {
                     channelInfo(beginDate, beginHour);
+                    logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(beginDate),GfJsonUtil.toJSONString(beginHour));
                     calendar.add(Calendar.HOUR_OF_DAY, 1);
                     beginHour = DateUtils.formatDate(calendar.getTime(), "HH");
                 }
@@ -292,6 +294,7 @@ public class ChannelInfoHourService {
 
                         String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
                         channelInfo(searchDay, searchHour);
+                        logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(searchDay),GfJsonUtil.toJSONString(searchHour));
                         calendar.add(Calendar.HOUR_OF_DAY, 1);
                         date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
                     }
@@ -305,6 +308,7 @@ public class ChannelInfoHourService {
 
                         String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
                         channelInfo(searchDay, searchHour);
+                        logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(searchDay),GfJsonUtil.toJSONString(searchHour));
                         calendar.add(Calendar.HOUR_OF_DAY, -1);
                         date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
                     }
@@ -317,6 +321,7 @@ public class ChannelInfoHourService {
 
                         String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
                         channelInfo(searchDay, searchHour);
+                        logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(searchDay),GfJsonUtil.toJSONString(searchHour));
                         calendar.add(Calendar.HOUR_OF_DAY, 1);
                         date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
                     }
