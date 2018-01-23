@@ -324,5 +324,6 @@ public class ChannelInfoHourService {
             }
         }
 
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 }
