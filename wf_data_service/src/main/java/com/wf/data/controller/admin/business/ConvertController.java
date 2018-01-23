@@ -64,7 +64,7 @@ public class ConvertController extends ExtJsController {
         record.setParentId(parentId);
         record.setUserId(userId);
         record.setBizType(bizType);
-        Page<TransConvert> page = new Page<TransConvert>(record);
+        Page<TransConvert> page = new Page<>(record);
         Page<TransConvert> result = transConvertService.findPage(page);
         for (TransConvert item : result.getData()) {
             if (item.getUserId() != null) {
