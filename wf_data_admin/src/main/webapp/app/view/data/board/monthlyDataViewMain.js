@@ -45,7 +45,10 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 store: parentChannelStore
             },
             {
-                xtype: 'datefield', cId: 'dfBeginDate', labelWidth: 40, width: 150, format: 'Y-m', fieldLabel: '日期'
+                name: 'month',
+                fieldLabel: '开始时间',
+                xtype: 'datefield',
+                format: 'Y-m',
             }
             ]
         });
