@@ -22,4 +22,15 @@
         <include refid="channelInfoColumns"/>
         from channel_info t
     </select>
+
+    <select id="findChannelNameById" resultType="String">
+        SELECT `name` FROM `channel_info` WHERE
+        <if test="channelId != null and channelId != ''">
+            id = #{channelId}
+        </if>
+        <if test="channelId == null and parentId != '' and parentId !=null">
+            id = #{parentId}
+        </if>
+    </select>
+
 </mapper>
