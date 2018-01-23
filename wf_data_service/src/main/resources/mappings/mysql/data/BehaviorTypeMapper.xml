@@ -14,7 +14,8 @@
 		t.is_show,
 		t.create_time,
 		t.update_time,
-		t.delete_flag
+		t.delete_flag,
+		SUBSTR(t.event_id,(LENGTH(t.event_id)-1)) AS sub_event_id
 	</sql>
 	
 	<sql id="behaviorTypeWhere">
