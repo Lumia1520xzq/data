@@ -12,6 +12,9 @@ public class BehaviorType extends DataEntity {
 	private Integer behaviorLevel;
 	private Integer isShow;
 
+	// formdata
+	private String subEventId;
+
 	public String getName() {
 		return name;
 	}
@@ -68,4 +71,11 @@ public class BehaviorType extends DataEntity {
 		this.isShow = isShow;
 	}
 
+	public String getSubEventId() {
+		return subEventId;
+	}
+
+	public void setSubEventId(String subEventId) {
+		this.subEventId = subEventId;
+	}
 }
