@@ -13,7 +13,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
         var me = this;
         me.callParent(arguments);
         var store= Ext.create('DCIS.Store', {
-            url:'data/board/view/getList.do',
+            url:'data/month/view/getList.do',
             autoload:false,
             fields: []
         });
@@ -45,10 +45,15 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 store: parentChannelStore
             },
             {
-                name: 'month',
+                name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
-                format: 'Y-m',
+                format: 'Y-m'
+            },{
+                name: 'endTime',
+                fieldLabel: '结束时间',
+                xtype: 'datefield',
+                format: 'Y-m'
             }
             ]
         });
