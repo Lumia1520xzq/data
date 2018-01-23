@@ -9,18 +9,17 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dto.MonthlyDataDto;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelCostService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import com.wf.data.service.data.DatawareFinalChannelRetentionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 月度指标监控
@@ -81,24 +80,45 @@ public class MonthlyDataViewController extends ExtJsController {
         }else {
             params.put("parentId", parentId);
         }
-        params.put("beginDate",startTime);
-        params.put("endDate",endTime);
-
-        return null;
+        params.put("beginMonth",startTime);
+        params.put("endMonth",endTime);
+        List<MonthlyDataDto> list = new ArrayList<>();
+        List<MonthlyDataDto> infoAllList = datawareFinalChannelInfoAllService.findMonthSumData(params);
+        if(CollectionUtils.isNotEmpty(infoAllList)){
+            for(MonthlyDataDto info:infoAllList){
+                MonthlyDataDto dto = new MonthlyDataDto();
+                //1、月份
+                String month = info.getMonth();
+                //2、当月累计充值
+                Double sumRecharge = info.getSumRecharge();
+                //3、当月累计DAU日均值
+                int days = info.getDays();
+                long sumDau =  info.getSumDau();
+                long avgDau = days == 0 ? 0L:sumDau/days;
+                //4、当月累计DARPU值
+                double avgDarpu = sumDau == 0L?0:BigDecimalUtil.round(BigDecimalUtil.div(sumRecharge,sumDau),2);
+                //5、当月累计成本
+                params.put("month",month);
+                double sumCost = datawareFinalChannelCostService.findMonthCost(params);
+                //6、当月累计成本占比
+                double costRate = cal(sumCost,sumRecharge);
+                dto.setMonth(month);
+                dto.setSumRecharge(sumRecharge);
+                dto.setAvgDau(avgDau);
+                dto.setAvgDarpu(avgDarpu);
+                dto.setSumCost(sumCost);
+                dto.setCostRate(costRate);
+                list.add(dto);
+            }
+        }
+        return list;
     }
 
-
-    private  String cal(Long last,Long notlast){
-        if(0 == notlast){
-            return "0%";
+    private double cal(Double cost,Double recharge){
+        if(0 == recharge){
+            return 0;
         }
-        return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
-    }
-    private  String cal(Double last,Double notlast){
-        if(0 == notlast){
-            return "0%";
-        }
-        return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
+        return BigDecimalUtil.round(BigDecimalUtil.div(cost*100,recharge),2);
     }
 
     private static String getMonth(){
