@@ -5,6 +5,7 @@ import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.dao.data.BehaviorTypeDao;
 import com.wf.data.dao.data.entity.BehaviorType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,4 +35,11 @@ public class BehaviorTypeService extends CrudService<BehaviorTypeDao, BehaviorTy
 		return cacheHander.cache(DataCacheKey.DATA_ACTIVE_EVENT.key(),() -> dao.getActiveEventId());
 	}
 
+	public List<BehaviorType> findAll() {
+		return dao.findAll();
+	}
+
+	public List<BehaviorType> findByParentEventId(Long eventId) {
+		return dao.findByParentEventId(eventId);
+	}
 }
