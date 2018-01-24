@@ -47,12 +47,12 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
             {
                 name: 'startTime',
                 fieldLabel: '开始时间',
-                xtype: 'datefield',
+                xtype: 'monthfield',
                 format: 'Y-m'
             },{
                 name: 'endTime',
                 fieldLabel: '结束时间',
-                xtype: 'datefield',
+                xtype: 'monthfield',
                 format: 'Y-m'
             }
             ]
