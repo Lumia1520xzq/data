@@ -31,5 +31,46 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             AND  t.convert_hour = #{convertHour}
         </if>
     </select>
+
+
+    <select id="findRechargeByDate" resultType="DatawareFinalChannelInfoHour">
+        SELECT
+        COUNT(DISTINCT t.user_id) rechargeCount,
+        SUM(t.third_amount) rechargeAmount
+        FROM `dataware_convert_hour` t
+        WHERE 1=1 AND t.delete_flag = 0
+        <if test="convertHour != null and convertHour != ''">
+            AND t.convert_hour = #{convertHour}
+        </if>
+        <if test="convertDate != null and convertDate != ''">
+            AND t.convert_date = #{convertDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
+
+    <select id="findRechargeByTime" resultType="DatawareFinalChannelInfoHour">
+        SELECT
+        COUNT(DISTINCT t.user_id) rechargeCount,
+        SUM(t.third_amount) rechargeAmount
+        FROM `dataware_convert_hour` t
+        WHERE 1=1 AND t.delete_flag = 0
+        <if test="convertHour != null and convertHour != ''">
+            AND t.convert_hour &lt;= #{convertHour}
+        </if>
+        <if test="convertDate != null and convertDate != ''">
+            AND t.convert_date = #{convertDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
 </mapper>
 
