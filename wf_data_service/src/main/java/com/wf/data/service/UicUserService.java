@@ -33,4 +33,8 @@ public class UicUserService extends CrudService<UicUserDao, UicUser> {
 	public List<DatawareUserInfo> findUserInfoByTime(Map<String,Object> map){
 		return dao.findUserInfoByTime(map);
 	}
+
+	public UicUser getByUserId(Long userId) {
+		return get(userId);
+	}
 }

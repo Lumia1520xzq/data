@@ -66,7 +66,8 @@ public class BehaviorTypeController extends ExtJsController {
         }
         //拼接fullname和eventId
         String eventIdStr = "";
-        if (form.getParentEventId() == 0L) {
+        if (form.getParentEventId() == null || form.getParentEventId() == 0L) {
+            form.setParentEventId(0L);
             eventIdStr = form.getSubEventId() + "";
         } else {
             eventIdStr = form.getParentEventId() + "" + form.getSubEventId();
@@ -123,7 +124,7 @@ public class BehaviorTypeController extends ExtJsController {
 
         String keyword = null;
         JSONObject data = json.getJSONObject("data");
-        if (data != null && data.size() > 0 ) {
+        if (data != null && data.size() > 0) {
             keyword = data.getString("data");
         }
 
@@ -136,5 +137,57 @@ public class BehaviorTypeController extends ExtJsController {
             }
         }
         return behaviorTypeService.findPage(behaviorType);
+    }
+
+    @RequestMapping("/getParentEvents")
+    public Object getParentChannels() {
+        JSONObject json = getRequestJson();
+
+        String keyword = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null) {
+            keyword = data.getString("data");
+        }
+        BehaviorType dto = new BehaviorType();
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = keyword.trim();
+            if (NumberUtils.isDigits(keyword)) {
+                dto.setId(NumberUtils.toLong(keyword));
+            } else {
+                dto.setName(keyword);
+            }
+        }
+        List<BehaviorType> list = behaviorTypeService.findList(dto, 1000);
+
+        for (BehaviorType cInfo : list) {
+            cInfo.setName(cInfo.getName() + "(" + cInfo.getEventId() + ")");
+        }
+        return list;
+    }
+
+    @RequestMapping("/getChildEvents")
+    public Object getChildEvents() {
+        JSONObject json = getRequestJson();
+
+        String keyword = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null) {
+            keyword = data.getString("parentEventId");
+        }
+        BehaviorType dto = new BehaviorType();
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = keyword.trim();
+            if (NumberUtils.isDigits(keyword)) {
+                dto.setParentEventId(NumberUtils.toLong(keyword));
+            } else {
+                dto.setName(keyword);
+            }
+        }
+        List<BehaviorType> list = behaviorTypeService.findList(dto, 1000);
+
+        for (BehaviorType cInfo : list) {
+            cInfo.setName(cInfo.getName() + "(" + cInfo.getEventId() + ")");
+        }
+        return list;
     }
 }
