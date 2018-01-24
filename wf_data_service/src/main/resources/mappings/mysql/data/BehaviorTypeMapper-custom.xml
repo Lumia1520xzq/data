@@ -14,6 +14,20 @@
 		WHERE  t.delete_flag = 0
 		AND t.event_id  LIKE '%99'
 	</select>
+
+	<select id="findAll" resultType="BehaviorType">
+		SELECT <include refid="behaviorTypeColumns"/> FROM uic_behavior_type t
+		WHERE  t.delete_flag = 0
+		<if test="eventId != null">
+			where t.event_id = #{eventId}
+		</if>
+	</select>
+
+	<select id="findByParentEventId" resultType="BehaviorType">
+		SELECT <include refid="behaviorTypeColumns"/> FROM uic_behavior_type t
+		WHERE  t.delete_flag = 0
+		AND t.parent_event_id = #{parentEventId}
+	</select>
 	
 </mapper>
 
