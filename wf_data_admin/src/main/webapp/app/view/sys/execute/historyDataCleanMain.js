@@ -72,7 +72,7 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             border: false,
             store: store,
             xtype: 'searchpanel',
-            title: '补全plat_signed_user',
+            title: '补全plat_signed_user（添加一天的数据时注意,没做去重）',
             collapsible: true,
             collapsed: false,
             columns: 2,
@@ -89,7 +89,7 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
                             if (result.success) {
                                 Ext.Msg.show({
                                     title: "提示",
-                                    msg: result.data.msg + "成功",
+                                    msg: result.data.msg,
                                     modal: true,
                                     icon: Ext.Msg.INFO,
                                     buttons: Ext.Msg.OK
