@@ -41,7 +41,6 @@ Ext.define('WF.view.sys.behavior.editBehaviorType', {
                 colspan: 2,
                 fieldLabel: '事件名称'
             }, {
-                afterLabelTextTpl: required,
                 allowBlank: false,
                 colspan: 2,
                 name: 'parentEventId',

@@ -42,4 +42,13 @@ public class BehaviorTypeService extends CrudService<BehaviorTypeDao, BehaviorTy
 	public List<BehaviorType> findByParentEventId(Long eventId) {
 		return dao.findByParentEventId(eventId);
 	}
+
+	public List<Long> findEventIds(Long parentEventId) {
+		return dao.findEventIds(parentEventId);
+	}
+
+	public String findEventNameById(Long eventId) {
+		return dao.findEventNameById(eventId);
+	}
+
 }

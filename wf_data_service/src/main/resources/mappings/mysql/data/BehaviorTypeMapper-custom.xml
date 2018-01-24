@@ -28,6 +28,16 @@
 		WHERE  t.delete_flag = 0
 		AND t.parent_event_id = #{parentEventId}
 	</select>
+
+	<select id="findEventIds" resultType="Long">
+		SELECT distinct event_id FROM uic_behavior_type
+		WHERE delete_flag = 0
+		and event_id like CONCAT(#{eventId},'%')
+	</select>
+
+	<select id="findEventNameById" resultType="String">
+		SELECT full_name FROM `uic_behavior_type` WHERE event_id=#{eventId}
+	</select>
 	
 </mapper>
 

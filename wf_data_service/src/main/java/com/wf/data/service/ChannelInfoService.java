@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author  JoeH
@@ -74,5 +75,13 @@ public class ChannelInfoService extends CrudService<ChannelInfoDao, ChannelInfo>
     @Override
     protected void clearCache(ChannelInfo entity) {
         cacheHander.delete(DataCacheKey.DATA_CHANNEL_INFO_BY_ID.key(entity.getId()));
+    }
+
+    public String findChannelNameById(Map<String, Object> params) {
+        return dao.findChannelNameById(params);
+    }
+
+    public List<Long> findSubChannelIds(Long parentId) {
+        return dao.findSubChannelIds(parentId);
     }
 }

@@ -47,15 +47,14 @@ Ext.define('WF.view.sys.behavior.addBehaviorType', {
           colspan: 2,
           fieldLabel: '事件名称'
       },{
-          afterLabelTextTpl: required,
-          allowBlank: false,
+          allowBlank: true,
           colspan: 2,
           name: 'parentEventId',
           fieldLabel: '父集ID',
           xtype: 'searchfield',
           displayField: 'name',
           valueField: "eventId",
-          editable: false,
+          editable: true,
           queryMode: "local",
           store: 'behaviorTypeStore'
       },{
