@@ -66,7 +66,8 @@ public class BehaviorTypeController extends ExtJsController {
         }
         //拼接fullname和eventId
         String eventIdStr = "";
-        if (form.getParentEventId() == 0L) {
+        if (form.getParentEventId() == null || form.getParentEventId() == 0L) {
+            form.setParentEventId(0L);
             eventIdStr = form.getSubEventId() + "";
         } else {
             eventIdStr = form.getParentEventId() + "" + form.getSubEventId();

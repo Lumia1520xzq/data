@@ -80,4 +80,8 @@ public class ChannelInfoService extends CrudService<ChannelInfoDao, ChannelInfo>
     public String findChannelNameById(Map<String, Object> params) {
         return dao.findChannelNameById(params);
     }
+
+    public List<Long> findSubChannelIds(Long parentId) {
+        return dao.findSubChannelIds(parentId);
+    }
 }
