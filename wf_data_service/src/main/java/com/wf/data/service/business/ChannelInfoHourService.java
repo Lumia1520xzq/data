@@ -182,7 +182,7 @@ public class ChannelInfoHourService {
         }
 
         List<Long> beetingList = bettingLogHourService.findUserIdByTime(hour);
-        Collection beetingInterColl = CollectionUtils.intersection(beetingList, newUserList);
+        Collection beetingInterColl = CollectionUtils.intersection(beetingList, dayNewUserList);
         List<Long> bettingCount = (List<Long>) beetingInterColl;
         if (null != bettingCount) {
             info.setUserBettingCount(Long.valueOf(bettingCount.size()));
