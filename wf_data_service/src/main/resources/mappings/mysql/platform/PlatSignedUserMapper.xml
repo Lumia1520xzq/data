@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.platform.PlatSignedUserDao">
+	
+	<sql id="platSignedUserColumns">
+		t.id,
+		t.days,
+		t.user_id,
+		t.amount,
+		t.status,
+		t.channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="platSignedUserWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="platSignedUserJoins">
+	</sql>
+	
+	<select id="get" resultType="PlatSignedUser">
+		SELECT <include refid="platSignedUserColumns"/> FROM plat_signed_user t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="PlatSignedUser">
+		SELECT <include refid="platSignedUserColumns"/> FROM plat_signed_user t <include refid="platSignedUserJoins"/>
+		WHERE <include refid="platSignedUserWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM plat_signed_user t WHERE <include refid="platSignedUserWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO plat_signed_user (
+			id, 
+			days, 
+			user_id, 
+			amount, 
+			status, 
+			channel_id, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{days}, 
+			#{userId}, 
+			#{amount}, 
+			#{status}, 
+			#{channelId}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE plat_signed_user SET
+			days = #{days}, 
+			user_id = #{userId}, 
+			amount = #{amount}, 
+			status = #{status}, 
+			channel_id = #{channelId}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE plat_signed_user SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
