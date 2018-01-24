@@ -14,4 +14,7 @@ public interface BehaviorTypeDao extends CrudDao<BehaviorType> {
 
 	List<Long> getActiveEventId();
 
+	List<BehaviorType> findAll();
+
+	List<BehaviorType> findByParentEventId(Long eventId);
 }
