@@ -60,7 +60,7 @@ Ext.define('WF.view.sys.behavior.addBehaviorType', {
       },{
           afterLabelTextTpl: required,
           allowBlank: false,
-          name: 'eventId',
+          name: 'eventIdStr',
           colspan: 2,
           fieldLabel: '事件ID'
       },{

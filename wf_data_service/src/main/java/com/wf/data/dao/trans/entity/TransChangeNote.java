@@ -34,6 +34,9 @@ public class TransChangeNote extends DataEntity {
 	private String unionBusinessType;
 	//导出属性
 	private String businessTypeName;
+
+	private Integer touristType;
+	private String thirdId;
 	
 	@NotNull
 	@ExcelField(title="游戏用户ID", type = 1, align = 1, sort = 10)
@@ -184,6 +187,20 @@ public class TransChangeNote extends DataEntity {
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
-	
-	
+
+	public Integer getTouristType() {
+		return touristType;
+	}
+
+	public void setTouristType(Integer touristType) {
+		this.touristType = touristType;
+	}
+
+	public String getThirdId() {
+		return thirdId;
+	}
+
+	public void setThirdId(String thirdId) {
+		this.thirdId = thirdId;
+	}
 }

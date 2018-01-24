@@ -46,14 +46,6 @@ Ext.define('WF.view.sys.behavior.editBehaviorType', {
                 name: 'parentEventId',
                 fieldLabel: '父集ID',
                 xtype: 'searchfield',
-                displayField: function (value) {
-                    var record = parentEventStor.findRecord('value', value, 0, false, false, true);
-                    if (record == null) {
-                        return '';
-                    } else {
-                        return record.data.label;
-                    }
-                },
                 valueField: "eventId",
                 editable: false,
                 queryMode: "local",
