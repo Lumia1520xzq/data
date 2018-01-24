@@ -15,6 +15,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="businessDate != null and businessDate != ''">
 			AND t.registered_date = #{businessDate}
 		</if>
+		<if test="businessHour != null and businessHour != ''">
+			AND t.registered_hour = #{businessHour}
+		</if>
 		<if test="channelId != null and channelId != ''">
 			AND t.channel_id = #{channelId}
 		</if>
@@ -32,6 +35,26 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
 				#{item}
 			</foreach>
+		</if>
+	</select>
+
+	<select id="getNewUserByTime" resultType="Long">
+		SELECT DISTINCT t.user_id
+		FROM dataware_user_info t
+		WHERE  1=1 AND t.delete_flag = 0
+		AND t.user_group =2
+		AND t.channel_id IS NOT NULL
+		<if test="businessDate != null and businessDate != ''">
+			AND t.registered_date = #{businessDate}
+		</if>
+		<if test="businessHour != null and businessHour != ''">
+			AND t.registered_hour &lt;= #{businessHour}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND t.parent_id = #{parentId}
 		</if>
 	</select>
 </mapper>

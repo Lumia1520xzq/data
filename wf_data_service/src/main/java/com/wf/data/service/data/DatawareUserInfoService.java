@@ -22,4 +22,8 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
     public List<Long> getNewUserByDate(Map<String, Object> map) {
         return dao.getNewUserByDate(map);
     }
+
+    public List<Long> getNewUserByTime(Map<String, Object> map) {
+        return dao.getNewUserByTime(map);
+    }
 }

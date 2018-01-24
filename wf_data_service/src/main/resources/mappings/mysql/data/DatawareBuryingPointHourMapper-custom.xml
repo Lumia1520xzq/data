@@ -79,6 +79,31 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="gameType != null and gameType != ''">
             AND game_type = #{gameType}
         </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
+        </if>
+    </select>
+
+    <select id="getDauByTime" resultType="Long">
+        SELECT
+        IFNULL(COUNT(DISTINCT user_id),0)
+        FROM `dataware_burying_point_hour`
+        WHERE 1=1 AND delete_flag = 0 AND user_group = 2
+        <if test="buryingDate != null and buryingDate != ''">
+            AND burying_date = #{buryingDate}
+        </if>
+        <if test="buryingHour != null and buryingHour != ''">
+            AND burying_hour &lt;= #{buryingHour}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
+        </if>
     </select>
 
 </mapper>

@@ -13,4 +13,6 @@ public interface DatawareUserInfoDao extends CrudDao<DatawareUserInfo> {
     long getCountByTime(Map<String,Object> map);
 
     List<Long> getNewUserByDate(Map<String,Object> map);
+
+    List<Long> getNewUserByTime(Map<String,Object> map);
 }

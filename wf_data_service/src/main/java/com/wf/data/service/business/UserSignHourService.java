@@ -13,6 +13,7 @@ import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.data.DatawareUserSignDayService;
+import com.wf.data.service.platform.PlatSignedUserService;
 import com.wf.data.service.platform.PlatUserCheckLotteryLogService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -41,6 +42,8 @@ public class UserSignHourService {
     private DatawareUserSignDayService datawareUserSignDayService;
     @Autowired
     private ChannelInfoService channelInfoService;
+    @Autowired
+    private PlatSignedUserService platSignedUserService;
 
     public void toDoAnalysis() {
         logger.info("每小时签到汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -161,7 +164,10 @@ public class UserSignHourService {
     private void sign(Map<String, Object> map, List<Long> uicGroupList, String searchDay, String searchHour) {
         try {
             List<DatawareUserSignDay> hourList = platUserCheckLotteryLogService.findSignList(map);
-
+            List<DatawareUserSignDay> oldList = platSignedUserService.findListFromSignedUser(map);
+            if (CollectionUtils.isNotEmpty(oldList)) {
+                hourList.addAll(oldList);
+            }
             for (DatawareUserSignDay item : hourList) {
                 item.setUserGroup(getUserGroup(item.getUserId(), uicGroupList));
 
