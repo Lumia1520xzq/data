@@ -102,7 +102,32 @@ Ext.define("DCIS.SearchPanel", {
             }
         };
         buttonPanel.items = [];
+        if(config.todoExec){
 
+            buttonPanel.items.push({
+                xtype: "button",
+                text: "执行",
+                iconCls: 'icon-search',
+                width: 60,
+                handler: config.todoExec,
+                scope: me
+            });
+            buttonPanel.items.push({
+                xtype: "panel",
+                width: 60,
+                border: false,
+                height: "auto"
+            });
+            buttonPanel.items.push({
+                xtype: "button",
+                text: "重置",
+                iconCls: 'icon-undo',
+                width: 60,
+                handler: me.searchCancel,
+                scope: me
+            });
+            return buttonPanel;
+        }
         buttonPanel.items.push({
             xtype: "button",
             text: "查询",

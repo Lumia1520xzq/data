@@ -46,9 +46,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="p.nickname != null and p.nickname != '' and p.id != null">
 			AND t.nickname LIKE CONCAT('%', #{p.nickname}, '%') OR t.id = #{p.id}
 		</if>
-       <!-- <if test="p.regChannelId != null and p.regChannelId != ''">
-			AND t.reg_channel_id LIKE CONCAT('%', #{p.regChannelId}, '%')
-		</if> -->
+		<!--<if test="p.regParentChannel != null and p.regParentChannel != ''">
+			AND t.reg_parent_channel = #{p.regParentChannel}
+		</if>-->
+       <if test="p.regParentChannel != null and p.regParentChannel != ''">
+			AND t.reg_channel_id LIKE CONCAT(#{p.regParentChannel}, '%')
+		</if>
 	</sql>
 	
 	<select id="get" resultType="UicUser">

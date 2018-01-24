@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelInfoHourDao">
+
+	<sql id="datawareFinalChannelInfoHourColumns">
+		t.id,
+		t.hour_dau,
+		t.hour_recharge_amount,
+		t.hour_recharge_count,
+		t.hour_new_users,
+		t.hour_user_betting_count,
+		t.hour_user_count,
+		t.hour_betting_count,
+		t.hour_betting_amount,
+		t.hour_result_amount,
+		t.hour_diff_amount,
+		t.dau,
+		t.recharge_amount,
+		t.recharge_count,
+		t.new_users,
+		t.user_betting_count,
+		t.user_count,
+		t.betting_count,
+		t.betting_amount,
+		t.result_amount,
+		t.diff_amount,
+		t.channel_name,
+		t.parent_id,
+		t.channel_id,
+		t.business_hour,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+
+	<sql id="datawareFinalChannelInfoHourWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="datawareFinalChannelInfoHourJoins">
+	</sql>
+
+	<select id="get" resultType="DatawareFinalChannelInfoHour">
+		SELECT <include refid="datawareFinalChannelInfoHourColumns"/> FROM dataware_final_channel_info_hour t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalChannelInfoHour">
+		SELECT <include refid="datawareFinalChannelInfoHourColumns"/> FROM dataware_final_channel_info_hour t <include refid="datawareFinalChannelInfoHourJoins"/>
+		WHERE <include refid="datawareFinalChannelInfoHourWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_channel_info_hour t WHERE <include refid="datawareFinalChannelInfoHourWhere" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dataware_final_channel_info_hour (
+		id,
+		hour_dau,
+		hour_recharge_amount,
+		hour_recharge_count,
+		hour_new_users,
+		hour_user_betting_count,
+		hour_user_count,
+		hour_betting_count,
+		hour_betting_amount,
+		hour_result_amount,
+		hour_diff_amount,
+		dau,
+		recharge_amount,
+		recharge_count,
+		new_users,
+		user_betting_count,
+		user_count,
+		betting_count,
+		betting_amount,
+		result_amount,
+		diff_amount,
+		channel_name,
+		parent_id,
+		channel_id,
+		business_hour,
+		business_date,
+		create_time,
+		delete_flag
+		) VALUES (
+		#{id},
+		#{hourDau},
+		#{hourRechargeAmount},
+		#{hourRechargeCount},
+		#{hourNewUsers},
+		#{hourUserBettingCount},
+		#{hourUserCount},
+		#{hourBettingCount},
+		#{hourBettingAmount},
+		#{hourResultAmount},
+		#{hourDiffAmount},
+		#{dau},
+		#{rechargeAmount},
+		#{rechargeCount},
+		#{newUsers},
+		#{userBettingCount},
+		#{userCount},
+		#{bettingCount},
+		#{bettingAmount},
+		#{resultAmount},
+		#{diffAmount},
+		#{channelName},
+		#{parentId},
+		#{channelId},
+		#{businessHour},
+		#{businessDate},
+		#{createTime},
+		#{deleteFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dataware_final_channel_info_hour SET
+		hour_dau = #{hourDau},
+		hour_recharge_amount = #{hourRechargeAmount},
+		hour_recharge_count = #{hourRechargeCount},
+		hour_new_users = #{hourNewUsers},
+		hour_user_betting_count = #{hourUserBettingCount},
+		hour_user_count = #{hourUserCount},
+		hour_betting_count = #{hourBettingCount},
+		hour_betting_amount = #{hourBettingAmount},
+		hour_result_amount = #{hourResultAmount},
+		hour_diff_amount = #{hourDiffAmount},
+		dau = #{dau},
+		recharge_amount = #{rechargeAmount},
+		recharge_count = #{rechargeCount},
+		new_users = #{newUsers},
+		user_betting_count = #{userBettingCount},
+		user_count = #{userCount},
+		betting_count = #{bettingCount},
+		betting_amount = #{bettingAmount},
+		result_amount = #{resultAmount},
+		diff_amount = #{diffAmount},
+		channel_name = #{channelName},
+		parent_id = #{parentId},
+		channel_id = #{channelId},
+		business_hour = #{businessHour},
+		business_date = #{businessDate},
+		delete_flag = #{deleteFlag}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_channel_info_hour SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
-       xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-">
+    <task:annotation-driven/>
     <bean class="com.wf.core.utils.core.SpringContextHolder"/>
 
     <import resource="classpath*:wf/spring-redis.xml"/>
@@ -24,26 +28,26 @@
     <import resource="app-dubbo-provider-data.xml"/>
     <import resource="app-dubbo-consumer.xml"/>
 
-    <import resource="app-db-mysql-trans.xml" />
-    <import resource="app-db-mysql-uic.xml" />
-    <import resource="app-db-mysql-base.xml" />
-    <import resource="app-db-mycat-uic.xml" />
-    <import resource="app-db-mysql-tcard.xml" />
-    <import resource="app-db-mysql-platform.xml" />
-    <import resource="app-db-mysql-mall.xml" />
+    <import resource="app-db-mysql-trans.xml"/>
+    <import resource="app-db-mysql-uic.xml"/>
+    <import resource="app-db-mysql-base.xml"/>
+    <import resource="app-db-mycat-uic.xml"/>
+    <import resource="app-db-mysql-tcard.xml"/>
+    <import resource="app-db-mysql-platform.xml"/>
+    <import resource="app-db-mysql-mall.xml"/>
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
-        <constructor-arg index="0" value="${es.ips}" />
-        <constructor-arg index="1" value="${es.clusterName}" />
-        <constructor-arg index="2" value="${es.port}" />
-        <constructor-arg index="3" value="${es.nodeName}" />
+        <constructor-arg index="0" value="${es.ips}"/>
+        <constructor-arg index="1" value="${es.clusterName}"/>
+        <constructor-arg index="2" value="${es.port}"/>
+        <constructor-arg index="3" value="${es.nodeName}"/>
     </bean>
 
     <bean id="dbConfig" class="com.wf.data.common.config.DbConfig">
-        <constructor-arg index="0" value="${src.host}" />
-        <constructor-arg index="1" value="${src.username}" />
-        <constructor-arg index="2" value="${src.password}" />
-        <constructor-arg index="3" value="${src.port}" />
+        <constructor-arg index="0" value="${src.host}"/>
+        <constructor-arg index="1" value="${src.username}"/>
+        <constructor-arg index="2" value="${src.password}"/>
+        <constructor-arg index="3" value="${src.port}"/>
     </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
@@ -58,7 +62,6 @@
     <context:component-scan base-package="com.wf.data.service" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
-
 
 
     <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
