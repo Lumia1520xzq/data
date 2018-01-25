@@ -9,6 +9,7 @@
         SELECT COUNT(*)
         FROM dataware_burying_point_day t
         WHERE 1=1 AND t.delete_flag = 0
+        AND t.channel_id IS NOT NULL
         <if test="buryingDate != null and buryingDate != ''">
             AND t.burying_date = #{buryingDate}
         </if>
@@ -18,6 +19,7 @@
         SELECT IFNULL(COUNT(DISTINCT user_id),0)
         FROM `dataware_burying_point_day`
         WHERE 1=1
+        AND channel_id IS NOT NULL
         <if test="gameType != null and gameType != ''">
             AND game_type= #{gameType}
         </if>
@@ -101,6 +103,7 @@
         SELECT DISTINCT user_id
         FROM `dataware_burying_point_day`
         WHERE 1=1
+        AND channel_id IS NOT NULL
         <if test="gameType != null and gameType != ''">
             AND game_type= #{gameType}
         </if>
@@ -121,6 +124,7 @@
         SELECT DISTINCT user_id
         FROM `dataware_burying_point_day`
         WHERE 1=1
+        AND channel_id IS NOT NULL
         <if test="gameType != null and gameType != ''">
             AND game_type= #{gameType}
         </if>
