@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 历史数据补充
@@ -26,6 +25,7 @@ public class HistoryDataCleanController extends ExtJsController {
     private ChannelInfoHourService channelInfoHourService;
     @Autowired
     private PlatUserSignHourService platUserSignHourService;
+
     /**
      * 清洗channelInfoHour表
      *
@@ -44,12 +44,11 @@ public class HistoryDataCleanController extends ExtJsController {
             return error("结束时间为空");
         }
 
-        if(DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()){
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
             return error("开始时间大于结束时间");
         }
 
-        List<String> datelist = DateUtils.getDateList(startTime, endTime);
-        channelInfoHourService.dataClean(datelist);
+        channelInfoHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
 
@@ -72,7 +71,7 @@ public class HistoryDataCleanController extends ExtJsController {
             return error("结束时间为空");
         }
 
-        if(DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()){
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
             return error("开始时间大于结束时间");
         }
 

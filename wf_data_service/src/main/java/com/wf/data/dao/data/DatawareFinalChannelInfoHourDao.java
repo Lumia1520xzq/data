@@ -10,4 +10,6 @@ import java.util.Map;
 @MyBatisDao(tableName = "dataware_final_channel_info_hour")
 public interface DatawareFinalChannelInfoHourDao extends CrudDao<DatawareFinalChannelInfoHour> {
     long getCountByTime(Map<String, Object> map);
+
+    int deleteByDate(Map<String, Object> params);
 }

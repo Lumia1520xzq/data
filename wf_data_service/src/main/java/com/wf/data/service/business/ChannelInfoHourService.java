@@ -58,17 +58,23 @@ public class ChannelInfoHourService {
             Map<String, Object> params = new HashMap<>();
             params.put("businessDate", businessDate);
             params.put("businessHour", businessHour);
+            params.put("parentId", 1);
+            long channelCount = channelInfoHourService.getCountByTime(params);
+            if (channelCount > 0) {
+                channelInfoHourService.deleteByDate(params);
+            }
             dataKettle(null, businessDate, businessHour);
+
+
             List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
             //判断数据是否存在
             for (ChannelInfo item : channelInfoList) {
                 params.put("parentId", item.getId());
                 long count = channelInfoHourService.getCountByTime(params);
                 if (count > 0) {
-                    continue;
-                } else {
-                    dataKettle(item, businessDate, businessHour);
+                    channelInfoHourService.deleteByDate(params);
                 }
+                dataKettle(item, businessDate, businessHour);
             }
         } catch (Exception e) {
             logger.error("添加渠道汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
@@ -258,77 +264,27 @@ public class ChannelInfoHourService {
 
     }
 
-
     @Async
-    public void dataClean(List<String> datelist) {
-        if (DateUtils.formatDate(DateUtils.parseDate(datelist.get(0)), "yyyy-MM-dd").equals(DateUtils.formatDate(DateUtils.parseDate(datelist.get(datelist.size() - 1)), "yyyy-MM-dd"))) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.parseDate(datelist.get(0), DateUtils.DATE_TIME_PATTERN));
-            String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(datelist.get(0), DateUtils.DATE_PATTERN)), DateUtils.DATE_PATTERN);
-            String beginHour = DateUtils.formatDate(calendar.getTime(), "HH");
+    public void dataClean(String startTime, String endTime) {
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(DateUtils.parseDate(datelist.get(datelist.size() - 1), DateUtils.DATE_TIME_PATTERN));
-            String endHour = DateUtils.formatDate(cal.getTime(), "HH");
-            if (beginHour.equals(endHour)) {
-                channelInfo(beginDate, beginHour);
-                logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(beginDate),GfJsonUtil.toJSONString(beginHour));
-            } else {
-                while (!beginHour.equals(endHour)) {
-                    channelInfo(beginDate, beginHour);
-                    logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(beginDate),GfJsonUtil.toJSONString(beginHour));
-                    calendar.add(Calendar.HOUR_OF_DAY, 1);
-                    beginHour = DateUtils.formatDate(calendar.getTime(), "HH");
-                }
-            }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtils.parseDate(startTime, DateUtils.DATE_TIME_PATTERN));
+        Long startTimeStamp = DateUtils.parseDateTime(startTime).getTime();
+        Long endTimeStamp = DateUtils.parseDateTime(endTime).getTime();
+        while (startTimeStamp < endTimeStamp) {
 
-        } else {
-            for (String searchDate : datelist) {
-                if (datelist.get(0) == searchDate) {
+            String businessDate = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
+            String businessHour = DateUtils.formatDate(calendar.getTime(), "HH");
 
-                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN), DateUtils.DATE_PATTERN);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN));
-                    String date = searchDay;
-                    while (searchDay.equals(date)) {
 
-                        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
-                        channelInfo(searchDay, searchHour);
-                        logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(searchDay),GfJsonUtil.toJSONString(searchHour));
-                        calendar.add(Calendar.HOUR_OF_DAY, 1);
-                        date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
-                    }
+            channelInfo(businessDate, businessHour);
+            logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(businessDate), GfJsonUtil.toJSONString(businessHour));
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
+            startTimeStamp = calendar.getTime().getTime();
 
-                } else if (searchDate == datelist.get(datelist.size() - 1)) {
-                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN), DateUtils.DATE_PATTERN);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(DateUtils.parseDate(searchDate, DateUtils.DATE_TIME_PATTERN));
-                    String date = searchDay;
-                    while (searchDay.equals(date)) {
-
-                        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
-                        channelInfo(searchDay, searchHour);
-                        logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(searchDay),GfJsonUtil.toJSONString(searchHour));
-                        calendar.add(Calendar.HOUR_OF_DAY, -1);
-                        date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
-                    }
-                } else {
-                    String searchDay = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, DateUtils.DATE_PATTERN)), DateUtils.DATE_PATTERN);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, DateUtils.DATE_PATTERN)));
-                    String date = searchDay;
-                    while (searchDay.equals(date)) {
-
-                        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
-                        channelInfo(searchDay, searchHour);
-                        logger.info("小时数据清洗结束:traceId={},day={},hour={}", TraceIdUtils.getTraceId(),GfJsonUtil.toJSONString(searchDay),GfJsonUtil.toJSONString(searchHour));
-                        calendar.add(Calendar.HOUR_OF_DAY, 1);
-                        date = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
-                    }
-                }
-            }
         }
-
         logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
+
+
 }

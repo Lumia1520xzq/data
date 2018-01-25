@@ -23,5 +23,24 @@
             AND t.parent_id = #{parentId}
         </if>
     </select>
+
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_final_channel_info_hour
+        WHERE 1=1
+        <if test="businessHour != null and businessHour != ''">
+            AND business_hour = #{businessHour}
+        </if>
+        <if test="businessDate != null and businessDate != ''">
+            AND business_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+    </delete>
 </mapper>
 

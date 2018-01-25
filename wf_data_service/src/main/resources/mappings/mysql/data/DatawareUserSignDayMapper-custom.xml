@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
 <mapper namespace="com.wf.data.dao.data.DatawareUserSignDayDao">
-	
-	<select id="getCountByTime" resultType="long">
-		SELECT COUNT(*)
-		FROM dataware_user_sign_day t
-		WHERE  1=1 AND t.delete_flag = 0
-		<if test="signDate != null and signDate != ''">
-			AND  t.sign_date = #{signDate}
-		</if>
-		<if test="signHour != null and signHour != ''">
-			AND  t.sign_hour = #{signHour}
-		</if>
 
-	</select>
-	
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*)
+        FROM dataware_user_sign_day t
+        WHERE 1=1 AND t.delete_flag = 0
+        <if test="signDate != null and signDate != ''">
+            AND t.sign_date = #{signDate}
+        </if>
+        <if test="signHour != null and signHour != ''">
+            AND t.sign_hour = #{signHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND t.sign_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND t.sign_hour &lt;= #{endHour}
+        </if>
+    </select>
+
+
+    <delete id="deleteByDate">
+        delete
+        FROM dataware_user_sign_day
+        WHERE 1=1 AND delete_flag = 0
+        <if test="signDate != null and signDate != ''">
+            AND sign_date = #{signDate}
+        </if>
+        <if test="signHour != null and signHour != ''">
+            AND sign_hour = #{signHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND sign_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND sign_hour &lt;= #{endHour}
+        </if>
+    </delete>
 
 </mapper>
 
