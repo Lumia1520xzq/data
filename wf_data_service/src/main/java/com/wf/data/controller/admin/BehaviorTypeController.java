@@ -61,7 +61,7 @@ public class BehaviorTypeController extends ExtJsController {
             }
             form.setCreateTime(behaviorType.getCreateTime());
         } else {
-            form.setSubEventId(form.getEventId().toString());
+            form.setSubEventId(form.getEventIdStr());
             form.setCreateTime(new Date());
         }
         //拼接fullname和eventId

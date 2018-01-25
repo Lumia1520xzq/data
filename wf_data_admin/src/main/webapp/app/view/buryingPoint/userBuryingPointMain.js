@@ -118,7 +118,7 @@ Ext.define('WF.view.buryingPoint.userBuryingPointMain', {
                 store: childEventIdStore
             }, {
                 colspan: 2,
-                name: 'userId',
+                name: 'userType',
                 xtype: 'combo',
                 displayField: 'name',
                 valueField: "userType",
