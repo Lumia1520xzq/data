@@ -372,6 +372,21 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return calendar.getTime();
     }
 
+
+    /**
+     * 获取上N天的字符串
+     *
+     * @param
+     * @return
+     */
+    public static String getPrevDate(String date, int days) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(parseDate(date));
+        calendar.add(Calendar.DATE, -days);
+        return formatDate(calendar.getTime());
+    }
+
+
     /**
      * @param args
      * @throws java.text.ParseException
