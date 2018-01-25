@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.data.dao.mall.MallBizLogDao">
+
+	<sql id="mallBizLogColumns">
+		t.id,
+		t.user_id,
+		t.biz_id,
+		t.product_id,
+		t.product_code,
+		t.product_type,
+		t.product_name,
+		t.product_price,
+		t.product_amount,
+		t.convert_id,
+		t.status,
+		t.reg_channel_id,
+		t.channel_id,
+		t.version,
+		t.remark,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="mallBizLogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.userId != null and p.userId != ''">
+			AND t.user_id = #{p.userId}
+		</if>
+		<if test="p.productCode != null and p.productCode != ''">
+			AND t.product_code = #{p.productCode}
+		</if>
+		<if test="p.productType != null and p.productType != ''">
+			AND t.product_type = #{p.productType}
+		</if>
+		<if test="p.status != null and p.status != ''">
+			AND t.status = #{p.status}
+		</if>
+		<if test="p.channelId != null and p.channelId != ''">
+		    AND t.reg_channel_id = #{p.channelId}
+		</if>
+		<if test="p.parentId != null and p.parentId != ''">
+		    AND t.reg_channel_id LIKE CONCAT(#{p.parentId}, '%')
+		</if>
+		<if test="p.beginDate != null and p.beginDate != ''">
+      		AND t.create_time >= #{p.beginDate}
+		</if>
+		<if test="p.endDate != null and p.endDate != ''">
+			AND t.create_time &lt;= #{p.endDate}
+		</if>
+	</sql>
+
+	<select id="get" resultType="MallBizLog">
+		SELECT <include refid="mallBizLogColumns"/> FROM mall_biz_log t WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MallBizLog">
+		SELECT <include refid="mallBizLogColumns"/> FROM mall_biz_log t
+		WHERE <include refid="mallBizLogWhere"/> ORDER BY t.update_time DESC LIMIT #{start}, #{length}
+	</select>
+
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM mall_biz_log t WHERE <include refid="mallBizLogWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO mall_biz_log (
+			id,
+			user_id,
+			biz_id,
+			product_id,
+			product_code,
+			product_type,
+			product_name,
+			product_price,
+			product_amount,
+			convert_id,
+			status,
+			reg_channel_id,
+			channel_id,
+			version,
+			remark,
+			create_time,
+			delete_flag 
+		) VALUES (
+			#{id},
+			#{userId},
+			#{bizId},
+			#{productId},
+			#{productCode},
+			#{productType},
+			#{productName},
+			#{productPrice},
+			#{productAmount},
+			#{convertId},
+			#{status},
+			#{regChannelId},
+			#{channelId},
+			#{version},
+			#{remark},
+			#{createTime},
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE mall_biz_log SET
+			user_id = #{userId},
+			biz_id = #{bizId},
+			product_id = #{productId},
+			product_code = #{productCode},
+			product_type = #{productType},
+			product_name = #{productName},
+			product_price = #{productPrice},
+			product_amount = #{productAmount},
+			convert_id = #{convertId},
+			status = #{status},
+			reg_channel_id = #{regChannelId},
+			channel_id = #{channelId},
+			version = #{version},
+			remark = #{remark},
+			delete_flag = #{deleteFlag}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE mall_biz_log SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
