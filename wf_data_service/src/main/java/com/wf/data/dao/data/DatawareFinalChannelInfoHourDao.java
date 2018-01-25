@@ -12,4 +12,10 @@ public interface DatawareFinalChannelInfoHourDao extends CrudDao<DatawareFinalCh
     long getCountByTime(Map<String, Object> map);
 
     int deleteByDate(Map<String, Object> params);
+
+    List<DatawareFinalChannelInfoHour> getByDateAndHour(Map<String, Object> map);
+
+
+    List<DatawareFinalChannelInfoHour> getSumDataByDateAndHour(Map<String, Object> map);
+
 }

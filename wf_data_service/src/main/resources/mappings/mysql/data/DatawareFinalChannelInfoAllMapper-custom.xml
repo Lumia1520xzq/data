@@ -67,13 +67,19 @@
         </if>
     </select>
 
-    <delete id="deleteByDate">
-        delete
-        FROM dataware_final_channel_info_all
+    <select id="findMonthSumData" resultType="com.wf.data.dto.MonthlyDataDto">
+        SELECT
+        DATE_FORMAT(business_date,'%Y-%m') `month`,
+        IFNULL(SUM(recharge_amount),0) sumRecharge,
+        IFNULL(SUM(dau),0) sumDau,
+        IFNULL(COUNT(id),0) days
+        FROM `dataware_final_channel_info_all`
         WHERE 1=1
-        AND delete_flag =0
-        <if test="businessDate != null and businessDate != ''">
-            AND business_date = #{businessDate}
+        <if test="beginMonth != null and beginMonth != ''">
+        AND DATE_FORMAT(business_date,'%Y-%m') &gt;= #{beginMonth}
+        </if>
+        <if test="endMonth != null and endMonth != ''">
+        AND DATE_FORMAT(business_date,'%Y-%m') &lt;= #{endMonth}
         </if>
         <if test="channelId != null">
             AND channel_id = #{channelId}
@@ -81,18 +87,9 @@
         <if test="parentId != null">
             AND parent_id = #{parentId}
         </if>
-        <if test="parentChannelList != null and  parentChannelList.size() != 0">
-            AND parent_id not in
-            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        <if test="childChannelList != null and  childChannelList.size() != 0">
-            AND channel_id not in
-            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-    </delete>
+        GROUP BY DATE_FORMAT(business_date,'%Y-%m')
+        ORDER BY DATE_FORMAT(business_date,'%Y-%m') ASC
+    </select>
+
 </mapper>
 

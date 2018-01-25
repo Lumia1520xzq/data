@@ -23,4 +23,8 @@ public class DatawareFinalChannelCostService extends CrudService<DatawareFinalCh
         return dao.findByDate(params);
     }
 
+    public Double findMonthCost(Map<String,Object> params){
+        return dao.findMonthCost(params);
+    }
+
 }

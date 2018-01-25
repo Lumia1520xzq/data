@@ -30,4 +30,8 @@ public class DatawareFinalChannelInfoAllService extends CrudService<DatawareFina
         return dao.deleteByDate(params);
     }
 
+    public List<MonthlyDataDto> findMonthSumData(Map<String,Object> params){
+        return dao.findMonthSumData(params);
+    }
+
 }
