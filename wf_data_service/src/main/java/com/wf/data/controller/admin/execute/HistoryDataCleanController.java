@@ -2,6 +2,7 @@ package com.wf.data.controller.admin.execute;
 
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.service.business.ChannelInfoAllService;
 import com.wf.data.service.business.ChannelInfoHourService;
 import com.wf.data.service.business.PlatUserSignHourService;
 import jodd.util.StringUtil;
@@ -25,7 +26,8 @@ public class HistoryDataCleanController extends ExtJsController {
     private ChannelInfoHourService channelInfoHourService;
     @Autowired
     private PlatUserSignHourService platUserSignHourService;
-
+    @Autowired
+    private ChannelInfoAllService channelInfoAllService;
     /**
      * 清洗channelInfoHour表
      *
@@ -79,5 +81,30 @@ public class HistoryDataCleanController extends ExtJsController {
         return success("清洗开始执行");
     }
 
+    /**
+     * 清洗channelInfoAll表
+     *
+     * @return
+     */
+    @RequestMapping("/channelInfoAll")
+    @ResponseBody
+    public Object channelInfoAll(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        channelInfoAllService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
 
 }

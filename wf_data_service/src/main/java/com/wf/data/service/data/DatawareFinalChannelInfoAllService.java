@@ -26,4 +26,8 @@ public class DatawareFinalChannelInfoAllService extends CrudService<DatawareFina
         return dao.findByDate(params);
     }
 
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
+    }
+
 }
