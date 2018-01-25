@@ -67,5 +67,29 @@
         </if>
     </select>
 
+    <select id="findMonthSumData" resultType="com.wf.data.dto.MonthlyDataDto">
+        SELECT
+        DATE_FORMAT(business_date,'%Y-%m') `month`,
+        IFNULL(SUM(recharge_amount),0) sumRecharge,
+        IFNULL(SUM(dau),0) sumDau,
+        IFNULL(COUNT(id),0) days
+        FROM `dataware_final_channel_info_all`
+        WHERE 1=1
+        <if test="beginMonth != null and beginMonth != ''">
+        AND DATE_FORMAT(business_date,'%Y-%m') &gt;= #{beginMonth}
+        </if>
+        <if test="endMonth != null and endMonth != ''">
+        AND DATE_FORMAT(business_date,'%Y-%m') &lt;= #{endMonth}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        GROUP BY DATE_FORMAT(business_date,'%Y-%m')
+        ORDER BY DATE_FORMAT(business_date,'%Y-%m') ASC
+    </select>
+
 </mapper>
 
