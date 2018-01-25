@@ -12,4 +12,6 @@ public interface DatawareFinalChannelCostDao extends CrudDao<DatawareFinalChanne
     long getCountByTime(Map<String, Object> map);
 
     DatawareFinalChannelCost findByDate(Map<String,Object> params);
+
+    Double findMonthCost(Map<String,Object> params);
 }

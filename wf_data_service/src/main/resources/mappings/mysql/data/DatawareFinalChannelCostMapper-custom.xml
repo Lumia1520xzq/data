@@ -47,5 +47,19 @@
         </if>
     </select>
 
+    <select id="findMonthCost" resultType="Double">
+        SELECT IFNULL(SUM(total_cost),0) FROM `dataware_final_channel_cost`
+        WHERE 1=1
+        <if test="month != null and month != ''">
+        AND DATE_FORMAT(business_date,'%Y-%m') = #{month}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+    </select>
+
 </mapper>
 

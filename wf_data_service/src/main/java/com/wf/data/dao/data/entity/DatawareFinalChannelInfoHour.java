@@ -31,6 +31,22 @@ public class DatawareFinalChannelInfoHour extends DataEntity {
     private String businessDate;
     private String businessHour;
 
+    private String dayDauRate;
+    private String weekDauRate;
+    private String dayUserCountRate;
+    private String weekUserCountRate;
+    private String dayRechargeCountRate;
+    private String weekRechargeCountRate;
+    private String dayRechargeAmountRate;
+    private String weekRechargeAmountRate;
+    private String dayNewUsersRate;
+    private String weekNewUsersRate;
+    private String dayBettingAmountRate;
+    private String weekBettingAmountRate;
+    private String dayDiffAmountRate;
+    private String weekDiffAmountRate;
+
+
     public String getBusinessHour() {
         return businessHour;
     }
@@ -229,5 +245,117 @@ public class DatawareFinalChannelInfoHour extends DataEntity {
 
     public void setBusinessDate(String businessDate) {
         this.businessDate = businessDate;
+    }
+
+    public String getDayDauRate() {
+        return dayDauRate;
+    }
+
+    public void setDayDauRate(String dayDauRate) {
+        this.dayDauRate = dayDauRate;
+    }
+
+    public String getWeekDauRate() {
+        return weekDauRate;
+    }
+
+    public void setWeekDauRate(String weekDauRate) {
+        this.weekDauRate = weekDauRate;
+    }
+
+    public String getDayUserCountRate() {
+        return dayUserCountRate;
+    }
+
+    public void setDayUserCountRate(String dayUserCountRate) {
+        this.dayUserCountRate = dayUserCountRate;
+    }
+
+    public String getWeekUserCountRate() {
+        return weekUserCountRate;
+    }
+
+    public void setWeekUserCountRate(String weekUserCountRate) {
+        this.weekUserCountRate = weekUserCountRate;
+    }
+
+    public String getDayRechargeCountRate() {
+        return dayRechargeCountRate;
+    }
+
+    public void setDayRechargeCountRate(String dayRechargeCountRate) {
+        this.dayRechargeCountRate = dayRechargeCountRate;
+    }
+
+    public String getWeekRechargeCountRate() {
+        return weekRechargeCountRate;
+    }
+
+    public void setWeekRechargeCountRate(String weekRechargeCountRate) {
+        this.weekRechargeCountRate = weekRechargeCountRate;
+    }
+
+    public String getDayRechargeAmountRate() {
+        return dayRechargeAmountRate;
+    }
+
+    public void setDayRechargeAmountRate(String dayRechargeAmountRate) {
+        this.dayRechargeAmountRate = dayRechargeAmountRate;
+    }
+
+    public String getWeekRechargeAmountRate() {
+        return weekRechargeAmountRate;
+    }
+
+    public void setWeekRechargeAmountRate(String weekRechargeAmountRate) {
+        this.weekRechargeAmountRate = weekRechargeAmountRate;
+    }
+
+    public String getDayNewUsersRate() {
+        return dayNewUsersRate;
+    }
+
+    public void setDayNewUsersRate(String dayNewUsersRate) {
+        this.dayNewUsersRate = dayNewUsersRate;
+    }
+
+    public String getWeekNewUsersRate() {
+        return weekNewUsersRate;
+    }
+
+    public void setWeekNewUsersRate(String weekNewUsersRate) {
+        this.weekNewUsersRate = weekNewUsersRate;
+    }
+
+    public String getDayBettingAmountRate() {
+        return dayBettingAmountRate;
+    }
+
+    public void setDayBettingAmountRate(String dayBettingAmountRate) {
+        this.dayBettingAmountRate = dayBettingAmountRate;
+    }
+
+    public String getWeekBettingAmountRate() {
+        return weekBettingAmountRate;
+    }
+
+    public void setWeekBettingAmountRate(String weekBettingAmountRate) {
+        this.weekBettingAmountRate = weekBettingAmountRate;
+    }
+
+    public String getDayDiffAmountRate() {
+        return dayDiffAmountRate;
+    }
+
+    public void setDayDiffAmountRate(String dayDiffAmountRate) {
+        this.dayDiffAmountRate = dayDiffAmountRate;
+    }
+
+    public String getWeekDiffAmountRate() {
+        return weekDiffAmountRate;
+    }
+
+    public void setWeekDiffAmountRate(String weekDiffAmountRate) {
+        this.weekDiffAmountRate = weekDiffAmountRate;
     }
 }

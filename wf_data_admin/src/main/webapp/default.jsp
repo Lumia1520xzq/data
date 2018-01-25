@@ -27,6 +27,7 @@
   <script src="resources/ext-lang-zh_CN.js" type="text/javascript"></script>
   <script src="app/app-all.js" type="text/javascript"></script>
   <script src="app/echarts.js" type="text/javascript"></script>
+  <script src="app/MonthField.js" type="text/javascript"></script>
   <script src="app/app-base.js" type="text/javascript"></script>
   <script src="app/commFunction.js" type="text/javascript"></script>
   <script src="config.js" type="text/javascript"></script>
