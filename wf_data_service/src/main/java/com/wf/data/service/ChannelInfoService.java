@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author  JoeH
+ * @author JoeH
  */
 @Service
 public class ChannelInfoService extends CrudService<ChannelInfoDao, ChannelInfo> {
@@ -45,16 +45,16 @@ public class ChannelInfoService extends CrudService<ChannelInfoDao, ChannelInfo>
     }
 
     public List<ChannelInfo> findMainChannel() {
-        return dao.findMainChannel();
+        return cacheHander.cache(DataCacheKey.DATA_CHANNEL_INFO_ALL.key(), () -> dao.findMainChannel(), CacheKey.MINUTE_30);
     }
 
     public List<Long> findMainChannelIds() {
         List<Long> list = new ArrayList<>();
         List<ChannelInfo> mainChannels = findMainChannel();
         if (CollectionUtils.isNotEmpty(mainChannels)) {
-           for(ChannelInfo mainChannel:mainChannels){
+            for (ChannelInfo mainChannel : mainChannels) {
                 list.add(mainChannel.getId());
-           }
+            }
         }
         return list;
     }

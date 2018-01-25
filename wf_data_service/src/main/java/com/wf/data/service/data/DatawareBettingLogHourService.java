@@ -41,4 +41,8 @@ public class DatawareBettingLogHourService extends CrudService<DatawareBettingLo
     public DatawareBettingLogHour getBettingByDate(Map<String,Object> params){
         return dao.getBettingByDate(params);
     }
+
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
+    }
 }

@@ -76,5 +76,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             AND t.parent_id = #{parentId}
         </if>
     </select>
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_convert_hour
+        WHERE 1=1
+        <if test="beginDate != null and beginDate != ''">
+            AND convert_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND convert_date &lt;= #{endDate}
+        </if>
+    </delete>
 </mapper>
 

@@ -63,5 +63,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			</foreach>
 		</if>
 	</select>
+
+	<delete id="deleteByDate">
+		delete FROM
+		dataware_convert_day
+		WHERE 1=1
+		<if test="beginDate != null and beginDate != ''">
+			AND convert_date &gt;= #{beginDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND convert_date &lt;= #{endDate}
+		</if>
+	</delete>
 </mapper>
 
