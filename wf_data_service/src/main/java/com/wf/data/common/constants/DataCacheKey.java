@@ -26,6 +26,8 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_CHANNEL_INFO_BY_ID,
 
+	DATA_CHANNEL_INFO_ALL,
+
 	DATA_UIC_USER_BY_ID,
 
 	DATA_USER_GROUP,

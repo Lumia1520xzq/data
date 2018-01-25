@@ -18,6 +18,9 @@ public class DatawareFinalChannelInfoHourService extends CrudService<DatawareFin
         return dao.getCountByTime(map);
     }
 
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
+    }
     public List<DatawareFinalChannelInfoHour> getByDateAndHour(Map<String, Object> map){
         return dao.getByDateAndHour(map);
     }

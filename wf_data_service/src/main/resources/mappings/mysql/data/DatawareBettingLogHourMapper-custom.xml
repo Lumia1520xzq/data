@@ -136,5 +136,17 @@
             AND t.parent_id = #{parentId}
         </if>
     </select>
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_betting_log_hour
+        WHERE 1=1
+        <if test="beginDate != null and beginDate != ''">
+            AND betting_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND betting_date &lt;= #{endDate}
+        </if>
+    </delete>
 </mapper>
 

@@ -91,5 +91,21 @@
         ORDER BY DATE_FORMAT(business_date,'%Y-%m') ASC
     </select>
 
+    <delete id="deleteByDate">
+        delete
+        FROM dataware_final_channel_info_all
+        WHERE 1=1
+        AND delete_flag =0
+        <if test="businessDate != null and businessDate != ''">
+            AND business_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+
+    </delete>
 </mapper>
 

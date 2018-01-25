@@ -53,5 +53,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		order by t.business_date asc
 	</select>
 
+	<delete id="deleteByDate">
+		delete FROM
+		dataware_final_channel_conversion
+		WHERE 1=1
+		<if test="beginDate != null and beginDate != ''">
+			AND business_date &gt;= #{beginDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND business_date &lt;= #{endDate}
+		</if>
+	</delete>
+
 </mapper>
 

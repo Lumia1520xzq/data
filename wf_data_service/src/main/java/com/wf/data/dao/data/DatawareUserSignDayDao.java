@@ -11,4 +11,6 @@ import java.util.Map;
 public interface DatawareUserSignDayDao extends CrudDao<DatawareUserSignDay> {
 
     long getCountByTime(Map<String,Object> map);
+
+    int deleteByDate(Map<String, Object> params);
 }

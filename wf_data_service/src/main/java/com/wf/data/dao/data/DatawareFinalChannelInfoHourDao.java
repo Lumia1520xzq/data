@@ -12,6 +12,8 @@ import java.util.Map;
 public interface DatawareFinalChannelInfoHourDao extends CrudDao<DatawareFinalChannelInfoHour> {
     long getCountByTime(Map<String, Object> map);
 
+    int deleteByDate(Map<String, Object> params);
+
     List<DatawareFinalChannelInfoHour> getByDateAndHour(Map<String, Object> map);
 
 

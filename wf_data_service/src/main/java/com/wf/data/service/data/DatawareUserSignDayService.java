@@ -16,4 +16,8 @@ public class DatawareUserSignDayService extends CrudService<DatawareUserSignDayD
     public long getCountByTime(Map<String,Object> map){
         return dao.getCountByTime(map);
     }
+
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
+    }
 }
