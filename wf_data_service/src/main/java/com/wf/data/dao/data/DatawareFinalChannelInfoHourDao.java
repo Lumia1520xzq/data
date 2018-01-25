@@ -5,6 +5,7 @@ import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoHour;
 
+import java.util.List;
 import java.util.Map;
 
 @MyBatisDao(tableName = "dataware_final_channel_info_hour")

@@ -3,6 +3,7 @@ package com.wf.data.dao.data;
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dto.MonthlyDataDto;
 
 import java.util.List;
 import java.util.Map;
@@ -17,4 +18,6 @@ public interface DatawareFinalChannelInfoAllDao extends CrudDao<DatawareFinalCha
     DatawareFinalChannelInfoAll findByDate(Map<String,Object> params);
 
     List<MonthlyDataDto> findMonthSumData(Map<String,Object> params);
+
+    int deleteByDate(Map<String, Object> params);
 }
