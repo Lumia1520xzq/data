@@ -137,7 +137,6 @@ Ext.define('WF.view.data.board.hourlyMonitorViewMain', {
             var todData = store.getAt(0).get("todData");
             var yesData = store.getAt(0).get("yesData");
             var hisData = store.getAt(0).get("historyData");
-            console.log(hisData);
             var todSize = todData.length;
             var index = todSize-1;
             var todBusinessHour = [];

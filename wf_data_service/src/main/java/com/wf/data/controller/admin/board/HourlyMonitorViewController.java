@@ -168,14 +168,14 @@ public class HourlyMonitorViewController extends ExtJsController {
     }
 
     private  String cal(Long last,Long notlast){
-        if(0 == notlast){
+        if(null == notlast || 0 == notlast){
             return "0%";
         }
         return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
     }
 
     private  String cal(Double last,Double notlast){
-        if(0 == notlast){
+        if(null == notlast || 0 == notlast) {
             return "0%";
         }
         return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
