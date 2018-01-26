@@ -143,7 +143,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + format(params[i].value);
                             }
                             return str;
                         }
@@ -186,6 +186,9 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                                     textStyle : {
                                         fontSize : '14',
                                         fontWeight:'bold'
+                                    },
+                                    formatter:function (p) {
+                                        return format(p.value);
                                     }
                                 }
                             }
@@ -198,7 +201,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + format(params[i].value);
                             }
                             return str;
                         }
@@ -241,6 +244,9 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                                     textStyle : {
                                         fontSize : '14',
                                         fontWeight:'bold'
+                                    },
+                                    formatter:function (p) {
+                                        return format(p.value);
                                     }
                                 }
                             }
@@ -308,7 +314,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + formatDecimal(params[i].value);
                             }
                             return str;
                         }
@@ -351,6 +357,9 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                                     textStyle : {
                                         fontSize : '14',
                                         fontWeight:'bold'
+                                    },
+                                    formatter:function (p) {
+                                        return formatDecimal(p.value);
                                     }
                                 }
                             }
@@ -427,6 +436,14 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 var d =  Ext.get("monthTitle"+k).dom;
                 d.innerHTML = "<div align='center' style='line-height:50px;font-size:20px'>"+titles[k]+"</strong></div>";
             }
+        }
+
+        function format(value){
+            return Ext.util.Format.number(value,"0,000");
+        }
+
+        function formatDecimal(value){
+            return Ext.util.Format.number(value,"0,000.0");
         }
     }
 });
