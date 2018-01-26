@@ -2,9 +2,7 @@ package com.wf.data.controller.admin.execute;
 
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.service.business.ChannelInfoAllService;
-import com.wf.data.service.business.ChannelInfoHourService;
-import com.wf.data.service.business.PlatUserSignHourService;
+import com.wf.data.service.business.*;
 import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +26,12 @@ public class HistoryDataCleanController extends ExtJsController {
     private PlatUserSignHourService platUserSignHourService;
     @Autowired
     private ChannelInfoAllService channelInfoAllService;
+    @Autowired
+    private BettingLogDayService bettingLogDayService;
+    @Autowired
+    private BettingLogHourService bettingLogHourService;
+
+
     /**
      * 清洗channelInfoHour表
      *
@@ -56,7 +60,7 @@ public class HistoryDataCleanController extends ExtJsController {
 
 
     /**
-     * 清洗channelInfoHour表
+     * 清洗platSignedUser表
      *
      * @return
      */
@@ -104,6 +108,59 @@ public class HistoryDataCleanController extends ExtJsController {
         }
 
         channelInfoAllService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+
+    /**
+     * 清洗bettingLogDay表
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/bettingLogDay")
+    public Object bettingLogDay(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        bettingLogDayService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗bettingLogHour表
+     *
+     * @return
+     */
+    @RequestMapping("/bettingLogHour")
+    @ResponseBody
+    public Object bettingLogHour(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        bettingLogHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
 

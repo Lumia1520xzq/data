@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -66,9 +67,10 @@ public class BettingLogDayService {
             for (String bettingDate : datelist) {
                 params.put("bettingDate", bettingDate);
                 long count = datawareBettingLogDayService.getCountByTime(params);
-                if (count <= 0) {
-                    dayBettingLog(bettingDate, uicGroupList);
+                if (count > 0) {
+                    datawareBettingLogDayService.deleteByDate(params);
                 }
+                dayBettingLog(bettingDate, uicGroupList);
             }
 
         } else {
@@ -80,9 +82,10 @@ public class BettingLogDayService {
             }
             params.put("bettingDate", bettingDate);
             long count = datawareBettingLogDayService.getCountByTime(params);
-            if (count <= 0) {
-                dayBettingLog(bettingDate, uicGroupList);
+            if (count > 0) {
+                datawareBettingLogDayService.deleteByDate(params);
             }
+            dayBettingLog(bettingDate, uicGroupList);
         }
 
 
@@ -136,5 +139,47 @@ public class BettingLogDayService {
         } catch (Exception e) {
             logger.error("更新datawareBettingLogDay失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
+    }
+
+    @Async
+    public void dataClean(String startTime, String endTime) {
+
+        List<Long> uicGroupList = Lists.newArrayList();
+        String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
+        if (StringUtils.isNotEmpty(datawareUicGroup)) {
+            String[] uicGroupArr = datawareUicGroup.split(",");
+            List<String> userGroup = Arrays.asList(uicGroupArr);
+            uicGroupList = uicGroupService.findGroupUsers(userGroup);
+        } else {
+            logger.error("非正常用户规则未设置: traceId={}", TraceIdUtils.getTraceId());
+        }
+
+        try {
+            Map<String, Object> params = new HashMap<>();
+            if (startTime.equals(endTime)) {
+                params.put("bettingDate", endTime);
+                long count = datawareBettingLogDayService.getCountByTime(params);
+                if (count > 0) {
+                    datawareBettingLogDayService.deleteByDate(params);
+                }
+                dayBettingLog(endTime, uicGroupList);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    params.put("bettingDate", searchDate);
+                    long count = datawareBettingLogDayService.getCountByTime(params);
+                    if (count > 0) {
+                        datawareBettingLogDayService.deleteByDate(params);
+                    }
+                    dayBettingLog(searchDate, uicGroupList);
+                }
+
+            }
+
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 }
