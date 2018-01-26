@@ -13,7 +13,6 @@ import com.wf.data.dto.DailyReportDto;
 import com.wf.data.dto.TcardDto;
 import com.wf.data.service.data.DatawareBettingLogDayService;
 import com.wf.data.service.data.DatawareBuryingPointDayService;
-import com.wf.data.service.elasticsearch.EsUicAllGameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +33,8 @@ public class GameDailyReportController extends ExtJsController {
     private DatawareBuryingPointDayService datawareBuryingPointDayService;
     @Autowired
     private DatawareBettingLogDayService datawareBettingLogDayService;
-    @Autowired
-    private EsUicAllGameService esUicAllGameService;
+//    @Autowired
+//    private EsUicAllGameService esUicAllGameService;
 
     /**
      * 返回日报表列表
@@ -115,18 +114,18 @@ public class GameDailyReportController extends ExtJsController {
             //List<Long> todayDauIds = datawareBuryingPointDayService.getGameDauIds(params);
             //新增用户
             //List<Long> newUserIds = getNewIds(historyDauIds,todayDauIds);
-            List<Long> newUserIds = esUicAllGameService.getNewUserIds(gameType,searchDate,parentId);
-            Integer newUserCount = newUserIds.size();
+            //List<Long> newUserIds = esUicAllGameService.getNewUserIds(gameType,searchDate,parentId);
+            //Integer newUserCount = newUserIds.size();
             //15、新增投注转化率(新增且投注用户/新增用户)
             //投注用户id
-            List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(params);
-            String newUserRate = getTransRate(newUserIds,bettingUserIds);
+            //List<Long> bettingUserIds = datawareBettingLogDayService.getBettingUserIds(params);
+            //String newUserRate = getTransRate(newUserIds,bettingUserIds);
             //16、新增次留(第二天活跃/头一天新增)
             //第二天活跃
-            String nextDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate)));
-            params.put("searchDate", nextDay);
-            List<Long> nextDauIds = datawareBuryingPointDayService.getGameDauIds(params);
-            String newUserRemain = getTransRate(newUserIds,nextDauIds);
+            //String nextDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate)));
+            //params.put("searchDate", nextDay);
+            //List<Long> nextDauIds = datawareBuryingPointDayService.getGameDauIds(params);
+            //String newUserRemain = getTransRate(newUserIds,nextDauIds);
             dto.setGameType(gameType);
             dto.setSearchDate(searchDate);
             dto.setDau(dau);
@@ -140,9 +139,9 @@ public class GameDailyReportController extends ExtJsController {
             dto.setArpu(arpu);
             dto.setAsp(asp);
             dto.setAvgBettingCount(avgBettingCount);
-            dto.setNewUserCount(newUserCount);
-            dto.setNewUserRate(newUserRate);
-            dto.setNewUserRemain(newUserRemain);
+            //dto.setNewUserCount(newUserCount);
+            //dto.setNewUserRate(newUserRate);
+            //dto.setNewUserRemain(newUserRemain);
             list.add(dto);
         }
         return list;
