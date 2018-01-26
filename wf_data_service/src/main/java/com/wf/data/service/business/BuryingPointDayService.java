@@ -21,6 +21,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -67,9 +68,10 @@ public class BuryingPointDayService {
             Map<String, Object> params = new HashMap<>();
             params.put("buryingDate", searchDate);
             long count = datawareBuryingPointDayService.getCountByTime(params);
-            if (count <= 0) {
-                buryingPoint(searchDate, uicGroupList);
+            if (count > 0) {
+                datawareBuryingPointDayService.deleteByDate(params);
             }
+            buryingPoint(searchDate, uicGroupList);
         }
 
 
@@ -102,8 +104,8 @@ public class BuryingPointDayService {
                 params.put("buryingDate", searchDate);
                 long count = datawareBuryingPointDayService.getCountByTime(params);
                 if (count <= 0) {
-                    buryingPoint(searchDate, uicGroupList);
                 }
+                buryingPoint(searchDate, uicGroupList);
 
             }
         } catch (Exception e) {
@@ -164,5 +166,47 @@ public class BuryingPointDayService {
         } catch (Exception e) {
             logger.error("buryingPointDay添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
+    }
+
+
+    @Async
+    public void dataClean(String startTime, String endTime) {
+        List<Long> uicGroupList = Lists.newArrayList();
+        String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
+        if (StringUtils.isNotEmpty(datawareUicGroup)) {
+            String[] uicGroupArr = datawareUicGroup.split(",");
+            List<String> userGroup = Arrays.asList(uicGroupArr);
+            uicGroupList = uicGroupService.findGroupUsers(userGroup);
+        } else {
+            logger.error("非正常用户规则未设置: traceId={}", TraceIdUtils.getTraceId());
+        }
+        try {
+
+            if (startTime.equals(endTime)) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("buryingDate", startTime);
+                long count = datawareBuryingPointDayService.getCountByTime(params);
+                if (count > 0) {
+                    datawareBuryingPointDayService.deleteByDate(params);
+                }
+                buryingPoint(startTime, uicGroupList);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("buryingDate", searchDate);
+                    long count = datawareBuryingPointDayService.getCountByTime(params);
+                    if (count > 0) {
+                        datawareBuryingPointDayService.deleteByDate(params);
+                    }
+                    buryingPoint(searchDate, uicGroupList);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 }

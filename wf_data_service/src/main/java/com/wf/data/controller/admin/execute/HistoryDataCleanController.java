@@ -30,6 +30,10 @@ public class HistoryDataCleanController extends ExtJsController {
     private BettingLogDayService bettingLogDayService;
     @Autowired
     private BettingLogHourService bettingLogHourService;
+    @Autowired
+    private BuryingPointDayService buryingPointDayService;
+    @Autowired
+    private BuryingPointHourService buryingPointHourService;
 
 
     /**
@@ -161,6 +165,59 @@ public class HistoryDataCleanController extends ExtJsController {
         }
 
         bettingLogHourService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+
+    /**
+     * 清洗buryingPointDay表
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/buryingPointDay")
+    public Object buryingPointDay(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        buryingPointDayService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗buryingPointHour表
+     *
+     * @return
+     */
+    @RequestMapping("/buryingPointHour")
+    @ResponseBody
+    public Object buryingPointHour(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        buryingPointHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
 
