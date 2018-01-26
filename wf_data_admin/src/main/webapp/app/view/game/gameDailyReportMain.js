@@ -14,10 +14,10 @@ Ext.define('WF.view.game.gameDailyReportMain', {
             autoLoad: true,
             url: 'data/admin/report/getList.do',
             fields: [
+                "gameType",
                 "searchDate", "dau", "importRate", "bettingUserCount",
                 "bettingCount", "bettingAmount", "amountGap",
-                "bettingRate", "returnRate", "arpu", "asp", "avgBettingCount",
-                "newUserCount", "newUserRate", "newUserRemain", "gameType"
+                "bettingRate", "returnRate", "arpu", "asp", "avgBettingCount"
             ]
         });
 
@@ -181,28 +181,29 @@ Ext.define('WF.view.game.gameDailyReportMain', {
                 dataIndex: 'avgBettingCount',
                 menuDisabled: true,
                 sortable: false
-            },
-            {
-                text: '新增用户',
-                width: 50,
-                dataIndex: 'newUserCount',
-                menuDisabled: true,
-                sortable: false
-            },
-            {
-                text: '新增投注转化率',
-                width: 50,
-                dataIndex: 'newUserRate',
-                menuDisabled: true,
-                sortable: false
-            },
-            {
-                text: '新增次留',
-                width: 50,
-                dataIndex: 'newUserRemain',
-                menuDisabled: true,
-                sortable: false
             }
+            // ,
+            // {
+            //     text: '新增用户',
+            //     width: 50,
+            //     dataIndex: 'newUserCount',
+            //     menuDisabled: true,
+            //     sortable: false
+            // },
+            // {
+            //     text: '新增投注转化率',
+            //     width: 50,
+            //     dataIndex: 'newUserRate',
+            //     menuDisabled: true,
+            //     sortable: false
+            // },
+            // {
+            //     text: '新增次留',
+            //     width: 50,
+            //     dataIndex: 'newUserRemain',
+            //     menuDisabled: true,
+            //     sortable: false
+            // }
             ]
         });
 

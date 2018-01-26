@@ -67,6 +67,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 valueField: "id",
                 editable: true,
                 queryMode: "local",
+                width:275,
                 store: parentChannelStore
             },
                 // {
@@ -98,7 +99,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             align : 'stretch',
             bodyStyle:'border-width:0 0 0 0;',
             items: [{
-                title: '核心指标',align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                title: '核心指标',collapsible: true,align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
                 items:[
                     {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                         items:[
@@ -149,87 +150,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             },
                             {width:"100%",height:240,id:"kpi1"}
                         ]
-                    },
-                    {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
-                        items:[
-                            {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
-                                items:[
-                                    {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"31.33%",height:60,html:'<h2>充值人数</h2>',bodyStyle:'border-width:0'},
-                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                        items:[
-                                            {width:"100%",height:10,bodyStyle:'border-width:0'},
-                                            {id:'date2',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                            {id:'rechargeCount',width:"100%",height:30,bodyStyle:'border-width:0'}
-                                        ]
-                                    },
-                                    {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                        items:[
-                                            {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                            {id:'dayRechargeCountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                            {id:'weekRechargeCountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
-                                        ]
-                                    }
-                                ]
-                            },
-                            {width:"100%",height:240,id:"kpi2"}
-                        ]
-                      }
+                    }
                     ]
-            },
+                },
                 {
-                    align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    title: '转化率',collapsible: true, align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
-                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
-                            items:[
-                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
-                                    items:[
-                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新增用户</h2>',bodyStyle:'border-width:0'},
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
-                                                {id:'date3',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'newUsers',width:"100%",height:30,bodyStyle:'border-width:0'}
-                                            ]
-                                        },
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'dayNewUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'weekNewUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'}
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {width:"100%",height:240,id:"kpi3"}
-                            ]
-                        },
-                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
-                            items:[
-                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
-                                    items:[
-                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>投注人数</h2>',bodyStyle:'border-width:0'},
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
-                                                {id:'date4',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'userCount',width:"100%",height:30,bodyStyle:'border-width:0'}
-                                            ]
-                                        },
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'dayUserCountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'weekUserCountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {width:"100%",height:240,id:"kpi4"}
-                            ]
-                        },
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
@@ -254,12 +180,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 },
                                 {width:"100%",height:240,id:"kpi5"}
                             ]
-                        }
-                    ]
-                },
-                {
-                    align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
-                    items:[
+                        },
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
@@ -309,6 +230,61 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 },
                                 {width:"100%",height:240,id:"kpi7"}
                             ]
+                        }
+                        ]
+                },
+                {
+                    title: '新用户数据',collapsible: true,align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>新增用户</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date3',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'newUsers',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayNewUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekNewUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi3"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>新用户占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date15',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'usersRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi15"}
+                            ]
                         },
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
@@ -335,65 +311,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:240,id:"kpi8"}
                             ]
                         }
-                        ]
-                },
-                {
-                    title: '投注数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
-                    items:[
-                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
-                            items:[
-                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
-                                    items:[
-                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>投注流水</h2>',bodyStyle:'border-width:0'},
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
-                                                {id:'date9',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'bettingAmount',width:"100%",height:30,bodyStyle:'border-width:0'}
-                                            ]
-                                        },
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'dayBettingAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'weekBettingAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {width:"100%",height:240,id:"kpi9"}
-                            ]
-                        },
-                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
-                            items:[
-                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
-                                    items:[
-                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>返奖率</h2>',bodyStyle:'border-width:0'},
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
-                                                {id:'date10',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'resultRate',width:"100%",height:30,bodyStyle:'border-width:0'}
-                                            ]
-                                        },
-                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
-                                            items:[
-                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'dayResultRate',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'weekResultRate',width:"100%",height:20,bodyStyle:'border-width:0'}
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {width:"100%",height:240,id:"kpi10"}
-                            ]
-                        }
                     ]
                 },
                 {
-                    title: '留存数据',height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    title: '留存数据',collapsible: true,height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
@@ -444,37 +365,38 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 },
                                 {width:"100%",height:240,id:"kpi14"}
                             ]
-                        },
+                        }
+
+                    ]
+                },
+                {
+                    title: '付费数据',collapsible: true,height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新用户占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>充值人数</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
-                                                {id:'date15',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'usersRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                                {id:'date2',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'rechargeCount',width:"100%",height:30,bodyStyle:'border-width:0'}
                                             ]
                                         },
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'dayUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'},
-                                                {id:'weekUsersRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                                {id:'dayRechargeCountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekRechargeCountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
                                             ]
                                         }
                                     ]
                                 },
-                                {width:"100%",height:240,id:"kpi15"}
+                                {width:"100%",height:240,id:"kpi2"}
                             ]
-                        }
-                    ]
-                },
-                {
-                    title: '付费数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
-                    items:[
+                        },
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
@@ -528,7 +450,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     ]
                 },
                 {
-                    title: '成本数据',height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    title: '成本数据',collapsible: true,height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
@@ -578,6 +500,86 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                     ]
                                 },
                                 {width:"100%",height:240,id:"kpi17"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: '投注数据',collapsible: true,height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>投注人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date4',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'userCount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayUserCountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekUserCountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi4"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>投注流水</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date9',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'bettingAmount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayBettingAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekBettingAmountRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi9"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>返奖率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date10',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'resultRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayResultRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekResultRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi10"}
                             ]
                         }
                     ]
@@ -1019,7 +1021,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + format(params[i].value);
                             }
                             return str;
                         }
@@ -1466,14 +1468,14 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     var date = Ext.get('date' + p).dom;
                     var dd = r.get('businessDate');
                     var xx = dd.indexOf('-');
-                    date.innerHTML = '<div align="center">' + dd.substring(xx + 1)+'</div>';
+                    date.innerHTML = '<div align="center">' + dd.substring(xx + 1) + '</div>';
                 }
 
                 for (var q = 0; q < option.length; q++) {
-                    if(q==13||q==14||q==15){
-                    var date = Ext.get('date' + q).dom;
-                    var rentionDate =  businessDate1[businessDate1.length-1];
-                    date.innerHTML = '<div align="center">'+ rentionDate +'</div>';
+                    if (q == 13 || q == 14 || q == 15) {
+                        var date = Ext.get('date' + q).dom;
+                        var rentionDate = businessDate1[businessDate1.length - 1];
+                        date.innerHTML = '<div align="center">' + rentionDate + '</div>';
                     }
                 }
 
@@ -1487,15 +1489,13 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('dauPayRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dauPayRate') + "%</strong></div>";
                 Ext.get('bettingPayRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('bettingPayRate') + "%</strong></div>";
                 Ext.get('userBettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong></div>";
-                Ext.get('bettingAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('bettingAmount') + "</strong></div>";
+                Ext.get('bettingAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + format(r.get('bettingAmount')) + "</strong></div>";
                 Ext.get('resultRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('resultRate') + "%</strong></div>";
                 Ext.get('payArpu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArpu') + "</strong></div>";
                 Ext.get('payArppu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong></div>";
-
-                Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" +  usersDayRetention[usersDayRetention.length-1] +"%</strong></div>";
-                Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length-1] + "%</strong></div>";
-                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersRate[usersRate.length-1]  + "%</strong></div>";
-
+                Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersDayRetention[usersDayRetention.length - 1] + "%</strong></div>";
+                Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length - 1] + "%</strong></div>";
+                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersRate[usersRate.length - 1] + "%</strong></div>";
                 Ext.get('totalCost').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('totalCost') + "</strong></div>";
                 Ext.get('costRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong></div>";
 
@@ -1536,8 +1536,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('dayCostRate').dom.innerHTML = "日环比：" + r.get('dayCostRate');
                 Ext.get('weekCostRate').dom.innerHTML = "周同比：" + r.get('weekCostRate');
             }
+        }
 
-
+        function format(value){
+            return Ext.util.Format.number(value,"0,000");
         }
     }
 });

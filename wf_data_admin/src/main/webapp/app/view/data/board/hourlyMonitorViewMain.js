@@ -137,7 +137,6 @@ Ext.define('WF.view.data.board.hourlyMonitorViewMain', {
             var todData = store.getAt(0).get("todData");
             var yesData = store.getAt(0).get("yesData");
             var hisData = store.getAt(0).get("historyData");
-            console.log(hisData);
             var todSize = todData.length;
             var index = todSize-1;
             var todBusinessHour = [];
@@ -213,13 +212,13 @@ Ext.define('WF.view.data.board.hourlyMonitorViewMain', {
             if(todData.length != 0){
                 var dataCss = "<div align='center'><strong style='font-size:24px;color:#3c94db;cursor:pointer;line-height:35px;'>";
                 var end = "</strong></div>";
-                Ext.get('hourlyData0').dom.innerHTML = dataCss + todData[index].dau + end;
-                Ext.get('hourlyData1').dom.innerHTML = dataCss + todData[index].userCount +  end;
-                Ext.get('hourlyData2').dom.innerHTML = dataCss + todData[index].rechargeCount + end;
-                Ext.get('hourlyData3').dom.innerHTML = dataCss + todData[index].rechargeAmount + end;
-                Ext.get('hourlyData4').dom.innerHTML = dataCss + todData[index].newUsers + end;
-                Ext.get('hourlyData5').dom.innerHTML = dataCss + todData[index].bettingAmount + end;
-                Ext.get('hourlyData6').dom.innerHTML = dataCss + todData[index].diffAmount + end;
+                Ext.get('hourlyData0').dom.innerHTML = dataCss + format(todData[index].dau) + end;
+                Ext.get('hourlyData1').dom.innerHTML = dataCss + format(todData[index].userCount) +  end;
+                Ext.get('hourlyData2').dom.innerHTML = dataCss + format(todData[index].rechargeCount) + end;
+                Ext.get('hourlyData3').dom.innerHTML = dataCss + format(todData[index].rechargeAmount) + end;
+                Ext.get('hourlyData4').dom.innerHTML = dataCss + format(todData[index].newUsers) + end;
+                Ext.get('hourlyData5').dom.innerHTML = dataCss + format(todData[index].bettingAmount) + end;
+                Ext.get('hourlyData6').dom.innerHTML = dataCss + format(todData[index].diffAmount) + end;
 
                 var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
                 Ext.get('hourlyRate0').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayDauRate) +"<br/>" + "周环比:"+ judge(todData[index].weekDauRate) + end;
@@ -305,7 +304,7 @@ Ext.define('WF.view.data.board.hourlyMonitorViewMain', {
                                         endStr = "0" + endStr;
                                     }
                                     var k = j + "时-" + endStr + "时";
-                                    str += params[i].seriesName + ':' + params[i].value + '&nbsp;&nbsp;' + '时间:' + k + "<br/>";
+                                    str += params[i].seriesName + ':' + format(params[i].value) + '&nbsp;&nbsp;' + '时间:' + k + "<br/>";
                                 }
                             }
                             return str;
@@ -373,7 +372,12 @@ Ext.define('WF.view.data.board.hourlyMonitorViewMain', {
             me.echarts.setOption(option);
         }
 
-
+        function format(value){
+            if(value >= 0){
+                return Ext.util.Format.number(value,"0,000");
+            }
+            return "-"+Ext.util.Format.number(Math.abs(value),"0,000");
+        }
     }
 });
 
