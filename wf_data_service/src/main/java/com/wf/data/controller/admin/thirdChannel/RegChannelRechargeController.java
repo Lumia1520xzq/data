@@ -41,6 +41,8 @@ public class RegChannelRechargeController extends ExtJsController {
         Long parentId = null;
         String beginDate = null;
         String endDate = null;
+        Long start = null;
+        Long length = null;
 
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
@@ -48,6 +50,8 @@ public class RegChannelRechargeController extends ExtJsController {
             parentId = data.getLong("parentId");
             beginDate = data.getString("beginDate");
             endDate = data.getString("endDate");
+            start = json.getLongValue("start");
+            length = json.getLongValue("limit");
         }
 
         MallBizLog note = new MallBizLog();
@@ -61,7 +65,7 @@ public class RegChannelRechargeController extends ExtJsController {
         if (note.getParentId() == null) {
             return new Page<MallBizLog>();
         }
-        Page<MallBizLog> pageList = mallBizLogService.findPage(new Page<MallBizLog>(note));
+        Page<MallBizLog> pageList = mallBizLogService.findPage(new Page<MallBizLog>(note, start, length));
         for (MallBizLog mallBizLog : pageList.getData()) {
             UicUser user = uicUserService.getByUserId(mallBizLog.getUserId());
             if (user != null) {
@@ -79,7 +83,7 @@ public class RegChannelRechargeController extends ExtJsController {
      */
     @RequestMapping("sumData")
     public Object countData(@RequestBody Map<String, Object> dataParam) {
-        dataParam.put("status",8);
+        dataParam.put("status", 8);
         Double data = mallBizLogService.getSumRecharge(dataParam);
         return data == null ? 0D : data;
 

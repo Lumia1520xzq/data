@@ -30,23 +30,20 @@ public class InventoryPhyAwardsSendlog extends DataEntity {
 	private String endDate;
 	private Long goldAmount;
 	private Double rmbAmount;
+	private String thirdId;
 
 	public Double getRmbAmount() {
 		return rmbAmount;
 	}
-
 	public void setRmbAmount(Double rmbAmount) {
 		this.rmbAmount = rmbAmount;
 	}
-
 	public Long getGoldAmount() {
 		return goldAmount;
 	}
-
 	public void setGoldAmount(Long goldAmount) {
 		this.goldAmount = goldAmount;
 	}
-
 	public Long getAwardsEntity() {
 		return awardsEntity;
 	}
@@ -167,5 +164,10 @@ public class InventoryPhyAwardsSendlog extends DataEntity {
 	public void setActivityIds(List<Long> activityIds) {
 		this.activityIds = activityIds;
 	}
-	
+	public String getThirdId() {
+		return thirdId;
+	}
+	public void setThirdId(String thirdId) {
+		this.thirdId = thirdId;
+	}
 }
