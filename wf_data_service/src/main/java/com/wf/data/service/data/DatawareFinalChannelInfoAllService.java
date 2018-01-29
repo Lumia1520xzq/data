@@ -15,15 +15,15 @@ import java.util.Map;
 @Service
 public class DatawareFinalChannelInfoAllService extends CrudService<DatawareFinalChannelInfoAllDao, DatawareFinalChannelInfoAll> {
 
-    public long getCountByTime(Map<String,Object> map){
+    public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
 
-    public List<DatawareFinalChannelInfoAll> getListByChannelAndDate(Map<String,Object> params){
+    public List<DatawareFinalChannelInfoAll> getListByChannelAndDate(Map<String, Object> params) {
         return dao.getListByChannelAndDate(params);
     }
 
-    public DatawareFinalChannelInfoAll findByDate(Map<String,Object> params){
+    public DatawareFinalChannelInfoAll findByDate(Map<String, Object> params) {
         return dao.findByDate(params);
     }
 
@@ -31,8 +31,16 @@ public class DatawareFinalChannelInfoAllService extends CrudService<DatawareFina
         return dao.deleteByDate(params);
     }
 
-    public List<MonthlyDataDto> findMonthSumData(Map<String,Object> params){
+    public List<MonthlyDataDto> findMonthSumData(Map<String, Object> params) {
         return dao.findMonthSumData(params);
+    }
+
+    public int updateUserLtv(Map<String, Object> params) {
+        return dao.updateUserLtv(params);
+    }
+
+    public DatawareFinalChannelInfoAll getInfoByChannel(Map<String, Object> params) {
+        return dao.getInfoByChannel(params);
     }
 
 }

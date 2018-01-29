@@ -57,5 +57,38 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND t.parent_id = #{parentId}
 		</if>
 	</select>
+
+
+	<select id="getHistoryUserByDate" resultType="Long">
+		SELECT COUNT(DISTINCT t.user_id)
+		FROM dataware_user_info t
+		WHERE  1=1 AND t.delete_flag = 0
+		AND t.user_group =2
+		AND t.channel_id IS NOT NULL
+		<if test="businessDate != null and businessDate != ''">
+			AND t.registered_date &lt;= #{businessDate}
+		</if>
+		<if test="businessHour != null and businessHour != ''">
+			AND t.registered_hour = #{businessHour}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND t.parent_id = #{parentId}
+		</if>
+		<if test="parentChannelList != null and  parentChannelList.size() != 0">
+			AND t.parent_id not in
+			<foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="childChannelList != null and  childChannelList.size() != 0">
+			AND t.channel_id not in
+			<foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
 </mapper>
 

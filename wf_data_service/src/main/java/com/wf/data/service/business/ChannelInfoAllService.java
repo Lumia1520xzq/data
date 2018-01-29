@@ -49,54 +49,13 @@ public class ChannelInfoAllService {
         logger.info("每天数据汇总开始:traceId={}", TraceIdUtils.getTraceId());
 
         boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DESTINATION_COLLECTING_FLAG);
-        if (false == flag) {
-            historyChannelInfo();
-        } else {
+        if (true == flag) {
             String yesterdayDate = DateUtils.getYesterdayDate();
             channelInfo(yesterdayDate);
         }
 
         logger.info("每天数据汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
-
-    private void historyChannelInfo() {
-        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_DATE);
-
-        if (StringUtils.isBlank(date)) {
-            logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
-            return;
-        }
-
-        String[] dates = date.split(",");
-        if (StringUtils.isBlank(dates[0])) {
-            logger.error("清洗开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        if (StringUtils.isBlank(dates[1])) {
-            logger.error("清洗结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        String startDay = dates[0].trim();
-        String endDay = dates[1].trim();
-        try {
-
-            if (startDay.equals(endDay)) {
-                channelInfo(startDay);
-            } else {
-                List<String> datelist = DateUtils.getDateList(startDay, endDay);
-                for (String searchDate : datelist) {
-                    channelInfo(searchDate);
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-
-
-    }
-
 
     private void channelInfo(String searchDay) {
         String channelIdList = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_CHANNEL);
@@ -298,6 +257,24 @@ public class ChannelInfoAllService {
         infoAll.setPayArppu(payArppu);
 
 
+        Double hisRecharge = datawareConvertDayService.getHistoryConvertByDate(params);
+        if (null != hisRecharge) {
+            infoAll.setHisRecharge(hisRecharge);
+        } else {
+            infoAll.setHisRecharge(0.00);
+        }
+        Long hisRegistered = datawareUserInfoService.getHistoryUserByDate(params);
+        if (null != hisRegistered) {
+            infoAll.setHisRegistered(hisRegistered);
+        } else {
+            infoAll.setHisRegistered(0L);
+        }
+        if (infoAll.getHisRegistered() > 0) {
+            infoAll.setUserLtv(BigDecimalUtil.div(infoAll.getHisRecharge(), infoAll.getHisRegistered(), 2));
+        } else {
+            infoAll.setUserLtv(0.00);
+        }
+
         try {
             datawareFinalChannelInfoAllService.save(infoAll);
         } catch (Exception e) {
@@ -328,5 +305,128 @@ public class ChannelInfoAllService {
         logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
+
+    @Async
+    public void historyLtv(String startTime, String endTime) {
+
+        try {
+
+            if (startTime.equals(endTime)) {
+                forChannel(endTime);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    forChannel(searchDate);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
+
+
+    private void forChannel(String searchDay) {
+        String channelIdList = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_CHANNEL);
+        if (StringUtils.isBlank(channelIdList)) {
+            logger.error("渠道未设置: traceId={}", TraceIdUtils.getTraceId());
+            return;
+        }
+        try {
+            Map<String, Object> countParams = new HashMap<>();
+            countParams.put("businessDate", searchDay);
+            countParams.put("parentId", 1);
+            DatawareFinalChannelInfoAll info = datawareFinalChannelInfoAllService.getInfoByChannel(countParams);
+            if (null != info) {
+                Map<String, Object> mapAll = new HashMap<>();
+                mapAll.put("businessDate", searchDay);
+                updateLtv(mapAll, info);
+
+            }
+
+            List<String> channels = Arrays.asList(channelIdList.split(","));
+
+            List<Long> childChannelList = Lists.newArrayList();
+            List<Long> parentChannelList = Lists.newArrayList();
+
+
+            for (String channelStr : channels) {
+                Long channel = Long.valueOf(channelStr);
+                ChannelInfo channelInfo = channelInfoService.get(channel);
+                if (null != channelInfo) {
+                    if (null != channelInfo.getParentId()) {
+                        childChannelList.add(channel);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("businessDate", searchDay);
+                        map.put("channelId", channel);
+
+                        DatawareFinalChannelInfoAll channelInfoAll = datawareFinalChannelInfoAllService.getInfoByChannel(map);
+                        if (null != channelInfoAll) {
+                            updateLtv(map, channelInfoAll);
+                        }
+
+
+                    } else {
+                        parentChannelList.add(channel);
+                        Map<String, Object> parentMap = new HashMap<>();
+                        parentMap.put("businessDate", searchDay);
+                        parentMap.put("parentId", channel);
+
+                        DatawareFinalChannelInfoAll channelInfoAll = datawareFinalChannelInfoAllService.getInfoByChannel(parentMap);
+                        if (null != channelInfoAll) {
+                            updateLtv(parentMap, channelInfoAll);
+                        }
+                    }
+                }
+
+            }
+
+
+            Map<String, Object> otherMap = new HashMap<>();
+            otherMap.put("businessDate", searchDay);
+            otherMap.put("parentId", 0);
+            DatawareFinalChannelInfoAll channelInfoAll = datawareFinalChannelInfoAllService.getInfoByChannel(otherMap);
+            if (null != channelInfoAll) {
+                //汇总其他渠道
+                parentChannelList.add(1L);
+                Map<String, Object> params = new HashMap<>();
+                params.put("businessDate", searchDay);
+                params.put("childChannelList", childChannelList);
+                params.put("parentChannelList", parentChannelList);
+                updateLtv(params, channelInfoAll);
+            }
+
+        } catch (Exception e) {
+            logger.error("添加渠道汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+        }
+    }
+
+    private void updateLtv(Map<String, Object> map, DatawareFinalChannelInfoAll info) {
+        Double hisRecharge = datawareConvertDayService.getHistoryConvertByDate(map);
+        if (null != hisRecharge) {
+            info.setHisRecharge(hisRecharge);
+        } else {
+            info.setHisRecharge(0.00);
+        }
+        Long hisRegistered = datawareUserInfoService.getHistoryUserByDate(map);
+        if (null != hisRegistered) {
+            info.setHisRegistered(hisRegistered);
+        } else {
+            info.setHisRegistered(0L);
+        }
+        if (info.getHisRegistered() > 0) {
+            info.setUserLtv(BigDecimalUtil.div(info.getHisRecharge(), info.getHisRegistered(), 2));
+        } else {
+            info.setUserLtv(0.00);
+        }
+
+        try {
+            datawareFinalChannelInfoAllService.save(info);
+        } catch (Exception e) {
+            logger.error("添加渠道汇总记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(info.toString()));
+        }
+    }
 
 }

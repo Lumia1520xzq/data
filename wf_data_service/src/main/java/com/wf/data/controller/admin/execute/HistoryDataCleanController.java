@@ -278,4 +278,32 @@ public class HistoryDataCleanController extends ExtJsController {
         return success("清洗开始执行");
     }
 
+    /**
+     * 清洗historyLtv
+     *
+     * @return
+     */
+    @RequestMapping("/historyLtv")
+    @ResponseBody
+    public Object historyLtv(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        channelInfoAllService.historyLtv(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+
+
 }

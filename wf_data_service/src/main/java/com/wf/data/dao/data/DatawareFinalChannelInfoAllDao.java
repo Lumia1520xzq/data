@@ -20,4 +20,8 @@ public interface DatawareFinalChannelInfoAllDao extends CrudDao<DatawareFinalCha
     List<MonthlyDataDto> findMonthSumData(Map<String,Object> params);
 
     int deleteByDate(Map<String, Object> params);
+
+    int updateUserLtv(Map<String, Object> params);
+
+    DatawareFinalChannelInfoAll getInfoByChannel(Map<String,Object> params);
 }

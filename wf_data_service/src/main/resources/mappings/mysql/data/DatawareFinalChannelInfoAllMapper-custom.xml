@@ -107,5 +107,55 @@
         </if>
 
     </delete>
+
+    <update id="updateUserLtv">
+        UPDATE dataware_final_channel_info_all SET
+        his_registered = #{hisRegistered},
+        his_recharge = #{hisRecharge},
+        user_ltv = #{userLtv},
+        WHERE 1=1
+        AND delete_flag =0
+        <if test="businessDate != null and businessDate != ''">
+            AND business_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+    </update>
+
+
+
+    <select id="getInfoByChannel" resultType="DatawareFinalChannelInfoAll">
+        SELECT <include refid="datawareFinalChannelInfoAllColumns"/>
+        FROM dataware_final_channel_info_all t
+        WHERE 1=1
+        AND t.delete_flag =0
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.business_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY update_time desc LIMIT 1
+    </select>
 </mapper>
 
