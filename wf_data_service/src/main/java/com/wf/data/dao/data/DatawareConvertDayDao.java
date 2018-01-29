@@ -16,4 +16,8 @@ public interface DatawareConvertDayDao extends CrudDao<DatawareConvertDay> {
     DatawareFinalChannelInfoAll getConvertByDate(Map<String,Object> map);
 
     List<Long> getUserIdByDate(Map<String,Object> map);
+
+    Double getRechargeSumByDate(Map<String,Object> map);
+
+    List<Long> getRechargeUserIdsByDate(Map<String,Object> map);
 }
