@@ -16,6 +16,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -48,6 +49,12 @@ public class ConvertDayService {
             historyConvert();
         } else {
             String yesterdayDate = DateUtils.getYesterdayDate();
+            Map<String, Object> params = new HashMap<>();
+            params.put("convertDate", yesterdayDate);
+            long count = datawareConvertDayService.getCountByTime(params);
+            if (count > 0) {
+                datawareConvertDayService.deleteByDate(params);
+            }
             convert(yesterdayDate);
         }
 
@@ -96,22 +103,19 @@ public class ConvertDayService {
             List<DatawareConvertDay> convertList = datawareConvertHourService.findConvertList(map);
 
             if (CollectionUtils.isNotEmpty(convertList)) {
-                long count = datawareConvertDayService.getCountByTime(map);
-                if (count <= 0) {
-                    for (DatawareConvertDay item : convertList) {
-                        if (null != item.getChannelId()) {
-                            ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
-                            if (null != channelInfo) {
-                                if (null == channelInfo.getParentId()) {
-                                    item.setParentId(item.getChannelId());
-                                } else {
-                                    item.setParentId(channelInfo.getParentId());
-                                }
+                for (DatawareConvertDay item : convertList) {
+                    if (null != item.getChannelId()) {
+                        ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                        if (null != channelInfo) {
+                            if (null == channelInfo.getParentId()) {
+                                item.setParentId(item.getChannelId());
+                            } else {
+                                item.setParentId(channelInfo.getParentId());
                             }
                         }
                     }
-                    datawareConvertDayService.batchSave(convertList);
                 }
+                datawareConvertDayService.batchSave(convertList);
             }
         } catch (Exception e) {
             logger.error("datawareConvertDay添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
@@ -119,4 +123,37 @@ public class ConvertDayService {
     }
 
 
+    @Async
+    public void dataClean(String startTime, String endTime) {
+
+        try {
+            if (startTime.equals(endTime)) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("convertDate", startTime);
+                long count = datawareConvertDayService.getCountByTime(params);
+                if (count > 0) {
+                    datawareConvertDayService.deleteByDate(params);
+                }
+                convert(startTime);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("convertDate", searchDate);
+                    long count = datawareConvertDayService.getCountByTime(params);
+                    if (count > 0) {
+                        datawareConvertDayService.deleteByDate(params);
+                    }
+                    convert(searchDate);
+                }
+            }
+
+
+
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
 }

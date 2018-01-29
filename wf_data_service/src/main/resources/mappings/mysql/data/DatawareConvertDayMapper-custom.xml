@@ -68,12 +68,39 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		delete FROM
 		dataware_convert_day
 		WHERE 1=1
-		<if test="beginDate != null and beginDate != ''">
-			AND convert_date &gt;= #{beginDate}
-		</if>
-		<if test="endDate != null and endDate != ''">
-			AND convert_date &lt;= #{endDate}
+		<if test="convertDate != null and convertDate != ''">
+			AND  convert_date = #{convertDate}
 		</if>
 	</delete>
+
+
+	<select id="getHistoryConvertByDate" resultType="Double">
+		SELECT
+		SUM(t.third_amount) rechargeAmount
+		FROM `dataware_convert_day` t
+		WHERE 1=1
+		AND t.channel_id IS NOT NULL
+		<if test="businessDate != null and businessDate != ''">
+			AND t.convert_date &lt;= #{businessDate}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND t.parent_id = #{parentId}
+		</if>
+		<if test="parentChannelList != null and  parentChannelList.size() != 0">
+			AND t.parent_id not in
+			<foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="childChannelList != null and  childChannelList.size() != 0">
+			AND t.channel_id not in
+			<foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
 </mapper>
 

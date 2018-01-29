@@ -91,6 +91,35 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private String weekCostRate;
 
 
+	private Long hisRegistered;
+	private Double hisRecharge;
+	private Double userLtv;
+
+
+	public Long getHisRegistered() {
+		return hisRegistered;
+	}
+
+	public void setHisRegistered(Long hisRegistered) {
+		this.hisRegistered = hisRegistered;
+	}
+
+	public Double getHisRecharge() {
+		return hisRecharge;
+	}
+
+	public void setHisRecharge(Double hisRecharge) {
+		this.hisRecharge = hisRecharge;
+	}
+
+	public Double getUserLtv() {
+		return userLtv;
+	}
+
+	public void setUserLtv(Double userLtv) {
+		this.userLtv = userLtv;
+	}
+
 	public Long getUserBettingCount() {
 		return userBettingCount;
 	}
