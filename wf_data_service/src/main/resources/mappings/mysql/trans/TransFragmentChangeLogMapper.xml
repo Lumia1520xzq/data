@@ -25,7 +25,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</sql>
 	
 	<sql id="transFragmentChangeLogWhere">
-		t.delete_flag = #{DEL_FLAG_NORMAL}
+		t.delete_flag = #{DEL_FLAG_NORMAL} AND t.change_num > 0
 		<if test="p.userId != null">
 			AND t.user_id = #{p.userId}
 		</if>

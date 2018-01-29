@@ -158,6 +158,22 @@ Ext.define("DCIS.SearchPanel", {
                 scope: me
             });
         }
+        if (config.export) {
+            buttonPanel.items.push({
+                xtype: "panel",
+                width: 50,
+                border: false,
+                height: "auto"
+            });
+            buttonPanel.items.push({
+                xtype: "button",
+                text: "导出",
+                iconCls: 'icon-print',
+                width: 100,
+                handler: config.export,
+                scope: me
+            });
+        }
         buttonPanel.items.push({
             xtype: "panel",
             width: 20,
