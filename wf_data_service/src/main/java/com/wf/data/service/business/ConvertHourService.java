@@ -16,6 +16,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -80,10 +81,8 @@ public class ConvertHourService {
                 Map<String, Object> map = new HashMap<>();
                 map.put("beginDate", dates[0]);
                 map.put("endDate", dates[1]);
-                //
-                String searchDay = DateUtils.formatDate(DateUtils.parseDate(dates[0], "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
-                String searchHour = "";
-                convert(map, searchDay, searchHour);
+
+                convert(map);
             } else {
 
                 List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
@@ -106,10 +105,7 @@ public class ConvertHourService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("beginDate", beginDate);
                     map.put("endDate", endDate);
-
-                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(beginDate, "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
-                    String searchHour = "";
-                    convert(map, searchDay, searchHour);
+                    convert(map);
                 }
             }
         } catch (Exception e) {
@@ -143,36 +139,127 @@ public class ConvertHourService {
 
         String searchDay = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
         String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
-        convert(map, searchDay, searchHour);
+        Map<String, Object> params = new HashMap<>();
+        params.put("convertDate", searchDay);
+        params.put("convertHour", searchHour);
+
+        long count = datawareConvertHourService.getCountByTime(params);
+        if (count > 0) {
+            datawareConvertHourService.deleteByDate(params);
+        }
+        convert(map);
     }
 
-    private void convert(Map<String, Object> map, String searchDay, String searchHour) {
+    private void convert(Map<String, Object> map) {
         try {
             List<DatawareConvertHour> hourList = transConvertService.findConvertList(map);
 
             if (CollectionUtils.isNotEmpty(hourList)) {
-                Map<String, Object> params = new HashMap<>();
-                params.put("convertDate", searchDay);
-                params.put("convertHour", searchHour);
-                long count = datawareConvertHourService.getCountByTime(params);
-                if (count <= 0) {
-                    for (DatawareConvertHour item : hourList) {
-                        if (null != item.getChannelId()) {
-                            ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
-                            if (null != channelInfo) {
-                                if (null == channelInfo.getParentId()) {
-                                    item.setParentId(item.getChannelId());
-                                } else {
-                                    item.setParentId(channelInfo.getParentId());
-                                }
+                for (DatawareConvertHour item : hourList) {
+                    if (null != item.getChannelId()) {
+                        ChannelInfo channelInfo = channelInfoService.get(item.getChannelId());
+                        if (null != channelInfo) {
+                            if (null == channelInfo.getParentId()) {
+                                item.setParentId(item.getChannelId());
+                            } else {
+                                item.setParentId(channelInfo.getParentId());
                             }
                         }
                     }
-                    datawareConvertHourService.batchSave(hourList);
                 }
+                datawareConvertHourService.batchSave(hourList);
             }
         } catch (Exception e) {
             logger.error("datawareConvertHour添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+        }
+    }
+
+
+    @Async
+    public void dataClean(String startTime, String endTime) {
+
+        try {
+            String startDay = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "yyyy-MM-dd");
+            String endDay = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "yyyy-MM-dd");
+            String startHour = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "HH");
+            String endHour = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "HH");
+            if (startDay.equals(endDay)) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("convertDate", startDay);
+                params.put("startHour", startHour);
+                params.put("endHour", endHour);
+
+                long count = datawareConvertHourService.getCountByTime(params);
+                if (count > 0) {
+                    datawareConvertHourService.deleteByDate(params);
+                }
+
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("beginDate", startTime);
+                map.put("endDate", endTime);
+                convert(map);
+            } else {
+                forDay(startTime, endTime);
+            }
+
+        } catch (Exception e) {
+            logger.error("错误: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+
+
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
+
+    private void forDay(String startTime, String endTime) {
+        List<String> datelist = DateUtils.getDateList(startTime, endTime);
+        String beginDate = "";
+        String endDate = "";
+        String signDate = "";
+        String startHour = "";
+        String endHour = "";
+
+        for (String searchDate : datelist) {
+
+            if (datelist.get(0) == searchDate) {
+                beginDate = searchDate;
+                endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+
+                signDate = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "yyyy-MM-dd");
+                startHour = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "HH");
+
+            } else if (searchDate == datelist.get(datelist.size() - 1)) {
+                beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+                endDate = searchDate;
+
+                signDate = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "yyyy-MM-dd");
+                endHour = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "HH");
+                startHour = "";
+            } else {
+                beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate)), "yyyy-MM-dd HH:mm:ss");
+                endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate)), "yyyy-MM-dd HH:mm:ss");
+
+                signDate = DateUtils.formatDate(DateUtils.parseDate(searchDate));
+                endHour = "";
+                startHour = "";
+            }
+
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("convertDate", signDate);
+            params.put("startHour", startHour);
+            params.put("endHour", endHour);
+
+            long count = datawareConvertHourService.getCountByTime(params);
+            if (count > 0) {
+                datawareConvertHourService.deleteByDate(params);
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("beginDate", beginDate);
+            map.put("endDate", endDate);
+            convert(map);
         }
     }
 

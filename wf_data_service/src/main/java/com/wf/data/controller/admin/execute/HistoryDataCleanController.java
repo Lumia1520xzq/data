@@ -34,6 +34,10 @@ public class HistoryDataCleanController extends ExtJsController {
     private BuryingPointDayService buryingPointDayService;
     @Autowired
     private BuryingPointHourService buryingPointHourService;
+    @Autowired
+    private ConvertDayService convertDayService;
+    @Autowired
+    private ConvertHourService convertHourService;
 
 
     /**
@@ -218,6 +222,59 @@ public class HistoryDataCleanController extends ExtJsController {
         }
 
         buryingPointHourService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+
+    /**
+     * 清洗convertDay表
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/convertDay")
+    public Object convertDay(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        convertDayService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗convertHour表
+     *
+     * @return
+     */
+    @RequestMapping("/convertHour")
+    @ResponseBody
+    public Object convertHour(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        convertHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
 

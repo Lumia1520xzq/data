@@ -16,4 +16,6 @@ public interface DatawareConvertDayDao extends CrudDao<DatawareConvertDay> {
     DatawareFinalChannelInfoAll getConvertByDate(Map<String,Object> map);
 
     List<Long> getUserIdByDate(Map<String,Object> map);
+
+    int deleteByDate(Map<String, Object> params);
 }
