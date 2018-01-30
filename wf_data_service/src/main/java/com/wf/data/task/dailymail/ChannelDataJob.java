@@ -114,10 +114,10 @@ public class ChannelDataJob {
         Double rechargeSum = convertDayService.getRechargeSumByDate(toMap(date,parentId,channelId));
         // 3、日活人数
         List<Long> activeUserList = buryingPointDayService.getGameDauIds(toMap(date,parentId,channelId));
-        Integer activeUser = activeUserList.size();
+        Integer activeUser = CollectionUtils.isEmpty(activeUserList) ? 0:activeUserList.size();
         TcardDto bettingInfo = bettingLogDayService.getTcardBettingByday(toMap(date,parentId,channelId));
         // 4、投注用户数
-        Integer bettingUser = bettingInfo.getUserCount();
+        Integer bettingUser = bettingInfo == null?0:bettingInfo.getUserCount();
         // 5、投注转化率
         String bettingRate = activeUser == 0?"0%":NumberUtils.format(BigDecimalUtil.div(bettingUser,activeUser,4),"#.##%");
         // 6、充值用户数
@@ -126,9 +126,9 @@ public class ChannelDataJob {
         // 7、付费渗透率(充值用户数/投注用户数)
         String payRate = bettingUser == 0 ? "0%":NumberUtils.format(BigDecimalUtil.div(rechargeUser,bettingUser,4),"#.##%");
         // 8、投注流水
-        Double cathecticMoney = bettingInfo.getBettingAmount();
+        Double cathecticMoney = bettingInfo == null?0:bettingInfo.getBettingAmount();
         // 9、返奖流水
-        Double winMoney = bettingInfo.getResultAmount();
+        Double winMoney = bettingInfo == null?0:bettingInfo.getResultAmount();
         // 10、返奖率
         String winMoneyRate = cathecticMoney == 0?"0%":NumberUtils.format(BigDecimalUtil.div(winMoney,cathecticMoney,4),"#.##%");
         // 11、新增用户
