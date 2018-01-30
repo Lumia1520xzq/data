@@ -74,7 +74,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</delete>
 
 	<select id="getRechargeSumByDate" resultType = "java.lang.Double">
-		SELECT SUM(third_amount)
+		SELECT IFNULL(SUM(third_amount),0)
 		FROM `dataware_convert_day` t
 		WHERE 1=1
 		AND t.channel_id IS NOT NULL
