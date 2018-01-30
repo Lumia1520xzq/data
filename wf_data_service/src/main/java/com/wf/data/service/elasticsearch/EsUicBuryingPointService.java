@@ -22,7 +22,7 @@ import java.util.*;
 /**
  * 
  * @author jianjian.huang
- * @date 2017年8月16日
+ * date 2017年8月16日
  */
 
 @Service
@@ -31,17 +31,9 @@ public class EsUicBuryingPointService {
 	@Autowired
 	private EsClientFactory esClientFactory;
 
-	public Integer getActiveCount(String date,Long channelId){
-		AggregationBuilder aggsBuilder= EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
-		Aggregations aggs = esClientFactory.getAggregation(
-		EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,aggsBuilder,getActiveQuery(date, channelId));
-		LongTerms agg = (LongTerms)aggs.get("userCount");
-		int count =agg.getBuckets().size();
-		return count;
-	}
 	
 	public List<Long> getActiveUserIds(String date,Long channelId){
-		List<Long> list = new ArrayList<Long>();
+		List<Long> list = new ArrayList<>();
 		AggregationBuilder aggsBuilder=EsQueryBuilders.addAggregation("userCount", "user_id", 1000000);
 		Aggregations aggs = esClientFactory.getAggregation(EsContents.UIC_BURYING_POINT, EsContents.UIC_BURYING_POINT,
 		aggsBuilder, getActiveQuery(date, channelId));
@@ -53,12 +45,10 @@ public class EsUicBuryingPointService {
 		}
 		return list;
 	}
-	
 
-	//日活用户查询条件
 	private QueryBuilder getActiveQuery(String date,Long channelId) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		QueryBuilder query = null;
+		Map<String, Object> map = new HashMap<>();
+		QueryBuilder query;
 		map.put("delete_flag", 0);
 		map.put("burying_type",8);
 		BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
@@ -73,7 +63,5 @@ public class EsUicBuryingPointService {
 		logger.debug("query" + query);
 		return query;
 	}
-	
-	
-	
+
 }
