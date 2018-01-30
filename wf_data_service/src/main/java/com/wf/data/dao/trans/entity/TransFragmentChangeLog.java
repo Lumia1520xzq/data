@@ -32,6 +32,7 @@ public class TransFragmentChangeLog extends DataEntity {
 	private String endDate;
 	private Long goldAmount;
 	private Double rmbAmount;
+	private String thirdId;
 
 
 	public List<Long> getActivityIds() {
@@ -216,5 +217,13 @@ public class TransFragmentChangeLog extends DataEntity {
 
 	public void setSourceType(Integer sourceType) {
 		this.sourceType = sourceType;
+	}
+
+	public String getThirdId() {
+		return thirdId;
+	}
+
+	public void setThirdId(String thirdId) {
+		this.thirdId = thirdId;
 	}
 }
