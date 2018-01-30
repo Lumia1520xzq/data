@@ -32,6 +32,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="convertHour != null and convertHour != ''">
             AND  t.convert_hour = #{convertHour}
         </if>
+        <if test="startHour != null and startHour != ''">
+            AND t.convert_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND t.convert_hour &lt;= #{endHour}
+        </if>
     </select>
 
 
@@ -81,11 +87,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         delete FROM
         dataware_convert_hour
         WHERE 1=1
-        <if test="beginDate != null and beginDate != ''">
-            AND convert_date &gt;= #{beginDate}
+        <if test="convertDate != null and convertDate != ''">
+            AND  convert_date = #{convertDate}
         </if>
-        <if test="endDate != null and endDate != ''">
-            AND convert_date &lt;= #{endDate}
+        <if test="convertHour != null and convertHour != ''">
+            AND  convert_hour = #{convertHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND convert_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND convert_hour &lt;= #{endHour}
         </if>
     </delete>
 </mapper>

@@ -62,6 +62,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="buryingHour != null and buryingHour != ''">
             AND  t.burying_hour = #{buryingHour}
         </if>
+        <if test="startHour != null and startHour != ''">
+            AND t.burying_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND t.burying_hour &lt;= #{endHour}
+        </if>
     </select>
 
 
@@ -112,11 +118,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         delete FROM
         dataware_burying_point_hour
         WHERE 1=1
-        <if test="beginDate != null and beginDate != ''">
-            AND burying_date &gt;= #{beginDate}
+        <if test="buryingDate != null and buryingDate != ''">
+            AND  burying_date = #{buryingDate}
         </if>
-        <if test="endDate != null and endDate != ''">
-            AND burying_date &lt;= #{endDate}
+        <if test="buryingHour != null and buryingHour != ''">
+            AND  burying_hour = #{buryingHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND burying_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND burying_hour &lt;= #{endHour}
         </if>
     </delete>
 </mapper>

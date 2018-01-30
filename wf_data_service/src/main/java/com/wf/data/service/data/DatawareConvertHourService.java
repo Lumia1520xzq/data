@@ -31,4 +31,8 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
     public DatawareFinalChannelInfoHour findRechargeByTime(Map<String, Object> map) {
         return dao.findRechargeByTime(map);
     }
+
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
+    }
 }
