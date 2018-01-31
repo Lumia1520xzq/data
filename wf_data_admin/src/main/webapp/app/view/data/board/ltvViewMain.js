@@ -15,13 +15,12 @@ Ext.define('WF.view.data.board.ltvViewMain', {
         var store= Ext.create('DCIS.Store', {
             url:'data/ltv/view/getList.do',
             autoload:false,
-            fields:[]
+            fields:["1","100001","100006",
+                   "100015","100016","100018",
+                   "200001","300001","100002"
+            ]
         });
-        var parentChannelStore = Ext.create('DCIS.Store', {
-            url: 'data/admin/common/data/getFilterChannels.do',
-            autoLoad: true,
-            fields: ['id', 'name']
-        });
+
         me.add({
             border: false,
             store: store,
@@ -32,28 +31,72 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
-            items: [{
-                name: 'parentId',
-                fieldLabel: '主渠道',
-                xtype: 'combo',
-                emptyText: "--请选择--",
-                displayField: 'name',
-                valueField: "id",
-                editable: true,
-                queryMode: "local",
-                store: parentChannelStore
-            },
-            {
-                name: 'startTime',
-                fieldLabel: '开始时间',
-                xtype: 'datefield',
-                format: 'Y-m-d'
-            },{
-                name: 'endTime',
-                fieldLabel: '结束时间',
-                xtype: 'datefield',
-                format: 'Y-m-d'
-            }
+            items: [
+                {
+                    name:"channels",
+                    fieldLabel:"全部",
+                    xtype:"checkbox",
+                    inputValue:"1"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"奖多多",
+                    xtype:"checkbox",
+                    inputValue:"100001"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"澳客",
+                    xtype:"checkbox",
+                    inputValue:"100006"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"全民彩票",
+                    xtype:"checkbox",
+                    inputValue:"100015"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"我去彩票站",
+                    xtype:"checkbox",
+                    inputValue:"100016"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"抓抓乐",
+                    xtype:"checkbox",
+                    inputValue:"100018"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"Android",
+                    xtype:"checkbox",
+                    inputValue:"200001"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"IOS",
+                    xtype:"checkbox",
+                    inputValue:"300001"
+                },
+                {
+                    name:"channels",
+                    fieldLabel:"逗游",
+                    xtype:"checkbox",
+                    inputValue:"100002"
+                },
+                {
+                    name: 'startTime',
+                    fieldLabel: '开始时间',
+                    xtype: 'datefield',
+                    format: 'Y-m-d'
+                },{
+                    name: 'endTime',
+                    fieldLabel: '结束时间',
+                    xtype: 'datefield',
+                    format: 'Y-m-d'
+                }
             ]
         });
 
@@ -68,17 +111,17 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                     {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
                         {width:"50%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
-                                {width:'100%',height:80,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
+                                {width:'100%',height:40,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                     items:[
-                                        {id:'ltvTitle0',width:'20%',height:80,forceFit:true},
-                                        {width:'60%',height:80,forceFit:true},
-                                        {id:'ltvDate',width:'20%',height:80,forceFit:true}
+                                        {id:'ltvTitle0',width:'20%',height:40,forceFit:true},
+                                        {width:'60%',height:40,forceFit:true},
+                                        {id:'ltvDate',width:'20%',height:40,forceFit:true}
                                     ]
                                 },
-                                {width:'100%',height:320,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
+                                {width:'100%',height:360,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                     items:[
-                                        {id:"ltvBoard0",width:"95%",height:320,forceFit:true,bodyStyle:'border-width:0'},
-                                        {width:"5%",height:320,forceFit:true,bodyStyle:'border-width:0'}
+                                        {id:"ltvBoard0",width:"95%",height:360,forceFit:true,bodyStyle:'border-width:0'},
+                                        {width:"5%",height:360,forceFit:true,bodyStyle:'border-width:0'}
                                     ]
                                 }
                             ]
@@ -95,7 +138,6 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             ]
         });
 
-
         store.addListener('datachanged',function(){
                 fun1();
             }
@@ -107,12 +149,26 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             }
         });
 
-
-
         function fun1() {
-            Ext.get('filterRate0').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>(DAU-->充值) 转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRate +"%</strong></div>";
-            Ext.get('filterRate1').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>(DAU-->充值) 转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayRegisteredRate +"%</strong></div>";
-            Ext.get('filterRate2').dom.innerHTML = "<div align='center' style='line-height:35px;font-size:16px;cursor:pointer'>(DAU-->充值) 转化率<strong style='font-size:24px;color:#3c94db'><br/>"+lastPayOlderRate +"%</strong></div>";
+            var doyo = store.getAt(0).get("100002");
+            var ios = store.getAt(0).get("300001");
+            var android = store.getAt(0).get("200001");
+            var zhuazhuale = store.getAt(0).get("100018");
+            var woqu = store.getAt(0).get("100016");
+            var quanmin = store.getAt(0).get("100015");
+            var okooo = store.getAt(0).get("100006");
+            var jinshan = store.getAt(0).get("100001");
+            var total = store.getAt(0).get("1");
+
+            var userLtv = [];
+            var parentId = [];
+
+            if(total.length != 0){
+                var index = total.length-1;
+                console.log(total[index].userLtv);
+                console.log(total[index].parentId);
+            }
+
             var option =
                 {
                     tooltip: {trigger: 'axis',
@@ -199,51 +255,17 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                         }
                     }]
                 };
-
-            me.echarts = echarts.init(Ext.get("filter"+p).dom);
-            me.echarts.setOption(option[p]);
-
-
-            var businessDate=[];
-            var gamedauRate=[];
-            var bettingRate=[];
-            var rechargeRate=[];
-            var payRate=[];
-            var	dauRegisteredRate=[];
-            var	gamedauRegisteredRate=[];
-            var bettingRegisteredRate=[];
-            var	rechargeRegisteredRate=[];
-            var	payRegisteredRate=[];
-            var gamedauOlderRate=[];
-            var bettingOlderRate=[];
-            var rechargeOlderRate=[];
-            var payOlderRate=[];
+            me.echarts = echarts.init(Ext.get("ltvBoard0").dom);
+            me.echarts.setOption(option);
+        }
 
 
-            for(var i=0;i<store.getCount();i++){
-            var re=store.getAt(i);
-            var d = re.get('businessDate');
-            var x = d.indexOf('-');
-            businessDate[i] = d.substring(x+1);
 
-            gamedauRate[i]=re.get('gamedauRate');
-            bettingRate[i]=re.get('bettingRate');
-            rechargeRate[i]=re.get('rechargeRate');
-            payRate[i]=re.get('payRate');
-
-            dauRegisteredRate[i]=re.get('dauRegisteredRate');
-            gamedauRegisteredRate[i]=re.get('gamedauRegisteredRate');
-            bettingRegisteredRate[i]=re.get('bettingRegisteredRate');
-            rechargeRegisteredRate[i]=re.get('rechargeRegisteredRate');
-            payRegisteredRate[i]=re.get('payRegisteredRate');
-
-            gamedauOlderRate[i]=re.get('gamedauOlderRate');
-            bettingOlderRate[i]=re.get('bettingOlderRate');
-            rechargeOlderRate[i]=re.get('rechargeOlderRate');
-            payOlderRate[i]=re.get('payOlderRate');
-
+        function getLtv(data) {
+            if(data.length != 0) {
+                var index = total.length-1;
+                return total[index].userLtv;
             }
-
         }
 
 
