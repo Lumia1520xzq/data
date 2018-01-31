@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataEventDao">
+	
+	<sql id="dataEventColumns">
+		t.id,
+		t.channel_id,
+		t.begin_date,
+		t.end_date,
+		t.event_type,
+		t.title,
+		t.content,
+		t.delete_flag,
+		t.creater,
+		t.create_time,
+		t.updater,
+		t.update_time
+	</sql>
+	
+	<sql id="dataEventWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.channelId != null and p.channelId != ''">
+			AND t.channel_id = #{p.channelId}
+		</if>
+		<if test="p.beginDate != null and p.beginDate != ''">
+			AND t.begin_date >= CONCAT(#{p.beginDate} , ' 00:00:00')
+		</if>
+		<if test="p.endDate != null and p.endDate != ''">
+			AND t.end_date &lt;= CONCAT(#{p.endDate} , ' 23:59:59')
+		</if>
+		<if test="p.eventType != null and p.eventType != ''">
+			AND t.event_type = #{p.eventType}
+		</if>
+	</sql>
+	
+	<select id="get" resultType="DataEvent">
+		SELECT <include refid="dataEventColumns"/> FROM data_event t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DataEvent">
+		SELECT <include refid="dataEventColumns"/> FROM data_event t
+		WHERE <include refid="dataEventWhere"/> ORDER BY t.begin_date desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM data_event t WHERE <include refid="dataEventWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO data_event (
+			id, 
+			channel_id, 
+			begin_date, 
+			end_date, 
+			event_type, 
+			title, 
+			content, 
+			delete_flag, 
+			creater, 
+			create_time, 
+			updater, 
+			update_time
+		) VALUES (
+			#{id}, 
+			#{channelId}, 
+			#{beginDate}, 
+			#{endDate}, 
+			#{eventType}, 
+			#{title}, 
+			#{content}, 
+			#{deleteFlag}, 
+			#{creater}, 
+			#{createTime}, 
+			#{updater}, 
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE data_event SET
+			channel_id = #{channelId}, 
+			begin_date = #{beginDate}, 
+			end_date = #{endDate}, 
+			event_type = #{eventType}, 
+			title = #{title}, 
+			content = #{content}, 
+			delete_flag = #{deleteFlag}, 
+			creater = #{creater}, 
+			updater = #{updater}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE data_event SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
