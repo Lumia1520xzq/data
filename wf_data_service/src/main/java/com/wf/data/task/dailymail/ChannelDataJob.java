@@ -50,7 +50,6 @@ public class ChannelDataJob {
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
-        date = "2018-01-12";
         while (count <= TIMES) {
             String contentTemp = "<table border='1' style='text-align: center ; border-collapse: collapse'>"
                     +"<tr style='font-weight:bold'><td>渠道</td><td>渠道ID</td><td>充值金额</td><td>日活人数</td><td>投注用户数</td><td>充值人数</td><td>新增人数</td><td>投注流水</td><td>投注转化率</td><td>付费渗透率</td><td>新用户投注转化率</td><td>新用户次留</td><td>返奖流水</td><td>返奖率</td></tr>";
