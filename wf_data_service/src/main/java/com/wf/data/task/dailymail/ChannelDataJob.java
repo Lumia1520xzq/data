@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ public class ChannelDataJob {
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
+        date = "2018-01-12";
         while (count <= TIMES) {
             String contentTemp = "<table border='1' style='text-align: center ; border-collapse: collapse'>"
                     +"<tr style='font-weight:bold'><td>渠道</td><td>渠道ID</td><td>充值金额</td><td>日活人数</td><td>投注用户数</td><td>充值人数</td><td>新增人数</td><td>投注流水</td><td>投注转化率</td><td>付费渗透率</td><td>新用户投注转化率</td><td>新用户次留</td><td>返奖流水</td><td>返奖率</td></tr>";
@@ -149,7 +152,7 @@ public class ChannelDataJob {
         String result = template
         .replace("rechargeSum",rechargeSum.toString()).replace("activeUser", activeUser.toString()).replace("bettingUser", bettingUser.toString())
         .replace("bettingRate", bettingRate).replace("rechargeUser", rechargeUser.toString()).replace("payRate", payRate)
-        .replace("cathecticMoney", cathecticMoney.toString()).replaceFirst("winMoney", winMoney.toString()).replace("winMoneyRate", winMoneyRate)
+        .replace("cathecticMoney",format(cathecticMoney)).replaceFirst("winMoney", format(winMoney)).replace("winMoneyRate", winMoneyRate)
         .replace("newUser", newUser.toString()).replace("newBettingRate",newBettingRate).replace("newRemainRate", newRemainRate);
         sb.append(result);
         return sb.toString();
@@ -170,6 +173,10 @@ public class ChannelDataJob {
         map.put("parentId",parentId);
         map.put("channelId",channelId);
         return map;
+    }
+
+    private String format(double num) {
+        return new DecimalFormat("0").format(num);
     }
 
 }
