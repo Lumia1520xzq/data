@@ -165,7 +165,6 @@ public class DataDailyRecordController extends ExtJsController {
                                 break;
                             }else {
                                 logger.error("导入模板下载失败！类别填写不正确！");
-                                System.out.println("----------------------------");
                             }
                         }
                     }
