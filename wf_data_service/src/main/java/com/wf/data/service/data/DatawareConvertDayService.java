@@ -37,6 +37,10 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
         return dao.getHistoryConvertByDate(params);
     }
 
+    public Double getRegisteredConvertByDate(Map<String, Object> params) {
+        return dao.getRegisteredConvertByDate(params);
+    }
+
     public Double getRechargeSumByDate(Map<String,Object> map){
         return dao.getRechargeSumByDate(map);
     }

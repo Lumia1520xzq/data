@@ -566,5 +566,60 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
 
             }]
         });
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '补全registeredArpu',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要补全registeredArpu历史数据吗?", function (button) {
+                    if (button == "yes") {
+                        var data= {
+                            startTime: Ext.util.Format.date(me.down("[name='arpuStart']").getValue(),'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='arpuEnd']").getValue(),'Y-m-d')
+                        };
+                        callapi("data/admin/dataClean/registeredArpu.do", data, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            },
+            items: [{
+                name: 'arpuStart',
+                fieldLabel: '开始日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }, {
+                name: 'arpuEnd',
+                fieldLabel: '结束日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }]
+        });
     }
 });
