@@ -202,12 +202,12 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                         type : 'category',
                         data: channelNames,
                         splitLine: {show: false},
-                        axisLine: {
-                            show: false
-                        },
-                        axisTick: {
-                            show: false
-                        },
+                        // axisLine: {
+                        //     show: false
+                        // },
+                        // axisTick: {
+                        //     show: false
+                        // },
                         offset: 10,
                         nameTextStyle: {
                             fontSize: 15
