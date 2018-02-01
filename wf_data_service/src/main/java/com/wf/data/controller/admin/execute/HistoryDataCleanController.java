@@ -38,7 +38,8 @@ public class HistoryDataCleanController extends ExtJsController {
     private ConvertDayService convertDayService;
     @Autowired
     private ConvertHourService convertHourService;
-
+    @Autowired
+    private RegisteredArpuService registeredArpuService;
 
     /**
      * 清洗channelInfoHour表
@@ -304,6 +305,30 @@ public class HistoryDataCleanController extends ExtJsController {
         return success("清洗开始执行");
     }
 
+    /**
+     * 清洗registeredArpu
+     *
+     * @return
+     */
+    @RequestMapping("/registeredArpu")
+    @ResponseBody
+    public Object registeredArpu(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
 
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        registeredArpuService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
 
 }

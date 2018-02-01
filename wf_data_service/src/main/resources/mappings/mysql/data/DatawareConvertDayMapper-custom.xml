@@ -135,5 +135,48 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			</foreach>
 		</if>
 	</select>
+
+	<select id="getRegisteredConvertByDate" resultType="Double">
+		SELECT
+		SUM(t.third_amount) rechargeAmount
+		FROM `dataware_convert_day` t
+		WHERE 1=1
+		AND t.channel_id IS NOT NULL
+		AND t.user_id IN (
+			SELECT DISTINCT t1.user_id
+			FROM dataware_user_info t1
+			WHERE  1=1 AND t1.delete_flag = 0
+			AND t1.user_group =2
+			AND t1.channel_id IS NOT NULL
+			<if test="channelId != null and channelId != ''">
+				AND t1.channel_id = #{channelId}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND t1.parent_id = #{parentId}
+			</if>
+			<if test="businessDate != null and businessDate != ''">
+				AND t1.registered_date = #{businessDate}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND t1.registered_date = #{startDate}
+			</if>
+		)
+		<if test="businessDate != null and businessDate != ''">
+			AND t.convert_date = #{businessDate}
+		</if>
+		<if test="startDate != null and startDate != ''">
+			AND t.convert_date &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND t.convert_date &lt;= #{endDate}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND t.channel_id = #{channelId}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND t.parent_id = #{parentId}
+		</if>
+
+	</select>
 </mapper>
 
