@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DataDailyRecordDao">
+
+    <sql id="dataDailyRecordColumns">
+		t.id,
+		t.channel_id,
+		t.data_time,
+		t.indicator_type,
+		t.phenomenon,
+		t.analysis_summary,
+		t.follow_up,
+		t.follow_up_user,
+		t.delete_flag,
+		t.creater,
+		t.create_time,
+		t.updater,
+		t.update_time
+	</sql>
+
+    <sql id="dataDailyRecordWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.channelId != null and p.channelId != ''">
+			AND t.channel_id = #{p.channelId}
+		</if>
+		<if test="p.beginDate != null and p.beginDate != ''">
+			AND t.data_time >= #{p.beginDate}
+		</if>
+		<if test="p.endDate != null and p.endDate != ''">
+			AND t.data_time &lt;= #{p.endDate}
+		</if>
+		<if test="p.indicatorType != null and p.indicatorType != ''">
+			AND t.indicator_type = #{p.indicatorType}
+		</if>
+	</sql>
+
+
+    <select id="get" resultType="DataDailyRecord">
+        SELECT
+        <include refid="dataDailyRecordColumns"/>
+        FROM data_daily_record t WHERE id = #{id}
+    </select>
+    <select id="findList" resultType="DataDailyRecord">
+        SELECT
+        <include refid="dataDailyRecordColumns"/>
+        FROM data_daily_record t
+        WHERE
+        <include refid="dataDailyRecordWhere"/>
+        ORDER BY t.data_time DESC, t.create_time DESC LIMIT #{start}, #{length}
+    </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM data_daily_record t WHERE
+        <include refid="dataDailyRecordWhere"/>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO data_daily_record (
+			id, 
+			channel_id, 
+			data_time,
+			indicator_type,
+			phenomenon, 
+			analysis_summary, 
+			follow_up, 
+			follow_up_user, 
+			delete_flag, 
+			creater, 
+			create_time, 
+			updater,
+			update_time
+		) VALUES (
+			#{id}, 
+			#{channelId}, 
+			#{dataTime},
+			#{indicatorType},
+			#{phenomenon}, 
+			#{analysisSummary}, 
+			#{followUp}, 
+			#{followUpUser}, 
+			#{deleteFlag}, 
+			#{creater}, 
+			#{createTime}, 
+			#{updater}, 
+			#{updateTime}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE data_daily_record SET
+			channel_id = #{channelId}, 
+			data_time = #{dataTime},
+			indicator_type = #{indicatorType},
+			phenomenon = #{phenomenon}, 
+			analysis_summary = #{analysisSummary}, 
+			follow_up = #{followUp}, 
+			follow_up_user = #{followUpUser}, 
+			delete_flag = #{deleteFlag}, 
+			creater = #{creater}, 
+			updater = #{updater}
+		WHERE id = #{id}
+	</update>
+
+    <delete id="delete">
+		UPDATE data_daily_record SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
