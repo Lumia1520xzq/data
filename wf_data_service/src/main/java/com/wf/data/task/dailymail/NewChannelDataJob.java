@@ -47,8 +47,6 @@ public class NewChannelDataJob {
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
         String prvDate = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),2));
-        date = "2018-01-12";
-        prvDate = "2018-01-11";
         while (count <= TIMES) {
             String contentTemp = "<table border='1' style='text-align: center;border-collapse: collapse'>"+
              "<tr style='font-weight:bold'><td>searchDate日报</td><td bgcolor='#FF6666'>降幅超过<br/>30%</td><td bgcolor='#FFE4E1'>降幅小于<br/>30%</td><td bgcolor='#00991F'>涨幅大于<br/>30%</td><td bgcolor='ccffcc'>涨幅小于<br/>30%</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>"+
