@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -163,9 +164,9 @@ public class AllGameDayReportJob {
         .replace("dailyActive", dailyActive.toString())
         .replace("importRate", importRate)
         .replace("sumUser", sumUser.toString())
-        .replace("cathecticMoney", cathecticMoney.toString())
-        .replaceFirst("winMoney", winMoney.toString())
-        .replace("moneyGap", moneyGap.toString())
+        .replace("cathecticMoney", format(cathecticMoney))
+        .replaceFirst("winMoney", format(winMoney))
+        .replace("moneyGap",format(moneyGap))
         .replace("winMoneyRate", winMoneyRate)
         .replace("cathecticUserCount", cathecticUserCount.toString())
         .replace("cathecticARPU", cathecticARPU)
@@ -219,6 +220,10 @@ public class AllGameDayReportJob {
             sb.append(result);
         }
         return sb.toString();
+    }
+
+    private String format(double num) {
+        return new DecimalFormat("0").format(num);
     }
 
 }
