@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +151,7 @@ public class ChannelDataJob {
         String result = template
         .replace("rechargeSum",rechargeSum.toString()).replace("activeUser", activeUser.toString()).replace("bettingUser", bettingUser.toString())
         .replace("bettingRate", bettingRate).replace("rechargeUser", rechargeUser.toString()).replace("payRate", payRate)
-        .replace("cathecticMoney", cathecticMoney.toString()).replaceFirst("winMoney", winMoney.toString()).replace("winMoneyRate", winMoneyRate)
+        .replace("cathecticMoney",format(cathecticMoney)).replaceFirst("winMoney", format(winMoney)).replace("winMoneyRate", winMoneyRate)
         .replace("newUser", newUser.toString()).replace("newBettingRate",newBettingRate).replace("newRemainRate", newRemainRate);
         sb.append(result);
         return sb.toString();
@@ -170,6 +172,10 @@ public class ChannelDataJob {
         map.put("parentId",parentId);
         map.put("channelId",channelId);
         return map;
+    }
+
+    private String format(double num) {
+        return new DecimalFormat("0").format(num);
     }
 
 }
