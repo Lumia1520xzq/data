@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,6 +47,8 @@ public class NewChannelDataJob {
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
         String prvDate = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),2));
+        date = "2018-01-12";
+        prvDate = "2018-01-11";
         while (count <= TIMES) {
             String contentTemp = "<table border='1' style='text-align: center;border-collapse: collapse'>"+
              "<tr style='font-weight:bold'><td>searchDate日报</td><td bgcolor='#FF6666'>降幅超过<br/>30%</td><td bgcolor='#FFE4E1'>降幅小于<br/>30%</td><td bgcolor='#00991F'>涨幅大于<br/>30%</td><td bgcolor='ccffcc'>涨幅小于<br/>30%</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>"+
@@ -165,6 +168,12 @@ public class NewChannelDataJob {
     }
 
     private String colorMoney(Double tod,Double yes){
+        if(tod == null){
+            tod = 0.0;
+        }
+        if(yes == null){
+            yes = 0.0;
+        }
         if(yes == 0){
             return "<td bgcolor='#00991F'>"+format(tod)+"</td>";
         }
@@ -181,6 +190,12 @@ public class NewChannelDataJob {
     }
 
     private String colorRate(Double tod,Double yes){
+        if(tod == null){
+            tod = 0.0;
+        }
+        if(yes == null){
+            yes = 0.0;
+        }
         if(yes == 0){
             return "<td bgcolor='#00991F'>"+tod+"%</td>";
         }
@@ -197,6 +212,12 @@ public class NewChannelDataJob {
     }
 
     private String color(Long tod,Long yes){
+        if(tod == null){
+            tod = 0L;
+        }
+        if(yes == null){
+            yes = 0L;
+        }
         if(yes == 0){
             return "<td bgcolor='#00991F'>"+tod+"</td>";
         }
@@ -225,7 +246,7 @@ public class NewChannelDataJob {
     }
 
     private String format(double num) {
-        return new DecimalFormat("0").format(num);
+        return new DecimalFormat(",###,##0").format(num);
     }
 
 
