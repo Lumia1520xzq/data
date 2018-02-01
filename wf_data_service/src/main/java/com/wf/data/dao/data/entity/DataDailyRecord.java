@@ -22,6 +22,7 @@ public class DataDailyRecord extends DataEntity {
     private String beginDate;
     private String endDate;
     private String dataTimeStr;
+    private String indicatorTypeName;
 
 
     @ExcelField(title="渠道", type=0, align=1, sort=10)
@@ -52,6 +53,14 @@ public class DataDailyRecord extends DataEntity {
     }
 
     @ExcelField(title="指标", type=0, align=1, sort=30)
+    public String getIndicatorTypeName() {
+        return indicatorTypeName;
+    }
+
+    public void setIndicatorTypeName(String indicatorTypeName) {
+        this.indicatorTypeName = indicatorTypeName;
+    }
+
     public Integer getIndicatorType() {
         return indicatorType;
     }

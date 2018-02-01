@@ -9,7 +9,9 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.data.entity.DataDailyRecord;
+import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.service.DataDailyRecordService;
+import com.wf.data.service.DataDictService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jasig.cas.client.util.AssertionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class DataDailyRecordController extends ExtJsController {
 
     @Autowired
     private DataDailyRecordService dataDailyRecordService;
+
+    @Autowired
+    private DataDictService dataDictService;
 
 
     /**
@@ -140,10 +145,29 @@ public class DataDailyRecordController extends ExtJsController {
         try {
             ImportExcel ei = new ImportExcel(file, 1, 0);
             List<DataDailyRecord> list = ei.getDataList(DataDailyRecord.class);
+
+            DataDict params = new DataDict();
+            params.setType("indicator_type");
+            List<DataDict> indicatorTypeList = dataDictService.findList(params);
+
             for (DataDailyRecord entity : list) {
                 try {
+                    //插入数据日期
                     if (StringUtils.isNotBlank(entity.getDataTimeStr())) {
                         entity.setDataTime(DateUtils.parseDate(entity.getDataTimeStr()));
+                    }
+
+                    //插入指标
+                    if (StringUtils.isNotBlank(entity.getIndicatorTypeName())){
+                        for (DataDict dataDict : indicatorTypeList) {
+                            if (entity.getIndicatorTypeName().equals(dataDict.getLabel())){
+                                entity.setIndicatorType(dataDict.getValue());
+                                break;
+                            }else {
+                                logger.error("导入模板下载失败！类别填写不正确！");
+                                System.out.println("----------------------------");
+                            }
+                        }
                     }
                     entity.setCreater(AssertionHolder.getAssertion().getPrincipal().getName());
                     entity.setCreateTime(new Date());

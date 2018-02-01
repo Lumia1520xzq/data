@@ -5,9 +5,12 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.excel.ImportExcel;
 import com.wf.core.web.base.ExtJsController;
+import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DataEvent;
+import com.wf.data.service.DataDictService;
 import com.wf.data.service.EventService;
 import com.wf.data.service.UicUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jasig.cas.client.util.AssertionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,9 @@ public class EventController extends ExtJsController {
 
     @Autowired
     private UicUserService uicUserService;
+
+    @Autowired
+    private DataDictService dataDictService;
 
     /**
      * 查询列表
@@ -107,11 +113,25 @@ public class EventController extends ExtJsController {
         try {
             ImportExcel ei = new ImportExcel(file, 1, 0);
             List<DataEvent> list = ei.getDataList(DataEvent.class);
+
+            DataDict params = new DataDict();
+            params.setType("event_type");
+            List<DataDict> eventTypeList = dataDictService.findList(params);
             for (DataEvent entity : list) {
                 try {
                     entity.setCreater(AssertionHolder.getAssertion().getPrincipal().getName());
                     entity.setCreateTime(new Date());
                     entity.setDeleteFlag(0);
+                    if (StringUtils.isNotBlank(entity.getEventTypeName())){
+                        for (DataDict dataDict : eventTypeList) {
+                            if (entity.getEventTypeName().equals(dataDict.getLabel())){
+                                entity.setEventType(dataDict.getValue());
+                                break;
+                            }else {
+                                logger.error("导入模板下载失败！类别填写不正确！");
+                            }
+                        }
+                    }
                     eventService.save(entity);
                     count++;
                 } catch (Exception e) {

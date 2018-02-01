@@ -18,6 +18,7 @@ public class DataEvent extends DataEntity {
     private String channelName;
     private String createrName;
     private String updaterName;
+    private String eventTypeName;
 
     @ExcelField(title="渠道", type=0, align=1, sort=10)
     public Long getChannelId() {
@@ -46,13 +47,21 @@ public class DataEvent extends DataEntity {
         this.endDate = value;
     }
 
-    @ExcelField(title="类别", type=0, align=1, sort=40)
+    public void setEventType(Integer value) {
+        this.eventType = value;
+    }
+
     public Integer getEventType() {
         return this.eventType;
     }
 
-    public void setEventType(Integer value) {
-        this.eventType = value;
+    @ExcelField(title="类别", type=0, align=1, sort=40)
+    public String getEventTypeName() {
+        return eventTypeName;
+    }
+
+    public void setEventTypeName(String eventTypeName) {
+        this.eventTypeName = eventTypeName;
     }
 
     @ExcelField(title="标题", type=0, align=1, sort=50)
