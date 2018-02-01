@@ -47,7 +47,6 @@ Ext.define('WF.view.data.daily.editDaily', {
             }, {
                 afterLabelTextTpl: required,
                 allowBlank: false,
-                colspan: 2,
                 name: 'indicatorType',
                 fieldLabel: '指标',
                 xtype: 'combobox',
@@ -75,13 +74,13 @@ Ext.define('WF.view.data.daily.editDaily', {
                 allowBlank: false,
                 name: 'followUp',
                 colspan: 2,
-                fieldLabel: '分析总结'
+                fieldLabel: '待跟进'
             }, {
                 afterLabelTextTpl: required,
                 allowBlank: false,
                 name: 'followUpUser',
                 colspan: 2,
-                fieldLabel: '分析总结'
+                fieldLabel: '跟进人'
             }, {
                 xtype: 'hidden',
                 name: 'id'
