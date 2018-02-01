@@ -1,14 +1,15 @@
 package com.wf.data.controller.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.excel.ImportExcel;
 import com.wf.core.utils.type.DateUtils;
+import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.data.entity.DataDailyRecord;
 import com.wf.data.service.DataDailyRecordService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jasig.cas.client.util.AssertionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,41 @@ public class DataDailyRecordController extends ExtJsController {
      */
     @RequestMapping("/list")
     public Object list() {
-        Page<DataDailyRecord> page = getPage(DataDailyRecord.class);
-        return dataGrid(dataDailyRecordService.findPage(page));
+
+        JSONObject json = getRequestJson();
+        Long channelId = null;
+        Integer indicatorType = null;
+        String beginDate = null;
+        String endDate = null;
+        Long start = null;
+        Long length = null;
+
+        JSONObject data = json.getJSONObject("data");
+
+        if (data != null) {
+            channelId = data.getLong("channelId");
+            indicatorType = data.getInteger("indicatorType");
+            beginDate = data.getString("beginDate");
+            endDate = data.getString("endDate");
+            start = json.getLongValue("start");
+            length = json.getLongValue("limit");
+        }
+
+        //设置默认搜索时间为昨天
+        if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
+            beginDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
+            endDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
+        }
+
+        DataDailyRecord dataDailyRecord = new DataDailyRecord();
+        dataDailyRecord.setChannelId(channelId);
+        dataDailyRecord.setIndicatorType(indicatorType);
+        dataDailyRecord.setBeginDate(beginDate);
+        dataDailyRecord.setEndDate(endDate);
+
+        Page<DataDailyRecord> dailyRecordPage = new Page<DataDailyRecord>(dataDailyRecord, start, length);
+        dailyRecordPage = dataDailyRecordService.findPage(dataDailyRecord);
+        return dataGrid(dailyRecordPage);
     }
 
     /**
@@ -108,7 +142,7 @@ public class DataDailyRecordController extends ExtJsController {
             List<DataDailyRecord> list = ei.getDataList(DataDailyRecord.class);
             for (DataDailyRecord entity : list) {
                 try {
-                    if (StringUtils.isNotBlank(entity.getDataTimeStr())){
+                    if (StringUtils.isNotBlank(entity.getDataTimeStr())) {
                         entity.setDataTime(DateUtils.parseDate(entity.getDataTimeStr()));
                     }
                     entity.setCreater(AssertionHolder.getAssertion().getPrincipal().getName());

@@ -33,6 +33,13 @@ Ext.define('WF.view.data.event.eventMain', {
 
         allChannelStore.load({
             callback: function () {
+                sync:true
+            }
+        });
+
+        eventTypeStor.load({
+            callback: function () {
+                sync:true
             }
         });
 

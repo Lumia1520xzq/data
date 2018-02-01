@@ -33,9 +33,9 @@ Ext.define('WF.view.data.daily.dailyMain', {
 
         allChannelStore.load({
             callback: function () {
+                sync:true
             }
         });
-
 
         me.add({
             border: false,
@@ -70,12 +70,14 @@ Ext.define('WF.view.data.daily.dailyMain', {
                 xtype: 'datefield',
                 name: 'beginDate',
                 format: 'Y-m-d',
-                fieldLabel: '开始时间'
+                fieldLabel: '开始时间',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
             }, {
                 xtype: 'datefield',
                 name: 'endDate',
                 format: 'Y-m-d',
-                fieldLabel: '结束时间'
+                fieldLabel: '结束时间',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
             }]
         });
         me.add({

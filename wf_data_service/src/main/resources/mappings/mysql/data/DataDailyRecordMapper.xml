@@ -50,7 +50,7 @@
         FROM data_daily_record t
         WHERE
         <include refid="dataDailyRecordWhere"/>
-        ORDER BY id desc LIMIT #{start}, #{length}
+        ORDER BY t.data_time DESC, t.create_time DESC LIMIT #{start}, #{length}
     </select>
     <select id="count" resultType="long">
         SELECT COUNT(*) FROM data_daily_record t WHERE

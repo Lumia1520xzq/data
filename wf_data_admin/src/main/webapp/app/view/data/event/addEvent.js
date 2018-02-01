@@ -58,7 +58,7 @@ Ext.define('WF.view.data.event.addEvent', {
                 allowBlank: false,
                 colspan: 2,
                 name: 'eventType',
-                fieldLabel: '埋点类型',
+                fieldLabel: '类别',
                 xtype: 'combobox',
                 emptyText: "--请选择--",
                 displayField: 'label',
