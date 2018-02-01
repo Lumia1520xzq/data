@@ -17,7 +17,8 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             autoload:false,
             fields:["1","100001","100006",
                    "100015","100016","100018",
-                   "200001","300001","100002"
+                   "200001","300001","100002",
+                    "channelNames","ltv","endDate"
             ]
         });
 
@@ -28,7 +29,7 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 2,
+            columns: 3,
             buildField: "Manual",
             forceFit: true,
             items: [
@@ -106,30 +107,30 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             align : 'stretch',
             bodyStyle:'border-width:0 0 0 0;',
             items: [{
-                title: '用户LTV',align:'stretch',height:400,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
+                title: '用户LTV',align:'stretch',height:500,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
                 items:[
-                    {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                        {width:"50%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                    {width:"100%",height:500,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                        {width:"45%",height:500,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
                                 {width:'100%',height:40,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                     items:[
-                                        {id:'ltvTitle0',width:'20%',height:40,forceFit:true},
-                                        {width:'60%',height:40,forceFit:true},
-                                        {id:'ltvDate',width:'20%',height:40,forceFit:true}
+                                        {id:'ltvTitle0',width:'20%',height:40,forceFit:true,bodyStyle:'border-width:0'},
+                                        {width:'40%',height:40,forceFit:true,bodyStyle:'border-width:0'},
+                                        {id:'ltvDate',width:'40%',height:40,forceFit:true,bodyStyle:'border-width:0'}
                                     ]
                                 },
-                                {width:'100%',height:360,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
+                                {width:'100%',height:460,forceFit:true,layout:'hbox',bodyStyle:'border-width:0',
                                     items:[
-                                        {id:"ltvBoard0",width:"95%",height:360,forceFit:true,bodyStyle:'border-width:0'},
-                                        {width:"5%",height:360,forceFit:true,bodyStyle:'border-width:0'}
+                                        {id:"ltvBoard0",width:"95%",height:460,forceFit:true,bodyStyle:'border-width:0'},
+                                        {width:"5%",height:460,forceFit:true,bodyStyle:'border-width:0'}
                                     ]
                                 }
                             ]
                         },
-                        {width:"48%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                        {width:"1%",height:500,xtype:"panel",forceFit:true,bodyStyle:'border-width:0'},
+                        {width:"50%",height:500,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
-                                {id:'ltvTitle1',width:'100%',height:60,forceFit:true,bodyStyle:'border-width:0'},
-                                {id:'ltvBoard1',width:'100%',height:340,forceFit:true,bodyStyle:'border-width:0'}
+                                {id:'ltvBoard1',width:'100%',height:440,forceFit:true,bodyStyle:'border-width:0'}
                             ]
                         }
                      ] }
@@ -149,26 +150,17 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             }
         });
 
-        function fun1() {
-            var doyo = store.getAt(0).get("100002");
-            var ios = store.getAt(0).get("300001");
-            var android = store.getAt(0).get("200001");
-            var zhuazhuale = store.getAt(0).get("100018");
-            var woqu = store.getAt(0).get("100016");
-            var quanmin = store.getAt(0).get("100015");
-            var okooo = store.getAt(0).get("100006");
-            var jinshan = store.getAt(0).get("100001");
-            var total = store.getAt(0).get("1");
-
-            var userLtv = [];
-            var parentId = [];
-
-            if(total.length != 0){
-                var index = total.length-1;
-                console.log(total[index].userLtv);
-                console.log(total[index].parentId);
+        function fun1(){
+            Ext.get('ltvTitle0').dom.innerHTML = "<div align='center'><span style='font-size:20px;line-height:35px;'>" + "用户LTV" + "</div>";
+            var endDate = store.getAt(0).get("endDate");
+            if(endDate != ''){
+                Ext.get('ltvDate').dom.innerHTML = "<div align='center'><span style='font-size:12px;line-height:35px;'>截至" + endDate + "</div>";
+            }else{
+                Ext.get('ltvDate').dom.innerHTML = "";
             }
 
+            var channelNames = store.getAt(0).get("channelNames");
+            var ltv = store.getAt(0).get("ltv");
             var option =
                 {
                     tooltip: {trigger: 'axis',
@@ -191,15 +183,14 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                     },
                     calculable : true,
                     grid: {
-                        left: '3%',
-                        right: '7%',
+                        left: '6%',
+                        right: '1%',
                         top:'1%',
                         containLabel: true
                     },
                     xAxis: {
                         type : 'value',
                         show :false,
-                        // boundaryGap : false
                         axisLine: {
                             show: false
                         },
@@ -209,7 +200,7 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                     },
                     yAxis: {
                         type : 'category',
-                        data:['充值','投注','进入游戏','DAU'],
+                        data: channelNames,
                         splitLine: {show: false},
                         axisLine: {
                             show: false
@@ -223,10 +214,9 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                         }
                         },
                     series: [{
-                        // name: '',
                         type: 'bar',
                         smooth:true,
-                        data:[lastRechargeCount,lastBettingCount,lastGamedauCount,lastDauCount],
+                        data:ltv,
                         barWidth: 18,
                         label: {
                             normal: {
@@ -257,18 +247,132 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                 };
             me.echarts = echarts.init(Ext.get("ltvBoard0").dom);
             me.echarts.setOption(option);
-        }
 
+            var total = store.getAt(0).get("1");
+            var jinshan = store.getAt(0).get("100001");
+            var okooo = store.getAt(0).get("100006");
+            var quanmin = store.getAt(0).get("100015");
+            var woqu = store.getAt(0).get("100016");
+            var zhuazhuale = store.getAt(0).get("100018");
+            var android = store.getAt(0).get("200001");
+            var ios = store.getAt(0).get("300001");
+            var doyo = store.getAt(0).get("100002");
+            var data=[];
 
-
-        function getLtv(data) {
-            if(data.length != 0) {
-                var index = total.length-1;
-                return total[index].userLtv;
+            if(judge(total)){
+               data.push(total);
             }
+            if(judge(jinshan)){
+                data.push(jinshan);
+            }
+            if(judge(okooo)){
+                data.push(okooo);
+            }
+            if(judge(quanmin)){
+                data.push(quanmin);
+            }
+            if(judge(woqu)){
+                data.push(woqu);
+            }
+            if(judge(zhuazhuale)){
+                data.push(zhuazhuale);
+            }
+            if(judge(android)){
+                data.push(android);
         }
+            if(judge(ios)){
+                data.push(ios);
+            }
+            if(judge(doyo)){
+                data.push(doyo);
+            }
+
+            var businessDate = [];
+            if (data.length !=0) {
+                var val = data[0];
+                for(var k=0;k<val.length;k++) {
+                   var date = val[k].businessDate;
+                    var x = date.indexOf('-');
+                    businessDate[k] = date.substring(x+1);
+                }
+            }
+
+
+            var tendency =
+                {
+                    title: {text:'用户LTV趋势',left:'center',
+                        textStyle:{//标题内容的样式
+                            fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                            fontWeight:"bold",//可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
+                            fontFamily:"san-serif",//主题文字字体，默认微软雅黑
+                            fontSize:22//主题文字字体大小，默认为18px
+                        }},
+                    tooltip: {trigger: 'axis'
+                        // formatter:
+                    },
+                    legend: {
+                        // data:['今日','昨日','历史七日均值'],
+                        top:'bottom'
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'5%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data:businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }
+                    },
+                    series:[]
+                };
+
+            var channelNames = [];
+            for(var j=0;j<data.length;j++){
+                var val = data[j];
+                channelNames.push(val[0].channelName);
+                var userLtv = [];
+                for(var k=0;k<val.length;k++) {
+                    userLtv[k] = val[k].userLtv;
+                }
+                var item =
+                {
+                    name: val[0].channelName,
+                    type: 'line',
+                    smooth:true,
+                    data: userLtv,
+                    itemStyle:{normal:{}}
+                };
+                tendency.series.push(item);
+            }
+            tendency.legend.data = channelNames;
+            me.echarts = echarts.init(Ext.get("ltvBoard1").dom);
+            me.echarts.setOption(tendency);
+        }
+
+
+        function judge(data){
+            if(data.length == 0){
+                return false;
+            }
+            return true;
+        }
+
 
 
     }
 });
+
+
 

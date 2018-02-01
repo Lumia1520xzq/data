@@ -1,26 +1,20 @@
 package com.wf.data.controller.admin.board;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.scenario.effect.impl.prism.ps.PPStoPSWDisplacementMapPeer;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
-import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
-import com.wf.data.dto.MonthlyDataDto;
 import com.wf.data.service.ChannelInfoService;
-import com.wf.data.service.data.DatawareFinalChannelConversionService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.charset.CharsetEncoder;
 import java.util.*;
 
 /**
@@ -75,11 +69,35 @@ public class LtvViewController extends ExtJsController {
         }
         Map<String,Object> map = new HashMap<>();
         //遍历channels
+        List<String> channelNames = new ArrayList<>();
+        List<Double> ltvList = new ArrayList<>();
+        String businessDate = "";
         for(Long channel:channels){
-        params.put("parentId", channel);
-        List<DatawareFinalChannelInfoAll> infoAllList = channelInfoAllService.getListByChannelAndDate(params);
-        map.put(""+channel,infoAllList);
+            //1、获取所有的渠道名称
+            ChannelInfo channelInfo = channelInfoService.get(channel);
+            if(null ==  channelInfo){
+                channelNames.add("全平台");
+            }else{
+                channelNames.add(channelInfo.getName());
+            }
+            //2、获取几天的ltv值
+            params.put("parentId", channel);
+            List<DatawareFinalChannelInfoAll> infoAllList = channelInfoAllService.getListByChannelAndDate(params);
+            map.put(""+channel,infoAllList);
+            //3、获取最后一天的ltv值
+            if(CollectionUtils.isNotEmpty(infoAllList)){
+                DatawareFinalChannelInfoAll last = infoAllList.get(infoAllList.size()-1);
+                businessDate = last.getBusinessDate();
+                ltvList.add(last.getUserLtv());
+            }else{
+                ltvList.add(0.0);
+            }
         }
+        Collections.reverse(channelNames);
+        Collections.reverse(ltvList);
+        map.put("channelNames",channelNames);
+        map.put("ltv",ltvList);
+        map.put("endDate",businessDate);
         List<Map<String,Object>> list = new ArrayList<>();
         list.add(map);
         return list;
