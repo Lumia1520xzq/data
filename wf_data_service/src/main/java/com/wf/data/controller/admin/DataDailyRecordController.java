@@ -152,11 +152,6 @@ public class DataDailyRecordController extends ExtJsController {
 
             for (DataDailyRecord entity : list) {
                 try {
-                    //插入数据日期
-                    if (StringUtils.isNotBlank(entity.getDataTimeStr())) {
-                        entity.setDataTime(DateUtils.parseDate(entity.getDataTimeStr()));
-                    }
-
                     //插入指标
                     if (StringUtils.isNotBlank(entity.getIndicatorTypeName())){
                         for (DataDict dataDict : indicatorTypeList) {

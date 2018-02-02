@@ -35,4 +35,8 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
+
+    public Long findrechargeCountByDate(Map<String, Object> map) {
+        return dao.findrechargeCountByDate(map);
+    }
 }

@@ -43,5 +43,21 @@
         </if>
     </delete>
 
+    <select id="getSignedCountByTime" resultType="long">
+        SELECT COUNT(DISTINCT t.user_id)
+        FROM dataware_user_sign_day t
+        WHERE 1=1 AND t.delete_flag = 0 AND t.user_group = 2
+        <if test="businessOur != null and businessOur != ''">
+            AND t.sign_date = #{businessOur}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+
+    </select>
+
 </mapper>
 
