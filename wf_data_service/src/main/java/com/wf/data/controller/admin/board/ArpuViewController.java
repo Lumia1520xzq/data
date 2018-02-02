@@ -2,23 +2,14 @@ package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.wf.core.persistence.Page;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DatawareFinalRegisteredArpu;
-import com.wf.data.dao.mycatuic.entity.UicUser;
-import com.wf.data.dao.trans.entity.TransChangeNote;
-import com.wf.data.dto.TcardDto;
-import com.wf.data.service.ChannelInfoService;
-import com.wf.data.service.UicUserService;
 import com.wf.data.service.data.DatawareFinalRegisteredArpuService;
-import com.wf.data.service.elasticsearch.EsTransChangeNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,12 +58,15 @@ public class ArpuViewController extends ExtJsController {
             } else if (StringUtils.isNotBlank(beginDate) && StringUtils.isBlank(endDate)) {
                 datelist.add(beginDate);
             } else {
+                if(DateUtils.getDateInterval(beginDate,endDate)>=7){
+                    endDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(beginDate), 6));
+                }
                 datelist = DateUtils.getDateList(beginDate, endDate);
             }
         } catch (Exception e) {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(3);
         if (parentId == null){
             params.put("parentId", 1);
         }else{

@@ -60,18 +60,135 @@ Ext.define('WF.view.data.board.ArpuViewMain', {
             }]
         });
 
+        me.add({
+            xtype:'panel',
+            layout:'vbox',
+            align : 'stretch',
+            bodyStyle:'border-width:0 0 0 0;',
+            items: [
+                // {title: '',align:'stretch',height:50,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0'},
+                {
+                title: '用户累计ARPU和留存(最多查询七天)',align:'stretch',height:350,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
+                items:[
+                    {width:"100%",height:350,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                        {width:"45%",height:350,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {id:'arpu0',width:'100%',height:300,forceFit:true}
+                            ]
+                        },
+                        {width:"1%",height:350,xtype:"panel",forceFit:true,bodyStyle:'border-width:0'},
+                        {width:"45%",height:350,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {id:'arpu1',width:'100%',height:350,forceFit:true,bodyStyle:'border-width:0'}
+                            ]
+                        }
+                    ] }
+                ]
+            }
+            ]
+        });
+
 
         store.load({
             callback:function(){
                 fun1();
+                fun2();
             }
         });
 
-        // store.addListener('datachanged',function(){
-        //         fun1();
-        //     }
-        // );
+        store.addListener('datachanged',function(){
+                fun2();
+            }
+        );
 
+        function fun2() {
+            var arpu1 = [];
+            var arpu2 = [];
+            var arpu3 = [];
+            var arpu4 = [];
+            var arpu5 = [];
+            var arpu6 = [];
+            var arpu7 = [];
+            var arpu15 = [];
+            var arpu30 = [];
+            var arpu60 = [];
+            var arpu90 = [];
+            var businessDate = [];
+            for(var i=0;i<store.getCount();i++) {
+                var record = store.getAt(i);
+                arpu1[i] = record.get("arpu1");
+                arpu2[i] = record.get("arpu2");
+                arpu3[i] = record.get("arpu3");
+                arpu4[i] = record.get("arpu4");
+                arpu5[i] = record.get("arpu5");
+                arpu6[i] = record.get("arpu6");
+                arpu7[i] = record.get("arpu7");
+                arpu15[i] = record.get("arpu15");
+                arpu30[i] = record.get("arpu30");
+                arpu60[i] = record.get("arpu60");
+                arpu90[i] = record.get("arpu90");
+                businessDate[i] = record.get("businessDate");
+            }
+
+            var option =
+                {
+                    title: {text:'用户累计ARPU',left:'center',
+                        textStyle:{//标题内容的样式
+                            fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                            fontWeight:"bold",//可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
+                            fontFamily:"san-serif",//主题文字字体，默认微软雅黑
+                            fontSize:22//主题文字字体大小，默认为18px
+                        }},
+                    tooltip: {trigger: 'axis'
+                        // formatter:
+                    },
+                    legend: {
+                        data:businessDate,
+                        top:'bottom'
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'5%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data:["D1","D2","D3","D4","D5","D6","D7","D15","D30","D60","D90"]
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }
+                    },
+                    series:[]
+                };
+
+
+                for(var k=0;k<businessDate.length;k++) {
+                    var item =
+                    {
+                        name: businessDate[k],
+                        type: 'line',
+                        smooth:true,
+                        data: [arpu1[k],arpu2[k],arpu3[k],
+                               arpu4[k],arpu5[k],arpu6[k],
+                               arpu7[k],arpu15[k],arpu30[k],
+                               arpu60[k],arpu90[k]],
+                        itemStyle:{normal:{}}
+                    };
+                    option.series.push(item);
+                }
+            me.echarts = echarts.init(Ext.get("arpu0").dom);
+            me.echarts.setOption(option);
+
+        }
 
         function fun1(){
             me.add({
