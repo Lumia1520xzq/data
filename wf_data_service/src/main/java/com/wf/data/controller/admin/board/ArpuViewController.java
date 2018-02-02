@@ -42,7 +42,7 @@ public class ArpuViewController extends ExtJsController {
     /**
      * 查询列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/getList")
     public Object list() {
         JSONObject json = getRequestJson();
         Long parentId = null;
@@ -81,7 +81,9 @@ public class ArpuViewController extends ExtJsController {
         for (String searchDate : datelist) {
             params.put("businessDate", searchDate);
             DatawareFinalRegisteredArpu arpu = arpuService.getArpuByDate(params);
-            list.add(arpu);
+            if (null != arpu){
+                list.add(arpu);
+            }
         }
         return list;
     }

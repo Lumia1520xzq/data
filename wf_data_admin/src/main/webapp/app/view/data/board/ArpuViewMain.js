@@ -11,14 +11,17 @@ Ext.define('WF.view.data.board.ArpuViewMain', {
         this.callParent(arguments);
         var me = this;
         var store = Ext.create('DCIS.Store', {
-            autoLoad: true,
+            autoLoad:false,
             url: 'data/arpu/view/getList.do',
-            fields: ["channelName"]
+            fields: ["channelName","businessDate",'newUsers',
+                'arpu1','arpu2','arpu3','arpu4','arpu5','arpu6',
+                'arpu7','arpu15','arpu30','arpu60','arpu90']
         });
         var parentChannelStore = Ext.create('DCIS.Store', {
             url: 'data/admin/common/data/getParentChannels.do',
             autoLoad: true,
-            fields: ['id', 'name']
+            fields: ['id', 'name'
+            ]
         });
 
         me.add({
@@ -57,93 +60,132 @@ Ext.define('WF.view.data.board.ArpuViewMain', {
             }]
         });
 
-        me.add({
-            xtype: 'datagrid',
-            store: store,
-            buildField: "Manual",
-            forceFit: true,
-            columns: [
-            {
-                text: '渠道',
-                dataIndex: 'channelName',
-                width: 50,
-                menuDisabled: true,
-                sortable: false
+
+        store.load({
+            callback:function(){
+                fun1();
             }
-            // , {
-            //     text: 'DAU',
-            //     width: 50,
-            //     dataIndex: 'dau',
-            //     menuDisabled: true,
-            //     sortable: false
-            // }, {
-            //     text: '导入率',
-            //     width: 50,
-            //     dataIndex: 'importRate',
-            //     menuDisabled: true,
-            //     sortable: false
-            // }, {
-            //     text: '投注人数',
-            //     width: 50,
-            //     dataIndex: 'bettingUserCount',
-            //     menuDisabled: true,
-            //     sortable: false
-            // }, {
-            //     text: '投注笔数',
-            //     width: 50,
-            //     dataIndex: 'bettingCount',
-            //     menuDisabled: true,
-            //     sortable: false
-            // }, {
-            //     text: '投注流水',
-            //     width: 50,
-            //     dataIndex: 'bettingAmount',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },{
-            //     text: '流水差',
-            //     width: 50,
-            //     dataIndex: 'amountGap',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },
-            // {
-            //     text: '投注转化率',
-            //     width: 50,
-            //     dataIndex: 'bettingRate',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },
-            // {
-            //     text: '返奖率',
-            //     width: 50,
-            //     dataIndex: 'returnRate',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },
-            // {
-            //     text: '投注ARPU',
-            //     width: 50,
-            //     dataIndex: 'arpu',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },
-            // {
-            //     text: '投注ASP',
-            //     width: 50,
-            //     dataIndex: 'asp',
-            //     menuDisabled: true,
-            //     sortable: false
-            // },
-            // {
-            //     text: '人均频次',
-            //     width: 50,
-            //     dataIndex: 'avgBettingCount',
-            //     menuDisabled: true,
-            //     sortable: false
-            // }
-            ]
         });
+
+        // store.addListener('datachanged',function(){
+        //         fun1();
+        //     }
+        // );
+
+
+        function fun1(){
+            me.add({
+                xtype: 'datagrid',
+                store: store,
+                buildField: "Manual",
+                columns: [
+                    {
+                        text: '渠道',
+                        width:100,
+                        dataIndex: 'channelName',
+                        menuDisabled: true,
+                        sortable: false
+                    }
+                    , {
+                        text: '注册日期',
+                        width:100,
+                        dataIndex: 'businessDate',
+                        menuDisabled: true,
+                        sortable: false
+                    },
+                    {
+                        text: '新用户数',
+                        width:100,
+                        dataIndex: 'newUsers',
+                        menuDisabled: true,
+                        sortable: false
+                    },
+                    {
+                        text:'用户累计ARPU',
+                        width:880,
+                        columns:[
+                            {
+                                text: '1天',
+                                width: 80,
+                                dataIndex: 'arpu1',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '2天',
+                                width: 80,
+                                dataIndex: 'arpu2',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '3天',
+                                width: 80,
+                                dataIndex: 'arpu3',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '4天',
+                                width: 80,
+                                dataIndex: 'arpu4',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '5天',
+                                width: 80,
+                                dataIndex: 'arpu5',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '6天',
+                                width: 80,
+                                dataIndex: 'arpu6',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '7天',
+                                width: 80,
+                                dataIndex: 'arpu7',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '15天',
+                                width: 80,
+                                dataIndex: 'arpu15',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '30天',
+                                width: 80,
+                                dataIndex: 'arpu30',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '60天',
+                                width: 80,
+                                dataIndex: 'arpu60',
+                                menuDisabled: true,
+                                sortable: false
+                            },
+                            {
+                                text: '90天',
+                                width: 80,
+                                dataIndex: 'arpu90',
+                                menuDisabled: true,
+                                sortable: false
+                            }
+                        ]
+                    }
+                ]
+            });
+        }
 
     }
 });
