@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.DatawareFinalRegisteredRetentionDao">
+	
+	<sql id="datawareFinalRegisteredRetentionColumns">
+		t.id,
+		t.new_users,
+		t.registered_dau_2,
+		t.retention_2,
+		t.registered_dau_3,
+		t.retention_3,
+		t.registered_dau_4,
+		t.retention_4,
+		t.registered_dau_5,
+		t.retention_5,
+		t.registered_dau_6,
+		t.retention_6,
+		t.registered_dau_7,
+		t.retention_7,
+		t.registered_dau_8,
+		t.retention_8,
+		t.registered_dau_9,
+		t.retention_9,
+		t.registered_dau_10,
+		t.retention_10,
+		t.registered_dau_11,
+		t.retention_11,
+		t.registered_dau_12,
+		t.retention_12,
+		t.registered_dau_13,
+		t.retention_13,
+		t.registered_dau_14,
+		t.retention_14,
+		t.registered_dau_15,
+		t.retention_15,
+		t.channel_name,
+		t.parent_id,
+		t.channel_id,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareFinalRegisteredRetentionWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareFinalRegisteredRetentionJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareFinalRegisteredRetention">
+		SELECT <include refid="datawareFinalRegisteredRetentionColumns"/> FROM dataware_final_registered_retention t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalRegisteredRetention">
+		SELECT <include refid="datawareFinalRegisteredRetentionColumns"/> FROM dataware_final_registered_retention t <include refid="datawareFinalRegisteredRetentionJoins"/>
+		WHERE <include refid="datawareFinalRegisteredRetentionWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_registered_retention t WHERE <include refid="datawareFinalRegisteredRetentionWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_final_registered_retention (
+			id, 
+			new_users, 
+			registered_dau_2, 
+			retention_2, 
+			registered_dau_3, 
+			retention_3, 
+			registered_dau_4, 
+			retention_4, 
+			registered_dau_5, 
+			retention_5, 
+			registered_dau_6, 
+			retention_6, 
+			registered_dau_7, 
+			retention_7, 
+			registered_dau_8, 
+			retention_8, 
+			registered_dau_9, 
+			retention_9, 
+			registered_dau_10, 
+			retention_10, 
+			registered_dau_11, 
+			retention_11, 
+			registered_dau_12, 
+			retention_12, 
+			registered_dau_13, 
+			retention_13, 
+			registered_dau_14, 
+			retention_14, 
+			registered_dau_15, 
+			retention_15, 
+			channel_name, 
+			parent_id, 
+			channel_id, 
+			business_date, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{newUsers}, 
+			#{registeredDau2}, 
+			#{retention2}, 
+			#{registeredDau3}, 
+			#{retention3}, 
+			#{registeredDau4}, 
+			#{retention4}, 
+			#{registeredDau5}, 
+			#{retention5}, 
+			#{registeredDau6}, 
+			#{retention6}, 
+			#{registeredDau7}, 
+			#{retention7}, 
+			#{registeredDau8}, 
+			#{retention8}, 
+			#{registeredDau9}, 
+			#{retention9}, 
+			#{registeredDau10}, 
+			#{retention10}, 
+			#{registeredDau11}, 
+			#{retention11}, 
+			#{registeredDau12}, 
+			#{retention12}, 
+			#{registeredDau13}, 
+			#{retention13}, 
+			#{registeredDau14}, 
+			#{retention14}, 
+			#{registeredDau15}, 
+			#{retention15}, 
+			#{channelName}, 
+			#{parentId}, 
+			#{channelId}, 
+			#{businessDate}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_final_registered_retention SET
+			new_users = #{newUsers}, 
+			registered_dau_2 = #{registeredDau2}, 
+			retention_2 = #{retention2}, 
+			registered_dau_3 = #{registeredDau3}, 
+			retention_3 = #{retention3}, 
+			registered_dau_4 = #{registeredDau4}, 
+			retention_4 = #{retention4}, 
+			registered_dau_5 = #{registeredDau5}, 
+			retention_5 = #{retention5}, 
+			registered_dau_6 = #{registeredDau6}, 
+			retention_6 = #{retention6}, 
+			registered_dau_7 = #{registeredDau7}, 
+			retention_7 = #{retention7}, 
+			registered_dau_8 = #{registeredDau8}, 
+			retention_8 = #{retention8}, 
+			registered_dau_9 = #{registeredDau9}, 
+			retention_9 = #{retention9}, 
+			registered_dau_10 = #{registeredDau10}, 
+			retention_10 = #{retention10}, 
+			registered_dau_11 = #{registeredDau11}, 
+			retention_11 = #{retention11}, 
+			registered_dau_12 = #{registeredDau12}, 
+			retention_12 = #{retention12}, 
+			registered_dau_13 = #{registeredDau13}, 
+			retention_13 = #{retention13}, 
+			registered_dau_14 = #{registeredDau14}, 
+			retention_14 = #{retention14}, 
+			registered_dau_15 = #{registeredDau15}, 
+			retention_15 = #{retention15}, 
+			channel_name = #{channelName}, 
+			parent_id = #{parentId}, 
+			channel_id = #{channelId}, 
+			business_date = #{businessDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_registered_retention SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
