@@ -47,9 +47,11 @@ public class NewChannelDataJob {
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
         String prvDate = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),2));
+        date = "2018-01-12";
+        prvDate = "2018-01-11";
         while (count <= TIMES) {
-            String contentTemp = "<table border='1' style='text-align: center;border-collapse: collapse'>"+
-             "<tr style='font-weight:bold'><td>searchDate日报</td><td bgcolor='#FF6666'>降幅超过<br/>30%</td><td bgcolor='#FFE4E1'>降幅小于<br/>30%</td><td bgcolor='#00991F'>涨幅大于<br/>30%</td><td bgcolor='ccffcc'>涨幅小于<br/>30%</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>"+
+            String contentTemp = "<table border='1' cellspacing=1 cellpadding=5 style='text-align:center;border-collapse:collapse'>"+
+             "<tr style='font-weight:bold'><td style='background-color:#D6D6D6;'>searchDate日报</td><td bgcolor='#FF6666' colspan=2>降幅超过30%</td><td bgcolor='#FFE4E1' colspan=2>降幅小于30%</td><td bgcolor='#00991F' colspan=2>涨幅大于30%</td><td bgcolor='ccffcc' colspan=2>涨幅小于30%</td><td></td><td></td><td></td><td></td><td></td></tr>"+
             "<tr style='font-weight:bold;background-color:#206A9C;color:white'><td>渠道</td><td>充值金额</td><td>充值人数</td><td>日活人数</td><td>新增人数</td><td>投注用户数</td><td>投注转化率</td><td>付费渗透率</td><td>新用户投注转化率</td><td>新用户次留</td><td>投注流水</td><td>返奖流水</td><td>返奖率</td><td>流水差</td></tr>";
             String tableEnd = "</table>";
             try {
@@ -109,7 +111,7 @@ public class NewChannelDataJob {
      * 各渠道数据模板
      */
     private String getTemplate(String date,Long parentId,Long channelId){
-        String template = "<tr><td>channelName</td><td>rechargeSum</td><td>rechargeUser</td><td>activeUser</td><td>newUser</td><td>bettingUser</td><td>bettingRate</td><td>payRate</td><td>newBettingRate</td><td>newRemainRate</td><td>cathecticMoney</td><td>winMoney</td><td>winMoneyRate</td><td>moneyGap</td></tr>";
+        String template = "<tr><td style='background-color:#D6D6D6;'>channelName</td><td>rechargeSum</td><td>rechargeUser</td><td>activeUser</td><td>newUser</td><td>bettingUser</td><td>bettingRate</td><td>payRate</td><td>newBettingRate</td><td>newRemainRate</td><td>cathecticMoney</td><td>winMoney</td><td>winMoneyRate</td><td>moneyGap</td></tr>";
         StringBuilder sb = new StringBuilder();
         String yesDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(date),1));
         DatawareFinalChannelInfoAll info = infoAllService.findByDate(toMap(date,parentId,channelId));
@@ -173,17 +175,17 @@ public class NewChannelDataJob {
             yes = 0.0;
         }
         if(yes == 0){
-            return "<td bgcolor='#00991F'>"+format(tod)+"</td>";
+            return "<td bgcolor='#00991F' style='text-align:right'>"+format(tod)+"</td>";
         }
         double value = BigDecimalUtil.div(tod-yes,yes);
         if(value <= -0.3){
-        return "<td bgcolor='#FF6666'>"+format(tod)+"</td>";
+        return "<td bgcolor='#FF6666' style='text-align:right'>"+format(tod)+"</td>";
         } else if(value > -0.3 && value < 0){
-        return "<td bgcolor='#FFE4E1'>"+format(tod)+"</td>";
+        return "<td bgcolor='#FFE4E1' style='text-align:right'>"+format(tod)+"</td>";
         }else if(value >=0 && value < 0.3){
-            return "<td bgcolor='ccffcc'>"+format(tod)+"</td>";
+            return "<td bgcolor='ccffcc' style='text-align:right'>"+format(tod)+"</td>";
         }else{
-            return "<td bgcolor='#00991F'>"+format(tod)+"</td>";
+            return "<td bgcolor='#00991F' style='text-align:right'>"+format(tod)+"</td>";
         }
     }
 
@@ -195,17 +197,17 @@ public class NewChannelDataJob {
             yes = 0.0;
         }
         if(yes == 0){
-            return "<td bgcolor='#00991F'>"+tod+"%</td>";
+            return "<td bgcolor='#00991F' style='text-align:right'>"+tod+"%</td>";
         }
         double value = BigDecimalUtil.div(tod-yes,yes);
         if(value <= -0.3){
-            return "<td bgcolor='#FF6666'>"+tod+"%</td>";
+            return "<td bgcolor='#FF6666' style='text-align:right'>"+tod+"%</td>";
         } else if(value > -0.3 && value < 0){
-            return "<td bgcolor='#FFE4E1'>"+tod+"%</td>";
+            return "<td bgcolor='#FFE4E1' style='text-align:right'>"+tod+"%</td>";
         }else if(value >=0 && value < 0.3){
-            return "<td bgcolor='ccffcc	'>"+tod+"%</td>";
+            return "<td bgcolor='ccffcc' style='text-align:right'>"+tod+"%</td>";
         }else{
-            return "<td bgcolor='#00991F'>"+tod+"%</td>";
+            return "<td bgcolor='#00991F' style='text-align:right'>"+tod+"%</td>";
         }
     }
 
@@ -217,17 +219,17 @@ public class NewChannelDataJob {
             yes = 0L;
         }
         if(yes == 0){
-            return "<td bgcolor='#00991F'>"+tod+"</td>";
+            return "<td bgcolor='#00991F' style='text-align:right'>"+tod+"</td>";
         }
         double value = BigDecimalUtil.div(tod-yes,yes);
         if(value <= -0.3){
-            return "<td bgcolor='#FF6666'>"+tod+"</td>";
+            return "<td bgcolor='#FF6666' style='text-align:right'>"+tod+"</td>";
         } else if(value > -0.3 && value < 0){
-            return "<td bgcolor='#FFE4E1'>"+tod+"</td>";
+            return "<td bgcolor='#FFE4E1' style='text-align:right'>"+tod+"</td>";
         }else if(value >=0 && value < 0.3){
-            return "<td bgcolor='ccffcc	'>"+tod+"</td>";
+            return "<td bgcolor='ccffcc' style='text-align:right'>"+tod+"</td>";
         }else{
-            return "<td bgcolor='#00991F'>"+tod+"</td>";
+            return "<td bgcolor='#00991F' style='text-align:right'>"+tod+"</td>";
         }
     }
 
