@@ -18,5 +18,18 @@
 		AND create_time BETWEEN #{beginDate} AND #{endDate}
 		AND delete_flag=0
 	</select>
+
+	<select id="findSignedUserCount" resultType="java.lang.Integer">
+		SELECT count(DISTINCT t.user_id) FROM plat_signed_user t
+		WHERE `status`=8 and t.delete_flag=0
+		AND t.create_time BETWEEN CONCAT(#{beginDate} , ' 00:00:00') AND CONCAT(#{endDate} , ' 23:59:59')
+		<if test="channelId != null and channelId != '' ">
+			AND t.channel_id=#{channelId}
+		</if>
+		<if test="channelId == null and parentId != null and parentId != ''">
+			AND t.channel_id LIKE CONCAT('%', #{parentId}, '%')
+		</if>
+	</select>
+
 </mapper>
 
