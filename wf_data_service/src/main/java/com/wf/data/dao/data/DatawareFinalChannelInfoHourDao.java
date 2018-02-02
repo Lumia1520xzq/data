@@ -19,4 +19,5 @@ public interface DatawareFinalChannelInfoHourDao extends CrudDao<DatawareFinalCh
 
     List<DatawareFinalChannelInfoHour> getSumDataByDateAndHour(Map<String, Object> map);
 
+    DatawareFinalChannelInfoHour findDataForPandect(Map<String, Object> map);
 }

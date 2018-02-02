@@ -28,4 +28,8 @@ public class DatawareFinalChannelInfoHourService extends CrudService<DatawareFin
     public List<DatawareFinalChannelInfoHour> getSumDataByDateAndHour(Map<String, Object> map){
         return dao.getSumDataByDateAndHour(map);
     }
+
+    public DatawareFinalChannelInfoHour findDataForPandect(Map<String, Object> map) {
+        return dao.findDataForPandect(map);
+    }
 }

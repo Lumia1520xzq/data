@@ -90,5 +90,33 @@
         ORDER BY business_hour ASC
     </select>
 
+    <select id="findDataForPandect" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoHour">
+        SELECT
+        SUM(dau) dau,
+        SUM(user_count) userCount,
+        SUM(betting_amount) bettingAmount,
+        SUM(betting_count) bettingCount,
+        SUM(betting_amount) bettingAmount,
+        SUM(diff_amount) diffAmount,
+        SUM(result_amount) resultAmount,
+        SUM(recharge_count) rechargeCount,
+        SUM(recharge_amount) rechargeAmount,
+        sum(new_users) newUsers
+        FROM `dataware_final_channel_info_hour`
+        WHERE 1=1 AND delete_flag = 0
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="businessDate != null and businessDate != ''">
+            AND business_date = #{businessDate}
+        </if>
+        <if test="businessOur != null and businessOur != ''">
+            AND business_hour = #{businessOur}
+        </if>
+    </select>
+
 </mapper>
 

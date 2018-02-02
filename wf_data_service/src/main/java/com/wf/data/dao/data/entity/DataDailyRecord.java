@@ -10,7 +10,7 @@ public class DataDailyRecord extends DataEntity {
     private static final long serialVersionUID = -1;
 
     private Long channelId;//渠道
-    private Date dataTime;//数据日期
+    private String dataTime;//数据日期
     private Integer indicatorType;//指标
     private String phenomenon;//现象
     private String analysisSummary;//分析总结
@@ -21,7 +21,6 @@ public class DataDailyRecord extends DataEntity {
 
     private String beginDate;
     private String endDate;
-    private String dataTimeStr;
     private String indicatorTypeName;
 
 
@@ -30,25 +29,16 @@ public class DataDailyRecord extends DataEntity {
         return channelId;
     }
 
-    public Date getDataTime() {
-        return dataTime;
-    }
-
     public void setChannelId(Long channelId) {
         this.channelId = channelId;
     }
 
     @ExcelField(title="数据日期", type=0, align=1, sort=20)
-    public String getDataTimeStr() {
-        return dataTimeStr;
+    public String getDataTime() {
+        return dataTime;
     }
 
-    public void setDataTimeStr(String dataTimeStr) {
-        this.dataTimeStr = dataTimeStr;
-    }
-
-
-    public void setDataTime(Date dataTime) {
+    public void setDataTime(String dataTime) {
         this.dataTime = dataTime;
     }
 
