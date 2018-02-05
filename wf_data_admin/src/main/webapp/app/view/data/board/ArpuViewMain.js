@@ -41,6 +41,22 @@ Ext.define('WF.view.data.board.ArpuViewMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                var parentId = me.down(("[name='parentId']")).value;
+                var beginDate = me.down(("[name='beginDate']")).value;
+                var endDate = me.down(("[name='endDate']")).value;
+                if (parentId == null || parentId === undefined) {
+                    parentId = '';
+                }
+                if (beginDate == null || beginDate === undefined) {
+                    beginDate = '';
+                }
+                if (endDate == null || endDate === undefined) {
+                    endDate = '';
+                }
+                var url = '/data/arpu/view/export.do?parentId=' + parentId + '&beginDate=' + beginDate + '&endDate=' + endDate;
+                window.location.href = url;
+            },
             items: [
             {
                 name: 'parentId',
