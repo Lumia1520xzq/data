@@ -33,6 +33,22 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 	private Long channelId;
 	private String businessDate;
 
+	private Double	retention2;
+	private Double	retention3;
+	private Double	retention4;
+	private Double	retention5;
+	private Double	retention6;
+	private Double	retention7;
+	private Double	retention8;
+	private Double	retention9;
+	private Double	retention10;
+	private Double	retention11;
+	private Double	retention12;
+	private Double	retention13;
+	private Double	retention14;
+	private Double	retention15;
+
+
 	public Long getNewUsers() {
 		return newUsers;
 	}
@@ -275,5 +291,117 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		arpu.setArpu60(0.00);
 		arpu.setArpu90(0.00);
 		return arpu;
+	}
+
+	public Double getRetention2() {
+		return retention2;
+	}
+
+	public void setRetention2(Double retention2) {
+		this.retention2 = retention2;
+	}
+
+	public Double getRetention3() {
+		return retention3;
+	}
+
+	public void setRetention3(Double retention3) {
+		this.retention3 = retention3;
+	}
+
+	public Double getRetention4() {
+		return retention4;
+	}
+
+	public void setRetention4(Double retention4) {
+		this.retention4 = retention4;
+	}
+
+	public Double getRetention5() {
+		return retention5;
+	}
+
+	public void setRetention5(Double retention5) {
+		this.retention5 = retention5;
+	}
+
+	public Double getRetention6() {
+		return retention6;
+	}
+
+	public void setRetention6(Double retention6) {
+		this.retention6 = retention6;
+	}
+
+	public Double getRetention7() {
+		return retention7;
+	}
+
+	public void setRetention7(Double retention7) {
+		this.retention7 = retention7;
+	}
+
+	public Double getRetention8() {
+		return retention8;
+	}
+
+	public void setRetention8(Double retention8) {
+		this.retention8 = retention8;
+	}
+
+	public Double getRetention9() {
+		return retention9;
+	}
+
+	public void setRetention9(Double retention9) {
+		this.retention9 = retention9;
+	}
+
+	public Double getRetention10() {
+		return retention10;
+	}
+
+	public void setRetention10(Double retention10) {
+		this.retention10 = retention10;
+	}
+
+	public Double getRetention11() {
+		return retention11;
+	}
+
+	public void setRetention11(Double retention11) {
+		this.retention11 = retention11;
+	}
+
+	public Double getRetention12() {
+		return retention12;
+	}
+
+	public void setRetention12(Double retention12) {
+		this.retention12 = retention12;
+	}
+
+	public Double getRetention13() {
+		return retention13;
+	}
+
+	public void setRetention13(Double retention13) {
+		this.retention13 = retention13;
+	}
+
+	public Double getRetention14() {
+		return retention14;
+	}
+
+	public void setRetention14(Double retention14) {
+		this.retention14 = retention14;
+	}
+
+	public Double getRetention15() {
+		return retention15;
+	}
+
+	public void setRetention15(Double retention15) {
+		this.retention15 = retention15;
 	}
 }
