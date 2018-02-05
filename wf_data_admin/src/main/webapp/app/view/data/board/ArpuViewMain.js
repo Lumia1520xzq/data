@@ -82,7 +82,7 @@ Ext.define('WF.view.data.board.ArpuViewMain', {
                                 {id:'arpu1',width:'100%',height:350,forceFit:true,bodyStyle:'border-width:0'}
                             ]
                         }
-                    ] }
+                    ]}
                 ]
             }
             ]

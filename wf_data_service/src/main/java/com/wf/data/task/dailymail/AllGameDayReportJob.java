@@ -65,6 +65,7 @@ public class AllGameDayReportJob {
                     StringBuilder content = new StringBuilder();
                     content.append(buildGameInfo(GameTypeContents.GAME_TYPE_TCARD,date));
                     content.append(buildGameInfo(GameTypeContents.GAME_TYPE_FISH,date));
+                    content.append(buildGameInfo(GameTypeContents.GAME_TYPE_NIUNIU,date));
                     content.append(buildGameInfo(GameTypeContents.GAME_TYPE_NEW_THREE_KINGDOM,date));
                     content.append(buildGameInfo(GameTypeContents.GAME_TYPE_BILLIARDS,date));
                     content.append(buildGameInfo(GameTypeContents.GAME_TYPE_DART,date));
@@ -114,6 +115,7 @@ public class AllGameDayReportJob {
             case GameTypeContents.GAME_TYPE_ARROWS:gameName="貂蝉保卫战";break;
             case GameTypeContents.GAME_TYPE_KINGDOM:gameName="热血三国";break;
             case GameTypeContents.GAME_TYPE_CANDY:gameName="糖果夺宝";break;
+            case GameTypeContents.GAME_TYPE_NIUNIU:gameName="牛牛";break;
             default:gameName="";break;
         }
         return demo.replace("gameName",gameName).replace("dateTime",date);
