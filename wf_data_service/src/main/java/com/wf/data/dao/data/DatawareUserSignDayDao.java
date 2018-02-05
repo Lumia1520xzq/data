@@ -15,4 +15,7 @@ public interface DatawareUserSignDayDao extends CrudDao<DatawareUserSignDay> {
     int deleteByDate(Map<String, Object> params);
 
     Long getSignedCountByTime(Map<String, Object> params);
+
+    int updateUserGroup(Map<String,Object> map);
+
 }

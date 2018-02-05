@@ -29,7 +29,7 @@ public class DatawareBettingLogHourService extends CrudService<DatawareBettingLo
     public List<Long> findUserIdByTime(DatawareBettingLogHour log) {
         return dao.findUserIdByTime(log);
     }
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
+
     public List<DatawareBettingLogDay> findBettingList(Map<String, Object> params) {
         return dao.findBettingList(params);
     }

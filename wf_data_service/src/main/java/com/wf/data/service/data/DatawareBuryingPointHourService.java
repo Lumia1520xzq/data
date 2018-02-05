@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Service
 public class DatawareBuryingPointHourService extends CrudService<DatawareBuryingPointHourDao, DatawareBuryingPointHour> {
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
+
     public List<DatawareBuryingPointDay> findBuryingList(Map<String, Object> map) {
         return dao.findBuryingList(map);
     }

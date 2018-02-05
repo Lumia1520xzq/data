@@ -100,9 +100,11 @@ public class UserRegisteredHourService {
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("userGroup", 2);
             datawareUserInfoService.updateUserGroup(userMap);
-            userMap.put("userGroup", 1);
-            userMap.put("userList", uicGroupList);
-            datawareUserInfoService.updateUserGroup(userMap);
+            if (CollectionUtils.isNotEmpty(uicGroupList)) {
+                userMap.put("userGroup", 1);
+                userMap.put("userList", uicGroupList);
+                datawareUserInfoService.updateUserGroup(userMap);
+            }
         }
 
         UserInfo(map, uicGroupList);
