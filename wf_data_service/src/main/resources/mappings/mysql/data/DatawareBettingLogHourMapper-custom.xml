@@ -135,6 +135,9 @@
         <if test="parentId != null and parentId != ''">
             AND t.parent_id = #{parentId}
         </if>
+        <if test="gameType != null and gameType != ''">
+            AND t.game_type = #{gameType}
+        </if>
     </select>
 
     <delete id="deleteByDate">
