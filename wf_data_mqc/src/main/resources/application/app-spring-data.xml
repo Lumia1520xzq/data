@@ -7,6 +7,15 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+    <aop:config>
+        <aop:pointcut id="dataactionPointCut"
+                      expression="execution(* com.wf.data.service..*.*(..))"/>
+        <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="dataactionPointCut"
+                     order="1"/>
+    </aop:config>
+
+    <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
     <bean class="com.wf.core.utils.core.SpringContextHolder"/>
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
@@ -40,9 +49,6 @@
         <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="transactionPointCut"
                      order="1"/>
     </aop:config>
-
-    <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
-
 
 
     <import resource="classpath*:wf/spring-redis.xml"/>

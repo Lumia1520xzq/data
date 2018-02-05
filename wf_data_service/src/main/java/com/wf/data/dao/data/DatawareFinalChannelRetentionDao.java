@@ -3,7 +3,6 @@ package com.wf.data.dao.data;
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.data.entity.DatawareFinalChannelRetention;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -11,6 +10,8 @@ import java.util.Map;
 public interface DatawareFinalChannelRetentionDao extends CrudDao<DatawareFinalChannelRetention> {
 
     long getCountByTime(Map<String,Object> map);
+
+    long deleteByDate(Map<String,Object> map);
 
     DatawareFinalChannelRetention findByDate(Map<String,Object> params);
 }

@@ -33,6 +33,22 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 
+	<delete id="deleteByDate">
+		delete
+		FROM dataware_final_channel_retention
+		WHERE 1=1
+		<if test="businessDate != null and businessDate != ''">
+			AND business_date = #{businessDate}
+		</if>
+		<if test="channelId != null">
+			AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null">
+			AND parent_id = #{parentId}
+		</if>
+
+	</delete>
+
 	<select id="findByDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelRetention">
 		SELECT <include refid="datawareFinalChannelRetentionColumns"/> FROM dataware_final_channel_retention t
 		WHERE 1=1 AND t.delete_flag =0

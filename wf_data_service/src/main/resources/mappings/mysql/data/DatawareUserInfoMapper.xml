@@ -38,6 +38,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="registeredHour != null and registeredHour != ''">
 			AND  t.registered_hour = #{registeredHour}
 		</if>
+		<if test="startHour != null and startHour != ''">
+			AND t.registered_hour &gt;= #{startHour}
+		</if>
+		<if test="endHour != null and endHour != ''">
+			AND t.registered_hour &lt;= #{endHour}
+		</if>
 	</select>
 
 	<select id="get" resultType="DatawareUserInfo">
