@@ -12,14 +12,11 @@ import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dto.DailyReportDto;
 import com.wf.data.service.data.DatawareBettingLogHourService;
-import com.wf.data.service.data.DatawareBuryingPointDayService;
 import com.wf.data.service.data.DatawareBuryingPointHourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +41,6 @@ public class ChannelGameDataController extends ExtJsController {
     public Object getList() {
         List<DailyReportDto> list = Lists.newArrayList();
         List<String> datelist = Lists.newArrayList();
-        String currentHour = Integer.toString(LocalTime.now().getHour() - 1);//清洗表中最新小时
-        String currentDay = LocalDate.now().toString();//当前日期
 
         JSONObject json = getRequestJson();
         Integer gameType = null;
