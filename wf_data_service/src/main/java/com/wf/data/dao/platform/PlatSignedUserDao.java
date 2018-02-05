@@ -13,4 +13,6 @@ import java.util.Map;
 public interface PlatSignedUserDao extends CrudDao<PlatSignedUser> {
 
     List<DatawareUserSignDay> findListFromSignedUser(Map<String,Object> map);
+
+    int findSignedUserCount(Map<String, Object> map);
 }

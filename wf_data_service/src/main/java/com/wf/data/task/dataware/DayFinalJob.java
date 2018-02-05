@@ -27,6 +27,7 @@ public class DayFinalJob {
     private final ChannelConversionService channelConversionService = SpringContextHolder.getBean(ChannelConversionService.class);
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final RegisteredArpuService registeredArpuService = SpringContextHolder.getBean(RegisteredArpuService.class);
+    private final RegisteredRetentionService registeredRetentionService = SpringContextHolder.getBean(RegisteredRetentionService.class);
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -64,6 +65,13 @@ public class DayFinalJob {
             logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
+        try {
+            if ("true".equals(openFlag[2])) {
+                registeredRetentionService.toDoAnalysis();
+            }
+        } catch (Exception e) {
+            logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
 
         logger.info("每日任务调度总job结束:traceId={}", TraceIdUtils.getTraceId());
     }

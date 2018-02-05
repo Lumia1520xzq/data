@@ -19,4 +19,7 @@ public class PlatSignedUserService extends CrudService<PlatSignedUserDao, PlatSi
         return dao.findListFromSignedUser(params);
     }
 
+    public int findSignedUserCount(Map<String, Object> map) {
+        return dao.findSignedUserCount(map);
+    }
 }
