@@ -21,4 +21,8 @@ public class DatawareFinalChannelConversionService extends CrudService<DatawareF
     public List<DatawareFinalChannelConversion> getByChannelAndDate(Map<String,Object> params){
         return dao.getByChannelAndDate(params);
     }
+
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
+    }
 }

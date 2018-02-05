@@ -34,6 +34,21 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 
+	<delete id="deleteByDate">
+		delete FROM
+		dataware_final_channel_conversion
+		WHERE 1=1
+		<if test="businessDate != null and businessDate != ''">
+			AND business_date = #{businessDate}
+		</if>
+		<if test="channelId != null">
+			AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null">
+			AND parent_id = #{parentId}
+		</if>
+	</delete>
+
 
 	<select id="getByChannelAndDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelConversion">
 	SELECT <include refid="datawareFinalChannelConversionColumns"/> FROM dataware_final_channel_conversion t
@@ -52,18 +67,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</if>
 		order by t.business_date asc
 	</select>
-
-	<delete id="deleteByDate">
-		delete FROM
-		dataware_final_channel_conversion
-		WHERE 1=1
-		<if test="beginDate != null and beginDate != ''">
-			AND business_date &gt;= #{beginDate}
-		</if>
-		<if test="endDate != null and endDate != ''">
-			AND business_date &lt;= #{endDate}
-		</if>
-	</delete>
 
 </mapper>
 

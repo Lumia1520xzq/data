@@ -61,5 +61,19 @@
         </if>
     </select>
 
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_final_channel_cost
+        WHERE 1=1
+        <if test="businessDate != null and businessDate != ''">
+            AND business_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+    </delete>
 </mapper>
 

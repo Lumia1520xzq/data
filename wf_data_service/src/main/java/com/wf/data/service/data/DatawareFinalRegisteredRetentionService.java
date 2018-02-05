@@ -1,5 +1,7 @@
 package com.wf.data.service.data;
 
+import com.wf.core.db.DataSource;
+import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.DatawareFinalRegisteredRetentionDao;
 import com.wf.data.dao.data.entity.DatawareFinalRegisteredRetention;
@@ -12,7 +14,7 @@ import java.util.Map;
  */
 @Service
 public class DatawareFinalRegisteredRetentionService extends CrudService<DatawareFinalRegisteredRetentionDao, DatawareFinalRegisteredRetention> {
-
+    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalRegisteredRetention getRetentionByDate(Map<String, Object> map) {
         return dao.getRetentionByDate(map);
     }

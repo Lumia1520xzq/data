@@ -19,6 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -47,9 +48,7 @@ public class ChannelRetentionService {
         logger.info("用户留存分析开始:traceId={}", TraceIdUtils.getTraceId());
 
         boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DESTINATION_RETENTION_FLAG);
-        if (false == flag) {
-            historyChannelRetention();
-        } else {
+        if (true == flag) {
             //前天
             String searchDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
             channelRetention(searchDate);
@@ -57,45 +56,6 @@ public class ChannelRetentionService {
 
         logger.info("用户留存分析结束:traceId={}", TraceIdUtils.getTraceId());
     }
-
-    private void historyChannelRetention() {
-        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_RETENTION_DATE);
-
-        if (StringUtils.isBlank(date)) {
-            logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
-            return;
-        }
-
-        String[] dates = date.split(",");
-        if (StringUtils.isBlank(dates[0])) {
-            logger.error("清洗开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        if (StringUtils.isBlank(dates[1])) {
-            logger.error("清洗结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        String startDay = dates[0].trim();
-        String endDay = dates[1].trim();
-        try {
-
-            if (startDay.equals(endDay)) {
-                channelRetention(startDay);
-            } else {
-                List<String> datelist = DateUtils.getDateList(startDay, endDay);
-                for (String searchDate : datelist) {
-                    channelRetention(searchDate);
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-
-
-    }
-
 
     private void channelRetention(String searchDay) {
         String channelIdList = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_CHANNEL);
@@ -241,5 +201,22 @@ public class ChannelRetentionService {
 
     }
 
+    @Async
+    public void dataClean(String startTime, String endTime) {
+        try {
 
+            if (startTime.equals(endTime)) {
+                channelRetention(endTime);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    channelRetention(searchDate);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
 }

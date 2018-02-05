@@ -14,4 +14,6 @@ public interface DatawareFinalChannelConversionDao extends CrudDao<DatawareFinal
     long getCountByTime(Map<String,Object> map);
 
     List<DatawareFinalChannelConversion> getByChannelAndDate(Map<String,Object> params);
+
+    int deleteByDate(Map<String,Object> map);
 }

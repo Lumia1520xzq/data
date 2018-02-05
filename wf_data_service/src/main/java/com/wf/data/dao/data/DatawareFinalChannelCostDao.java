@@ -14,4 +14,6 @@ public interface DatawareFinalChannelCostDao extends CrudDao<DatawareFinalChanne
     DatawareFinalChannelCost findByDate(Map<String,Object> params);
 
     Double findMonthCost(Map<String,Object> params);
+
+    int deleteByDate(Map<String,Object> map);
 }

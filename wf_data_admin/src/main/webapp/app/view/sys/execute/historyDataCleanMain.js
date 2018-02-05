@@ -677,5 +677,170 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
 
             }]
         });
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '补全channelConversion',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要补全channelConversion历史数据吗?", function (button) {
+                    if (button == "yes") {
+                        var data= {
+                            startTime: Ext.util.Format.date(me.down("[name='conversionStart']").getValue(),'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='conversionEnd']").getValue(),'Y-m-d')
+                        };
+                        callapi("data/admin/dataClean/channelConversion.do", data, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            },
+            items: [{
+                name: 'conversionStart',
+                fieldLabel: '开始日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }, {
+                name: 'conversionEnd',
+                fieldLabel: '结束日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }]
+        });
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '补全channelCost',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要补全channelCost历史数据吗?", function (button) {
+                    if (button == "yes") {
+                        var data= {
+                            startTime: Ext.util.Format.date(me.down("[name='costStart']").getValue(),'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='costEnd']").getValue(),'Y-m-d')
+                        };
+                        callapi("data/admin/dataClean/channelCost.do", data, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            },
+            items: [{
+                name: 'costStart',
+                fieldLabel: '开始日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }, {
+                name: 'costEnd',
+                fieldLabel: '结束日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }]
+        });
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '补全channelRetention',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要补全channelRetention历史数据吗?", function (button) {
+                    if (button == "yes") {
+                        var data= {
+                            startTime: Ext.util.Format.date(me.down("[name='channelRetentionStart']").getValue(),'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='channelRetentionEnd']").getValue(),'Y-m-d')
+                        };
+                        callapi("data/admin/dataClean/channelRetention.do", data, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            },
+            items: [{
+                name: 'channelRetentionStart',
+                fieldLabel: '开始日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }, {
+                name: 'channelRetentionEnd',
+                fieldLabel: '结束日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }]
+        });
     }
 });

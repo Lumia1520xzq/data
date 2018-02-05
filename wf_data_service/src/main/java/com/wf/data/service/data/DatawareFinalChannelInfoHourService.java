@@ -1,5 +1,7 @@
 package com.wf.data.service.data;
 
+import com.wf.core.db.DataSource;
+import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.DatawareFinalChannelInfoHourDao;
 import com.wf.data.dao.data.entity.DatawareFinalChannelInfoHour;
@@ -13,7 +15,7 @@ import java.util.Map;
  */
 @Service
 public class DatawareFinalChannelInfoHourService extends CrudService<DatawareFinalChannelInfoHourDao, DatawareFinalChannelInfoHour> {
-
+    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
@@ -24,11 +26,11 @@ public class DatawareFinalChannelInfoHourService extends CrudService<DatawareFin
     public List<DatawareFinalChannelInfoHour> getByDateAndHour(Map<String, Object> map){
         return dao.getByDateAndHour(map);
     }
-
+    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public List<DatawareFinalChannelInfoHour> getSumDataByDateAndHour(Map<String, Object> map){
         return dao.getSumDataByDateAndHour(map);
     }
-
+    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoHour findDataForPandect(Map<String, Object> map) {
         return dao.findDataForPandect(map);
     }
