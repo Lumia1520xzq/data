@@ -64,18 +64,8 @@ public interface GameTypeContents {
      * 真.热血无双
      */
     int GAME_TYPE_NEW_THREE_KINGDOM = 13;
-
-
     /**
-	 * WAP平台
-	 */
-    int GAME_TYPE_WAP = 101;
-    /**
-     * 安卓
+     * 牛牛
      */
-    int GAME_TYPE_ANDROID = 102;
-    /**
-     * IOS
-     */
-    int GAME_TYPE_IOS = 103;
+    int GAME_TYPE_NIUNIU = 14;
 }
