@@ -21,14 +21,17 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
     public List<DatawareConvertDay> findConvertList(Map<String, Object> map) {
         return dao.findConvertList(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoHour findRechargeByDate(Map<String, Object> map) {
         return dao.findRechargeByDate(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoHour findRechargeByTime(Map<String, Object> map) {
         return dao.findRechargeByTime(map);
@@ -37,6 +40,7 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public Long findrechargeCountByDate(Map<String, Object> map) {
         return dao.findrechargeCountByDate(map);

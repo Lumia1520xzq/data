@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 public class DatawareFinalRegisteredArpuService extends CrudService<DatawareFinalRegisteredArpuDao, DatawareFinalRegisteredArpu> {
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
-    public DatawareFinalRegisteredArpu getArpuByDate(Map<String,Object> map){
+    public DatawareFinalRegisteredArpu getArpuByDate(Map<String, Object> map) {
         return dao.getArpuByDate(map);
     }
 

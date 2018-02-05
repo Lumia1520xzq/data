@@ -15,13 +15,14 @@ import java.util.Map;
 @Service
 public class DatawareUserSignDayService extends CrudService<DatawareUserSignDayDao, DatawareUserSignDay> {
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
-    public long getCountByTime(Map<String,Object> map){
+    public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
 
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public Long getSignedCountByTime(Map<String, Object> params) {
         return dao.getSignedCountByTime(params);

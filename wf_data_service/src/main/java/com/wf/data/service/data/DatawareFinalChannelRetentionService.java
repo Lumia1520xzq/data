@@ -24,7 +24,6 @@ public class DatawareFinalChannelRetentionService extends CrudService<DatawareFi
         return dao.findByDate(params);
     }
 
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public long deleteByDate(Map<String, Object> map) {
         return dao.deleteByDate(map);
     }

@@ -90,5 +90,38 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			</foreach>
 		</if>
 	</select>
+
+	<delete id="deleteByDate">
+		delete FROM
+		dataware_user_info
+		WHERE 1=1
+		<if test="registeredDate != null and registeredDate != ''">
+			AND registered_date = #{registeredDate}
+		</if>
+		<if test="registeredHour != null and registeredHour != ''">
+			AND registered_hour = #{registeredHour}
+		</if>
+		<if test="startHour != null and startHour != ''">
+			AND registered_hour &gt;= #{startHour}
+		</if>
+		<if test="endHour != null and endHour != ''">
+			AND registered_hour &lt;= #{endHour}
+		</if>
+	</delete>
+
+	<update id="updateUserGroup">
+		UPDATE dataware_user_info SET
+		user_group = #{userGroup}
+		WHERE 1=1 AND delete_flag = 0
+		<if test="registeredDate != null and registeredDate != ''">
+			AND registered_date = #{registeredDate}
+		</if>
+		<if test="userList != null and userList.size()!=0">
+			AND user_id in
+			<foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
 </mapper>
 

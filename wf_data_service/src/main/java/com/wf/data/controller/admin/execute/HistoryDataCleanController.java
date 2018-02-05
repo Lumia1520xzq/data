@@ -50,6 +50,8 @@ public class HistoryDataCleanController extends ExtJsController {
     private ChannelConversionService channelConversionService;
     @Autowired
     private ChannelRetentionService channelRetentionService;
+    @Autowired
+    private UserRegisteredHourService userRegisteredHourService;
 
     /**
      * 清洗channelInfoHour表
@@ -449,4 +451,31 @@ public class HistoryDataCleanController extends ExtJsController {
         channelRetentionService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
+
+    /**
+     * 清洗userInfo表
+     *
+     * @return
+     */
+    @RequestMapping("/userInfo")
+    @ResponseBody
+    public Object userInfo(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        userRegisteredHourService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
 }

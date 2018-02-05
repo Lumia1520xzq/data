@@ -23,13 +23,16 @@ public class DatawareFinalChannelInfoHourService extends CrudService<DatawareFin
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
-    public List<DatawareFinalChannelInfoHour> getByDateAndHour(Map<String, Object> map){
+
+    public List<DatawareFinalChannelInfoHour> getByDateAndHour(Map<String, Object> map) {
         return dao.getByDateAndHour(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
-    public List<DatawareFinalChannelInfoHour> getSumDataByDateAndHour(Map<String, Object> map){
+    public List<DatawareFinalChannelInfoHour> getSumDataByDateAndHour(Map<String, Object> map) {
         return dao.getSumDataByDateAndHour(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoHour findDataForPandect(Map<String, Object> map) {
         return dao.findDataForPandect(map);

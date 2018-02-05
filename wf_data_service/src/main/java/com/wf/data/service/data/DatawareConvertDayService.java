@@ -21,10 +21,12 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoAll getConvertByDate(Map<String, Object> map) {
         return dao.getConvertByDate(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public List<Long> getUserIdByDate(Map<String, Object> map) {
         return dao.getUserIdByDate(map);
@@ -38,16 +40,19 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     public Double getHistoryConvertByDate(Map<String, Object> params) {
         return dao.getHistoryConvertByDate(params);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public Double getRegisteredConvertByDate(Map<String, Object> params) {
         return dao.getRegisteredConvertByDate(params);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
-    public Double getRechargeSumByDate(Map<String,Object> map){
+    public Double getRechargeSumByDate(Map<String, Object> map) {
         return dao.getRechargeSumByDate(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
-    public List<Long> getRechargeUserIdsByDate(Map<String,Object> map){
+    public List<Long> getRechargeUserIdsByDate(Map<String, Object> map) {
         return dao.getRechargeUserIdsByDate(map);
     }
 }

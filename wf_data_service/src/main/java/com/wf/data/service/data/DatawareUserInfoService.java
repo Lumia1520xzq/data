@@ -20,10 +20,15 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
         return dao.getCountByTime(map);
     }
 
+    public long deleteByDate(Map<String, Object> map) {
+        return dao.deleteByDate(map);
+    }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public List<Long> getNewUserByDate(Map<String, Object> map) {
         return dao.getNewUserByDate(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public List<Long> getNewUserByTime(Map<String, Object> map) {
         return dao.getNewUserByTime(map);
@@ -32,5 +37,9 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public Long getHistoryUserByDate(Map<String, Object> map) {
         return dao.getHistoryUserByDate(map);
+    }
+
+    public int updateUserGroup(Map<String, Object> map) {
+        return dao.updateUserGroup(map);
     }
 }
