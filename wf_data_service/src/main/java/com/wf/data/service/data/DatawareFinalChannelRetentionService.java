@@ -18,9 +18,15 @@ public class DatawareFinalChannelRetentionService extends CrudService<DatawareFi
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
+
     @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
-    public DatawareFinalChannelRetention findByDate(Map<String,Object> params) {
+    public DatawareFinalChannelRetention findByDate(Map<String, Object> params) {
         return dao.findByDate(params);
+    }
+
+    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
+    public long deleteByDate(Map<String, Object> map) {
+        return dao.deleteByDate(map);
     }
 
 }

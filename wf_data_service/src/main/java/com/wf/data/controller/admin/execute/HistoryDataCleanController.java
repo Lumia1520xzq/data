@@ -3,7 +3,6 @@ package com.wf.data.controller.admin.execute;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.service.business.*;
-import com.wf.data.service.data.DatawareBettingLogDayService;
 import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,8 +50,6 @@ public class HistoryDataCleanController extends ExtJsController {
     private ChannelConversionService channelConversionService;
     @Autowired
     private ChannelRetentionService channelRetentionService;
-    @Autowired
-    private DatawareBettingLogDayService datawareBettingLogDayService;
 
     /**
      * 清洗channelInfoHour表

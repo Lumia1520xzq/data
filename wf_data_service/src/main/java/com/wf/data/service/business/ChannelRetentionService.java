@@ -58,6 +58,12 @@ public class ChannelRetentionService {
     }
 
     private void channelRetention(String searchDay) {
+        Map<String, Object> channelParams = new HashMap<>();
+        channelParams.put("businessDate", searchDay);
+        long count = datawareFinalChannelRetentionService.getCountByTime(channelParams);
+        if (count > 0) {
+            datawareFinalChannelRetentionService.deleteByDate(channelParams);
+        }
         String channelIdList = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_CHANNEL);
         if (StringUtils.isBlank(channelIdList)) {
             logger.error("渠道未设置: traceId={}", TraceIdUtils.getTraceId());
@@ -110,93 +116,88 @@ public class ChannelRetentionService {
     }
 
     private void dataRetention(Map<String, Object> params, ChannelInfo channelInfo, String businessDate, Integer flag) {
-        long count = datawareFinalChannelRetentionService.getCountByTime(params);
 
-        if (count > 0) {
-            return;
+        DatawareFinalChannelRetention retention = new DatawareFinalChannelRetention();
+        retention.setBusinessDate(businessDate);
+        if (null == channelInfo) {
+            if (flag == 0) {
+                retention.setChannelId(0L);
+                retention.setParentId(0L);
+                retention.setChannelName("其他");
+            } else {
+                retention.setChannelId(1L);
+                retention.setParentId(1L);
+                retention.setChannelName("全部");
+            }
         } else {
-            DatawareFinalChannelRetention retention = new DatawareFinalChannelRetention();
-            retention.setBusinessDate(businessDate);
-            if (null == channelInfo) {
-                if (flag == 0) {
-                    retention.setChannelId(0L);
-                    retention.setParentId(0L);
-                    retention.setChannelName("其他");
-                } else {
-                    retention.setChannelId(1L);
-                    retention.setParentId(1L);
-                    retention.setChannelName("全部");
-                }
+            retention.setChannelName(channelInfo.getName());
+            retention.setChannelId(channelInfo.getId());
+            if (null == channelInfo.getParentId()) {
+                retention.setParentId(channelInfo.getId());
             } else {
-                retention.setChannelName(channelInfo.getName());
-                retention.setChannelId(channelInfo.getId());
-                if (null == channelInfo.getParentId()) {
-                    retention.setParentId(channelInfo.getId());
-                } else {
-                    retention.setParentId(channelInfo.getParentId());
-                }
+                retention.setParentId(channelInfo.getParentId());
             }
+        }
 
-            //当天的日活用户列表
-            List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(params);
-            //当天的注册用户列表
-            List<Long> newUserList = datawareUserInfoService.getNewUserByDate(params);
+        //当天的日活用户列表
+        List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(params);
+        //当天的注册用户列表
+        List<Long> newUserList = datawareUserInfoService.getNewUserByDate(params);
 
-            //新用户占比=当日新增用户数/当日DAU
-            if (CollectionUtils.isNotEmpty(dauUserList)) {
-                retention.setDau(Long.valueOf(dauUserList.size()));
-            } else {
-                retention.setDau(0L);
-            }
-            if (CollectionUtils.isNotEmpty(newUserList)) {
-                retention.setNewUsers(Long.valueOf(newUserList.size()));
-            } else {
-                retention.setNewUsers(0L);
-            }
-            if (retention.getDau() > 0) {
-                retention.setUsersRate(BigDecimalUtil.div(newUserList.size() * 100, dauUserList.size(), 2));
-            } else {
-                retention.setUsersRate(0.00);
-            }
+        //新用户占比=当日新增用户数/当日DAU
+        if (CollectionUtils.isNotEmpty(dauUserList)) {
+            retention.setDau(Long.valueOf(dauUserList.size()));
+        } else {
+            retention.setDau(0L);
+        }
+        if (CollectionUtils.isNotEmpty(newUserList)) {
+            retention.setNewUsers(Long.valueOf(newUserList.size()));
+        } else {
+            retention.setNewUsers(0L);
+        }
+        if (retention.getDau() > 0) {
+            retention.setUsersRate(BigDecimalUtil.div(newUserList.size() * 100, dauUserList.size(), 2));
+        } else {
+            retention.setUsersRate(0.00);
+        }
 
 
-            //次日活跃用户列表
-            String searchDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(businessDate), 1), DateUtils.DATE_PATTERN);
-            params.put("businessDate", searchDay);
-            List<Long> nextDayDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(params);
+        //次日活跃用户列表
+        String searchDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(businessDate), 1), DateUtils.DATE_PATTERN);
+        params.put("businessDate", searchDay);
+        List<Long> nextDayDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(params);
 
 
-            Collection interColl = CollectionUtils.intersection(newUserList, nextDayDauUserList);
-            //新用户且次日活跃的用户
-            List<Long> userList = (List<Long>) interColl;
-            int userCount = 0;
-            if (null != userList) {
-                userCount = userList.size();
-            }
-            if (retention.getNewUsers() > 0) {
-                retention.setUsersDayRetention(BigDecimalUtil.div(userCount * 100, retention.getNewUsers(), 2));
-            } else {
-                retention.setUsersDayRetention(0.00);
-            }
+        Collection interColl = CollectionUtils.intersection(newUserList, nextDayDauUserList);
+        //新用户且次日活跃的用户
+        List<Long> userList = (List<Long>) interColl;
+        int userCount = 0;
+        if (null != userList) {
+            userCount = userList.size();
+        }
+        if (retention.getNewUsers() > 0) {
+            retention.setUsersDayRetention(BigDecimalUtil.div(userCount * 100, retention.getNewUsers(), 2));
+        } else {
+            retention.setUsersDayRetention(0.00);
+        }
 
-            Collection dauInterColl = CollectionUtils.intersection(dauUserList, nextDayDauUserList);
-            //活跃用户且次日活跃的用户
-            List<Long> dauList = (List<Long>) dauInterColl;
-            int dauCount = 0;
-            if (null != dauList) {
-                dauCount = dauList.size();
-            }
-            if (retention.getDau() > 0) {
-                retention.setDayRetention(BigDecimalUtil.div(dauCount * 100, retention.getDau(), 2));
-            } else {
-                retention.setDayRetention(0.00);
-            }
+        Collection dauInterColl = CollectionUtils.intersection(dauUserList, nextDayDauUserList);
+        //活跃用户且次日活跃的用户
+        List<Long> dauList = (List<Long>) dauInterColl;
+        int dauCount = 0;
+        if (null != dauList) {
+            dauCount = dauList.size();
+        }
+        if (retention.getDau() > 0) {
+            retention.setDayRetention(BigDecimalUtil.div(dauCount * 100, retention.getDau(), 2));
+        } else {
+            retention.setDayRetention(0.00);
+        }
 
-            try {
-                datawareFinalChannelRetentionService.save(retention);
-            } catch (Exception e) {
-                logger.error("添加用户留存记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(retention.toString()));
-            }
+        try {
+            datawareFinalChannelRetentionService.save(retention);
+        } catch (Exception e) {
+            logger.error("添加用户留存记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(retention.toString()));
         }
 
     }
