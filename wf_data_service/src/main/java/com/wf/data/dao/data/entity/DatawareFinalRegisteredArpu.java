@@ -33,20 +33,20 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 	private Long channelId;
 	private String businessDate;
 
-	private Double	retention2;
-	private Double	retention3;
-	private Double	retention4;
-	private Double	retention5;
-	private Double	retention6;
-	private Double	retention7;
-	private Double	retention8;
-	private Double	retention9;
-	private Double	retention10;
-	private Double	retention11;
-	private Double	retention12;
-	private Double	retention13;
-	private Double	retention14;
-	private Double	retention15;
+	private double	retention2;
+	private double	retention3;
+	private double	retention4;
+	private double	retention5;
+	private double	retention6;
+	private double	retention7;
+	private double	retention8;
+	private double	retention9;
+	private double	retention10;
+	private double	retention11;
+	private double	retention12;
+	private double	retention13;
+	private double	retention14;
+	private double	retention15;
 
 
 	public Long getNewUsers() {
@@ -293,115 +293,115 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		return arpu;
 	}
 
-	public Double getRetention2() {
+	public double getRetention2() {
 		return retention2;
 	}
 
-	public void setRetention2(Double retention2) {
+	public void setRetention2(double retention2) {
 		this.retention2 = retention2;
 	}
 
-	public Double getRetention3() {
+	public double getRetention3() {
 		return retention3;
 	}
 
-	public void setRetention3(Double retention3) {
+	public void setRetention3(double retention3) {
 		this.retention3 = retention3;
 	}
 
-	public Double getRetention4() {
+	public double getRetention4() {
 		return retention4;
 	}
 
-	public void setRetention4(Double retention4) {
+	public void setRetention4(double retention4) {
 		this.retention4 = retention4;
 	}
 
-	public Double getRetention5() {
+	public double getRetention5() {
 		return retention5;
 	}
 
-	public void setRetention5(Double retention5) {
+	public void setRetention5(double retention5) {
 		this.retention5 = retention5;
 	}
 
-	public Double getRetention6() {
+	public double getRetention6() {
 		return retention6;
 	}
 
-	public void setRetention6(Double retention6) {
+	public void setRetention6(double retention6) {
 		this.retention6 = retention6;
 	}
 
-	public Double getRetention7() {
+	public double getRetention7() {
 		return retention7;
 	}
 
-	public void setRetention7(Double retention7) {
+	public void setRetention7(double retention7) {
 		this.retention7 = retention7;
 	}
 
-	public Double getRetention8() {
+	public double getRetention8() {
 		return retention8;
 	}
 
-	public void setRetention8(Double retention8) {
+	public void setRetention8(double retention8) {
 		this.retention8 = retention8;
 	}
 
-	public Double getRetention9() {
+	public double getRetention9() {
 		return retention9;
 	}
 
-	public void setRetention9(Double retention9) {
+	public void setRetention9(double retention9) {
 		this.retention9 = retention9;
 	}
 
-	public Double getRetention10() {
+	public double getRetention10() {
 		return retention10;
 	}
 
-	public void setRetention10(Double retention10) {
+	public void setRetention10(double retention10) {
 		this.retention10 = retention10;
 	}
 
-	public Double getRetention11() {
+	public double getRetention11() {
 		return retention11;
 	}
 
-	public void setRetention11(Double retention11) {
+	public void setRetention11(double retention11) {
 		this.retention11 = retention11;
 	}
 
-	public Double getRetention12() {
+	public double getRetention12() {
 		return retention12;
 	}
 
-	public void setRetention12(Double retention12) {
+	public void setRetention12(double retention12) {
 		this.retention12 = retention12;
 	}
 
-	public Double getRetention13() {
+	public double getRetention13() {
 		return retention13;
 	}
 
-	public void setRetention13(Double retention13) {
+	public void setRetention13(double retention13) {
 		this.retention13 = retention13;
 	}
 
-	public Double getRetention14() {
+	public double getRetention14() {
 		return retention14;
 	}
 
-	public void setRetention14(Double retention14) {
+	public void setRetention14(double retention14) {
 		this.retention14 = retention14;
 	}
 
-	public Double getRetention15() {
+	public double getRetention15() {
 		return retention15;
 	}
 
-	public void setRetention15(Double retention15) {
+	public void setRetention15(double retention15) {
 		this.retention15 = retention15;
 	}
 }

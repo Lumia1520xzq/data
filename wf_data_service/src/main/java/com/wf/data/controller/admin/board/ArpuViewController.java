@@ -4,19 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
+import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.DatawareFinalRegisteredArpu;
+import com.wf.data.dao.data.entity.DatawareFinalRegisteredRetention;
 import com.wf.data.service.data.DatawareFinalRegisteredArpuService;
+import com.wf.data.service.data.DatawareFinalRegisteredRetentionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author JoeH
@@ -29,6 +29,10 @@ public class ArpuViewController extends ExtJsController {
 
     @Autowired
     private DatawareFinalRegisteredArpuService arpuService;
+    @Autowired
+    private DatawareFinalRegisteredRetentionService retentionService;
+
+
 
     /**
      * 查询列表
@@ -75,10 +79,49 @@ public class ArpuViewController extends ExtJsController {
         for (String searchDate : datelist) {
             params.put("businessDate", searchDate);
             DatawareFinalRegisteredArpu arpu = arpuService.getArpuByDate(params);
-            if (null != arpu){
-                list.add(arpu);
+            DatawareFinalRegisteredRetention retention = retentionService.getRetentionByDate(params);
+            DatawareFinalRegisteredArpu record = new DatawareFinalRegisteredArpu();
+            if(arpu != null){
+                record.setChannelName(arpu.getChannelName());
+                record.setBusinessDate(arpu.getBusinessDate());
+                record.setNewUsers(arpu.getNewUsers());
+                record.setArpu1(arpu.getArpu1());
+                record.setArpu2(arpu.getArpu2());
+                record.setArpu3(arpu.getArpu3());
+                record.setArpu4(arpu.getArpu4());
+                record.setArpu5(arpu.getArpu5());
+                record.setArpu6(arpu.getArpu6());
+                record.setArpu7(arpu.getArpu7());
+                record.setArpu15(arpu.getArpu15());
+                record.setArpu30(arpu.getArpu30());
+                record.setArpu60(arpu.getArpu60());
+                record.setArpu90(arpu.getArpu90());
+                if(retention != null){
+                    record.setRetention2(cal(retention.getRetention2()));
+                    record.setRetention3(cal(retention.getRetention3()));
+                    record.setRetention4(cal(retention.getRetention4()));
+                    record.setRetention5(cal(retention.getRetention5()));
+                    record.setRetention6(cal(retention.getRetention6()));
+                    record.setRetention7(cal(retention.getRetention7()));
+                    record.setRetention8(cal(retention.getRetention8()));
+                    record.setRetention9(cal(retention.getRetention9()));
+                    record.setRetention10(cal(retention.getRetention10()));
+                    record.setRetention11(cal(retention.getRetention11()));
+                    record.setRetention12(cal(retention.getRetention12()));
+                    record.setRetention13(cal(retention.getRetention13()));
+                    record.setRetention14(cal(retention.getRetention14()));
+                    record.setRetention15(cal(retention.getRetention15()));
+                }
+                list.add(record);
             }
+
         }
+        Collections.reverse(list);
         return list;
     }
+
+    private static double cal(double num){
+        return BigDecimalUtil.round(BigDecimalUtil.mul(num ,100),2);
+    }
+
 }
