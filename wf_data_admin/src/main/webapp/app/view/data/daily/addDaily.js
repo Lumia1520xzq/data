@@ -26,24 +26,23 @@ Ext.define('WF.view.data.daily.addDaily', {
             border: true,
             columns: 2,
             items: [{
-                allowBlank: true,
-                colspan: 2,
-                name: 'channelId',
-                xtype: 'searchfield',
-                emptyText: "--请选择--",
-                displayField: 'name',
-                valueField: "id",
-                editable: false,
-                queryMode: "local",
-                store: 'channelStore',
-                fieldLabel: '渠道'
-            }, {
                 afterLabelTextTpl: required,
                 allowBlank: false,
                 xtype: 'datefield',
                 name: 'dataTime',
                 format: 'Y-m-d',
                 fieldLabel: '数据日期'
+            }, {
+                allowBlank: true,
+                colspan: 2,
+                name: 'channelId',
+                xtype: 'searchfield',
+                displayField: 'name',
+                valueField: "id",
+                editable: false,
+                queryMode: "local",
+                store: 'channelStore',
+                fieldLabel: '渠道'
             }, {
                 afterLabelTextTpl: required,
                 allowBlank: false,
@@ -71,14 +70,12 @@ Ext.define('WF.view.data.daily.addDaily', {
                 colspan: 2,
                 fieldLabel: '分析总结'
             }, {
-                afterLabelTextTpl: required,
-                allowBlank: false,
+                allowBlank: true,
                 name: 'followUp',
                 colspan: 2,
                 fieldLabel: '待跟进'
             }, {
-                afterLabelTextTpl: required,
-                allowBlank: false,
+                allowBlank: true,
                 name: 'followUpUser',
                 colspan: 2,
                 fieldLabel: '跟进人'

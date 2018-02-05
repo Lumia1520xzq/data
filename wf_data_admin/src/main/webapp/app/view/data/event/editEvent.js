@@ -30,7 +30,6 @@ Ext.define('WF.view.data.event.editEvent', {
                 colspan: 2,
                 name: 'channelId',
                 xtype: 'searchfield',
-                emptyText: "--请选择--",
                 displayField: 'name',
                 valueField: "id",
                 editable: false,
@@ -60,13 +59,13 @@ Ext.define('WF.view.data.event.editEvent', {
                 editable: false,
                 queryMode: "local",
                 store: eventTypeStor
-            },{
+            }/*,{
                 afterLabelTextTpl: required,
                 allowBlank: false,
                 name: 'title',
                 colspan: 2,
                 fieldLabel: '标题'
-            },{
+            }*/,{
                 afterLabelTextTpl: required,
                 allowBlank: false,
                 name: 'content',

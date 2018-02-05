@@ -22,7 +22,7 @@ Ext.define('WF.view.data.event.addEvent', {
 
         var allChannelStore = Ext.create('DCIS.Store', {
             autoLoad: true,
-            url: 'data/admin/common/data/getAllChannels.do',
+            url: 'data/admin/common/data/getParentChannels.do',
             fields: ['id', 'name']
         });
 
@@ -36,7 +36,6 @@ Ext.define('WF.view.data.event.addEvent', {
                 colspan: 2,
                 name: 'channelId',
                 xtype: 'searchfield',
-                emptyText: "--请选择--",
                 displayField: 'name',
                 valueField: "id",
                 editable: false,
@@ -47,6 +46,7 @@ Ext.define('WF.view.data.event.addEvent', {
                 xtype: 'datefield',
                 name: 'beginDate',
                 format: 'Y-m-d',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d"),
                 fieldLabel: '开始时间'
             }, {
                 xtype: 'datefield',
@@ -66,13 +66,13 @@ Ext.define('WF.view.data.event.addEvent', {
                 editable: false,
                 queryMode: "local",
                 store: eventTypeStor
-            },{
+            }/*,{
                 afterLabelTextTpl: required,
                 allowBlank: false,
                 name: 'title',
                 colspan: 2,
                 fieldLabel: '标题'
-            },{
+            }*/,{
                 afterLabelTextTpl: required,
                 allowBlank: false,
                 name: 'content',
