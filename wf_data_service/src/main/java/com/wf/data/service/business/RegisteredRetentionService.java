@@ -360,46 +360,102 @@ public class RegisteredRetentionService {
 
         if (i == 1) {
             retention.setRegisteredDau2(Long.valueOf(userCount));
-            retention.setRetention2(BigDecimalUtil.div(retention.getRegisteredDau2(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention2(BigDecimalUtil.div(retention.getRegisteredDau2(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention2(0.00);
+            }
         } else if (i == 2) {
             retention.setRegisteredDau3(Long.valueOf(userCount));
-            retention.setRetention3(BigDecimalUtil.div(retention.getRegisteredDau3(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention3(BigDecimalUtil.div(retention.getRegisteredDau3(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention3(0.00);
+            }
         } else if (i == 3) {
             retention.setRegisteredDau4(Long.valueOf(userCount));
-            retention.setRetention4(BigDecimalUtil.div(retention.getRegisteredDau4(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention4(BigDecimalUtil.div(retention.getRegisteredDau4(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention4(0.00);
+            }
         } else if (i == 4) {
             retention.setRegisteredDau5(Long.valueOf(userCount));
-            retention.setRetention5(BigDecimalUtil.div(retention.getRegisteredDau5(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention5(BigDecimalUtil.div(retention.getRegisteredDau5(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention5(0.00);
+            }
         } else if (i == 5) {
             retention.setRegisteredDau6(Long.valueOf(userCount));
-            retention.setRetention6(BigDecimalUtil.div(retention.getRegisteredDau6(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention6(BigDecimalUtil.div(retention.getRegisteredDau6(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention6(0.00);
+            }
         } else if (i == 6) {
             retention.setRegisteredDau7(Long.valueOf(userCount));
-            retention.setRetention7(BigDecimalUtil.div(retention.getRegisteredDau7(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention7(BigDecimalUtil.div(retention.getRegisteredDau7(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention7(0.00);
+            }
         } else if (i == 7) {
             retention.setRegisteredDau8(Long.valueOf(userCount));
-            retention.setRetention8(BigDecimalUtil.div(retention.getRegisteredDau8(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention8(BigDecimalUtil.div(retention.getRegisteredDau8(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention8(0.00);
+            }
         } else if (i == 8) {
             retention.setRegisteredDau9(Long.valueOf(userCount));
-            retention.setRetention9(BigDecimalUtil.div(retention.getRegisteredDau9(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention9(BigDecimalUtil.div(retention.getRegisteredDau9(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention9(0.00);
+            }
         } else if (i == 9) {
             retention.setRegisteredDau10(Long.valueOf(userCount));
-            retention.setRetention10(BigDecimalUtil.div(retention.getRegisteredDau10(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention10(BigDecimalUtil.div(retention.getRegisteredDau10(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention10(0.00);
+            }
         } else if (i == 10) {
             retention.setRegisteredDau11(Long.valueOf(userCount));
-            retention.setRetention11(BigDecimalUtil.div(retention.getRegisteredDau11(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention11(BigDecimalUtil.div(retention.getRegisteredDau11(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention11(0.00);
+            }
         } else if (i == 11) {
             retention.setRegisteredDau12(Long.valueOf(userCount));
-            retention.setRetention12(BigDecimalUtil.div(retention.getRegisteredDau12(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention12(BigDecimalUtil.div(retention.getRegisteredDau12(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention12(0.00);
+            }
         } else if (i == 12) {
             retention.setRegisteredDau13(Long.valueOf(userCount));
-            retention.setRetention13(BigDecimalUtil.div(retention.getRegisteredDau13(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention13(BigDecimalUtil.div(retention.getRegisteredDau13(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention13(0.00);
+            }
         } else if (i == 13) {
             retention.setRegisteredDau14(Long.valueOf(userCount));
-            retention.setRetention14(BigDecimalUtil.div(retention.getRegisteredDau14(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention14(BigDecimalUtil.div(retention.getRegisteredDau14(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention14(0.00);
+            }
         } else if (i == 14) {
             retention.setRegisteredDau15(Long.valueOf(userCount));
-            retention.setRetention15(BigDecimalUtil.div(retention.getRegisteredDau15(), retention.getNewUsers(), 2));
+            if(retention.getNewUsers() >0){
+                retention.setRetention15(BigDecimalUtil.div(retention.getRegisteredDau15(), retention.getNewUsers(), 2));
+            }else {
+                retention.setRetention15(0.00);
+            }
         }
 
         return retention;
