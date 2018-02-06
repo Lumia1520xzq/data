@@ -78,6 +78,8 @@ public class BettingAnalyseJob {
                     content.append(buildTcardInfo(cal));
                     //多多捕鱼
                     content.append(buildFishInfo(cal));
+                    //牛牛
+                    content.append(buildNiuniuInfo(cal));
                     //梦想桌球
                     content.append(buildBilliardInfo(cal));
                     //梦想飞镖
@@ -134,6 +136,11 @@ public class BettingAnalyseJob {
     private String buildBilliardInfo(Calendar cal) {
         String temp = getTemp(cal, 2);
         return temp.replace("GAME_NAME", "梦想桌球");
+    }
+
+    private String buildNiuniuInfo(Calendar cal) {
+        String temp = getTemp(cal, 14);
+        return temp.replace("GAME_NAME", "牛牛");
     }
 
     private String buildWarInfo(Calendar cal) {
