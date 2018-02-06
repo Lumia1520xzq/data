@@ -71,6 +71,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="endDate != null">
         and create_time &lt;= #{endDate}
         </if>
+        <if test="roomType != null">
+        and room_type = #{roomType}
+        </if>
     </select>
 
 
@@ -90,6 +93,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         </if>
         <if test="amount != null">
             and amount = #{amount}
+        </if>
+        <if test="roomType != null">
+            and room_type = #{roomType}
         </if>
         <if test="beginDate != null">
             and create_time &gt;= #{beginDate}
@@ -115,6 +121,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         </if>
         <if test="bettingType != null and bettingType != ''">
             AND betting_type = #{bettingType}
+        </if>
+        <if test="roomType != null and roomType != ''">
+            AND room_type = #{roomType}
         </if>
         AND create_time BETWEEN #{beginDate} AND #{endDate}
     </select>
