@@ -6,9 +6,9 @@ import com.google.common.collect.Lists;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.utils.JdbcUtils;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 

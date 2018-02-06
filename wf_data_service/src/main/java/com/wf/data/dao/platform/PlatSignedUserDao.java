@@ -3,7 +3,7 @@ package com.wf.data.dao.platform;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
-import com.wf.data.dao.data.entity.DatawareUserSignDay;
+import com.wf.data.dao.datarepo.entity.DatawareUserSignDay;
 import com.wf.data.dao.platform.entity.PlatSignedUser;
 
 import java.util.List;

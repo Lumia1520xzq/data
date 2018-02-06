@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareBuryingPointDayDao">
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*)
+        FROM dataware_burying_point_day t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.channel_id IS NOT NULL
+        <if test="buryingDate != null and buryingDate != ''">
+            AND t.burying_date = #{buryingDate}
+        </if>
+    </select>
+
+    <select id="getGameDau" resultType="Integer">
+        SELECT IFNULL(COUNT(DISTINCT user_id),0)
+        FROM `dataware_burying_point_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND burying_date = #{searchDate}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+    <select id="getDauByChannel" resultType="long">
+        SELECT COUNT(DISTINCT t.user_id)
+        FROM `dataware_burying_point_day` t
+        WHERE 1=1
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.burying_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+    <select id="getUserIdListByChannel" resultType="long">
+        SELECT DISTINCT t.user_id
+        FROM `dataware_burying_point_day` t
+        WHERE 1=1
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.burying_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="gameFlag != null">
+            AND game_type != 0
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+    <select id="getHistoryDauIds" resultType="Long">
+        SELECT DISTINCT user_id
+        FROM `dataware_burying_point_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND burying_date &lt; #{searchDate}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+    <select id="getGameDauIds" resultType="Long">
+        SELECT DISTINCT user_id
+        FROM `dataware_burying_point_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND burying_date = #{searchDate}
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_burying_point_day
+        WHERE 1=1
+        <if test="buryingDate != null and buryingDate != ''">
+            AND burying_date = #{buryingDate}
+        </if>
+    </delete>
+
+</mapper>
+

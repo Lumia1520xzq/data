@@ -8,8 +8,8 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
-import com.wf.data.dao.data.entity.DatawareBettingLogDay;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.DataDictService;
@@ -105,9 +105,11 @@ public class BettingLogDayService {
             Collection interColl = CollectionUtils.intersection(userList, uicGroupList);
             List<Long> users = (List) interColl;
             //4、更新交集用户状态为非正常用户
-            log.setUserGroup(1);
-            log.setUserList(users);
-            datawareBettingLogHourService.updateUserGroup(log);
+            if (CollectionUtils.isNotEmpty(users)) {
+                log.setUserGroup(1);
+                log.setUserList(users);
+                datawareBettingLogHourService.updateUserGroup(log);
+            }
         } catch (Exception e) {
             logger.error("更新用户状态失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }

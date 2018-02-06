@@ -1,9 +1,9 @@
 package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareConvertDayDao;
-import com.wf.data.dao.data.entity.DatawareConvertDay;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.DatawareConvertDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareConvertDay;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.Map;
  */
 @Service
 public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao, DatawareConvertDay> {
-
 
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
@@ -32,7 +31,6 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
         return dao.deleteByDate(params);
     }
 
-
     public Double getHistoryConvertByDate(Map<String, Object> params) {
         return dao.getHistoryConvertByDate(params);
     }
@@ -41,11 +39,11 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
         return dao.getRegisteredConvertByDate(params);
     }
 
-    public Double getRechargeSumByDate(Map<String,Object> map){
+    public Double getRechargeSumByDate(Map<String, Object> map) {
         return dao.getRechargeSumByDate(map);
     }
 
-    public List<Long> getRechargeUserIdsByDate(Map<String,Object> map){
+    public List<Long> getRechargeUserIdsByDate(Map<String, Object> map) {
         return dao.getRechargeUserIdsByDate(map);
     }
 }

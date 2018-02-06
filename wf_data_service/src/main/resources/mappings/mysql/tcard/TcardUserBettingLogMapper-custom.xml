@@ -6,7 +6,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.wf.data.dao.tcard.TcardUserBettingLogDao">
 
-    <select id="getGameBettingRecord" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+    <select id="getGameBettingRecord" resultType="com.wf.data.dao.datarepo.entity.DatawareBettingLogHour">
         SELECT
         user_id userId,
         channel_id channelId,
@@ -27,7 +27,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="getBettingAndAward" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+    <select id="getBettingAndAward" resultType="com.wf.data.dao.datarepo.entity.DatawareBettingLogHour">
         SELECT
         SUM(amount) bettingAmount,
         SUM(return_amount) resultAmount

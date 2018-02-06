@@ -1,7 +1,7 @@
 package com.wf.data.service.platform;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.entity.DatawareUserSignDay;
+import com.wf.data.dao.datarepo.entity.DatawareUserSignDay;
 import com.wf.data.dao.platform.PlatSignedUserDao;
 import com.wf.data.dao.platform.entity.PlatSignedUser;
 import org.springframework.stereotype.Service;

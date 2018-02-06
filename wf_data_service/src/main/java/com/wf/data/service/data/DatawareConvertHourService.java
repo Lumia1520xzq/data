@@ -1,10 +1,10 @@
 package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareConvertHourDao;
-import com.wf.data.dao.data.entity.DatawareConvertDay;
-import com.wf.data.dao.data.entity.DatawareConvertHour;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoHour;
+import com.wf.data.dao.datarepo.DatawareConvertHourDao;
+import com.wf.data.dao.datarepo.entity.DatawareConvertDay;
+import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.Map;
  */
 @Service
 public class DatawareConvertHourService extends CrudService<DatawareConvertHourDao, DatawareConvertHour> {
-
     public List<DatawareConvertDay> findConvertList(Map<String, Object> map) {
         return dao.findConvertList(map);
     }

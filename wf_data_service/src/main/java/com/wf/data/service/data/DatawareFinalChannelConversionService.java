@@ -1,8 +1,8 @@
 package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareFinalChannelConversionDao;
-import com.wf.data.dao.data.entity.DatawareFinalChannelConversion;
+import com.wf.data.dao.datarepo.DatawareFinalChannelConversionDao;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelConversion;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +18,11 @@ public class DatawareFinalChannelConversionService extends CrudService<DatawareF
         return dao.getCountByTime(map);
     }
 
-    public List<DatawareFinalChannelConversion> getByChannelAndDate(Map<String,Object> params){
+    public List<DatawareFinalChannelConversion> getByChannelAndDate(Map<String, Object> params) {
         return dao.getByChannelAndDate(params);
+    }
+
+    public int deleteByDate(Map<String, Object> params) {
+        return dao.deleteByDate(params);
     }
 }

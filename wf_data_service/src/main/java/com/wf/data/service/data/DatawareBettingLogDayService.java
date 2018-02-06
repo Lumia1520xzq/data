@@ -1,9 +1,9 @@
 package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareBettingLogDayDao;
-import com.wf.data.dao.data.entity.DatawareBettingLogDay;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.DatawareBettingLogDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dto.TcardDto;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,6 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
-
 
     public TcardDto getTcardBettingByday(Map<String, Object> params) {
         return dao.getTcardBettingByday(params);

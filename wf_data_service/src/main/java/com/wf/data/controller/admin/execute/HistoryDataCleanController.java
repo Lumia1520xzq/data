@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 历史数据补充
@@ -42,7 +44,14 @@ public class HistoryDataCleanController extends ExtJsController {
     private RegisteredArpuService registeredArpuService;
     @Autowired
     private RegisteredRetentionService registeredRetentionService;
-
+    @Autowired
+    private ChannelCostService channelCostService;
+    @Autowired
+    private ChannelConversionService channelConversionService;
+    @Autowired
+    private ChannelRetentionService channelRetentionService;
+    @Autowired
+    private UserRegisteredHourService userRegisteredHourService;
 
     /**
      * 清洗channelInfoHour表
@@ -358,6 +367,114 @@ public class HistoryDataCleanController extends ExtJsController {
         }
 
         registeredRetentionService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+
+    /**
+     * 清洗channelConversion
+     *
+     * @return
+     */
+    @RequestMapping("/channelConversion")
+    @ResponseBody
+    public Object channelConversion(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        channelConversionService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗channelCost
+     *
+     * @return
+     */
+    @RequestMapping("/channelCost")
+    @ResponseBody
+    public Object channelCost(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("bettingDate", startTime);
+        channelCostService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗channelRetention
+     *
+     * @return
+     */
+    @RequestMapping("/channelRetention")
+    @ResponseBody
+    public Object channelRetention(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("bettingDate", startTime);
+        channelRetentionService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗userInfo表
+     *
+     * @return
+     */
+    @RequestMapping("/userInfo")
+    @ResponseBody
+    public Object userInfo(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDateTime(startTime).getTime() > DateUtils.parseDateTime(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        userRegisteredHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
 

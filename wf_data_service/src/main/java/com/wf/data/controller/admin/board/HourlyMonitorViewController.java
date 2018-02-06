@@ -9,7 +9,7 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoHour;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelInfoHourService;
 import org.apache.commons.collections.CollectionUtils;

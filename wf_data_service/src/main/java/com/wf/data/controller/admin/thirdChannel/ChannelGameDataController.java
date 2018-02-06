@@ -9,7 +9,7 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dto.DailyReportDto;
 import com.wf.data.service.data.DatawareBettingLogHourService;
 import com.wf.data.service.data.DatawareBuryingPointHourService;

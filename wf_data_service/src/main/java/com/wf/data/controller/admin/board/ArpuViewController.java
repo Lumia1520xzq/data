@@ -9,13 +9,9 @@ import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DatawareFinalRegisteredArpu;
 import com.wf.data.dao.data.entity.DatawareFinalRegisteredArpuOut;
-import com.wf.data.dao.data.entity.DatawareFinalRegisteredRetention;
-import com.wf.data.dao.mall.entity.AwardsSendLogInOut;
-import com.wf.data.dao.mall.entity.InventoryPhyAwardsInfo;
-import com.wf.data.dao.mall.entity.InventoryPhyAwardsSendlog;
-import com.wf.data.dao.mycatuic.entity.UicUser;
+import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredArpu;
+import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredRetention;
 import com.wf.data.service.data.DatawareFinalRegisteredArpuService;
 import com.wf.data.service.data.DatawareFinalRegisteredRetentionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +38,6 @@ public class ArpuViewController extends ExtJsController {
     private DatawareFinalRegisteredArpuService arpuService;
     @Autowired
     private DatawareFinalRegisteredRetentionService retentionService;
-
-
-
     /**
      * 查询列表
      */

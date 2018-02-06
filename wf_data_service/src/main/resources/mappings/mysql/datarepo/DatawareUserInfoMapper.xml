@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareUserInfoDao">
+
+	<sql id="datawareUserInfoColumns">
+		t.id,
+		t.user_id,
+		t.nickname,
+		t.third_id,
+		t.parent_id,
+		t.channel_id,
+		t.user_group,
+		t.registered_time,
+		t.registered_hour,
+		t.registered_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareUserInfoWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareUserInfoJoins">
+	</sql>
+
+	<select id="getCountByTime" resultType="long">
+		SELECT COUNT(*) FROM dataware_user_info t
+		WHERE  1=1 AND t.delete_flag = 0
+		<if test="registeredDate != null and registeredDate != ''">
+			AND  t.registered_date = #{registeredDate}
+		</if>
+		<if test="registeredHour != null and registeredHour != ''">
+			AND  t.registered_hour = #{registeredHour}
+		</if>
+		<if test="startHour != null and startHour != ''">
+			AND t.registered_hour &gt;= #{startHour}
+		</if>
+		<if test="endHour != null and endHour != ''">
+			AND t.registered_hour &lt;= #{endHour}
+		</if>
+	</select>
+
+	<select id="get" resultType="DatawareUserInfo">
+		SELECT <include refid="datawareUserInfoColumns"/> FROM dataware_user_info t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareUserInfo">
+		SELECT <include refid="datawareUserInfoColumns"/> FROM dataware_user_info t <include refid="datawareUserInfoJoins"/>
+		WHERE <include refid="datawareUserInfoWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_user_info t WHERE <include refid="datawareUserInfoWhere" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dataware_user_info (
+			id, 
+			user_id, 
+			nickname, 
+			third_id, 
+			parent_id,
+			channel_id,
+			user_group,
+			registered_time,
+			registered_hour,
+			registered_date,
+			create_time,
+			delete_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{nickname},
+			#{thirdId},
+			#{parentId},
+			#{channelId},
+			#{userGroup},
+			#{registeredTime},
+			#{registeredHour},
+			#{registeredDate},
+			#{createTime},
+			#{deleteFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dataware_user_info SET
+			user_id = #{userId},
+			nickname = #{nickname},
+			third_id = #{thirdId},
+			parent_id = #{parentId},
+			channel_id = #{channelId}, 
+			user_group = #{userGroup}, 
+			registered_time = #{registeredTime}, 
+			registered_hour = #{registeredHour}, 
+			registered_date = #{registeredDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_user_info SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

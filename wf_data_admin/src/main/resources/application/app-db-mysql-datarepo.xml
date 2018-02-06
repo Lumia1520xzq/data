@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="datarepoWriteDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.datarepo.url}" />
+		<property name="username" value="${jdbc.datarepo.username}" />
+		<property name="password" value="${jdbc.datarepo.password}" />
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="10" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="select 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="filters" value="stat" />
+	</bean>
+
+	<bean id="datarepoMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
+		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="datarepoWriteDataSource" />
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="datarepoWriteDataSource" key="dataSourceWrite" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="datarepoSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="datarepoMultipleDataSource" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.datarepo.entity" />
+		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
+		<property name="mapperLocations" value="classpath*:mappings/mysql/datarepo/*.xml" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+	</bean>
+	<bean id="datarepoMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="datarepoSqlSessionFactory" />
+		<property name="basePackage" value="com.wf.data.dao.datarepo" />
+		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
+	</bean>
+
+	<bean id="datarepoTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="datarepoMultipleDataSource" />
+	</bean>
+</beans>

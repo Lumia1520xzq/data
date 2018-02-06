@@ -9,8 +9,8 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
-import com.wf.data.dao.data.entity.DatawareFinalChannelRetention;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelRetention;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.MessagingException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;

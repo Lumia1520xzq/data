@@ -11,6 +11,14 @@
     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
     http://www.springframework.org/schema/task
     http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+    <aop:config>
+        <aop:pointcut id="dataactionPointCut"
+                      expression="execution(* com.wf.data.service..*.*(..))"/>
+        <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="dataactionPointCut"
+                     order="1"/>
+    </aop:config>
+
+    <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
 
     <task:annotation-driven/>
     <bean class="com.wf.core.utils.core.SpringContextHolder"/>
@@ -35,6 +43,7 @@
     <import resource="app-db-mysql-tcard.xml"/>
     <import resource="app-db-mysql-platform.xml"/>
     <import resource="app-db-mysql-mall.xml"/>
+    <import resource="app-db-mysql-datarepo.xml"/>
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
         <constructor-arg index="0" value="${es.ips}"/>
@@ -64,14 +73,7 @@
     </context:component-scan>
 
 
-    <bean id="dataSourceExchange" class="com.wf.core.db.DataSourceExchange"/>
 
-    <aop:config>
-        <aop:pointcut id="transactionPointCut"
-                      expression="execution(* com.wf.data..*.*(..))"/>
-        <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="transactionPointCut"
-                     order="1"/>
-    </aop:config>
 
 
 </beans>
