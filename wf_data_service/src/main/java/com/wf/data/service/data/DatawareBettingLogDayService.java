@@ -3,9 +3,9 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareBettingLogDayDao;
-import com.wf.data.dao.data.entity.DatawareBettingLogDay;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.DatawareBettingLogDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dto.TcardDto;
 import org.springframework.stereotype.Service;
 

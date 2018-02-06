@@ -3,8 +3,8 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareFinalChannelInfoAllDao;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.DatawareFinalChannelInfoAllDao;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dto.MonthlyDataDto;
 import org.springframework.stereotype.Service;
 

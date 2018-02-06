@@ -3,7 +3,7 @@ package com.wf.data.dao.tcard;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.tcard.entity.TcardUserBettingLog;
 import com.wf.data.dto.TcardDto;
 

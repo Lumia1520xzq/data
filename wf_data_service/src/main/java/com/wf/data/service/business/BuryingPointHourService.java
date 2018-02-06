@@ -9,7 +9,7 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
-import com.wf.data.dao.data.entity.DatawareBuryingPointHour;
+import com.wf.data.dao.datarepo.entity.DatawareBuryingPointHour;
 import com.wf.data.service.*;
 import com.wf.data.service.data.DatawareBuryingPointHourService;
 import org.apache.commons.collections.CollectionUtils;

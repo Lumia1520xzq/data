@@ -1,7 +1,7 @@
 package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.tcard.TcardUserBettingLogDao;
 import com.wf.data.dao.tcard.entity.TcardUserBettingLog;
 import com.wf.data.dto.TcardDto;

@@ -3,9 +3,9 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareConvertDayDao;
-import com.wf.data.dao.data.entity.DatawareConvertDay;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.DatawareConvertDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareConvertDay;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

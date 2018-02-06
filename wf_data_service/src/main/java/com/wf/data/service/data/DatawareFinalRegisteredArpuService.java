@@ -3,8 +3,8 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareFinalRegisteredArpuDao;
-import com.wf.data.dao.data.entity.DatawareFinalRegisteredArpu;
+import com.wf.data.dao.datarepo.DatawareFinalRegisteredArpuDao;
+import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredArpu;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

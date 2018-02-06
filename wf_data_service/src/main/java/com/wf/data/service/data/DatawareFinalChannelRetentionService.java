@@ -3,8 +3,8 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareFinalChannelRetentionDao;
-import com.wf.data.dao.data.entity.DatawareFinalChannelRetention;
+import com.wf.data.dao.datarepo.DatawareFinalChannelRetentionDao;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelRetention;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

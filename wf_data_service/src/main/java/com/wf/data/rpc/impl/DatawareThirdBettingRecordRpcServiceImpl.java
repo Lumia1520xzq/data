@@ -1,7 +1,7 @@
 package com.wf.data.rpc.impl;
 
 import com.wf.data.common.utils.JsonResultUtils;
-import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
+import com.wf.data.dao.datarepo.entity.DatawareThirdBettingRecord;
 import com.wf.data.rpc.DatawareThirdBettingRecordRpcService;
 import com.wf.data.rpc.dto.DatawareThirdBettingRecordDto;
 import com.wf.data.rpc.dto.JsonResult;

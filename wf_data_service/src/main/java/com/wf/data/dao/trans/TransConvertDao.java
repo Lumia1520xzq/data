@@ -3,7 +3,7 @@ package com.wf.data.dao.trans;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
-import com.wf.data.dao.data.entity.DatawareConvertHour;
+import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.dao.trans.entity.TransConvert;
 import org.apache.ibatis.annotations.Param;

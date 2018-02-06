@@ -1,12 +1,13 @@
 package com.wf.data.service.data;
 
+
+import com.alibaba.dubbo.config.annotation.Service;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareBettingLogHourDao;
-import com.wf.data.dao.data.entity.DatawareBettingLogDay;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
-import org.springframework.stereotype.Service;
+import com.wf.data.dao.datarepo.DatawareBettingLogHourDao;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 
 import java.util.List;
 import java.util.Map;

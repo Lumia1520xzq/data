@@ -7,7 +7,7 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DatawareFinalRegisteredArpu;
+import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredArpu;
 import com.wf.data.service.data.DatawareFinalRegisteredArpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

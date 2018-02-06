@@ -3,8 +3,8 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareBuryingPointDayDao;
-import com.wf.data.dao.data.entity.DatawareBuryingPointDay;
+import com.wf.data.dao.datarepo.DatawareBuryingPointDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareBuryingPointDay;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

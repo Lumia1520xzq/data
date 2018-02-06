@@ -3,8 +3,8 @@ package com.wf.data.service.data;
 import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareUserSignDayDao;
-import com.wf.data.dao.data.entity.DatawareUserSignDay;
+import com.wf.data.dao.datarepo.DatawareUserSignDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareUserSignDay;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
