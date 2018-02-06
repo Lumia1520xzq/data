@@ -5,7 +5,7 @@ import com.wf.core.persistence.Page;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
+import com.wf.data.dao.datarepo.entity.DatawareThirdBettingRecord;
 import com.wf.data.service.data.DatawareThirdBettingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -142,7 +142,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-	<select id="findConvertList" resultType="com.wf.data.dao.data.entity.DatawareConvertHour">
+	<select id="findConvertList" resultType="com.wf.data.dao.datarepo.entity.DatawareConvertHour">
         SELECT
         user_id userId,
         channel_id channelId,

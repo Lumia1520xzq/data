@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareUserSignDayDao">
+
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*)
+        FROM dataware_user_sign_day t
+        WHERE 1=1 AND t.delete_flag = 0
+        <if test="signDate != null and signDate != ''">
+            AND t.sign_date = #{signDate}
+        </if>
+        <if test="signHour != null and signHour != ''">
+            AND t.sign_hour = #{signHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND t.sign_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND t.sign_hour &lt;= #{endHour}
+        </if>
+    </select>
+
+
+    <delete id="deleteByDate">
+        delete
+        FROM dataware_user_sign_day
+        WHERE 1=1 AND delete_flag = 0
+        <if test="signDate != null and signDate != ''">
+            AND sign_date = #{signDate}
+        </if>
+        <if test="signHour != null and signHour != ''">
+            AND sign_hour = #{signHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND sign_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND sign_hour &lt;= #{endHour}
+        </if>
+    </delete>
+
+    <select id="getSignedCountByTime" resultType="long">
+        SELECT COUNT(DISTINCT t.user_id)
+        FROM dataware_user_sign_day t
+        WHERE 1=1 AND t.delete_flag = 0 AND t.user_group = 2
+        <if test="businessDate != null and businessDate != ''">
+            AND t.sign_date = #{businessDate}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+
+    </select>
+
+    <update id="updateUserGroup">
+        UPDATE dataware_user_sign_day SET
+        user_group = #{userGroup}
+        WHERE 1=1 AND delete_flag = 0
+        <if test="signDate != null and signDate != ''">
+            AND sign_date = #{signDate}
+        </if>
+        <if test="signHour != null and signHour != ''">
+            AND sign_hour = #{signHour}
+        </if>
+        <if test="userList != null and userList.size()!=0">
+            AND user_id in
+            <foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+</mapper>
+

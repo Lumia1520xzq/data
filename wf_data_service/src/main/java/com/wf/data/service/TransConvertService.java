@@ -5,7 +5,7 @@ import com.wf.core.db.DataSource;
 import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DatawareConvertHour;
+import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
 import com.wf.data.dao.trans.TransConvertDao;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.dao.trans.entity.TransConvert;

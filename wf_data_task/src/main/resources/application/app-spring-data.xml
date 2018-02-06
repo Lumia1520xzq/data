@@ -31,6 +31,7 @@
 	<import resource="app-db-mysql-tcard.xml" />
 	<import resource="app-db-mysql-platform.xml" />
 	<import resource="app-db-mysql-mall.xml" />
+	<import resource="app-db-mysql-datarepo.xml" />
 
 	<import resource="classpath*:schedule/app-scheduler.xml" />
 	<import resource="classpath*:wf/spring-redis.xml"/>

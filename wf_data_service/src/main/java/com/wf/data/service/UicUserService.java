@@ -2,7 +2,7 @@ package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
-import com.wf.data.dao.data.entity.DatawareUserInfo;
+import com.wf.data.dao.datarepo.entity.DatawareUserInfo;
 import com.wf.data.dao.mycatuic.UicUserDao;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 import org.springframework.stereotype.Service;

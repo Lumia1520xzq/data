@@ -9,7 +9,7 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.service.*;
 import com.wf.data.service.data.DatawareBettingLogHourService;
 import org.apache.commons.collections.CollectionUtils;

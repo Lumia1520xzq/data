@@ -2,7 +2,7 @@ package com.wf.data.dao.mycatuic;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
-import com.wf.data.dao.data.entity.DatawareUserInfo;
+import com.wf.data.dao.datarepo.entity.DatawareUserInfo;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 
 import java.util.List;
