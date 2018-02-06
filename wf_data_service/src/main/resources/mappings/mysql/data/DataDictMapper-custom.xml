@@ -26,5 +26,16 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 		ORDER BY sort asc
 	</select>
+
+	<select id="findListByType" resultType="DataDict">
+		SELECT
+		<include refid="dataDictColumns"/>
+		FROM data_dict t WHERE 1=1 and delete_flag=0
+		<if test="type != null and type != ''">
+		AND `type` = #{type}
+		</if>
+		order by id asc
+	</select>
+
 </mapper>
 
