@@ -2,13 +2,12 @@ package com.wf.data.service.business;
 
 import com.google.common.collect.Lists;
 import com.wf.core.log.LogExceptionStackTrace;
-import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.data.entity.DatawareUserInfo;
+import com.wf.data.dao.datarepo.entity.DatawareUserInfo;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.UicGroupService;
@@ -19,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -56,9 +56,7 @@ public class UserRegisteredHourService {
         }
         boolean userinfoFlag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DATAWARE_USERINFO_FLAG_DAY);
 
-        if (false == userinfoFlag) {
-            historyUserInfo(uicGroupList);
-        } else {
+        if (true == userinfoFlag) {
             hourUserInfo(uicGroupList);
         }
 
@@ -66,69 +64,6 @@ public class UserRegisteredHourService {
         logger.info("每小时注册汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
-    private void historyUserInfo(List<Long> uicGroupList) {
-        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_USERINFO_HISTORY_DAY);
-
-        if (StringUtils.isBlank(date)) {
-            logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
-            return;
-        }
-
-        String[] dates = date.split(",");
-        if (StringUtils.isBlank(dates[0])) {
-            logger.error("清洗开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        if (StringUtils.isBlank(dates[1])) {
-            logger.error("清洗结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-
-        try {
-
-            if (DateUtils.formatDate(DateUtils.parseDate(dates[0]), "yyyy-MM-dd").equals(DateUtils.formatDate(DateUtils.parseDate(dates[1]), "yyyy-MM-dd"))) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("beginDate", dates[0]);
-                map.put("endDate", dates[1]);
-                //
-                String searchDay = DateUtils.formatDate(DateUtils.parseDate(dates[0], "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
-                String searchHour = "";
-                UserInfo(map, uicGroupList, searchDay, searchHour);
-            } else {
-                List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
-                String beginDate = "";
-                String endDate = "";
-                for (String searchDate : datelist) {
-
-                    if (datelist.get(0) == searchDate) {
-                        beginDate = searchDate;
-                        endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
-
-                    } else if (searchDate == datelist.get(datelist.size() - 1)) {
-                        beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
-                        endDate = searchDate;
-                    } else {
-                        beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
-                        endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
-                    }
-
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("beginDate", beginDate);
-                    map.put("endDate", endDate);
-                    //
-                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(beginDate, "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
-                    String searchHour = "";
-                    UserInfo(map, uicGroupList, searchDay, searchHour);
-
-                }
-            }
-
-
-        } catch (Exception e) {
-            logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-    }
 
     private void hourUserInfo(List<Long> uicGroupList) {
         Calendar cal = Calendar.getInstance();
@@ -153,11 +88,30 @@ public class UserRegisteredHourService {
 
         String searchDay = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
         String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
-        UserInfo(map, uicGroupList, searchDay, searchHour);
+        Map<String, Object> params = new HashMap<>();
+        params.put("registeredDate", searchDay);
+        params.put("registeredHour", searchHour);
+        long count = datawareUserInfoService.getCountByTime(params);
+        if (count > 0) {
+            datawareUserInfoService.deleteByDate(params);
+        }
+
+        if ("23".equals(searchHour)) {
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("userGroup", 2);
+            datawareUserInfoService.updateUserGroup(userMap);
+            if (CollectionUtils.isNotEmpty(uicGroupList)) {
+                userMap.put("userGroup", 1);
+                userMap.put("userList", uicGroupList);
+                datawareUserInfoService.updateUserGroup(userMap);
+            }
+        }
+
+        UserInfo(map, uicGroupList);
 
     }
 
-    private void UserInfo(Map<String, Object> map, List<Long> uicGroupList, String searchDay, String searchHour) {
+    private void UserInfo(Map<String, Object> map, List<Long> uicGroupList) {
         try {
 
             List<DatawareUserInfo> userInfoList = uicUserService.findUserInfoByTime(map);
@@ -183,13 +137,7 @@ public class UserRegisteredHourService {
             }
 
             if (CollectionUtils.isNotEmpty(userInfoList)) {
-                Map<String, Object> params = new HashMap<>();
-                params.put("registeredDate", searchDay);
-                params.put("registeredHour", searchHour);
-                long count = datawareUserInfoService.getCountByTime(params);
-                if (count <= 0) {
-                    datawareUserInfoService.batchSave(userInfoList);
-                }
+                datawareUserInfoService.batchSave(userInfoList);
             }
         } catch (Exception e) {
             logger.error("dataware_user_info添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
@@ -208,5 +156,103 @@ public class UserRegisteredHourService {
             userGroupFlag = 2;
         }
         return userGroupFlag;
+    }
+
+
+    @Async
+    public void dataClean(String startTime, String endTime) {
+        List<Long> uicGroupList = Lists.newArrayList();
+        String datawareUicGroup = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_UIC_GROUP);
+        if (StringUtils.isNotEmpty(datawareUicGroup)) {
+            String[] uicGroupArr = datawareUicGroup.split(",");
+            List<String> userGroup = Arrays.asList(uicGroupArr);
+            uicGroupList = uicGroupService.findGroupUsers(userGroup);
+        } else {
+            logger.error("非正常用户规则未设置: traceId={}", TraceIdUtils.getTraceId());
+        }
+
+        try {
+            String startDay = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "yyyy-MM-dd");
+            String endDay = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "yyyy-MM-dd");
+            String startHour = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "HH");
+            String endHour = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "HH");
+            if (startDay.equals(endDay)) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("registeredDate", startDay);
+                params.put("startHour", startHour);
+                params.put("endHour", endHour);
+
+                long count = datawareUserInfoService.getCountByTime(params);
+                if (count > 0) {
+                    datawareUserInfoService.deleteByDate(params);
+                }
+
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("beginDate", startTime);
+                map.put("endDate", endTime);
+                UserInfo(map, uicGroupList);
+            } else {
+                forDay(startTime, endTime, uicGroupList);
+            }
+
+        } catch (Exception e) {
+            logger.error("错误: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+
+
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
+
+    private void forDay(String startTime, String endTime, List<Long> uicGroupList) {
+        List<String> datelist = DateUtils.getDateList(startTime, endTime);
+        String beginDate = "";
+        String endDate = "";
+        String registeredDate = "";
+        String startHour = "";
+        String endHour = "";
+
+        for (String searchDate : datelist) {
+
+            if (datelist.get(0) == searchDate) {
+                beginDate = searchDate;
+                endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+
+                registeredDate = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "yyyy-MM-dd");
+                startHour = DateUtils.formatDate(DateUtils.parseDateTime(startTime), "HH");
+
+            } else if (searchDate == datelist.get(datelist.size() - 1)) {
+                beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
+                endDate = searchDate;
+
+                registeredDate = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "yyyy-MM-dd");
+                endHour = DateUtils.formatDate(DateUtils.parseDateTime(endTime), "HH");
+                startHour = "";
+            } else {
+                beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate)), "yyyy-MM-dd HH:mm:ss");
+                endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate)), "yyyy-MM-dd HH:mm:ss");
+
+                registeredDate = DateUtils.formatDate(DateUtils.parseDate(searchDate));
+                endHour = "";
+                startHour = "";
+            }
+
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("registeredDate", registeredDate);
+            params.put("startHour", startHour);
+            params.put("endHour", endHour);
+
+            long count = datawareUserInfoService.getCountByTime(params);
+            if (count > 0) {
+                datawareUserInfoService.deleteByDate(params);
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("beginDate", beginDate);
+            map.put("endDate", endDate);
+            UserInfo(map, uicGroupList);
+        }
     }
 }

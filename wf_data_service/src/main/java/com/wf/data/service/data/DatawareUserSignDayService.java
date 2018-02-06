@@ -1,8 +1,8 @@
 package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareUserSignDayDao;
-import com.wf.data.dao.data.entity.DatawareUserSignDay;
+import com.wf.data.dao.datarepo.DatawareUserSignDayDao;
+import com.wf.data.dao.datarepo.entity.DatawareUserSignDay;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -12,8 +12,7 @@ import java.util.Map;
  */
 @Service
 public class DatawareUserSignDayService extends CrudService<DatawareUserSignDayDao, DatawareUserSignDay> {
-
-    public long getCountByTime(Map<String,Object> map){
+    public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
 
@@ -23,5 +22,9 @@ public class DatawareUserSignDayService extends CrudService<DatawareUserSignDayD
 
     public Long getSignedCountByTime(Map<String, Object> params) {
         return dao.getSignedCountByTime(params);
+    }
+
+    public int updateUserGroup(Map<String, Object> map) {
+        return dao.updateUserGroup(map);
     }
 }

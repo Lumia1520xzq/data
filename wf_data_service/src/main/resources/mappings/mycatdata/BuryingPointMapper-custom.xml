@@ -35,7 +35,7 @@
 	</select>
 
 
-	<select id="findBuryingHourList" resultType="com.wf.data.dao.data.entity.DatawareBuryingPointHour">
+	<select id="findBuryingHourList" resultType="com.wf.data.dao.datarepo.entity.DatawareBuryingPointHour">
 		SELECT
 		user_id userId,
 		game_type gameType,

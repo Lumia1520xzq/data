@@ -63,7 +63,7 @@
 		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
 	</bean>
 
-	<bean id="dataTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="dataTractionManager" class="com.wf.core.persistence.TransactionDataSourceTransactionManager">
 		<property name="dataSource" ref="dataMultipleDataSource" />
 	</bean>
 </beans>

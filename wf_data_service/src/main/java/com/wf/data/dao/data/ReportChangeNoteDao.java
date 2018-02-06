@@ -3,9 +3,9 @@ package com.wf.data.dao.data;
 
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportChangeNote;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 
 import java.util.List;
 import java.util.Map;

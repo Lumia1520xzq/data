@@ -2,9 +2,9 @@ package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.data.ReportChangeNoteDao;
-import com.wf.data.dao.data.entity.DatawareBettingLogHour;
 import com.wf.data.dao.data.entity.ReportChangeNote;
 import com.wf.data.dao.data.entity.ReportGameInfo;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

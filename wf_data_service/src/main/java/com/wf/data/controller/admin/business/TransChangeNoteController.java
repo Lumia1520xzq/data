@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.ChannelInfoService;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author JoeH

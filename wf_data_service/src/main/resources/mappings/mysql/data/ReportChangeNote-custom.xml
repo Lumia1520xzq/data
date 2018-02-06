@@ -188,7 +188,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</if>
 	</select>
 
-	<select id="getGameBettingRecord" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+	<select id="getGameBettingRecord" resultType="com.wf.data.dao.datarepo.entity.DatawareBettingLogHour">
 		SELECT
 			user_id userId,
 			game_type gameType,

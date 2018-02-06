@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareConvertHourDao">
+     <select id="findConvertList" resultType="DatawareConvertDay">
+        SELECT
+         user_id userId,
+         channel_id channelId,
+         biz_type bizType,
+         SUM(recharge_count) rechargeCount,
+         SUM(third_amount) thirdAmount,
+         convert_date convertDate
+        FROM `dataware_convert_hour`
+        WHERE 1=1 AND delete_flag = 0
+         AND channel_id IS NOT NULL
+         <if test="convertDate != null and convertDate != ''">
+             AND convert_date = #{convertDate}
+         </if>
+        GROUP BY user_id,channel_id,biz_type,convert_date
+    </select>
+
+    <select id="getCountByTime" resultType="long">
+        SELECT COUNT(*) FROM dataware_convert_hour t
+        WHERE  1=1 AND t.delete_flag = 0
+        AND t.channel_id IS NOT NULL
+        <if test="convertDate != null and convertDate != ''">
+            AND  t.convert_date = #{convertDate}
+        </if>
+        <if test="convertHour != null and convertHour != ''">
+            AND  t.convert_hour = #{convertHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND t.convert_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND t.convert_hour &lt;= #{endHour}
+        </if>
+    </select>
+
+
+    <select id="findRechargeByDate" resultType="DatawareFinalChannelInfoHour">
+        SELECT
+        COUNT(DISTINCT t.user_id) rechargeCount,
+        SUM(t.third_amount) rechargeAmount
+        FROM `dataware_convert_hour` t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.channel_id IS NOT NULL
+        <if test="convertHour != null and convertHour != ''">
+            AND t.convert_hour = #{convertHour}
+        </if>
+        <if test="convertDate != null and convertDate != ''">
+            AND t.convert_date = #{convertDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
+
+    <select id="findRechargeByTime" resultType="DatawareFinalChannelInfoHour">
+        SELECT
+        COUNT(DISTINCT t.user_id) rechargeCount,
+        SUM(t.third_amount) rechargeAmount
+        FROM `dataware_convert_hour` t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.channel_id IS NOT NULL
+        <if test="convertHour != null and convertHour != ''">
+            AND t.convert_hour &lt;= #{convertHour}
+        </if>
+        <if test="convertDate != null and convertDate != ''">
+            AND t.convert_date = #{convertDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_convert_hour
+        WHERE 1=1
+        <if test="convertDate != null and convertDate != ''">
+            AND  convert_date = #{convertDate}
+        </if>
+        <if test="convertHour != null and convertHour != ''">
+            AND  convert_hour = #{convertHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND convert_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND convert_hour &lt;= #{endHour}
+        </if>
+    </delete>
+
+    <select id="findrechargeCountByDate" resultType="java.lang.Long">
+        SELECT
+        SUM(t.recharge_count) recharUserCount
+        FROM `dataware_convert_hour` t
+        WHERE 1=1 AND t.delete_flag = 0
+        <if test="businessDate != null and businessDate != ''">
+            AND t.convert_date = #{businessDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
+
+</mapper>
+

@@ -9,8 +9,8 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.data.entity.DatawareFinalChannelCost;
-import com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelCost;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareConvertDayService;
@@ -22,6 +22,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -58,9 +59,7 @@ public class ChannelCostService {
         logger.info("每天成本汇总开始:traceId={}", TraceIdUtils.getTraceId());
 
         boolean flag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DESTINATION_COST_FLAG);
-        if (false == flag) {
-            historyChannelCost();
-        } else {
+        if (true == flag) {
             String yesterdayDate = DateUtils.getYesterdayDate();
             channelCost(yesterdayDate);
         }
@@ -68,52 +67,12 @@ public class ChannelCostService {
         logger.info("每天成本汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
-    private void historyChannelCost() {
-        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COST_DATE);
-
-        if (StringUtils.isBlank(date)) {
-            logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
-            return;
-        }
-
-        String[] dates = date.split(",");
-        if (StringUtils.isBlank(dates[0])) {
-            logger.error("清洗开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        if (StringUtils.isBlank(dates[1])) {
-            logger.error("清洗结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        String startDay = dates[0].trim();
-        String endDay = dates[1].trim();
-        try {
-
-            if (startDay.equals(endDay)) {
-                channelCost(startDay);
-            } else {
-                List<String> datelist = DateUtils.getDateList(startDay, endDay);
-                for (String searchDate : datelist) {
-                    channelCost(searchDate);
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-
-
-    }
-
-
     private void channelCost(String searchDay) {
         Map<String, Object> mapAll = new HashMap<>();
         mapAll.put("businessDate", searchDay);
         long count = datawareFinalChannelCostService.getCountByTime(mapAll);
         if (count > 0) {
-            logger.info("cost数据已存在: traceId={},date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(searchDay));
-            return;
+            datawareFinalChannelCostService.deleteByDate(mapAll);
         }
 
         List<DatawareFinalChannelCost> costList = Lists.newArrayList();
@@ -268,5 +227,24 @@ public class ChannelCostService {
         }
     }
 
+
+    @Async
+    public void dataClean(String startTime, String endTime) {
+        try {
+
+            if (startTime.equals(endTime)) {
+                channelCost(endTime);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    channelCost(searchDate);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
 
 }

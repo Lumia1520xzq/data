@@ -6,7 +6,7 @@
 
 <mapper namespace="com.wf.data.dao.platform.PlatSignedUserDao">
 
-    <select id="findListFromSignedUser" resultType="com.wf.data.dao.data.entity.DatawareUserSignDay">
+    <select id="findListFromSignedUser" resultType="com.wf.data.dao.datarepo.entity.DatawareUserSignDay">
 	  	SELECT
 		user_id userId,
 		channel_id channelId,

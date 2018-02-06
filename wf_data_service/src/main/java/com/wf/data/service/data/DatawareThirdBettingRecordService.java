@@ -1,8 +1,8 @@
 package com.wf.data.service.data;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.data.DatawareThirdBettingRecordDao;
-import com.wf.data.dao.data.entity.DatawareThirdBettingRecord;
+import com.wf.data.dao.datarepo.DatawareThirdBettingRecordDao;
+import com.wf.data.dao.datarepo.entity.DatawareThirdBettingRecord;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -30,7 +30,6 @@ public class DatawareThirdBettingRecordService extends CrudService<DatawareThird
         }
 
     }
-
 
     public DatawareThirdBettingRecord sumDataByConds(Map<String, Object> dataParam) {
         return dao.sumDataByConds(dataParam);

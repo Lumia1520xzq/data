@@ -6,7 +6,7 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.data.entity.DatawareFinalRegisteredRetention;
+import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredRetention;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareBuryingPointDayService;
 import com.wf.data.service.data.DatawareFinalRegisteredRetentionService;
