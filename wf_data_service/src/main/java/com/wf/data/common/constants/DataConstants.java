@@ -13,6 +13,11 @@ public interface DataConstants {
     String CLUB_BETTING_DATA_RECEIVER = "club_betting_data_receiver";
 
     /**
+     * 每小时邮件游戏数
+     */
+    String BETTING_ANALYSIS_GAMES ="betting_analysis_games";
+
+    /**
      * 平台数据报表
      */
     String PLATFORM_DATA_RECEIVER = "platform_data_receiver";
