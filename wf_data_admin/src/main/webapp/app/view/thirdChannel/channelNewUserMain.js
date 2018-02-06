@@ -15,7 +15,7 @@ Ext.define('WF.view.thirdChannel.channelNewUserMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/channel/userdata/newuser/list.do',
-            fields: ['businessDate', 'dau', 'signedUserNum'],
+            fields: ['businessDate', 'dau', 'newUsersNum'],
             baseParams: {
                 parentId: me.parameters
             }

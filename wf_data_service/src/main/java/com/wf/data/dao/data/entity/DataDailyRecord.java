@@ -24,22 +24,22 @@ public class DataDailyRecord extends DataEntity {
     private String indicatorTypeName;
 
 
-    @ExcelField(title="渠道", type=0, align=1, sort=10)
-    public Long getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
-    }
-
-    @ExcelField(title="数据日期", type=0, align=1, sort=20)
+    @ExcelField(title="数据日期", type=0, align=1, sort=10)
     public String getDataTime() {
         return dataTime;
     }
 
     public void setDataTime(String dataTime) {
         this.dataTime = dataTime;
+    }
+
+    @ExcelField(title="渠道", type=0, align=1, sort=20)
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
     }
 
     @ExcelField(title="指标", type=0, align=1, sort=30)

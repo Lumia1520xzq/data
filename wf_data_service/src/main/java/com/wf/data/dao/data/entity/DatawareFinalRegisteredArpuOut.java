@@ -1,9 +1,10 @@
-package com.wf.data.dao.datarepo.entity;
+package com.wf.data.dao.data.entity;
 
 
 import com.wf.core.persistence.DataEntity;
+import com.wf.core.utils.excel.ExcelField;
 
-public class DatawareFinalRegisteredArpu extends DataEntity {
+public class DatawareFinalRegisteredArpuOut extends DataEntity {
 	private static final long serialVersionUID = -1;
 	private Long newUsers;
 	private Double recharge1;
@@ -33,22 +34,9 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 	private Long channelId;
 	private String businessDate;
 
-	private double	retention2;
-	private double	retention3;
-	private double	retention4;
-	private double	retention5;
-	private double	retention6;
-	private double	retention7;
-	private double	retention8;
-	private double	retention9;
-	private double	retention10;
-	private double	retention11;
-	private double	retention12;
-	private double	retention13;
-	private double	retention14;
-	private double	retention15;
 
 
+	@ExcelField(title = "新用户数", type = 1, align = 2, sort = 3)
 	public Long getNewUsers() {
 		return newUsers;
 	}
@@ -65,6 +53,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge1 = recharge1;
 	}
 
+	@ExcelField(title = "1天", type = 1, align = 2, sort = 4)
 	public Double getArpu1() {
 		return arpu1;
 	}
@@ -81,6 +70,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge2 = recharge2;
 	}
 
+	@ExcelField(title = "2天", type = 1, align = 2, sort = 5)
 	public Double getArpu2() {
 		return arpu2;
 	}
@@ -97,6 +87,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge3 = recharge3;
 	}
 
+	@ExcelField(title = "3天", type = 1, align = 2, sort = 6)
 	public Double getArpu3() {
 		return arpu3;
 	}
@@ -113,6 +104,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge4 = recharge4;
 	}
 
+	@ExcelField(title = "4天", type = 1, align = 2, sort = 7)
 	public Double getArpu4() {
 		return arpu4;
 	}
@@ -129,6 +121,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge5 = recharge5;
 	}
 
+	@ExcelField(title = "5天", type = 1, align = 2, sort = 8)
 	public Double getArpu5() {
 		return arpu5;
 	}
@@ -145,6 +138,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge6 = recharge6;
 	}
 
+	@ExcelField(title = "6天", type = 1, align = 2, sort = 9)
 	public Double getArpu6() {
 		return arpu6;
 	}
@@ -161,6 +155,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge7 = recharge7;
 	}
 
+	@ExcelField(title = "7天", type = 1, align = 2, sort = 10)
 	public Double getArpu7() {
 		return arpu7;
 	}
@@ -177,6 +172,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge15 = recharge15;
 	}
 
+	@ExcelField(title = "15天", type = 1, align = 2, sort = 11)
 	public Double getArpu15() {
 		return arpu15;
 	}
@@ -193,6 +189,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge30 = recharge30;
 	}
 
+	@ExcelField(title = "30天", type = 1, align = 2, sort = 12)
 	public Double getArpu30() {
 		return arpu30;
 	}
@@ -209,6 +206,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge60 = recharge60;
 	}
 
+	@ExcelField(title = "60天", type = 1, align = 2, sort = 13)
 	public Double getArpu60() {
 		return arpu60;
 	}
@@ -225,6 +223,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.recharge90 = recharge90;
 	}
 
+	@ExcelField(title = "90天", type = 1, align = 2, sort = 14)
 	public Double getArpu90() {
 		return arpu90;
 	}
@@ -233,6 +232,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.arpu90 = arpu90;
 	}
 
+	@ExcelField(title = "渠道", type = 1, align = 2, sort = 1)
 	public String getChannelName() {
 		return channelName;
 	}
@@ -257,6 +257,7 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.channelId = channelId;
 	}
 
+	@ExcelField(title = "注册日期", type = 1, align = 2, sort = 2)
 	public String getBusinessDate() {
 		return businessDate;
 	}
@@ -265,143 +266,6 @@ public class DatawareFinalRegisteredArpu extends DataEntity {
 		this.businessDate = businessDate;
 	}
 
-	public DatawareFinalRegisteredArpu toInit(){
-		DatawareFinalRegisteredArpu arpu = new DatawareFinalRegisteredArpu();
-		arpu.setNewUsers(0L);
-		arpu.setRecharge1(0.00);
-		arpu.setRecharge2(0.00);
-		arpu.setRecharge3(0.00);
-		arpu.setRecharge4(0.00);
-		arpu.setRecharge5(0.00);
-		arpu.setRecharge6(0.00);
-		arpu.setRecharge7(0.00);
-		arpu.setRecharge15(0.00);
-		arpu.setRecharge30(0.00);
-		arpu.setRecharge60(0.00);
-		arpu.setRecharge90(0.00);
-		arpu.setArpu1(0.00);
-		arpu.setArpu2(0.00);
-		arpu.setArpu3(0.00);
-		arpu.setArpu4(0.00);
-		arpu.setArpu5(0.00);
-		arpu.setArpu6(0.00);
-		arpu.setArpu7(0.00);
-		arpu.setArpu15(0.00);
-		arpu.setArpu30(0.00);
-		arpu.setArpu60(0.00);
-		arpu.setArpu90(0.00);
-		return arpu;
-	}
 
-	public double getRetention2() {
-		return retention2;
-	}
 
-	public void setRetention2(double retention2) {
-		this.retention2 = retention2;
-	}
-
-	public double getRetention3() {
-		return retention3;
-	}
-
-	public void setRetention3(double retention3) {
-		this.retention3 = retention3;
-	}
-
-	public double getRetention4() {
-		return retention4;
-	}
-
-	public void setRetention4(double retention4) {
-		this.retention4 = retention4;
-	}
-
-	public double getRetention5() {
-		return retention5;
-	}
-
-	public void setRetention5(double retention5) {
-		this.retention5 = retention5;
-	}
-
-	public double getRetention6() {
-		return retention6;
-	}
-
-	public void setRetention6(double retention6) {
-		this.retention6 = retention6;
-	}
-
-	public double getRetention7() {
-		return retention7;
-	}
-
-	public void setRetention7(double retention7) {
-		this.retention7 = retention7;
-	}
-
-	public double getRetention8() {
-		return retention8;
-	}
-
-	public void setRetention8(double retention8) {
-		this.retention8 = retention8;
-	}
-
-	public double getRetention9() {
-		return retention9;
-	}
-
-	public void setRetention9(double retention9) {
-		this.retention9 = retention9;
-	}
-
-	public double getRetention10() {
-		return retention10;
-	}
-
-	public void setRetention10(double retention10) {
-		this.retention10 = retention10;
-	}
-
-	public double getRetention11() {
-		return retention11;
-	}
-
-	public void setRetention11(double retention11) {
-		this.retention11 = retention11;
-	}
-
-	public double getRetention12() {
-		return retention12;
-	}
-
-	public void setRetention12(double retention12) {
-		this.retention12 = retention12;
-	}
-
-	public double getRetention13() {
-		return retention13;
-	}
-
-	public void setRetention13(double retention13) {
-		this.retention13 = retention13;
-	}
-
-	public double getRetention14() {
-		return retention14;
-	}
-
-	public void setRetention14(double retention14) {
-		this.retention14 = retention14;
-	}
-
-	public double getRetention15() {
-		return retention15;
-	}
-
-	public void setRetention15(double retention15) {
-		this.retention15 = retention15;
-	}
 }
