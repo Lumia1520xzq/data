@@ -38,6 +38,8 @@ public class TcardController extends ExtJsController {
     @Autowired
     private DatawareBuryingPointDayService datawareBuryingPointDayService;
 
+    private static final String DATE = "2018-02-01";
+
     /**
      * 根据类型获取列表
      *
@@ -206,22 +208,42 @@ public class TcardController extends ExtJsController {
             params.put("parentId", parentId);
         }
         params.put("bettingType", 1);
+        Date standardDate = DateUtils.parseDate(DATE);
         for (String searchDate : datelist) {
             params.put("searchDate", searchDate);
             TcardDto dto = new TcardDto();
             params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
             params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
-            params.put("amount", 20);
+            Date date = DateUtils.parseDate(searchDate);
+            if(date.after(standardDate)){
+                params.put("roomType", 1);
+                params.put("amount",null);
+            }else{
+                params.put("roomType",null);
+                params.put("amount",20);
+            }
             int lowBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double lowTableFee = tcardUserBettingLogService.getTableAmount(params);
             int lowTables = tcardUserBettingLogService.getTablesByBettingType(params);
             double lowAvgRounds = toDouble(lowTableFee, lowBettingUser,20);
-            params.put("amount", 300);
+            if(date.after(standardDate)){
+                params.put("roomType", 2);
+                params.put("amount",null);
+            }else{
+                params.put("roomType",null);
+                params.put("amount",300);
+            }
             int midBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double midTableFee = tcardUserBettingLogService.getTableAmount(params);
             int midTables = tcardUserBettingLogService.getTablesByBettingType(params);
             double midAvgRounds = toDouble(midTableFee, midBettingUser,300);
-            params.put("amount", 3000);
+            if(date.after(standardDate)){
+                params.put("roomType", 3);
+                params.put("amount",null);
+            }else{
+                params.put("roomType",null);
+                params.put("amount",3000);
+            }
             int highBettingUser = tcardUserBettingLogService.getUserCountByBettingType(params);
             double highTableFee = tcardUserBettingLogService.getTableAmount(params);
             int highTables = tcardUserBettingLogService.getTablesByBettingType(params);
