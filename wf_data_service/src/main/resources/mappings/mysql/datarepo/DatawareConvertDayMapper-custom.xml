@@ -4,9 +4,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.data.DatawareConvertDayDao">
+<mapper namespace="com.wf.data.dao.datarepo.DatawareConvertDayDao">
 
-	<select id="getConvertByDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll">
+	<select id="getConvertByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll">
 		SELECT
 		COUNT(DISTINCT t.user_id) rechargeCount,
 		SUM(t.third_amount) rechargeAmount

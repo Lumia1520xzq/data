@@ -1,7 +1,5 @@
 package com.wf.data.service.data;
 
-import com.wf.core.db.DataSource;
-import com.wf.core.db.DataSourceContext;
 import com.wf.core.service.CrudService;
 import com.wf.data.dao.datarepo.DatawareConvertHourDao;
 import com.wf.data.dao.datarepo.entity.DatawareConvertDay;
@@ -17,22 +15,18 @@ import java.util.Map;
  */
 @Service
 public class DatawareConvertHourService extends CrudService<DatawareConvertHourDao, DatawareConvertHour> {
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public List<DatawareConvertDay> findConvertList(Map<String, Object> map) {
         return dao.findConvertList(map);
     }
 
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public long getCountByTime(Map<String, Object> map) {
         return dao.getCountByTime(map);
     }
 
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoHour findRechargeByDate(Map<String, Object> map) {
         return dao.findRechargeByDate(map);
     }
 
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public DatawareFinalChannelInfoHour findRechargeByTime(Map<String, Object> map) {
         return dao.findRechargeByTime(map);
     }
@@ -41,7 +35,6 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
         return dao.deleteByDate(params);
     }
 
-    @DataSource(name = DataSourceContext.DATA_SOURCE_READ)
     public Long findrechargeCountByDate(Map<String, Object> map) {
         return dao.findrechargeCountByDate(map);
     }

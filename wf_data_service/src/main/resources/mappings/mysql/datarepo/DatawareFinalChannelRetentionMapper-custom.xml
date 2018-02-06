@@ -4,7 +4,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelRetentionDao">
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalChannelRetentionDao">
 	<select id="getCountByTime" resultType="long">
 		SELECT COUNT(*)
 		FROM dataware_final_channel_retention t
@@ -49,7 +49,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 	</delete>
 
-	<select id="findByDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelRetention">
+	<select id="findByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelRetention">
 		SELECT <include refid="datawareFinalChannelRetentionColumns"/> FROM dataware_final_channel_retention t
 		WHERE 1=1 AND t.delete_flag =0
 		<if test="channelId != null">

@@ -4,7 +4,7 @@
         "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.data.DatawareFinalChannelInfoAllDao">
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalChannelInfoAllDao">
 
     <select id="getCountByTime" resultType="long">
         SELECT COUNT(*) FROM dataware_final_channel_info_all t
@@ -35,7 +35,7 @@
     </select>
 
 
-    <select id="getListByChannelAndDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll">
+    <select id="getListByChannelAndDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll">
         SELECT <include refid="datawareFinalChannelInfoAllColumns"/> FROM dataware_final_channel_info_all t
         WHERE 1=1 AND t.delete_flag =0
         <if test="channelId != null">
@@ -53,7 +53,7 @@
         order by t.business_date asc
     </select>
 
-    <select id="findByDate" resultType="com.wf.data.dao.data.entity.DatawareFinalChannelInfoAll">
+    <select id="findByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll">
         SELECT <include refid="datawareFinalChannelInfoAllColumns"/> FROM dataware_final_channel_info_all t
         WHERE 1=1 AND t.delete_flag =0
         <if test="channelId != null">

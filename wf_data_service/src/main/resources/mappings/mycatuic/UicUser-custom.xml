@@ -7,7 +7,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 
-    <select id="findUserInfoByTime" resultType="com.wf.data.dao.data.entity.DatawareUserInfo">
+    <select id="findUserInfoByTime" resultType="com.wf.data.dao.datarepo.entity.DatawareUserInfo">
         SELECT
         id userId,
         nickname,

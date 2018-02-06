@@ -4,7 +4,7 @@
         "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
-<mapper namespace="com.wf.data.dao.data.DatawareBettingLogHourDao">
+<mapper namespace="com.wf.data.dao.datarepo.DatawareBettingLogHourDao">
     <update id="updateUserGroup">
         UPDATE dataware_betting_log_hour SET
         user_group = #{userGroup}
@@ -86,7 +86,7 @@
         GROUP BY user_id,channel_id,game_type,betting_date
     </select>
 
-    <select id="getSumByDateAndHour" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+    <select id="getSumByDateAndHour" resultType="com.wf.data.dao.datarepo.entity.DatawareBettingLogHour">
         SELECT
         SUM(betting_amount) bettingAmount,
         COUNT(DISTINCT user_id) bettingUserCount,
@@ -112,7 +112,7 @@
         </if>
     </select>
 
-    <select id="getBettingByDate" resultType="com.wf.data.dao.data.entity.DatawareBettingLogHour">
+    <select id="getBettingByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareBettingLogHour">
         SELECT
         COUNT(DISTINCT t.user_id) bettingUserCount,
         SUM(t.betting_amount) bettingAmount,
