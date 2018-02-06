@@ -1,6 +1,6 @@
 Ext.define('WF.view.data.daily.dailyMain', {
     extend: 'Ext.panel.Panel',
-    title: '日报数据管理',
+    title: '日报数据总结',
     xtype: 'dailyMain',
     closable: true,
     layout: {
@@ -27,7 +27,7 @@ Ext.define('WF.view.data.daily.dailyMain', {
         });
 
         var allChannelStore = Ext.create('DCIS.Store', {
-            url: 'data/admin/common/data/getAllChannels.do',
+            url: 'data/admin/common/data/getParentChannels.do',
             fields: ['id', 'name']
         });
 
@@ -59,7 +59,7 @@ Ext.define('WF.view.data.daily.dailyMain', {
                 store: allChannelStore
             }, {
                 name: 'indicatorType',
-                fieldLabel: '类别',
+                fieldLabel: '指标',
                 xtype: 'combobox',
                 store: indicatorTypeStor,
                 emptyText: "--请选择--",
@@ -106,7 +106,7 @@ Ext.define('WF.view.data.daily.dailyMain', {
                         var record = allChannelStore.getAt(index);
                         return record.data.name;
                     }
-                    return '--';
+                    return '全部';
                 }
             }, {
                 text: '指标',

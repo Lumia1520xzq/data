@@ -1,16 +1,18 @@
 package com.wf.data.controller.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.excel.ImportExcel;
+import com.wf.core.utils.type.DateUtils;
+import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DataEvent;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.EventService;
 import com.wf.data.service.UicUserService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jasig.cas.client.util.AssertionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,40 @@ public class EventController extends ExtJsController {
      */
     @RequestMapping("/list")
     public Object list() {
-        Page<DataEvent> page = getPage(DataEvent.class);
-        return dataGrid(eventService.findPage(page));
+        JSONObject json = getRequestJson();
+        Long channelId = null;
+        Integer eventType = null;
+        String beginDate = null;
+        String endDate = null;
+        Long start = null;
+        Long length = null;
+
+        JSONObject data = json.getJSONObject("data");
+
+        if (data != null) {
+            channelId = data.getLong("channelId");
+            eventType = data.getInteger("eventType");
+            beginDate = data.getString("beginDate");
+            endDate = data.getString("endDate");
+            start = json.getLongValue("start");
+            length = json.getLongValue("limit");
+        }
+
+        //设置默认搜索时间为昨天
+        if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
+            beginDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
+            endDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
+        }
+
+        DataEvent dataEvent = new DataEvent();
+        dataEvent.setChannelId(channelId);
+        dataEvent.setEventType(eventType);
+        dataEvent.setBeginDate(beginDate);
+        dataEvent.setEndDate(endDate);
+
+        Page<DataEvent> dataEventPage = new Page<>(dataEvent, start, length);
+        dataEventPage = eventService.findPage(dataEvent);
+        return dataGrid(dataEventPage);
     }
 
     /**
@@ -57,8 +91,14 @@ public class EventController extends ExtJsController {
     @RequestMapping("/save")
     public Object save() {
         DataEvent form = getForm(DataEvent.class);
+
         if (form == null) {
             return error("请求参数错误");
+        }
+
+        //开始日期默认为昨天
+        if (StringUtils.isBlank(form.getBeginDate())){
+            form.setBeginDate(DateUtils.getYesterdayDate());
         }
 
         DataEvent dataEvent = eventService.get(form.getId());

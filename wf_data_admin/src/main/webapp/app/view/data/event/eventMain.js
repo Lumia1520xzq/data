@@ -27,13 +27,13 @@ Ext.define('WF.view.data.event.eventMain', {
 
         var allChannelStore = Ext.create('DCIS.Store', {
             autoLoad: true,
-            url: 'data/admin/common/data/getAllChannels.do',
+            url: 'data/admin/common/data/getParentChannels.do',
             fields: ['id', 'name']
         });
 
         allChannelStore.load({
             callback: function () {
-                sync:true
+               sync:true
             }
         });
 
@@ -77,11 +77,13 @@ Ext.define('WF.view.data.event.eventMain', {
                 xtype: 'datefield',
                 name: 'beginDate',
                 format: 'Y-m-d',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d"),
                 fieldLabel: '开始时间'
             }, {
                 xtype: 'datefield',
                 name: 'endDate',
                 format: 'Y-m-d',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d"),
                 fieldLabel: '结束时间'
             }]
         });
@@ -102,7 +104,7 @@ Ext.define('WF.view.data.event.eventMain', {
                         var record = allChannelStore.getAt(index);
                         return record.data.name;
                     }
-                    return '--';
+                    return '全部';
                 }
             }, {
                 text: '开始日期',
