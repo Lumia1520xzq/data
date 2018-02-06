@@ -27,4 +27,8 @@ public class DatawareUserSignDayService extends CrudService<DatawareUserSignDayD
     public Long getSignedCountByTime(Map<String, Object> params) {
         return dao.getSignedCountByTime(params);
     }
+
+    public int updateUserGroup(Map<String, Object> map) {
+        return dao.updateUserGroup(map);
+    }
 }

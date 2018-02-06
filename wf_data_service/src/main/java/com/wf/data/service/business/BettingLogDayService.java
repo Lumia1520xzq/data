@@ -105,9 +105,11 @@ public class BettingLogDayService {
             Collection interColl = CollectionUtils.intersection(userList, uicGroupList);
             List<Long> users = (List) interColl;
             //4、更新交集用户状态为非正常用户
-            log.setUserGroup(1);
-            log.setUserList(users);
-            datawareBettingLogHourService.updateUserGroup(log);
+            if (CollectionUtils.isNotEmpty(users)) {
+                log.setUserGroup(1);
+                log.setUserList(users);
+                datawareBettingLogHourService.updateUserGroup(log);
+            }
         } catch (Exception e) {
             logger.error("更新用户状态失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }

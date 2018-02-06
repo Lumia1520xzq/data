@@ -2,7 +2,6 @@ package com.wf.data.service.business;
 
 import com.google.common.collect.Lists;
 import com.wf.core.log.LogExceptionStackTrace;
-import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
@@ -58,9 +57,7 @@ public class UserSignHourService {
         }
 
         boolean buryingFlag = dataConfigService.getBooleanValueByName(DataConstants.DATA_DATAWARE_SIGN_FLAG_DAY);
-        if (false == buryingFlag) {
-            historyUserSign(uicGroupList);
-        } else {
+        if (true == buryingFlag) {
             hourUserSign(uicGroupList);
         }
 
@@ -68,68 +65,6 @@ public class UserSignHourService {
         logger.info("每小时签到汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
-
-    private void historyUserSign(List<Long> uicGroupList) {
-        String date = dataConfigService.getStringValueByName(DataConstants.DATA_DATAWARE_SIGN_HISTORY_DAY);
-
-        if (StringUtils.isBlank(date)) {
-            logger.error("清洗时间未设置: traceId={}", TraceIdUtils.getTraceId());
-            return;
-        }
-
-        String[] dates = date.split(",");
-        if (StringUtils.isBlank(dates[0])) {
-            logger.error("清洗开始时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-        if (StringUtils.isBlank(dates[1])) {
-            logger.error("清洗结束时间未设置: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-
-        try {
-            if (DateUtils.formatDate(DateUtils.parseDate(dates[0]), "yyyy-MM-dd").equals(DateUtils.formatDate(DateUtils.parseDate(dates[1]), "yyyy-MM-dd"))) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("beginDate", dates[0]);
-                map.put("endDate", dates[1]);
-                //
-                String searchDay = DateUtils.formatDate(DateUtils.parseDate(dates[0], "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
-                String searchHour = "";
-                sign(map, uicGroupList, searchDay, searchHour);
-            } else {
-                List<String> datelist = DateUtils.getDateList(dates[0], dates[1]);
-                String beginDate = "";
-                String endDate = "";
-                for (String searchDate : datelist) {
-
-                    if (datelist.get(0) == searchDate) {
-                        beginDate = searchDate;
-                        endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
-
-                    } else if (searchDate == datelist.get(datelist.size() - 1)) {
-                        beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDateTime(searchDate)), "yyyy-MM-dd HH:mm:ss");
-                        endDate = searchDate;
-                    } else {
-                        beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
-                        endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss");
-                    }
-
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("beginDate", beginDate);
-                    map.put("endDate", endDate);
-                    //
-                    String searchDay = DateUtils.formatDate(DateUtils.parseDate(beginDate, "yyyy-MM-dd HH:mm:ss"), DateUtils.DATE_PATTERN);
-                    String searchHour = "";
-                    sign(map, uicGroupList, searchDay, searchHour);
-                }
-            }
-        } catch (Exception e) {
-            logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
-            return;
-        }
-
-
-    }
 
     private void hourUserSign(List<Long> uicGroupList) {
         Calendar cal = Calendar.getInstance();
@@ -155,11 +90,21 @@ public class UserSignHourService {
         //
         String searchDay = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
         String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
-
+        if ("23".equals(searchHour)) {
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("userGroup", 2);
+            userMap.put("signDate", searchDay);
+            datawareUserSignDayService.updateUserGroup(userMap);
+            if (CollectionUtils.isNotEmpty(uicGroupList)) {
+                userMap.put("userGroup", 1);
+                userMap.put("signDate", searchDay);
+                userMap.put("userList", uicGroupList);
+                datawareUserSignDayService.updateUserGroup(userMap);
+            }
+        }
 
         sign(map, uicGroupList, searchDay, searchHour);
     }
-
 
     private void sign(Map<String, Object> map, List<Long> uicGroupList, String searchDay, String searchHour) {
         try {
