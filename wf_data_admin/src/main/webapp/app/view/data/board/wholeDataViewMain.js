@@ -70,27 +70,21 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 width:275,
                 store: parentChannelStore
             },
-                // {
-                // xtype:'searchfield',
-                // store:parentChannelStore,
-                // displayField : 'name',
-                // valueField : 'id'
-                // },
-                {
-                    name: 'startTime',
-                    id:"viewStart",
-                    fieldLabel: '开始时间',
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-14),"Y-m-d")
-                },{
-                    name: 'endTime',
-                    id:"viewEnd",
-                    fieldLabel: '结束时间',
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
-                }]
+            {
+                name: 'startTime',
+                id:"viewStart",
+                fieldLabel: '开始时间',
+                xtype: 'datefield',
+                format: 'Y-m-d',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-14),"Y-m-d")
+            },{
+                name: 'endTime',
+                id:"viewEnd",
+                fieldLabel: '结束时间',
+                xtype: 'datefield',
+                format: 'Y-m-d',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
+            }]
         });
 
         me.add({
@@ -656,7 +650,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 if(new Date(lastDay)>=new Date(yesterday)){
                      usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
                      dayRetention = dayRetention.slice(0,store.getCount()-1);
-                     usersRate = usersRate.slice(0,store.getCount()-1);
+                     // usersRate = usersRate.slice(0,store.getCount()-1);
                      businessDate1 = businessDate.slice(0,store.getCount()-1);
                 }else{
                      businessDate1 = businessDate;
@@ -1279,7 +1273,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate1
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -1455,7 +1449,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 }
 
                 for (var q = 0; q < option.length; q++) {
-                    if (q == 13 || q == 14 || q == 15) {
+                    if (q == 13 || q == 14) {
                         var date = Ext.get('date' + q).dom;
                         var rentionDate = businessDate1[businessDate1.length - 1];
                         date.innerHTML = '<div align="center">' + rentionDate + '</div>';
@@ -1477,7 +1471,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('payArppu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong></div>";
                 Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersDayRetention[usersDayRetention.length - 1] + "%</strong></div>";
                 Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length - 1] + "%</strong></div>";
-                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersRate[usersRate.length - 1] + "%</strong></div>";
+                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong></div>";
                 Ext.get('totalCost').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('totalCost') + "</strong></div>";
                 Ext.get('costRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong></div>";
 
