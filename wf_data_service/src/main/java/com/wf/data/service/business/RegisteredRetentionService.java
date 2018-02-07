@@ -102,9 +102,10 @@ public class RegisteredRetentionService {
         }
 
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(params);
-
-        for (int i = 1; i <= 14; i++) {
-            daysRetention(dauUserList, channelInfo, businessDate, i);
+        if(CollectionUtils.isNotEmpty(dauUserList)){
+            for (int i = 1; i <= 14; i++) {
+                daysRetention(dauUserList, channelInfo, businessDate, i);
+            }
         }
 
     }
@@ -126,12 +127,12 @@ public class RegisteredRetentionService {
         }
 
         Map<String, Object> registeredParams = new HashMap<>();
-        params.put("businessDate", registeredDate);
+        registeredParams.put("businessDate", registeredDate);
         if (channelInfo != null) {
             registeredParams.put("parentId", channelInfo.getId());
         }
         //注册用户数
-        List<Long> dayNewUserList = datawareUserInfoService.getNewUserByTime(params);
+        List<Long> dayNewUserList = datawareUserInfoService.getNewUserByTime(registeredParams);
         Collection interColl = CollectionUtils.intersection(dayNewUserList, dauUserList);
         //新用户且次日活跃的用户
         List<Long> userList = (List<Long>) interColl;
