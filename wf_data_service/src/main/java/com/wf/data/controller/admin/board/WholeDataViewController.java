@@ -61,7 +61,7 @@ public class WholeDataViewController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -14));
                 endTime = DateUtils.getYesterdayDate();
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
                 startTime = endTime;
