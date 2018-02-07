@@ -34,69 +34,17 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             forceFit: true,
             items: [
                 {
-                    name:"channels",
-                    fieldLabel:"全部",
-                    xtype:"checkbox",
-                    inputValue:"1"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"奖多多",
-                    xtype:"checkbox",
-                    inputValue:"100001"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"澳客",
-                    xtype:"checkbox",
-                    inputValue:"100006"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"全民彩票",
-                    xtype:"checkbox",
-                    inputValue:"100015"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"我去彩票站",
-                    xtype:"checkbox",
-                    inputValue:"100016"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"抓抓乐",
-                    xtype:"checkbox",
-                    inputValue:"100018"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"Android",
-                    xtype:"checkbox",
-                    inputValue:"200001"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"IOS",
-                    xtype:"checkbox",
-                    inputValue:"300001"
-                },
-                {
-                    name:"channels",
-                    fieldLabel:"逗游",
-                    xtype:"checkbox",
-                    inputValue:"100002"
-                },
-                {
                     name: 'startTime',
                     fieldLabel: '开始时间',
                     xtype: 'datefield',
-                    format: 'Y-m-d'
+                    format: 'Y-m-d',
+                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-30),"Y-m-d")
                 },{
                     name: 'endTime',
                     fieldLabel: '结束时间',
                     xtype: 'datefield',
-                    format: 'Y-m-d'
+                    format: 'Y-m-d',
+                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
                 }
             ]
         });
@@ -161,16 +109,17 @@ Ext.define('WF.view.data.board.ltvViewMain', {
 
             var channelNames = store.getAt(0).get("channelNames");
             var ltv = store.getAt(0).get("ltv");
+
             var option =
                 {
                     tooltip: {trigger: 'axis',
-                    formatter: function (params) {
-                        var str='';
-                        for(var i = 0; i < params.length; i++){
-                                str += params[i].name+":"+ params[i].value;
-                        }
-                        return str;
-                    },
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += params[i].name+ ':' + params[i].value;
+                            }
+                            return str;
+                        },
                         axisPointer: {
                             type: 'shadow'
                         }
@@ -182,69 +131,52 @@ Ext.define('WF.view.data.board.ltvViewMain', {
                         }
                     },
                     calculable : true,
-                    grid: {
-                        left: '6%',
-                        right: '1%',
-                        top:'1%',
-                        containLabel: true
+                    grid:{
+                        left:'6%',
+                        top:'5%',
+                        right:'2%',
+                        bottom:'15%'
                     },
                     xAxis: {
-                        type : 'value',
-                        show :false,
-                        axisLine: {
-                            show: false
-                        },
-                        axisTick: {
-                            show: false
+                        type : 'category',
+                        data: channelNames,
+                        "axisLabel":{
+                            interval: 0,
+                            rotate:20
                         }
                     },
                     yAxis: {
-                        type : 'category',
-                        data: channelNames,
-                        splitLine: {show: false},
-                        // axisLine: {
-                        //     show: false
-                        // },
-                        // axisTick: {
-                        //     show: false
-                        // },
-                        offset: 10,
-                        nameTextStyle: {
-                            fontSize: 15
-                        }
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
                         },
+                        splitLine: {          // 控制Y轴的分隔线(辅助线)
+                            show: false      // 默认显示，属性show控制显示与
+                        }
+                    },
                     series: [{
+                        // name: '当月累计充值',
                         type: 'bar',
                         smooth:true,
-                        data:ltv,
-                        barWidth: 18,
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'right',
-                                offset: [1, -1],
-                                textStyle: {
-                                    color: 'black',
-                                    fontSize: 13
+                        data: ltv,
+                        barWidth: 30,
+                        itemStyle:{
+                            normal:{
+                                color:'cornflowerblue',
+                                label : {
+                                    show : true,  //柱头数字
+                                    position : 'top',
+                                    textStyle : {
+                                        fontSize : '14',
+                                        // fontWeight:'bold',
+                                        color: 'black'
+                                    }
                                 }
-                            }
-                        },
-                        itemStyle: {
-                            emphasis: {
-                                barBorderRadius: 7
-                            },
-                            normal: {
-                                barBorderRadius: 7,
-                                color: new echarts.graphic.LinearGradient(
-                                    0, 0, 1, 0,
-                                    [
-                                        {offset: 0, color: 'cornflowerblue'}
-                                    ]
-                                )
                             }
                         }
                     }]
                 };
+
             me.echarts = echarts.init(Ext.get("ltvBoard0").dom);
             me.echarts.setOption(option);
 
