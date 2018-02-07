@@ -39,12 +39,10 @@ public class LtvViewController extends ExtJsController {
         JSONObject json = getRequestJson();
         String startTime = null;
         String endTime = null;
-        String channelStr = null;
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             startTime = data.getString("startTime");
             endTime = data.getString("endTime");
-            channelStr = data.getString("channels");
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
@@ -62,11 +60,7 @@ public class LtvViewController extends ExtJsController {
         params.put("beginDate",startTime);
         params.put("endDate",endTime);
         List<Long> channels;
-        if(null == channelStr){
-            channels = Arrays.asList(new Long[]{1L,100001L,100006L,100015L,100016L});
-        }else {
-            channels = JSONObject.parseArray(channelStr,long.class);
-        }
+        channels = Arrays.asList(new Long[]{1L,100001L,100006L,100015L,100016L,100018L,200001L,300001L,100002L});
         Map<String,Object> map = new HashMap<>();
         //遍历channels
         List<String> channelNames = new ArrayList<>();
@@ -76,7 +70,7 @@ public class LtvViewController extends ExtJsController {
             //1、获取所有的渠道名称
             ChannelInfo channelInfo = channelInfoService.get(channel);
             if(null ==  channelInfo){
-                channelNames.add("全平台");
+                channelNames.add("全部");
             }else{
                 channelNames.add(channelInfo.getName());
             }
@@ -93,8 +87,8 @@ public class LtvViewController extends ExtJsController {
                 ltvList.add(0.0);
             }
         }
-        Collections.reverse(channelNames);
-        Collections.reverse(ltvList);
+//        Collections.reverse(channelNames);
+//        Collections.reverse(ltvList);
         map.put("channelNames",channelNames);
         map.put("ltv",ltvList);
         map.put("endDate",businessDate);

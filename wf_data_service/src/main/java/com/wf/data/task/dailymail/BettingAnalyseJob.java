@@ -150,6 +150,9 @@ public class BettingAnalyseJob {
                 case GameTypeContents.GAME_TYPE_QUOITS:
                     gameName = "欢乐套圈";
                     break;
+                case GameTypeContents.GAME_TYPE_NEW_THREE_KINGDOM:
+                    gameName = "真.热血无双";
+                    break;
                 default:
                     gameName = "";
                     break;
