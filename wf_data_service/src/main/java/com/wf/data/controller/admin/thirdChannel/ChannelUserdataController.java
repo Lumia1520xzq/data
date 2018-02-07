@@ -1,6 +1,5 @@
 package com.wf.data.controller.admin.thirdChannel;
 
-import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wf.core.utils.GfJsonUtil;
@@ -9,19 +8,13 @@ import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
-import com.wf.data.common.constants.EsContents;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.common.utils.elasticsearch.EsClientFactory;
-import com.wf.data.common.utils.elasticsearch.EsQueryBuilders;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
-import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dto.UserDataOverviewDto;
 import com.wf.data.service.data.*;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
