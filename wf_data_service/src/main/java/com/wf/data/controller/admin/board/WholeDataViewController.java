@@ -61,7 +61,7 @@ public class WholeDataViewController extends ExtJsController {
         }
         try {
             if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -14));
                 endTime = DateUtils.getYesterdayDate();
             } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
                 startTime = endTime;
@@ -95,15 +95,17 @@ public class WholeDataViewController extends ExtJsController {
                 if(null != retention) {
                     Double usersDayRetention = retention.getUsersDayRetention();
                     Double dayRetention = retention.getDayRetention();
-                    Double usersRate = retention.getUsersRate();
+//                    Double usersRate = retention.getUsersRate();
                     info.setUsersDayRetention(usersDayRetention);
                     info.setDayRetention(dayRetention);
-                    info.setUsersRate(usersRate);
+//                    info.setUsersRate(usersRate);
                 }else{
                     info.setUsersDayRetention(0.0);
                     info.setDayRetention(0.0);
-                    info.setUsersRate(0.0);
+//                    info.setUsersRate(0.0);
                 }
+                //新用户占比
+                info.setUsersRate(calRate(info.getNewUsers(),info.getDau()));
                 DatawareFinalChannelCost cost = datawareFinalChannelCostService.findByDate(params);
                 if(null != cost){
                     Double totalCost = cost.getTotalCost();
@@ -143,6 +145,7 @@ public class WholeDataViewController extends ExtJsController {
                 String dayResultRate = cal(lastInfoAll.getResultRate(),lastButOneInfoAll.getResultRate());
                 String dayPayArpuRate = cal(lastInfoAll.getPayArpu(),lastButOneInfoAll.getPayArpu());
                 String dayPayArppuRate = cal(lastInfoAll.getPayArppu(),lastButOneInfoAll.getPayArppu());
+                String dayUsersRate =  cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(lastButOneInfoAll.getNewUsers(),lastButOneInfoAll.getDau()));
 
                 //比较最后一天和昨天
                 Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
@@ -151,14 +154,14 @@ public class WholeDataViewController extends ExtJsController {
                     if(null != lastButOneRetention){
                         String dayUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
                         String dayDayRetentionRate = cal(lastInfoAll.getDayRetention(),lastButOneRetention.getDayRetention());
-                        String dayUsersRate = cal(lastInfoAll.getUsersRate(),lastButOneRetention.getUsersRate());
+//                        String dayUsersRate = cal(lastInfoAll.getUsersRate(),lastButOneRetention.getUsersRate());
                         lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
                         lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
-                        lastInfoAll.setDayUsersRate(dayUsersRate);
+//                        lastInfoAll.setDayUsersRate(dayUsersRate);
                     }else{
                         lastInfoAll.setDayUsersDayRetentionRate("0%");
                         lastInfoAll.setDayDayRetentionRate("0%");
-                        lastInfoAll.setDayUsersRate("0%");
+//                        lastInfoAll.setDayUsersRate("0%");
                     }
                 }else{
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
@@ -171,14 +174,14 @@ public class WholeDataViewController extends ExtJsController {
                     if(null != lastButOneRetention){
                         String dayUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
                         String dayDayRetentionRate = cal(lastRetention.getDayRetention(),lastButOneRetention.getDayRetention());
-                        String dayUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
+//                        String dayUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
                         lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
                         lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
-                        lastInfoAll.setDayUsersRate(dayUsersRate);
+//                        lastInfoAll.setDayUsersRate(dayUsersRate);
                     }else{
                         lastInfoAll.setDayUsersDayRetentionRate("0%");
                         lastInfoAll.setDayDayRetentionRate("0%");
-                        lastInfoAll.setDayUsersRate("0%");
+//                        lastInfoAll.setDayUsersRate("0%");
                     }
                 }
 
@@ -204,6 +207,7 @@ public class WholeDataViewController extends ExtJsController {
                 lastInfoAll.setDayResultRate(dayResultRate);
                 lastInfoAll.setDayPayArpuRate(dayPayArpuRate);
                 lastInfoAll.setDayPayArppuRate(dayPayArppuRate);
+                lastInfoAll.setDayUsersRate(dayUsersRate);
                 }
                 //一周前的日期
                 String weekBeforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),7));
@@ -226,8 +230,7 @@ public class WholeDataViewController extends ExtJsController {
                     String weekResultRate = cal(lastInfoAll.getResultRate(),weekInfoAll.getResultRate());
                     String weekPayArpuRate = cal(lastInfoAll.getPayArpu(),weekInfoAll.getPayArpu());
                     String weekPayArppuRate = cal(lastInfoAll.getPayArppu(),weekInfoAll.getPayArppu());
-
-
+                    String weekUsersRate =  cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(weekInfoAll.getNewUsers(),weekInfoAll.getDau()));
 
                     //比较最后一天和昨天
                     Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
@@ -236,14 +239,14 @@ public class WholeDataViewController extends ExtJsController {
                         if(null != weekRetention){
                             String weekUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),weekRetention.getUsersDayRetention());
                             String weekDayRetentionRate = cal(lastInfoAll.getDayRetention(),weekRetention.getDayRetention());
-                            String weekUsersRate = cal(lastInfoAll.getUsersRate(),weekRetention.getUsersRate());
+//                            String weekUsersRate = cal(lastInfoAll.getUsersRate(),weekRetention.getUsersRate());
                             lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
                             lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
-                            lastInfoAll.setWeekUsersRate(weekUsersRate);
+//                            lastInfoAll.setWeekUsersRate(weekUsersRate);
                         }else{
                             lastInfoAll.setWeekUsersDayRetentionRate("0%");
                             lastInfoAll.setWeekDayRetentionRate("0%");
-                            lastInfoAll.setWeekUsersRate("0%");
+//                            lastInfoAll.setWeekUsersRate("0%");
                         }
                     } else {
                         beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
@@ -255,18 +258,16 @@ public class WholeDataViewController extends ExtJsController {
                         if(null != lastButOneRetention){
                             String weekUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
                             String weekDayRetentionRate = cal(lastRetention.getDayRetention(),lastButOneRetention.getDayRetention());
-                            String weekUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
+//                            String weekUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
                             lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
                             lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
-                            lastInfoAll.setWeekUsersRate(weekUsersRate);
+//                            lastInfoAll.setWeekUsersRate(weekUsersRate);
                         }else{
                             lastInfoAll.setWeekUsersDayRetentionRate("0%");
                             lastInfoAll.setWeekDayRetentionRate("0%");
-                            lastInfoAll.setWeekUsersRate("0%");
+//                            lastInfoAll.setWeekUsersRate("0%");
                         }
                     }
-
-
                     if(null != weekCost) {
                         String weekTotalCost = cal(lastInfoAll.getTotalCost(), weekCost.getTotalCost());
                         String weekCostRate = cal(lastInfoAll.getCostRate()/100, weekCost.getCostRate());
@@ -289,6 +290,7 @@ public class WholeDataViewController extends ExtJsController {
                     lastInfoAll.setWeekResultRate(weekResultRate);
                     lastInfoAll.setWeekPayArpuRate(weekPayArpuRate);
                     lastInfoAll.setWeekPayArppuRate(weekPayArppuRate);
+                    lastInfoAll.setWeekUsersRate(weekUsersRate);
                 }
             }
             return  allList;
@@ -306,6 +308,16 @@ public class WholeDataViewController extends ExtJsController {
             return "0%";
         }
         return NumberUtils.format(BigDecimalUtil.div(last-notlast,notlast),"#.##%");
+    }
+
+    private static double calRate(Long one,Long two){
+        if(two == null || two == 0L){
+            return 0.0;
+        }
+        if(one == null || one == 0L){
+            return 0.0;
+        }
+        return BigDecimalUtil.round(BigDecimalUtil.div(one*100 ,two),2);
     }
 
 

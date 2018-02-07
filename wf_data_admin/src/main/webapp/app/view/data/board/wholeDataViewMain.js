@@ -70,27 +70,21 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 width:275,
                 store: parentChannelStore
             },
-                // {
-                // xtype:'searchfield',
-                // store:parentChannelStore,
-                // displayField : 'name',
-                // valueField : 'id'
-                // },
-                {
-                    name: 'startTime',
-                    id:"viewStart",
-                    fieldLabel: '开始时间',
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-7),"Y-m-d")
-                },{
-                    name: 'endTime',
-                    id:"viewEnd",
-                    fieldLabel: '结束时间',
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
-                }]
+            {
+                name: 'startTime',
+                id:"viewStart",
+                fieldLabel: '开始时间',
+                xtype: 'datefield',
+                format: 'Y-m-d',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-14),"Y-m-d")
+            },{
+                name: 'endTime',
+                id:"viewEnd",
+                fieldLabel: '结束时间',
+                xtype: 'datefield',
+                format: 'Y-m-d',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
+            }]
         });
 
         me.add({
@@ -321,7 +315,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新用户留存</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>新用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -346,7 +340,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>全量用户留存</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>全量用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -402,7 +396,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>ARPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>DARPU</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -427,7 +421,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>ARPPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>DARPPU</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -656,7 +650,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 if(new Date(lastDay)>=new Date(yesterday)){
                      usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
                      dayRetention = dayRetention.slice(0,store.getCount()-1);
-                     usersRate = usersRate.slice(0,store.getCount()-1);
+                     // usersRate = usersRate.slice(0,store.getCount()-1);
                      businessDate1 = businessDate.slice(0,store.getCount()-1);
                 }else{
                      businessDate1 = businessDate;
@@ -1096,7 +1090,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     }]
                 },
                 {
-                    // title: {text: 'ARPU'},
+                    // title: {text: 'DARPU'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -1128,14 +1122,14 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             formatter: '{value}'
                         }},
                     series: [{
-                        name: 'ARPU',
+                        name: 'DARPU',
                         type: 'line',
                         smooth:true,
                         data: payArpu
                     }]
                 },
                 {
-                    // title: {text: 'ARPPU'},
+                    // title: {text: 'DARPPU'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -1166,7 +1160,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             formatter: '{value}'
                         }},
                     series: [{
-                        name: 'ARPPU',
+                        name: 'DARPPU',
                         type: 'line',
                         smooth:true,
                         itemStyle: {normal: {}},
@@ -1174,7 +1168,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     }]
                 },
                 {
-                    // title: {text: '新用户留存'},
+                    // title: {text: '新用户次留'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -1206,7 +1200,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         }
                     },
                     series: [{
-                        name: '新用户留存',
+                        name: '新用户次留',
                         type: 'line',
                         smooth:true,
                         itemStyle: {normal: {}},
@@ -1214,7 +1208,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     }]
                 },
                 {
-                    // title: {text: '全量用户留存'},
+                    // title: {text: '全量用户次留'},
                     tooltip: {trigger: 'axis',
                         formatter: function (params) {
                             var str='';
@@ -1247,7 +1241,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         }
                     },
                     series: [{
-                        name: '全量用户留存',
+                        name: '全量用户次留',
                         type: 'line',
                         smooth: true,
                         itemStyle: {normal: {}},
@@ -1279,7 +1273,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate1
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -1447,23 +1441,6 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             }
             else {
 
-                // var lastRecord = store.getAt(store.getCount()-1);
-                // var businessDate1 = [];
-                // if(lastRecord != undefined) {
-                //     var lastDay = lastRecord.get("businessDate");
-                //     var now = new Date();
-                //     now.setTime(now.getTime()-24*60*60*1000);
-                //     var yesterday = now.getFullYear()+"-"+(now.getMonth()+1) + "-" + now.getDate();
-                //     if(new Date(lastDay)>=new Date(yesterday)){
-                //         usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
-                //         dayRetention = dayRetention.slice(0,store.getCount()-1);
-                //         usersRate = usersRate.slice(0,store.getCount()-1);
-                //         businessDate1 = businessDate.slice(0,store.getCount()-1);
-                //     }else{
-                //         businessDate1 = businessDate;
-                //     }
-                // }
-
                 for (var p = 0; p < option.length; p++) {
                     var date = Ext.get('date' + p).dom;
                     var dd = r.get('businessDate');
@@ -1472,13 +1449,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 }
 
                 for (var q = 0; q < option.length; q++) {
-                    if (q == 13 || q == 14 || q == 15) {
+                    if (q == 13 || q == 14) {
                         var date = Ext.get('date' + q).dom;
                         var rentionDate = businessDate1[businessDate1.length - 1];
                         date.innerHTML = '<div align="center">' + rentionDate + '</div>';
                     }
                 }
-
 
                 Ext.get('dau').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dau') + "</strong></div>";
                 Ext.get('rechargeAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeAmount') + "</strong></div>";
@@ -1495,7 +1471,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('payArppu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong></div>";
                 Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersDayRetention[usersDayRetention.length - 1] + "%</strong></div>";
                 Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length - 1] + "%</strong></div>";
-                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersRate[usersRate.length - 1] + "%</strong></div>";
+                Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong></div>";
                 Ext.get('totalCost').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('totalCost') + "</strong></div>";
                 Ext.get('costRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong></div>";
 

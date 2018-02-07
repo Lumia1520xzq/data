@@ -99,6 +99,7 @@ public class UserRegisteredHourService {
         if ("23".equals(searchHour)) {
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("userGroup", 2);
+            userMap.put("registeredDate", searchDay);
             datawareUserInfoService.updateUserGroup(userMap);
             if (CollectionUtils.isNotEmpty(uicGroupList)) {
                 userMap.put("userGroup", 1);
