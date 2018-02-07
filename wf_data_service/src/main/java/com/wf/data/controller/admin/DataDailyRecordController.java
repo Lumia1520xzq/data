@@ -159,7 +159,7 @@ public class DataDailyRecordController extends ExtJsController {
                                 entity.setIndicatorType(dataDict.getValue());
                                 break;
                             }else {
-                                logger.error("导入模板下载失败！类别填写不正确！");
+                                return error("导入失败！");
                             }
                         }
                     }

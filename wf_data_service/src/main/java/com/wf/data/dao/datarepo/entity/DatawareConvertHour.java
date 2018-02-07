@@ -17,6 +17,8 @@ public class DatawareConvertHour extends DataEntity {
 	private Long parentId;
 	private List<Long> userList;
 
+	private Long rechargeUserCount;//充值人数
+
 	public Long getParentId() {
 		return parentId;
 	}
@@ -88,5 +90,13 @@ public class DatawareConvertHour extends DataEntity {
 
 	public void setConvertDate(String convertDate) {
 		this.convertDate = convertDate;
+	}
+
+	public Long getRechargeUserCount() {
+		return rechargeUserCount;
+	}
+
+	public void setRechargeUserCount(Long rechargeUserCount) {
+		this.rechargeUserCount = rechargeUserCount;
 	}
 }

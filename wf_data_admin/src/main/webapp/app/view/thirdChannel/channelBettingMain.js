@@ -15,7 +15,7 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/channel/userdata/betting/list.do',
-            fields: ['businessDate', 'dau', 'bettingUserCount', 'bettingCount', 'bettingAmount', 'diffAmount','bettingArpu','bettingAsp','returnRate'],
+            fields: ['businessDate', 'dau', 'bettingUserCount', 'bettingCount', 'bettingAmount', 'diffAmount', 'bettingArpu', 'bettingAsp', 'returnRate'],
             baseParams: {
                 parentId: me.parameters
             }
@@ -29,7 +29,16 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 parentId: me.parameters
             }
         });
-        // me.down("[name='parentId']").setValue(me.parameters);
+
+        var userTypeStore = Ext.create('DCIS.Store', {
+            autoLoad: true,
+            fields: ['value', 'lable'],
+            data: [
+                {"value": 0, "lable": "全部用户"},
+                {"value": 1, "lable": "新增用户"}
+            ]
+        });
+
         me.add({
             border: false,
             store: store,
@@ -48,7 +57,6 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 name: 'channelId',
                 fieldLabel: '子渠道',
                 xtype: 'combo',
-                columns: 2,
                 emptyText: "--请选择--",
                 displayField: 'name',
                 valueField: "id",
@@ -56,17 +64,28 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 queryMode: "local",
                 store: childChannelStore
             }, {
+                name: 'userType',
+                fieldLabel: '用户类型',
+                xtype: 'combo',
+                emptyText: "--请选择--",
+                displayField: 'lable',
+                valueField: "value",
+                editable: true,
+                queryMode: "local",
+                value: 0,
+                store: userTypeStore
+            }, {
                 xtype: 'datefield',
                 name: 'beginDate',
                 format: 'Y-m-d',
                 fieldLabel: '开始时间',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-6),"Y-m-d")
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -6), "Y-m-d")
             }, {
                 xtype: 'datefield',
                 name: 'endDate',
                 format: 'Y-m-d',
                 fieldLabel: '结束时间',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY),"Y-m-d")
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY), "Y-m-d")
             }]
         });
 
@@ -88,10 +107,10 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 dataIndex: 'dau',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000.00");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
@@ -101,23 +120,23 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 dataIndex: 'bettingUserCount',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
-            },{
+            }, {
                 text: '投注笔数',
                 width: 30,
                 dataIndex: 'bettingCount',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
@@ -127,10 +146,10 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 dataIndex: 'bettingAmount',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
@@ -140,10 +159,10 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 dataIndex: 'bettingArpu',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000.0");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
@@ -153,10 +172,10 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 dataIndex: 'bettingAsp',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000.0");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
@@ -166,10 +185,10 @@ Ext.define('WF.view.thirdChannel.channelBettingMain', {
                 dataIndex: 'diffAmount',
                 menuDisabled: true,
                 sortable: false,
-                renderer:function (value) {
-                    if(value != null){
+                renderer: function (value) {
+                    if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
-                    }else {
+                    } else {
                         return 0.00;
                     }
                 }
