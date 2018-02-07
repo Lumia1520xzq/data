@@ -57,6 +57,9 @@ public class ChannelUserdataController extends ExtJsController {
     @Autowired
     private DatawareBuryingPointHourService buryingPointHourService;
 
+    @Autowired
+    private DatawareUserInfoService userInfoService;
+
 
     /**
      * 投注数据
@@ -131,7 +134,7 @@ public class ChannelUserdataController extends ExtJsController {
             //用户类型为新增用户
             if (userType != null && userType == 1) {
                 //获取新用户list
-                List<Long> userIds = getNewUserIds(dateStr);
+                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId);
                 if (userIds != null && userIds.size() != 0) {
                     params.put("userIds", userIds);
                     params.put("bettingDate", dateStr);
@@ -259,11 +262,11 @@ public class ChannelUserdataController extends ExtJsController {
 
             if (userType != null && userType == 1) {
                 //获取新用户list
-                List<Long> userIds = getNewUserIds(dateStr);
+                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId);
                 if (userIds != null && userIds.size() != 0) {
                     params.put("userIds", userIds);
-                    params.put("bettingDate", dateStr);
                     params.put("buryingDate", dateStr);
+                    params.put("convertDate", dateStr);
 
                     //获取充值清洗表数据
                     DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
@@ -274,24 +277,25 @@ public class ChannelUserdataController extends ExtJsController {
                         }
                         recharUserCount = convertHour.getRechargeUserCount() == null ? 0L : convertHour.getRechargeUserCount();
                         rechargeAmount = convertHour.getThirdAmount() == null ? 0D : convertHour.getThirdAmount();
-                    }
-                } else {
-                    if (dateStr.equals(currentDay)) {
-                        params.put("businessOur", currentHour);
-                    } else {
-                        params.put("businessOur", "23");
-                    }
-                    //从清洗表中获取DAU,充值人数，充值金额
-                    DatawareFinalChannelInfoHour channelInfoHour = channelInfoHourService.findDataForPandect(params);
-                    if (channelInfoHour != null) {
-                        dau = channelInfoHour.getDau();
-                        recharUserCount = channelInfoHour.getRechargeCount() == null ? 0L : channelInfoHour.getRechargeCount();
-                        rechargeAmount = channelInfoHour.getRechargeAmount() == null ? 0L : channelInfoHour.getRechargeAmount();
+                        recharCount = convertHour.getRechargeCount() == null ? 0L : convertHour.getRechargeCount().longValue();
                     }
                 }
+            } else {
+                if (dateStr.equals(currentDay)) {
+                    params.put("businessOur", currentHour);
+                } else {
+                    params.put("businessOur", "23");
+                }
+                //从清洗表中获取DAU,充值人数，充值金额
+                DatawareFinalChannelInfoHour channelInfoHour = channelInfoHourService.findDataForPandect(params);
+                if (channelInfoHour != null) {
+                    dau = channelInfoHour.getDau();
+                    recharUserCount = channelInfoHour.getRechargeCount() == null ? 0L : channelInfoHour.getRechargeCount();
+                    rechargeAmount = channelInfoHour.getRechargeAmount() == null ? 0L : channelInfoHour.getRechargeAmount();
+                }
+                //从充值清洗表中获取充值人数
+                recharCount = convertHourService.findrechargeCountByDate(params);
             }
-            //从充值清洗表中获取充值人数
-            recharCount = convertHourService.findrechargeCountByDate(params);
             //充值ARPU=充值金额/DAU
             Double rechargeArpu = dau == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(rechargeAmount, dau), 1);
             //充值ARPPU=充值金额/充值人数
@@ -365,7 +369,7 @@ public class ChannelUserdataController extends ExtJsController {
         for (int i = datelist.size() - 1; i >= 0; i--) {
             UserDataOverviewDto dto = new UserDataOverviewDto();
             String dateStr = datelist.get(i);
-
+            params.put("businessDate", dateStr);
             //DAU
             Long dau = 0L;
             //投注人数
@@ -374,7 +378,7 @@ public class ChannelUserdataController extends ExtJsController {
             Long recharUserCount = 0L;
 
             if (userType != null && userType == 1) {//用户类型：新用户
-                List<Long> userIds = getNewUserIds(dateStr);
+                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId);
                 if (userIds != null && userIds.size() != 0) {
                     params.put("userIds", userIds);
                     params.put("bettingDate", dateStr);
@@ -397,7 +401,6 @@ public class ChannelUserdataController extends ExtJsController {
                     }
                 }
             } else {//用户类型：所有用户
-                params.put("businessDate", dateStr);
                 if (dateStr.equals(currentDay)) {
                     params.put("businessOur", currentHour);
                 } else {
@@ -522,35 +525,11 @@ public class ChannelUserdataController extends ExtJsController {
 
 
     //获取新用户list
-    private List<Long> getNewUserIds(String dateStr) {
-        List<Long> newUserIds = new ArrayList<>();
-        Date date = DateUtils.parseDate(dateStr);
-        String nextDate = DateUtils.formatDateTime(DateUtils.getNextDate(date, 1));
-        String beginDate = DateUtils.formatDate(date, DateUtils.DATE_TIME_PATTERN);
-        List<UicUser> users = esClientFactory.list(EsContents.UIC_USER, EsContents.UIC_USER, getUicUserQuery(beginDate, nextDate), 0, 100000, UicUser.class);
-        if (CollectionUtils.isNotEmpty(users)) {
-            for (UicUser user : users) {
-                Long userId = user.getId();
-                newUserIds.add(userId);
-            }
-        }
-        return newUserIds;
+    private List<Long> getNewUserIds(String dateStr, Long parentId, Long channelId) {
+        Map<String, Object> userParams = new HashMap<>();
+        userParams.put("businessDate", dateStr);
+        userParams.put("parentId", parentId);
+        userParams.put("channelId", channelId);
+        return userInfoService.getNewUserByDate(userParams);
     }
-
-    private QueryBuilder getUicUserQuery(String beginTime, String endTime) {
-        Map<String, Object> map = new HashMap<>();
-        QueryBuilder query;
-        map.put("delete_flag", 0);
-        BoolQueryBuilder boolQuery = EsQueryBuilders.booleanQuery(map);
-        if (beginTime != null) {
-            boolQuery.must(QueryBuilders.rangeQuery("create_time").gte(DateUtils.formatUTCDate(beginTime, DateUtils.DATE_TIME_PATTERN)));
-        }
-        if (endTime != null) {
-            boolQuery.must(QueryBuilders.rangeQuery("create_time").lt(DateUtils.formatUTCDate(endTime, DateUtils.DATE_TIME_PATTERN)));
-        }
-        query = boolQuery;
-        logger.debug("query" + query);
-        return query;
-    }
-
 }
