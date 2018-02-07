@@ -38,4 +38,8 @@ public class DatawareConvertHourService extends CrudService<DatawareConvertHourD
     public Long findrechargeCountByDate(Map<String, Object> map) {
         return dao.findrechargeCountByDate(map);
     }
+
+    public DatawareConvertHour getNewUserConverInfo(Map<String, Object> params) {
+        return dao.getNewUserConverInfo(params);
+    }
 }

@@ -48,10 +48,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>  
 		
 		<if test="p.beginDate != null and p.beginDate !=''">
-			AND t.create_time >= CONCAT(#{p.beginDate} , ':00')
+			AND t.update_time >= CONCAT(#{p.beginDate} , ':00')
 		</if>
 		<if test="p.endDate != null and p.endDate !=''">
-			AND t.create_time &lt;= CONCAT(#{p.endDate} , ':59')
+			AND t.update_time &lt;= CONCAT(#{p.endDate} , ':59')
 		</if>
 	</sql>
 	

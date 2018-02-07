@@ -35,4 +35,6 @@ public interface DatawareConvertHourDao extends CrudDao<DatawareConvertHour> {
     int deleteByDate(Map<String, Object> params);
 
     Long findrechargeCountByDate(Map<String, Object> map);
+
+    DatawareConvertHour getNewUserConverInfo(Map<String, Object> params);
 }
