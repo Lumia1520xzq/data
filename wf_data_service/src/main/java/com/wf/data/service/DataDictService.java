@@ -5,6 +5,7 @@ import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.dao.data.DataDictDao;
 import com.wf.data.dao.data.entity.DataDict;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,5 +64,9 @@ public class DataDictService extends CrudService<DataDictDao, DataDict> {
         cacheHander.delete(DataCacheKey.SYS_DICT_TYPE_LABEL_LIST.key(dict.getType()));
         cacheHander.delete(DataCacheKey.SYS_DICT_BY_TYPE_MAP.key(dict.getType()));
         cacheHander.delete(DataCacheKey.SYS_DICT_BY_VALUE.key(dict.getType(), dict.getValue()));
+    }
+
+    public List<DataDict> findListByType(String type){
+        return dao.findListByType(type);
     }
 }

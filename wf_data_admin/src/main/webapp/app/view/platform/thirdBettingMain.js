@@ -47,8 +47,8 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             forceFit: true,
             sumData: function () {
             callapi("data/admin/platform/record/sumData.do", me.down('dataform').form.getValues(), function (response) {
-                me.down("[name='bettingData']").setValue(Ext.util.Format.number(response.bettingData, "0,000"));
-                me.down("[name='returnData']").setValue(Ext.util.Format.number(response.returnData, "0,000"));
+                me.down("[name='bettingData']").setValue(Ext.util.Format.number(response.bettingData, "0,000.00"));
+                me.down("[name='returnData']").setValue(Ext.util.Format.number(response.returnData, "0,000.00"));
             });
         },
             items: [{
@@ -167,7 +167,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 sortable: false,
                 renderer:function (value) {
                     if(value != null){
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     }else {
                         return 0.00;
                     }
@@ -180,7 +180,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 sortable: false,
                 renderer:function (value) {
                     if(value != null){
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     }else {
                         return 0.00;
                     }
@@ -193,7 +193,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 sortable: false,
                 renderer:function (value) {
                     if(value != null){
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     }else {
                         return 0.00;
                     }
@@ -206,7 +206,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 sortable: false,
                 renderer:function (value) {
                     if(value != null){
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     }else {
                         return 0.00;
                     }

@@ -72,12 +72,12 @@ public class DataDictController extends ExtJsController {
 	@RequestMapping("/getListByType")
 	public Object getListByType() {
 		JSONObject json = getRequestJson();
-		DataDict params = new DataDict();
+		String type = "";
 		JSONObject data = json.getJSONObject("data");
 		if (data != null) {
-			params.setType(data.getString("type"));
+			type = data.getString("type");
 		}
-		List<DataDict> list = dataDictService.findList(params);
+		List<DataDict> list = dataDictService.findListByType(type);
 		return list;
 	}
 }

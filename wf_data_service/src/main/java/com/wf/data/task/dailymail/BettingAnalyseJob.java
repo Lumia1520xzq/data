@@ -9,6 +9,7 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.GameTypeContents;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareBettingLogHourService;
@@ -72,28 +73,16 @@ public class BettingAnalyseJob {
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
                     content.append(EMAIL_STYLE);
-                    //所有游戏汇总信息
-                    content.append(buildSumInfo(cal));
-                    //乐赢三张
-                    content.append(buildTcardInfo(cal));
-                    //多多捕鱼
-                    content.append(buildFishInfo(cal));
-                    //梦想桌球
-                    content.append(buildBilliardInfo(cal));
-                    //梦想飞镖
-                    content.append(buildDartInfo(cal));
-                    //热血摩托
-                    content.append(buildMotorInfo(cal));
-                    //热血军团
-                    content.append(buildWarInfo(cal));
-                    //貂蝉保卫战
-                    content.append(buildArrowInfo(cal));
-                    //多多三国
-                    content.append(buildKingdomInfo(cal));
-                    //糖果夺宝
-                    content.append(buildCandyInfo(cal));
-                    //欢乐套圈
-                    content.append(buildQuoitsInfo(cal));
+                    //汇总数据
+                    content.append(buildBettingInfo(cal,null));
+                    //各游戏数据
+                    String gameStr = dataConfigService.findByName(DataConstants.BETTING_ANALYSIS_GAMES).getValue();
+                    if(StringUtils.isNotEmpty(gameStr)) {
+                        String[] games = gameStr.split(COMMA);
+                        for(String game:games){
+                            content.append(buildBettingInfo(cal,Integer.parseInt(game)));
+                        }
+                    }
                     content.insert(0, "截止" + DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN + " HH:00") + "<br/><br/>");
                     for (String to : receivers.split(COMMA)) {
                         try {
@@ -121,60 +110,54 @@ public class BettingAnalyseJob {
         }
     }
 
-    private String buildSumInfo(Calendar cal) {
-        String temp = getTemp(cal,null);
-        return temp.replace("GAME_NAME", "各游戏汇总");
+    private String buildBettingInfo(Calendar cal,Integer gameType) {
+        String temp = getTemp(cal,gameType);
+        String gameName;
+        if (null == gameType){
+            gameName = "各游戏汇总";
+        }else {
+            switch (gameType) {
+                case GameTypeContents.GAME_TYPE_DART:
+                    gameName = "梦想飞镖";
+                    break;
+                case GameTypeContents.GAME_TYPE_BILLIARDS:
+                    gameName = "梦想桌球";
+                    break;
+                case GameTypeContents.GAME_TYPE_NIUNIU:
+                    gameName = "牛牛";
+                    break;
+                case GameTypeContents.GAME_TYPE_WARS:
+                    gameName = "热血军团";
+                    break;
+                case GameTypeContents.GAME_TYPE_ARROWS:
+                    gameName = "貂蝉保卫战";
+                    break;
+                case GameTypeContents.GAME_TYPE_BIKE:
+                    gameName = "热血摩托";
+                    break;
+                case GameTypeContents.GAME_TYPE_KINGDOM:
+                    gameName = "热血三国";
+                    break;
+                case GameTypeContents.GAME_TYPE_FISH:
+                    gameName = "捕鱼大冒险";
+                    break;
+                case GameTypeContents.GAME_TYPE_TCARD:
+                    gameName = "乐赢三张";
+                    break;
+                case GameTypeContents.GAME_TYPE_CANDY:
+                    gameName = "糖果夺宝";
+                    break;
+                case GameTypeContents.GAME_TYPE_QUOITS:
+                    gameName = "欢乐套圈";
+                    break;
+                default:
+                    gameName = "";
+                    break;
+            }
+        }
+        return temp.replace("GAME_NAME", gameName);
     }
 
-    private String buildDartInfo(Calendar cal) {
-        String temp = getTemp(cal, 1);
-        return temp.replace("GAME_NAME", "梦想飞镖");
-    }
-
-    private String buildBilliardInfo(Calendar cal) {
-        String temp = getTemp(cal, 2);
-        return temp.replace("GAME_NAME", "梦想桌球");
-    }
-
-    private String buildWarInfo(Calendar cal) {
-        String temp = getTemp(cal, 4);
-        return temp.replace("GAME_NAME", "热血军团");
-    }
-
-    private String buildArrowInfo(Calendar cal) {
-        String temp = getTemp(cal, 5);
-        return temp.replace("GAME_NAME", "貂蝉保卫战");
-    }
-
-    private String buildMotorInfo(Calendar cal) {
-        String temp = getTemp(cal, 8);
-        return temp.replace("GAME_NAME", "热血摩托");
-    }
-
-    private String buildKingdomInfo(Calendar cal) {
-        String temp = getTemp(cal, 9);
-        return temp.replace("GAME_NAME", "热血三国");
-    }
-
-    private String buildFishInfo(Calendar cal) {
-        String temp = getTemp(cal,10);
-        return temp.replace("GAME_NAME", "捕鱼大冒险");
-    }
-
-    private String buildTcardInfo(Calendar cal) {
-        String temp = getTemp(cal,11);
-        return temp.replace("GAME_NAME", "乐赢三张");
-    }
-
-    private String buildCandyInfo(Calendar cal) {
-        String temp = getTemp(cal, 12);
-        return temp.replace("GAME_NAME", "糖果夺宝");
-    }
-
-    private String buildQuoitsInfo(Calendar cal) {
-        String temp = getTemp(cal, 3);
-        return temp.replace("GAME_NAME", "欢乐套圈");
-    }
 
     private Map<String, Object> bettingParams(Calendar cal,Integer gameType,boolean calHour) {
         Map<String, Object> params = new HashMap<>(3);
@@ -253,5 +236,7 @@ public class BettingAnalyseJob {
         }
         return  df.format(obj);
     }
+
+
 
 }

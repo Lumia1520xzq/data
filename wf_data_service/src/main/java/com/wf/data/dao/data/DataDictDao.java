@@ -16,4 +16,6 @@ public interface DataDictDao extends CrudDao<DataDict> {
     DataDict getDictByValue(@Param("type") String type, @Param("value") int value);
 
     List<DataDict> findByCond(DataDict dict);
+
+    List<DataDict> findListByType(@Param("type")String type);
 }
