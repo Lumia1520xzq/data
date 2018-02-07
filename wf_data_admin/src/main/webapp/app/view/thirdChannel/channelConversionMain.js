@@ -30,6 +30,15 @@ Ext.define('WF.view.thirdChannel.channelConversionMain', {
             }
         });
 
+        var userTypeStore = Ext.create('DCIS.Store', {
+            autoLoad: true,
+            fields: ['value', 'lable'],
+            data: [
+                {"value": 0, "lable": "全部用户"},
+                {"value": 1, "lable": "新增用户"}
+            ]
+        });
+
         me.add({
             border: false,
             store: store,
@@ -55,6 +64,17 @@ Ext.define('WF.view.thirdChannel.channelConversionMain', {
                 editable: true,
                 queryMode: "local",
                 store: childChannelStore
+            }, {
+                name: 'userType',
+                fieldLabel: '用户类型',
+                xtype: 'combo',
+                emptyText: "--请选择--",
+                displayField: 'lable',
+                valueField: "value",
+                editable: true,
+                queryMode: "local",
+                value: 0,
+                store: userTypeStore
             }, {
                 xtype: 'datefield',
                 name: 'beginDate',

@@ -27,10 +27,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND t.channel_id = #{p.channelId}
 		</if>
 		<if test="p.beginDate != null and p.beginDate != ''">
-			AND t.begin_date >= CONCAT(#{p.beginDate} , ' 00:00:00')
+			AND t.begin_date >= #{p.beginDate}
 		</if>
 		<if test="p.endDate != null and p.endDate != ''">
-			AND t.begin_date &lt;= CONCAT(#{p.endDate} , ' 23:59:59')
+			AND t.begin_date &lt;= #{p.endDate}
 		</if>
 		<if test="p.eventType != null and p.eventType != ''">
 			AND t.event_type = #{p.eventType}

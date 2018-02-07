@@ -122,25 +122,53 @@ Ext.define('WF.view.thirdChannel.channelGameDataMain', {
                 width: 50,
                 dataIndex: 'dau',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000");
+                    } else {
+                        return 0;
+                    }
+                }
             }, {
                 text: '投注人数',
                 width: 50,
                 dataIndex: 'bettingUserCount',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000");
+                    } else {
+                        return 0;
+                    }
+                }
             }, {
                 text: '投注笔数',
                 width: 50,
                 dataIndex: 'bettingCount',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000");
+                    } else {
+                        return 0;
+                    }
+                }
             }, {
                 text: '投注金额',
                 width: 50,
                 dataIndex: 'bettingAmount',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000.00");
+                    } else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '投注转化率',
                 width: 50,
@@ -152,19 +180,40 @@ Ext.define('WF.view.thirdChannel.channelGameDataMain', {
                 width: 50,
                 dataIndex: 'arpu',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000.0");
+                    } else {
+                        return 0.0;
+                    }
+                }
             }, {
                 text: '投注ASP',
                 width: 50,
                 dataIndex: 'asp',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000.0");
+                    } else {
+                        return 0.0;
+                    }
+                }
             }, {
                 text: '流水差',
                 width: 50,
                 dataIndex: 'amountGap',
                 menuDisabled: true,
-                sortable: false
+                sortable: false,
+                renderer: function (value) {
+                    if (value != null) {
+                        return Ext.util.Format.number(value, "0,000.00");
+                    } else {
+                        return 0.00;
+                    }
+                }
             }, {
                 text: '返奖率',
                 width: 50,

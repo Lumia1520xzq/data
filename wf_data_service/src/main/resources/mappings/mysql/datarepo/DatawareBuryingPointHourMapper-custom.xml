@@ -92,6 +92,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="parentId != null and parentId != ''">
             AND parent_id = #{parentId}
         </if>
+        <if test="userIds != null and userIds.size() !=0">
+            AND user_id in
+            <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <select id="getDauByTime" resultType="Long">

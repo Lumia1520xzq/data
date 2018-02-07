@@ -27,4 +27,6 @@ public interface DatawareBettingLogHourDao extends CrudDao<DatawareBettingLogHou
     DatawareBettingLogHour getBettingByDate(Map<String, Object> params);
 
     int deleteByDate(Map<String, Object> params);
+
+    DatawareBettingLogHour getNewUserBettingInfoByDate(Map<String, Object> params);
 }

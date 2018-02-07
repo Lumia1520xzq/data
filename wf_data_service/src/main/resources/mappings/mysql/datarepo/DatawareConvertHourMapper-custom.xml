@@ -88,10 +88,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         dataware_convert_hour
         WHERE 1=1
         <if test="convertDate != null and convertDate != ''">
-            AND  convert_date = #{convertDate}
+            AND convert_date = #{convertDate}
         </if>
         <if test="convertHour != null and convertHour != ''">
-            AND  convert_hour = #{convertHour}
+            AND convert_hour = #{convertHour}
         </if>
         <if test="startHour != null and startHour != ''">
             AND convert_hour &gt;= #{startHour}
@@ -114,6 +114,30 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         </if>
         <if test="parentId != null and parentId != ''">
             AND t.parent_id = #{parentId}
+        </if>
+    </select>
+
+    <select id="getNewUserConverInfo" resultType="DatawareConvertHour">
+        SELECT
+            IFNULL(COUNT(DISTINCT t.user_id), 0) recharge_user_count,
+            SUM(t.third_amount) third_amount,
+            SUM(t.recharge_count) recharge_count
+        FROM dataware_convert_hour t
+        WHERE 1=1 AND t.delete_flag = 0
+        <if test="convertDate != null and convertDate != ''">
+            AND t.convert_date = #{convertDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="userIds != null and userIds.size() !=0">
+            AND t.user_id in
+            <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
     </select>
 
