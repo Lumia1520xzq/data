@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareGameBettingInfoHourDao">
+	
+	<sql id="datawareGameBettingInfoHourColumns">
+		t.id,
+		t.parent_id,
+		t.channel_id,
+		t.game_type,
+		t.hour_dau,
+		t.dau,
+		t.hour_betting_amount,
+		t.hour_betting_count,
+		t.hour_betting_user_count,
+		t.betting_user_count,
+		t.hour_return_amount,
+		t.business_hour,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareGameBettingInfoHourWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<select id="get" resultType="DatawareGameBettingInfoHour">
+		SELECT <include refid="datawareGameBettingInfoHourColumns"/> FROM dataware_game_betting_info_hour t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareGameBettingInfoHour">
+		SELECT <include refid="datawareGameBettingInfoHourColumns"/> FROM dataware_game_betting_info_hour t
+		WHERE <include refid="datawareGameBettingInfoHourWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_game_betting_info_hour t WHERE <include refid="datawareGameBettingInfoHourWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_game_betting_info_hour (
+			id, 
+			parent_id, 
+			channel_id, 
+			game_type, 
+			hour_dau, 
+			dau, 
+			hour_betting_amount, 
+			hour_betting_count, 
+			hour_betting_user_count, 
+			betting_user_count, 
+			hour_return_amount, 
+			business_hour, 
+			business_date, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{parentId}, 
+			#{channelId}, 
+			#{gameType}, 
+			#{hourDau}, 
+			#{dau}, 
+			#{hourBettingAmount}, 
+			#{hourBettingCount}, 
+			#{hourBettingUserCount}, 
+			#{bettingUserCount}, 
+			#{hourReturnAmount}, 
+			#{businessHour}, 
+			#{businessDate}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_game_betting_info_hour SET
+			parent_id = #{parentId}, 
+			channel_id = #{channelId}, 
+			game_type = #{gameType}, 
+			hour_dau = #{hourDau}, 
+			dau = #{dau}, 
+			hour_betting_amount = #{hourBettingAmount}, 
+			hour_betting_count = #{hourBettingCount}, 
+			hour_betting_user_count = #{hourBettingUserCount}, 
+			betting_user_count = #{bettingUserCount}, 
+			hour_return_amount = #{hourReturnAmount}, 
+			business_hour = #{businessHour}, 
+			business_date = #{businessDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_game_betting_info_hour SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
