@@ -97,7 +97,7 @@ public class EventController extends ExtJsController {
         }
 
         //开始日期默认为昨天
-        if (StringUtils.isBlank(form.getBeginDate())){
+        if (StringUtils.isBlank(form.getBeginDate())) {
             form.setBeginDate(DateUtils.getYesterdayDate());
         }
 
@@ -162,14 +162,15 @@ public class EventController extends ExtJsController {
                     entity.setCreater(AssertionHolder.getAssertion().getPrincipal().getName());
                     entity.setCreateTime(new Date());
                     entity.setDeleteFlag(0);
-                    if (StringUtils.isNotBlank(entity.getEventTypeName())){
+                    if (StringUtils.isNotBlank(entity.getEventTypeName())) {
                         for (DataDict dataDict : eventTypeList) {
-                            if (entity.getEventTypeName().equals(dataDict.getLabel())){
+                            if (entity.getEventTypeName().equals(dataDict.getLabel())) {
                                 entity.setEventType(dataDict.getValue());
                                 break;
-                            }else {
-                                return error("导入失败！");
                             }
+                        }
+                        if (entity.getEventType() == null) {
+                            return error("类别不存在！");
                         }
                     }
                     eventService.save(entity);

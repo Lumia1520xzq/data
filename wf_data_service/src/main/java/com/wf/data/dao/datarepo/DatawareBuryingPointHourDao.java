@@ -25,4 +25,6 @@ public interface DatawareBuryingPointHourDao extends CrudDao<DatawareBuryingPoin
     Long getDauByTime(Map<String, Object> params);
 
     int deleteByDate(Map<String, Object> params);
+
+    Integer getGameDauByDateAndHour(Map<String, Object> buryingParams);
 }
