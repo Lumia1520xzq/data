@@ -121,13 +121,6 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
                             {id:'gameData5',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameRate5',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
                         ]
-                    },
-                    {id:"gameBoard6",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
-                        items:[
-                            {id:'gameTitle6',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
-                            {id:'gameData6',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
-                            {id:'gameRate6',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
-                        ]
                     }
                    ]
                 },

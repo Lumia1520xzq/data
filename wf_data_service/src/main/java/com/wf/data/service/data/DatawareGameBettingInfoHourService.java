@@ -16,5 +16,9 @@ public class DatawareGameBettingInfoHourService extends CrudService<DatawareGame
     public List<DatawareGameBettingInfoHour> getByDateAndHour(Map<String,Object> params){
         return dao.getByDateAndHour(params);
     }
+
+    public List<DatawareGameBettingInfoHour> getSumDataByDateAndHour(Map<String,Object> params){
+        return dao.getSumDataByDateAndHour(params);
+    }
 }
 

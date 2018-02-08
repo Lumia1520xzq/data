@@ -12,4 +12,6 @@ import java.util.Map;
 public interface DatawareGameBettingInfoHourDao extends CrudDao<DatawareGameBettingInfoHour> {
 
     List<DatawareGameBettingInfoHour> getByDateAndHour(Map<String,Object> params);
+
+    List<DatawareGameBettingInfoHour> getSumDataByDateAndHour(Map<String,Object> params);
 }

@@ -28,5 +28,34 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		order by t.business_hour asc
 	</select>
 
+	<select id="getSumDataByDateAndHour" resultType="DatawareGameBettingInfoHour">
+		SELECT
+		business_hour businessHour,
+		SUM(hour_dau) hourDau,
+		SUM(hour_betting_user_count) hourBettingUserCount,
+		SUM(hour_betting_count) hourBettingCount,
+		SUM(hour_betting_amount) hourBettingAmount,
+		SUM(hour_return_amount) hourReturnAmount
+		FROM `dataware_game_betting_info_hour`
+		WHERE 1=1
+		<if test="channelId != null">
+			AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null">
+			AND parent_id = #{parentId}
+		</if>
+		<if test="beginDate != null and beginDate != ''">
+			AND business_date &gt;= #{beginDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND business_date &lt;= #{endDate}
+		</if>
+		<if test="gameType != null and gameType != ''">
+			AND game_type = #{gameType}
+		</if>
+		GROUP BY business_hour
+		ORDER BY business_hour ASC
+	</select>
+
 </mapper>
 

@@ -160,6 +160,12 @@ public class ChannelCostService {
 
 
         List<Long> activityIds = activityInfoService.getListByChannelId(params);
+        if(CollectionUtils.isEmpty(activityIds)){
+            channelCost.setKindCost(0.00);
+            channelCost.setTotalCost(0.00);
+            channelCost.setCostRate(0.00);
+            return channelCost;
+        }
         params.put("activityIds", activityIds);
         Double kindCost = inventoryPhyAwardsSendlogService.getRmbAmountByChannel(params);
         if (null == kindCost) {
