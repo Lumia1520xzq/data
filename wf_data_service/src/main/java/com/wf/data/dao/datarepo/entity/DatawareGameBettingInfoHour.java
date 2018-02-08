@@ -10,10 +10,13 @@ public class DatawareGameBettingInfoHour extends DataEntity {
     private Long hourDau;
     private Long dau;
     private Double hourBettingAmount;
+    private Double bettingAmount;
     private Long hourBettingCount;
+    private Long bettingCount;
     private Long hourBettingUserCount;
     private Long bettingUserCount;
     private Double hourReturnAmount;
+    private Double returnAmount;
     private String businessHour;
     private String businessDate;
 
@@ -113,5 +116,28 @@ public class DatawareGameBettingInfoHour extends DataEntity {
         this.businessDate = value;
     }
 
+    public Double getBettingAmount() {
+        return bettingAmount;
+    }
+
+    public void setBettingAmount(Double bettingAmount) {
+        this.bettingAmount = bettingAmount;
+    }
+
+    public Long getBettingCount() {
+        return bettingCount;
+    }
+
+    public void setBettingCount(Long bettingCount) {
+        this.bettingCount = bettingCount;
+    }
+
+    public Double getReturnAmount() {
+        return returnAmount;
+    }
+
+    public void setReturnAmount(Double returnAmount) {
+        this.returnAmount = returnAmount;
+    }
 }
 
