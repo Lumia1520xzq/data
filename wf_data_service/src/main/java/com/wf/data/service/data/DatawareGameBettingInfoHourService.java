@@ -5,7 +5,8 @@ import com.wf.core.service.CrudService;
 import com.wf.data.dao.datarepo.DatawareGameBettingInfoHourDao;
 import com.wf.data.dao.datarepo.entity.DatawareGameBettingInfoHour;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +21,12 @@ public class DatawareGameBettingInfoHourService extends CrudService<DatawareGame
     public List<DatawareGameBettingInfoHour> getSumDataByDateAndHour(Map<String,Object> params){
         return dao.getSumDataByDateAndHour(params);
     }
+	public long getCountByTime(Map<String, Object> params) {
+		return dao.getCountByTime(params);
+	}
+
+	public void deleteByDate(Map<String, Object> params) {
+		dao.deleteByDate(params);
+	}
 }
 

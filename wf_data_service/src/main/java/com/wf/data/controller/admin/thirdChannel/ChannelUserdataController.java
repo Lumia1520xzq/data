@@ -42,9 +42,6 @@ public class ChannelUserdataController extends ExtJsController {
     private DatawareUserSignDayService userSignDayService;
 
     @Autowired
-    private EsClientFactory esClientFactory;
-
-    @Autowired
     private DatawareBettingLogHourService bettingLogHourService;
 
     @Autowired
@@ -81,7 +78,7 @@ public class ChannelUserdataController extends ExtJsController {
         List<String> datelist = Lists.newArrayList();
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
         Map<String, Object> params = new HashMap<>();
-        String currentHour = Integer.toString(LocalTime.now().getHour() - 1);//当前小时
+        String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
         String currentDay = LocalDate.now().toString();//当前日期
 
         params.put("parentId", parentId);
