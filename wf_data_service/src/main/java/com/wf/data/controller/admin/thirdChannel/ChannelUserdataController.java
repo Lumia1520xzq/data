@@ -42,9 +42,6 @@ public class ChannelUserdataController extends ExtJsController {
     private DatawareUserSignDayService userSignDayService;
 
     @Autowired
-    private EsClientFactory esClientFactory;
-
-    @Autowired
     private DatawareBettingLogHourService bettingLogHourService;
 
     @Autowired
