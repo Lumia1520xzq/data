@@ -158,9 +158,11 @@ public class DataDailyRecordController extends ExtJsController {
                             if (entity.getIndicatorTypeName().equals(dataDict.getLabel())){
                                 entity.setIndicatorType(dataDict.getValue());
                                 break;
-                            }else {
-                                return error("导入失败！");
                             }
+                        }
+                        if (entity.getIndicatorType() == null){
+                            logger.info("指标不存在！");
+                            return error("指标不存在！");
                         }
                     }
                     entity.setCreater(AssertionHolder.getAssertion().getPrincipal().getName());
