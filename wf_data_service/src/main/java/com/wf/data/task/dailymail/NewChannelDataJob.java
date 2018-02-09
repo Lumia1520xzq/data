@@ -115,9 +115,11 @@ public class NewChannelDataJob {
         DatawareFinalChannelInfoAll yesInfo = infoAllService.findByDate(toMap(yesDate,parentId,channelId));
         if(info == null){
            info = new DatawareFinalChannelInfoAll();
+           info.init(info);
         }
         if(yesInfo == null){
            yesInfo = new DatawareFinalChannelInfoAll();
+           yesInfo.init(yesInfo);
         }
         // 1、充值金额
         String rechargeSum = colorMoney(info.getRechargeAmount(),yesInfo.getRechargeAmount());
