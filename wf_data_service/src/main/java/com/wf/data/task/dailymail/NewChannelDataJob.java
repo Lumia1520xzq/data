@@ -57,7 +57,7 @@ public class NewChannelDataJob {
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
                     content.append(contentTemp.replace("searchDate",date));
-                    String channelStrs = dataConfigService.findByName(DataConstants.DATA_DAILY_CHANNELS).getValue();
+                    String channelStrs = dataConfigService.findByName(DataConstants.NEW_DATA_DAILY_CHANNELS).getValue();
                     if(StringUtils.isNotEmpty(channelStrs)) {
                         String[] channels = channelStrs.split(COMMA);
                         List<Long> mainChannels = channelInfoService.findMainChannelIds();
