@@ -42,4 +42,8 @@ public class DatawareBuryingPointHourService extends CrudService<DatawareBurying
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
+
+    public Integer getGameDauByDateAndHour(Map<String, Object> buryingParams) {
+        return dao.getGameDauByDateAndHour(buryingParams);
+    }
 }

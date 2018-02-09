@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
 <mapper namespace="com.wf.data.dao.datarepo.DatawareBuryingPointHourDao">
@@ -55,12 +55,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
     <select id="getCountByTime" resultType="long">
         SELECT COUNT(*) FROM dataware_burying_point_hour t
-        WHERE  1=1 AND t.delete_flag = 0 AND t.channel_id IS NOT NULL
+        WHERE 1=1 AND t.delete_flag = 0 AND t.channel_id IS NOT NULL
         <if test="buryingDate != null and buryingDate != ''">
-            AND  t.burying_date = #{buryingDate}
+            AND t.burying_date = #{buryingDate}
         </if>
         <if test="buryingHour != null and buryingHour != ''">
-            AND  t.burying_hour = #{buryingHour}
+            AND t.burying_hour = #{buryingHour}
         </if>
         <if test="startHour != null and startHour != ''">
             AND t.burying_hour &gt;= #{startHour}
@@ -92,6 +92,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="parentId != null and parentId != ''">
             AND parent_id = #{parentId}
         </if>
+        /*查询新用户dau条件*/
         <if test="userIds != null and userIds.size() !=0">
             AND user_id in
             <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
@@ -118,6 +119,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="parentId != null and parentId != ''">
             AND parent_id = #{parentId}
         </if>
+        <if test="gameType != null and gameType != ''">
+            AND game_type = #{gameType}
+        </if>
     </select>
 
     <delete id="deleteByDate">
@@ -125,10 +129,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         dataware_burying_point_hour
         WHERE 1=1
         <if test="buryingDate != null and buryingDate != ''">
-            AND  burying_date = #{buryingDate}
+            AND burying_date = #{buryingDate}
         </if>
         <if test="buryingHour != null and buryingHour != ''">
-            AND  burying_hour = #{buryingHour}
+            AND burying_hour = #{buryingHour}
         </if>
         <if test="startHour != null and startHour != ''">
             AND burying_hour &gt;= #{startHour}
@@ -137,5 +141,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             AND burying_hour &lt;= #{endHour}
         </if>
     </delete>
+
 </mapper>
 
