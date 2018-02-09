@@ -1,6 +1,7 @@
 package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.scenario.effect.impl.prism.ps.PPStoPSWDisplacementMapPeer;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
@@ -105,6 +106,7 @@ public class GameMonitorViewController extends ExtJsController {
             params.put("businessHour",hour);
             List<DatawareGameBettingInfoHour> yesLastRecordList = bettingInfoService.getByDateAndHour(params);
             DatawareGameBettingInfoHour yesLastRecord = new DatawareGameBettingInfoHour();
+            yesLastRecord.init(yesLastRecord);
             if(CollectionUtils.isNotEmpty(yesLastRecordList)){
                 yesLastRecord = yesLastRecordList.get(0);
             }
@@ -119,6 +121,7 @@ public class GameMonitorViewController extends ExtJsController {
             params.put("businessDate",DateUtils.getPrevDate(businessDate,7));
             List<DatawareGameBettingInfoHour> weekLastRecordList = bettingInfoService.getByDateAndHour(params);
             DatawareGameBettingInfoHour weekLastRecord = new DatawareGameBettingInfoHour();
+            weekLastRecord.init(weekLastRecord);
             if(CollectionUtils.isNotEmpty(weekLastRecordList)){
                 weekLastRecord = weekLastRecordList.get(0);
             }
