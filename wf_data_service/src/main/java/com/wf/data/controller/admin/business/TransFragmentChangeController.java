@@ -148,8 +148,8 @@ public class TransFragmentChangeController extends ExtJsController {
             return 0D;
         }
         changeLog.setActivityIds(activityIds);
-        changeLog.setChangeType(1);
-        changeLog.setBusinessType(1);
+//        changeLog.setChangeType(1);
+//        changeLog.setBusinessType(1);
 
         List<TransFragmentChangeLog> changeLogList = fragmentChangeLogService.findList(changeLog, 99999999);
         for (TransFragmentChangeLog temp : changeLogList) {
