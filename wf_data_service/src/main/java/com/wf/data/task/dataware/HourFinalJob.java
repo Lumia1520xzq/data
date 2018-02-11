@@ -8,6 +8,7 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.business.ChannelInfoHourService;
+import com.wf.data.service.business.GameBettingInfoHourService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,7 @@ public class HourFinalJob {
 
     private final ChannelInfoHourService channelInfoHourService = SpringContextHolder.getBean(ChannelInfoHourService.class);
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+    private final GameBettingInfoHourService gameBettingInfoHourService = SpringContextHolder.getBean(GameBettingInfoHourService.class);
 
     public void execute() {
         logger.info("每小时任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -36,6 +38,14 @@ public class HourFinalJob {
             }
         } catch (Exception e) {
             logger.error("channelInfoHourService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+
+        try {
+            if ("true".equals(openFlag[3])) {
+                gameBettingInfoHourService.toDoAnalysis();
+            }
+        } catch (Exception e) {
+            logger.error("gameBettingInfoHourService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
 
