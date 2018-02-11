@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.taurus.TaurusUserBettingLogDao">
+
+    <!--<select id="getTableAmount" resultType="double">-->
+        <!--SELECT IFNULL(sum(amount),0)-->
+        <!--FROM taurus_user_betting_log-->
+        <!--where 1 = 1-->
+        <!--<if test="channelId != null">-->
+            <!--AND channel_id = #{channelId}-->
+        <!--</if>-->
+        <!--<if test="parentId != null and parentId != ''">-->
+            <!--AND channel_id LIKE CONCAT(#{parentId},'%')-->
+        <!--</if>-->
+        <!--<if test="amount != null and amount != ''">-->
+            <!--AND amount = #{amount}-->
+        <!--</if>-->
+        <!--<if test="bettingType != null and bettingType != ''">-->
+            <!--AND betting_type = #{bettingType}-->
+        <!--</if>-->
+        <!--<if test="roomType != null and roomType != ''">-->
+            <!--AND room_type = #{roomType}-->
+        <!--</if>-->
+        <!--AND create_time BETWEEN #{beginDate} AND #{endDate}-->
+    <!--</select>-->
+
+
+    <select id="getUserCountByBettingType" resultType="Integer">
+        SELECT IFNULL(count(DISTINCT user_id),0)
+        FROM `taurus_user_betting_log` a, taurus_desk_log b
+        WHERE 1=1
+        <if test="beginDate != null">
+            and a.create_time &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null">
+            and a.create_time &lt;= #{endDate}
+        </if>
+        <if test="parentId != null">
+            AND a.channel_id LIKE CONCAT(#{parentId},'%')
+        </if>
+        <if test="channelId != null">
+            AND a.channel_id = #{channelId}
+        </if>
+        <if test="bettingType != null">
+            and a.betting_type = #{bettingType}
+        </if>
+        AND a.desk_id = b.id
+        <if test="roomType != null">
+        AND b.room_type = #{roomType}
+        </if>
+    </select>
+
+
+    <select id="getTableAmount" resultType="double">
+        SELECT IFNULL(sum(a.amount),0)
+        FROM `taurus_user_betting_log` a,taurus_desk_log b
+        WHERE 1=1
+        <if test="beginDate != null">
+            and a.create_time &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null">
+            and a.create_time &lt;= #{endDate}
+        </if>
+        <if test="parentId != null">
+            AND a.channel_id LIKE CONCAT(#{parentId},'%')
+        </if>
+        <if test="channelId != null">
+            AND a.channel_id = #{channelId}
+        </if>
+        <if test="bettingType != null">
+            and a.betting_type = #{bettingType}
+        </if>
+        AND a.desk_id = b.id
+        <if test="roomType != null">
+            AND b.room_type = #{roomType}
+        </if>
+    </select>
+
+    <select id="getTablesByBettingType" resultType="Integer">
+        SELECT IFNULL(COUNT(1),0) FROM
+        (SELECT desk_id, phase, count(DISTINCT user_id)
+         FROM `taurus_user_betting_log` a, taurus_desk_log b
+         WHERE 1=1
+        <if test="beginDate != null">
+            and a.create_time &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null">
+            and a.create_time &lt;= #{endDate}
+        </if>
+        <if test="parentId != null">
+            AND a.channel_id LIKE CONCAT(#{parentId},'%')
+        </if>
+        <if test="channelId != null">
+            AND a.channel_id = #{channelId}
+        </if>
+        <if test="bettingType != null">
+            and a.betting_type = #{bettingType}
+        </if>
+         AND a.desk_id = b.id
+        <if test="roomType != null">
+            AND b.room_type = #{roomType}
+        </if>
+        GROUP BY a.desk_id , a.phase
+        )t
+    </select>
+
+</mapper>
+
