@@ -11,10 +11,12 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelRetention;
+import com.wf.data.dto.MonthlyDataDto;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import com.wf.data.service.data.DatawareFinalChannelRetentionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +74,7 @@ public class NewChannelDataJob {
                         }
                         content.append(buildData(date,1L,null).replace("channelName","合计"));
                         content.append(buildData(prvDate,1L,null).replace("channelName","前日合计"));
+                        content.append(getMonthRecharge(date).replace("channelName","当月累计"));
                     }
                     content.append(tableEnd);
                     content.insert(0, date +"数据如下" + "<br/><br/>");
@@ -99,10 +102,33 @@ public class NewChannelDataJob {
         }
     }
 
+
+    /**
+     * 当月累计充值
+     */
+    private String getMonthRecharge(String date){
+        String template = "<tr><td style='background-color:#D6D6D6;'>channelName</td><td>sumRecharge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+        StringBuilder sb = new StringBuilder();
+        Map<String,Object> params = new HashMap<>();
+        String beginMonth = DateUtils.formatDate(DateUtils.parseDate(date), DateUtils.MONTH_PATTERN);
+        String endMonth = DateUtils.formatDate(DateUtils.parseDate(date), DateUtils.MONTH_PATTERN);
+        params.put("beginMonth",beginMonth);
+        params.put("endMonth",endMonth);
+        params.put("parentId",1);
+        List<MonthlyDataDto> infoAllList = infoAllService.findMonthSumData(params);
+        Double sumRecharge = 0.0;
+        if(CollectionUtils.isNotEmpty(infoAllList)){
+            sumRecharge = infoAllList.get(0).getSumRecharge();
+        }
+        String result = template.replace("<td>sumRecharge</td>","<td bgcolor='yellow' style='text-align:right'>"+format(sumRecharge)+"</td>");
+        sb.append(result);
+        return sb.toString();
+    }
+
+
     private String buildData(String date,Long parentId,Long channelId) {
         return getTemplate(date,parentId,channelId);
     }
-
 
     /**
      * 各渠道数据模板
