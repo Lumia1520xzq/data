@@ -48,6 +48,21 @@ public class GameBettingInfoHourService {
     @Autowired
     private DatawareBettingLogHourService bettingLogHourService;
 
+
+    public void toDoAnalysis() {
+        logger.info("每天数据汇总开始:traceId={}", TraceIdUtils.getTraceId());
+
+        //当前日期向前推1小时，保证统计昨天数据
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, -1);
+        String searchDay = DateUtils.formatDate(calendar.getTime(), DateUtils.DATE_PATTERN);
+        String searchHour = DateUtils.formatDate(calendar.getTime(), "HH");
+
+        channelGameHourInfo(searchDay, searchHour);
+        logger.info("每小时添加游戏数据汇总结束:traceId={}", TraceIdUtils.getTraceId());
+    }
+
+
     @Async
     public void dataClean(String startTime, String endTime) {
         Calendar calendar = Calendar.getInstance();
@@ -173,16 +188,16 @@ public class GameBettingInfoHourService {
         }
 
         //当天当前时间总投注信息
-        DatawareBettingLogHour bettingLogDate = bettingLogHourService.getSumByDateAndHour(params);
+        DatawareBettingLogHour bettingLogDate = bettingLogHourService.getBettingByDate(params);
         if (bettingLogDate != null) {
             //当天总投注金额
-            gameBettingInfoHour.setBettingAmount(bettingLogHour.getBettingAmount() == null ? 0D : bettingLogHour.getBettingAmount());
+            gameBettingInfoHour.setBettingAmount(bettingLogDate.getBettingAmount() == null ? 0D : bettingLogDate.getBettingAmount());
             //当天总投注笔数
-            gameBettingInfoHour.setBettingCount(bettingLogHour.getBettingCount() == null ? 0L : bettingLogHour.getBettingCount().longValue());
+            gameBettingInfoHour.setBettingCount(bettingLogDate.getBettingCount() == null ? 0L : bettingLogDate.getBettingCount().longValue());
             //当天总返奖金额
-            gameBettingInfoHour.setReturnAmount(bettingLogHour.getResultAmount() == null ? 0D : bettingLogHour.getResultAmount());
+            gameBettingInfoHour.setReturnAmount(bettingLogDate.getResultAmount() == null ? 0D : bettingLogDate.getResultAmount());
             //当天总投注人数
-            gameBettingInfoHour.setBettingUserCount(bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue());
+            gameBettingInfoHour.setBettingUserCount(bettingLogDate.getBettingUserCount() == null ? 0L : bettingLogDate.getBettingUserCount().longValue());
         }
         return gameBettingInfoHour;
     }
