@@ -29,6 +29,7 @@
 	<import resource="app-db-mysql-base.xml" />
 	<import resource="app-db-mycat-uic.xml" />
 	<import resource="app-db-mysql-tcard.xml" />
+	<import resource="app-db-mysql-taurus.xml" />
 	<import resource="app-db-mysql-platform.xml" />
 	<import resource="app-db-mysql-mall.xml" />
 	<import resource="app-db-mysql-datarepo.xml" />

@@ -41,6 +41,14 @@ public class DatawareGameBettingInfoHour extends DataEntity {
     private String weekMoneyGapRate;
     private String weekReturnRate;
 
+    public void init(DatawareGameBettingInfoHour info){
+        if (info == null){
+            return;
+        }
+        info.setBettingAmount(0.0);
+        info.setReturnAmount(0.0);
+    }
+
     public Long getParentId() {
         return this.parentId;
     }
@@ -288,5 +296,7 @@ public class DatawareGameBettingInfoHour extends DataEntity {
     public void setReturnRate(Double returnRate) {
         this.returnRate = returnRate;
     }
+
+
 }
 
