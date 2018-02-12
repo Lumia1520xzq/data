@@ -31,6 +31,8 @@ public class LtvViewController extends ExtJsController {
     @Autowired
     private DatawareFinalChannelInfoAllService channelInfoAllService;
 
+    private static final Long[] arr = new Long[]{1L,100001L,100006L,100015L,100016L,100018L,200001L,300001L,100002L};
+
     /**
      * 用户ltv分析
      */
@@ -60,7 +62,7 @@ public class LtvViewController extends ExtJsController {
         params.put("beginDate",startTime);
         params.put("endDate",endTime);
         List<Long> channels;
-        channels = Arrays.asList(new Long[]{1L,100001L,100006L,100015L,100016L,100018L,200001L,300001L,100002L});
+        channels = Arrays.asList(arr);
         Map<String,Object> map = new HashMap<>();
         //遍历channels
         List<String> channelNames = new ArrayList<>();
@@ -87,8 +89,6 @@ public class LtvViewController extends ExtJsController {
                 ltvList.add(0.0);
             }
         }
-//        Collections.reverse(channelNames);
-//        Collections.reverse(ltvList);
         map.put("channelNames",channelNames);
         map.put("ltv",ltvList);
         map.put("endDate",businessDate);

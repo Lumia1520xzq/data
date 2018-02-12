@@ -26,15 +26,23 @@ public class TcardDto implements Serializable{
 	private Double bettingAsp;
 	private Integer bettingCount;
 
+
+	private Integer rookieBettingUser;
 	private Integer lowBettingUser;
 	private Integer midBettingUser;
 	private Integer highBettingUser;
+
+	private Double rookieTableFee;
 	private Double lowTableFee;
 	private Double midTableFee;
 	private Double highTableFee;
+
+	private Integer rookieTables;
 	private Integer lowTables;
 	private Integer midTables;
 	private Integer highTables;
+
+	private Double rookieAvgRounds;
 	private Double lowAvgRounds;
 	private Double midAvgRounds;
 	private Double highAvgRounds;
@@ -277,5 +285,37 @@ public class TcardDto implements Serializable{
 
 	public void setHighAvgRounds(Double highAvgRounds) {
 		this.highAvgRounds = highAvgRounds;
+	}
+
+	public Integer getRookieBettingUser() {
+		return rookieBettingUser;
+	}
+
+	public void setRookieBettingUser(Integer rookieBettingUser) {
+		this.rookieBettingUser = rookieBettingUser;
+	}
+
+	public Double getRookieTableFee() {
+		return rookieTableFee;
+	}
+
+	public void setRookieTableFee(Double rookieTableFee) {
+		this.rookieTableFee = rookieTableFee;
+	}
+
+	public Integer getRookieTables() {
+		return rookieTables;
+	}
+
+	public void setRookieTables(Integer rookieTables) {
+		this.rookieTables = rookieTables;
+	}
+
+	public Double getRookieAvgRounds() {
+		return rookieAvgRounds;
+	}
+
+	public void setRookieAvgRounds(Double rookieAvgRounds) {
+		this.rookieAvgRounds = rookieAvgRounds;
 	}
 }

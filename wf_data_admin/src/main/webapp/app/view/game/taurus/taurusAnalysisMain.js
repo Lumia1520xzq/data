@@ -1,7 +1,7 @@
-Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
+Ext.define('WF.view.game.taurus.taurusAnalysisMain', {
     extend: 'Ext.panel.Panel',
-    title: '乐赢三张-场次分析',
-    xtype: 'tcardAnalysisMain',
+    title: '乐赢-场次分析',
+    xtype: 'taurusAnalysisMain',
     closable: true,
     layout: {
         type: 'vbox',
@@ -12,12 +12,12 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
         var me = this;
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
-            url: 'data/admin/tcard/getAnalysisList.do',
+            url: 'data/admin/taurus/getAnalysisList.do',
             fields: ['searchDate',
-                'lowBettingUser','midBettingUser', 'highBettingUser',
-                'lowTableFee', 'midTableFee', 'highTableFee',
-                'lowTables','midTables', 'highTables',
-                'lowAvgRounds','midAvgRounds','highAvgRounds']
+                'rookieBettingUser','lowBettingUser','midBettingUser', 'highBettingUser',
+                'rookieTableFee','lowTableFee', 'midTableFee', 'highTableFee',
+                'rookieTables', 'lowTables','midTables', 'highTables',
+                'rookieAvgRounds','lowAvgRounds','midAvgRounds','highAvgRounds']
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -94,19 +94,33 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
             forceFit: true,
             columns: [ {
                 text: '日期',
-                width: 100,
+                width: 90,
                 dataIndex: 'searchDate',
                 menuDisabled: true,
                 sortable: false
             },
                 {
                    text:'投注人数',
-                    width:390,
+                    width:400,
                     columns:[
+                        {
+                            text: '新手',
+                            dataIndex: 'rookieBettingUser',
+                            width: 100,
+                            menuDisabled: true,
+                            sortable: false,
+                            renderer:function (value) {
+                                if(value != null){
+                                    return Ext.util.Format.number(value, "0,000");
+                                }else {
+                                    return 0.00;
+                                }
+                            }
+                        },
                         {
                             text: '初级',
                             dataIndex: 'lowBettingUser',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -119,7 +133,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                         }, {
                             text: '中级',
                             dataIndex: 'midBettingUser',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -132,7 +146,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                         }, {
                             text: '高级',
                             dataIndex: 'highBettingUser',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -147,12 +161,26 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                 },
                 {
                     text:'桌费',
-                    width:390,
+                    width:400,
                     columns:[
+                        {
+                            text: '新手',
+                            dataIndex: 'rookieTableFee',
+                            width: 100,
+                            menuDisabled: true,
+                            sortable: false,
+                            renderer:function (value) {
+                                if(value != null){
+                                    return Ext.util.Format.number(value, "0,000");
+                                }else {
+                                    return 0.00;
+                                }
+                            }
+                        },
                         {
                             text: '初级',
                             dataIndex: 'lowTableFee',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -165,7 +193,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                         }, {
                             text: '中级',
                             dataIndex: 'midTableFee',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -178,7 +206,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                         }, {
                             text: '高级',
                             dataIndex: 'highTableFee',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -193,12 +221,26 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                 },
                 {
                     text:'桌数',
-                    width:390,
+                    width:400,
                     columns:[
+                        {
+                            text: '新手',
+                            dataIndex: 'rookieTables',
+                            width: 100,
+                            menuDisabled: true,
+                            sortable: false,
+                            renderer:function (value) {
+                                if(value != null){
+                                    return Ext.util.Format.number(value, "0,000");
+                                }else {
+                                    return 0.00;
+                                }
+                            }
+                        },
                         {
                             text: '初级',
                             dataIndex: 'lowTables',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -211,7 +253,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                         }, {
                             text: '中级',
                             dataIndex: 'midTables',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -224,7 +266,7 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                         }, {
                             text: '高级',
                             dataIndex: 'highTables',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false,
                             renderer:function (value) {
@@ -239,24 +281,31 @@ Ext.define('WF.view.game.tcard.tcardAnalysisMain', {
                 },
                 {
                     text: '人均局数',
-                    width:390,
+                    width:400,
                     columns:[
+                        {
+                            text: '新手',
+                            dataIndex: 'rookieAvgRounds',
+                            width: 100,
+                            menuDisabled: true,
+                            sortable: false
+                        },
                         {
                             text: '初级',
                             dataIndex: 'lowAvgRounds',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false
                         }, {
                             text: '中级',
                             dataIndex: 'midAvgRounds',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false
                         }, {
                             text: '高级',
                             dataIndex: 'highAvgRounds',
-                            width: 130,
+                            width: 100,
                             menuDisabled: true,
                             sortable: false
                         }

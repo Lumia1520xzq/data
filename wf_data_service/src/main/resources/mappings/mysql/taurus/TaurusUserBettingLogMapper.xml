@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.taurus.TaurusUserBettingLogDao">
+	
+	<sql id="taurusUserBettingLogColumns">
+		t.id,
+		t.desk_id,
+		t.phase,
+		t.user_id,
+		t.betting_type,
+		t.amount,
+		t.return_amount,
+		t.result_status,
+		t.status,
+		t.channel_id,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="taurusUserBettingLogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="taurusUserBettingLogJoins">
+	</sql>
+	
+	<select id="get" resultType="TaurusUserBettingLog">
+		SELECT <include refid="taurusUserBettingLogColumns"/> FROM taurus_user_betting_log t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="TaurusUserBettingLog">
+		SELECT <include refid="taurusUserBettingLogColumns"/> FROM taurus_user_betting_log t <include refid="taurusUserBettingLogJoins"/>
+		WHERE <include refid="taurusUserBettingLogWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM taurus_user_betting_log t WHERE <include refid="taurusUserBettingLogWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO taurus_user_betting_log (
+			id, 
+			desk_id, 
+			phase, 
+			user_id, 
+			betting_type, 
+			amount, 
+			return_amount, 
+			result_status, 
+			status, 
+			channel_id, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{deskId}, 
+			#{phase}, 
+			#{userId}, 
+			#{bettingType}, 
+			#{amount}, 
+			#{returnAmount}, 
+			#{resultStatus}, 
+			#{status}, 
+			#{channelId}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE taurus_user_betting_log SET
+			desk_id = #{deskId}, 
+			phase = #{phase}, 
+			user_id = #{userId}, 
+			betting_type = #{bettingType}, 
+			amount = #{amount}, 
+			return_amount = #{returnAmount}, 
+			result_status = #{resultStatus}, 
+			status = #{status}, 
+			channel_id = #{channelId}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE taurus_user_betting_log SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

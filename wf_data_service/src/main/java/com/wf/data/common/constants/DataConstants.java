@@ -55,6 +55,11 @@ public interface DataConstants {
      */
     String DATA_DAILY_CHANNELS = "data_daily_channels";
     /**
+     * 新版每日各渠道关键数据
+     */
+    String NEW_DATA_DAILY_CHANNELS = "new_data_daily_channels";
+
+    /**
      * 同ip个数设置
      */
     String MONITOR_IP_COUNT = "monitor_ip_count";

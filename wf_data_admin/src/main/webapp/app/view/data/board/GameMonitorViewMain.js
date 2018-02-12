@@ -80,42 +80,42 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
             items: [{
                 title: '当天累计数据',align:'stretch',height:160,width:"99%",xtype:"panel",layout:'hbox',bodyStyle:'border-color:black',forceFit:true,
                 items:[
-                    {id:"gameBoard0",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
+                    {id:"gameBoard0",width:"16.5%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
                        items:[
                            {id:'gameTitle0',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
                            {id:'gameData0',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
                            {id:'gameRate0',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
                         ]
                     },
-                    {id:"gameBoard1",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
+                    {id:"gameBoard1",width:"16.5%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
                         items:[
                             {id:'gameTitle1',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameData1',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameRate1',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
                         ]
                     },
-                    {id:"gameBoard2",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
+                    {id:"gameBoard2",width:"16.5%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
                         items:[
                             {id:'gameTitle2',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameData2',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameRate2',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
                         ]
                     },
-                    {id:"gameBoard3",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
+                    {id:"gameBoard3",width:"16.5%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
                         items:[
                             {id:'gameTitle3',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameData3',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameRate3',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
                         ]
                     },
-                    {id:"gameBoard4",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
+                    {id:"gameBoard4",width:"16.5%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
                         items:[
                             {id:'gameTitle4',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameData4',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameRate4',width:"100%",height:85,forceFit:true,bodyStyle:'border-width:0'}
                         ]
                     },
-                    {id:"gameBoard5",width:"14.28%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
+                    {id:"gameBoard5",width:"16.5%",height:"100%",xtype:"panel",forceFit:true,bodyStyle:'border-color:black',layout:'vbox',
                         items:[
                             {id:'gameTitle5',width:"100%",height:35,forceFit:true,bodyStyle:'border-width:0'},
                             {id:'gameData5',width:"100%",height:40,forceFit:true,bodyStyle:'border-width:0'},
@@ -146,144 +146,135 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
         });
 
         function fun1() {
-            // var todData = store.getAt(0).get("todData");
-            // var yesData = store.getAt(0).get("yesData");
-            // var hisData = store.getAt(0).get("historyData");
-            // var todSize = todData.length;
-            // var index = todSize-1;
-            // var todBusinessHour = [];
-            // var todDau = [];
-            // var todUserCount = [];
-            // var todRechargeCount = [];
-            // var todRechargeAmount = [];
-            // var todNewUsers = [];
-            // var todBettingAmount = [];
-            // var todDiffAmount =  [];
-            //
-            // for (var i=0;i<todSize;i++){
-            //     todBusinessHour[i] = todData[i].businessHour;
-            //     todDau[i] = todData[i].hourDau;
-            //     todUserCount[i] = todData[i].hourUserCount;
-            //     todRechargeCount[i] = todData[i].hourRechargeCount;
-            //     todRechargeAmount[i] = todData[i].hourRechargeAmount;
-            //     todNewUsers[i] = todData[i].hourNewUsers;
-            //     todBettingAmount[i] = todData[i].hourBettingAmount;
-            //     todDiffAmount[i] = todData[i].hourDiffAmount;
-            // }
-            //
-            // var yesBusinessHour = [];
-            // var yesDau=[];
-            // var yesUserCount=[];
-            // var yesRechargeCount = [];
-            // var yesRechargeAmount = [];
-            // var yesNewUsers = [];
-            // var yesBettingAmount = [];
-            // var yesDiffAmount =  [];
-            //
-            // for (var p=0;p<yesData.length;p++){
-            //     yesBusinessHour[p] = yesData[p].businessHour;
-            //     yesDau[p] = yesData[p].hourDau;
-            //     yesUserCount[p] = yesData[p].hourUserCount;
-            //
-            //     yesRechargeCount[p] = yesData[p].hourRechargeCount;
-            //     yesRechargeAmount[p] = yesData[p].hourRechargeAmount;
-            //     yesNewUsers[p] = yesData[p].hourNewUsers;
-            //     yesBettingAmount[p] = yesData[p].hourBettingAmount;
-            //     yesDiffAmount[p] = yesData[p].hourDiffAmount;
-            // }
-            //
-            //
-            // var hisBusinessHour = [];
-            // var hisDau=[];
-            // var hisUserCount=[];
-            // var hisRechargeCount = [];
-            // var hisRechargeAmount = [];
-            // var hisNewUsers = [];
-            // var hisBettingAmount = [];
-            // var hisDiffAmount =  [];
-            //
-            // for (var d=0;d<yesData.length;d++){
-            //     hisBusinessHour[d] = hisData[d].businessHour;
-            //     hisDau[d] = hisData[d].hourDau;
-            //     hisUserCount[d] = hisData[d].hourUserCount;
-            //     hisRechargeCount[d] = hisData[d].hourRechargeCount;
-            //     hisRechargeAmount[d] = hisData[d].hourRechargeAmount;
-            //     hisNewUsers[d] = hisData[d].hourNewUsers;
-            //     hisBettingAmount[d] = hisData[d].hourBettingAmount;
-            //     hisDiffAmount[d] = hisData[d].hourDiffAmount;
-            // }
-            //
-            // var titles = ["DAU","投注人数", "充值人数","充值金额","新增用户数","投注流水","投注流水差"];
-            // fun2(titles[0],yesBusinessHour,todDau,yesDau,hisDau);
-            //
-            // for(var k=0;k<titles.length;k++){
-            //     Ext.get('gameTitle'+k).dom.innerHTML = "<div align='center' style='line-height:35px;font-size:20px'>"+titles[k]+"</strong></div>";
-            // }
-            //
-            // if(todData.length != 0){
-            //     var dataCss = "<div align='center'><strong style='font-size:24px;color:#3c94db;cursor:pointer;line-height:35px;'>";
-            //     var end = "</strong></div>";
-            //     Ext.get('gameData0').dom.innerHTML = dataCss + format(todData[index].dau) + end;
-            //     Ext.get('gameData1').dom.innerHTML = dataCss + format(todData[index].userCount) +  end;
-            //     Ext.get('gameData2').dom.innerHTML = dataCss + format(todData[index].rechargeCount) + end;
-            //     Ext.get('gameData3').dom.innerHTML = dataCss + format(todData[index].rechargeAmount) + end;
-            //     Ext.get('gameData4').dom.innerHTML = dataCss + format(todData[index].newUsers) + end;
-            //     Ext.get('gameData5').dom.innerHTML = dataCss + format(todData[index].bettingAmount) + end;
-            //     Ext.get('gameData6').dom.innerHTML = dataCss + format(todData[index].diffAmount) + end;
-            //
-            //     var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
-            //     Ext.get('gameRate0').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayDauRate) +"<br/>" + "周环比:"+ judge(todData[index].weekDauRate) + end;
-            //     Ext.get('gameRate1').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayUserCountRate) +"<br/>" + "周环比:"+ judge(todData[index].weekUserCountRate) + end;
-            //     Ext.get('gameRate2').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayRechargeCountRate) +"<br/>" + "周环比:"+ judge(todData[index].weekRechargeCountRate) + end;
-            //     Ext.get('gameRate3').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayRechargeAmountRate) +"<br/>" + "周环比:"+judge(todData[index].weekRechargeAmountRate) + end;
-            //     Ext.get('gameRate4').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayNewUsersRate) +"<br/>" + "周环比:"+judge(todData[index].weekNewUsersRate) + end;
-            //     Ext.get('gameRate5').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayBettingAmountRate) +"<br/>" + "周环比:"+judge(todData[index].weekBettingAmountRate) + end;
-            //     Ext.get('gameRate6').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayDiffAmountRate) +"<br/>" + "周环比:"+ judge(todData[index].weekDiffAmountRate) + end;
-            // }
-            // else {
-            //     var dataCss = "<div align='center'><strong style='font-size:24px;color:#3c94db;cursor:pointer;line-height:35px;'>";
-            //     var end = "</strong></div>";
-            //     Ext.get('gameData0').dom.innerHTML = dataCss + 0 + end;
-            //     Ext.get('gameData1').dom.innerHTML = dataCss + 0 + end;
-            //     Ext.get('gameData2').dom.innerHTML = dataCss + 0 + end;
-            //     Ext.get('gameData3').dom.innerHTML = dataCss + 0 + end;
-            //     Ext.get('gameData4').dom.innerHTML = dataCss + 0 + end;
-            //     Ext.get('gameData5').dom.innerHTML = dataCss + 0 + end;
-            //     Ext.get('gameData6').dom.innerHTML = dataCss + 0 + end;
-            //
-            //     var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
-            //     Ext.get('gameRate0').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%"+ end;
-            //     Ext.get('gameRate1').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
-            //     Ext.get('gameRate2').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
-            //     Ext.get('gameRate3').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
-            //     Ext.get('gameRate4').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
-            //     Ext.get('gameRate5').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
-            //     Ext.get('gameRate6').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
-            // }
-            //
-            // Ext.get("gameBoard0").on("click",function(){
-            //      fun2(titles[0],yesBusinessHour,todDau,yesDau,hisDau);
-            // });
-            // Ext.get("gameBoard1").on("click",function(){
-            //     fun2(titles[1],yesBusinessHour,todUserCount,yesUserCount,hisUserCount);
-            // });
-            // Ext.get("gameBoard2").on("click",function(){
-            //     fun2(titles[2],yesBusinessHour,todRechargeCount,yesRechargeCount,hisRechargeCount);
-            // });
-            // Ext.get("gameBoard3").on("click",function(){
-            //     fun2(titles[3],yesBusinessHour,todRechargeAmount,yesRechargeAmount,hisRechargeAmount);
-            // });
-            //
-            // Ext.get("gameBoard4").on("click",function(){
-            //     fun2(titles[4],yesBusinessHour,todNewUsers,yesNewUsers,hisNewUsers);
-            // });
-            //
-            // Ext.get("gameBoard5").on("click",function(){
-            //     fun2(titles[5],yesBusinessHour,todBettingAmount,yesBettingAmount,hisBettingAmount);
-            // });
-            // Ext.get("gameBoard6").on("click",function(){
-            //     fun2(titles[6],yesBusinessHour,todDiffAmount,yesDiffAmount,hisDiffAmount);
-            // });
+            var todData = store.getAt(0).get("todData");
+            var yesData = store.getAt(0).get("yesData");
+            var hisData = store.getAt(0).get("historyData");
+
+            var todSize = todData.length;
+            var index = todSize-1;
+
+            var todBusinessHour = [];
+            var todDau = [];
+            var todBettingUserCount = [];
+            var todBettingCount = [];
+            var todBettingAmount = [];
+            var todMoneyGap = [];
+            var todReturnRate =  [];
+
+            for (var i=0;i<todSize;i++){
+                todBusinessHour[i] = todData[i].businessHour;
+                todDau[i] = todData[i].hourDau;
+                todBettingUserCount[i] = todData[i].hourBettingUserCount;
+                todBettingCount[i] = todData[i].hourBettingCount;
+                todBettingAmount[i] = todData[i].hourBettingAmount;
+                todMoneyGap[i] = todData[i].hourMoneyGap;
+                todReturnRate[i] = todData[i].hourReturnRate;
+            }
+
+            var yesBusinessHour = [];
+            var yesDau = [];
+            var yesBettingUserCount = [];
+            var yesBettingCount = [];
+            var yesBettingAmount = [];
+            var yesMoneyGap = [];
+            var yesReturnRate =  [];
+
+            for (var p=0;p<yesData.length;p++){
+                yesBusinessHour[p] = yesData[p].businessHour;
+                yesDau[p] = yesData[p].hourDau;
+                yesBettingUserCount[p] = yesData[p].hourBettingUserCount;
+                yesBettingCount[p] = yesData[p].hourBettingCount;
+                yesBettingAmount[p] = yesData[p].hourBettingAmount;
+                yesMoneyGap[p] = yesData[p].hourMoneyGap;
+                yesReturnRate[p] = yesData[p].hourReturnRate;
+            }
+
+            var hisBusinessHour = [];
+            var hisDau = [];
+            var hisBettingUserCount = [];
+            var hisBettingCount = [];
+            var hisBettingAmount = [];
+            var hisMoneyGap = [];
+            var hisReturnRate =  [];
+
+
+            for (var d=0;d<yesData.length;d++) {
+                hisBusinessHour[d] = hisData[d].businessHour;
+                hisDau[d] = hisData[d].hourDau;
+                hisBettingUserCount[d] = hisData[d].hourBettingUserCount;
+                hisBettingCount[d] = hisData[d].hourBettingCount;
+                hisBettingAmount[d] = hisData[d].hourBettingAmount;
+                hisMoneyGap[d] = hisData[d].hourMoneyGap;
+                hisReturnRate[d] = hisData[d].hourReturnRate;
+            }
+
+            var titles = ["DAU","投注人数", "投注笔数","投注流水","流水差","返奖率"];
+            fun2(titles[0],yesBusinessHour,todDau,yesDau,hisDau);
+
+            for(var k=0;k<titles.length;k++){
+                Ext.get('gameTitle'+k).dom.innerHTML = "<div align='center' style='line-height:35px;font-size:20px'>"+titles[k]+"</strong></div>";
+            }
+
+            if(todData.length != 0){
+                var dataCss = "<div align='center'><strong style='font-size:24px;color:#3c94db;cursor:pointer;line-height:35px;'>";
+                var end = "</strong></div>";
+                Ext.get('gameData0').dom.innerHTML = dataCss + format(todData[index].dau) + end;
+                Ext.get('gameData1').dom.innerHTML = dataCss + format(todData[index].bettingUserCount) +  end;
+                Ext.get('gameData2').dom.innerHTML = dataCss + format(todData[index].bettingCount) + end;
+                Ext.get('gameData3').dom.innerHTML = dataCss + format(todData[index].bettingAmount) + end;
+                Ext.get('gameData4').dom.innerHTML = dataCss + format(todData[index].moneyGap) + end;
+                Ext.get('gameData5').dom.innerHTML = dataCss + todData[index].returnRate + end;
+
+                var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
+                Ext.get('gameRate0').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayDauRate) +"<br/>" + "周环比:"+ judge(todData[index].weekDauRate) + end;
+                Ext.get('gameRate1').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayUserCountRate) +"<br/>" + "周环比:"+ judge(todData[index].weekUserCountRate) + end;
+                Ext.get('gameRate2').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayBettingCountRate) +"<br/>" + "周环比:"+ judge(todData[index].weekBettingCountRate) + end;
+                Ext.get('gameRate3').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayBettingAmountRate) +"<br/>" + "周环比:"+judge(todData[index].weekBettingAmountRate) + end;
+                Ext.get('gameRate4').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayMoneyGapRate) +"<br/>" + "周环比:"+judge(todData[index].weekMoneyGapRate) + end;
+                Ext.get('gameRate5').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayReturnRate) +"<br/>" + "周环比:"+judge(todData[index].weekReturnRate) + end;
+            }
+
+            else {
+                var dataCss = "<div align='center'><strong style='font-size:24px;color:#3c94db;cursor:pointer;line-height:35px;'>";
+                var end = "</strong></div>";
+                Ext.get('gameData0').dom.innerHTML = dataCss + 0 + end;
+                Ext.get('gameData1').dom.innerHTML = dataCss + 0 + end;
+                Ext.get('gameData2').dom.innerHTML = dataCss + 0 + end;
+                Ext.get('gameData3').dom.innerHTML = dataCss + 0 + end;
+                Ext.get('gameData4').dom.innerHTML = dataCss + 0 + end;
+                Ext.get('gameData5').dom.innerHTML = dataCss + 0 + end;
+
+                var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
+                Ext.get('gameRate0').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%"+ end;
+                Ext.get('gameRate1').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
+                Ext.get('gameRate2').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
+                Ext.get('gameRate3').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
+                Ext.get('gameRate4').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
+                Ext.get('gameRate5').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%" + end;
+            }
+
+
+            Ext.get("gameBoard0").on("click",function(){
+                 fun2(titles[0],yesBusinessHour,todDau,yesDau,hisDau);
+            });
+            Ext.get("gameBoard1").on("click",function(){
+                fun2(titles[1],yesBusinessHour,todBettingUserCount,yesBettingUserCount,hisBettingUserCount);
+            });
+            Ext.get("gameBoard2").on("click",function(){
+                fun2(titles[2],yesBusinessHour,todBettingCount,yesBettingCount,hisBettingCount);
+            });
+            Ext.get("gameBoard3").on("click",function(){
+                fun2(titles[3],yesBusinessHour,todBettingAmount,yesBettingAmount,hisBettingAmount);
+            });
+
+            Ext.get("gameBoard4").on("click",function(){
+                fun2(titles[4],yesBusinessHour,todMoneyGap,yesMoneyGap,hisMoneyGap);
+            });
+
+            Ext.get("gameBoard5").on("click",function(){
+                fun2(titles[5],yesBusinessHour,todReturnRate,yesReturnRate,hisReturnRate);
+            });
+
         }
 
         function judge(value){

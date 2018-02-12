@@ -189,6 +189,8 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             var android = store.getAt(0).get("200001");
             var ios = store.getAt(0).get("300001");
             var doyo = store.getAt(0).get("100002");
+            // var pptv = store.getAt(0).get("100019");
+
             var data=[];
 
             if(judge(total)){
@@ -211,14 +213,16 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             }
             if(judge(android)){
                 data.push(android);
-        }
+            }
             if(judge(ios)){
                 data.push(ios);
             }
             if(judge(doyo)){
                 data.push(doyo);
             }
-
+            // if(judge(pptv)){
+            //     data.push(pptv);
+            // }
             var businessDate = [];
             if (data.length !=0) {
                 var val = data[0];

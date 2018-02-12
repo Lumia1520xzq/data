@@ -95,6 +95,13 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double hisRecharge;
 	private Double userLtv;
 
+	public void init(DatawareFinalChannelInfoAll info) {
+		if(null == info){
+			return;
+		}
+		info.setBettingAmount(0.0);
+		info.setResultAmount(0.0);
+	}
 
 	public Long getHisRegistered() {
 		return hisRegistered;
