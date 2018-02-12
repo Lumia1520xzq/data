@@ -41,6 +41,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 				#{item}
 			</foreach>
 		</if>
+		<if test="p.fragmentType != null and p.fragmentType != ''">
+			AND t.fragment_id = #{p.fragmentType}
+		</if>
 
 		<if test="p.beginDate != null and p.beginDate !=''">
 			AND t.create_time >= CONCAT(#{p.beginDate} , ':00')

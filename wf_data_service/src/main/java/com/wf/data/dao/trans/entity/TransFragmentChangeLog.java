@@ -33,6 +33,7 @@ public class TransFragmentChangeLog extends DataEntity {
 	private Long goldAmount;
 	private Double rmbAmount;
 	private String thirdId;
+	private Long fragmentType;//碎片类型
 
 
 	public List<Long> getActivityIds() {
@@ -225,5 +226,13 @@ public class TransFragmentChangeLog extends DataEntity {
 
 	public void setThirdId(String thirdId) {
 		this.thirdId = thirdId;
+	}
+
+	public Long getFragmentType() {
+		return fragmentType;
+	}
+
+	public void setFragmentType(Long fragmentType) {
+		this.fragmentType = fragmentType;
 	}
 }
