@@ -45,9 +45,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="channelId != null">
             AND a.channel_id = #{channelId}
         </if>
-        <if test="bettingType != null">
-            and a.betting_type = #{bettingType}
-        </if>
+        <!--<if test="bettingType != null">-->
+            <!--and a.betting_type = #{bettingType}-->
+        <!--</if>-->
         AND a.desk_id = b.id
         <if test="roomType != null">
         AND b.room_type = #{roomType}
@@ -97,9 +97,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="channelId != null">
             AND a.channel_id = #{channelId}
         </if>
-        <if test="bettingType != null">
-            and a.betting_type = #{bettingType}
-        </if>
+        <!--<if test="bettingType != null">-->
+            <!--and a.betting_type = #{bettingType}-->
+        <!--</if>-->
          AND a.desk_id = b.id
         <if test="roomType != null">
             AND b.room_type = #{roomType}
