@@ -5,7 +5,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.datarepo.DatawareFinalChannelInfoAllDao">
-	
+
 	<sql id="datawareFinalChannelInfoAllColumns">
 		t.id,
 		t.dau,
@@ -22,6 +22,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.dau_pay_rate,
 		t.betting_pay_rate,
 		t.user_betting_rate,
+		t.first_recharge_rate,
+		t.week_recharge_rate,
 		t.pay_arpu,
 		t.pay_arppu,
 		t.his_registered,
@@ -53,7 +55,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_final_channel_info_all t WHERE <include refid="datawareFinalChannelInfoAllWhere" />
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO dataware_final_channel_info_all (
 			id, 
@@ -71,6 +73,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			dau_pay_rate,
 			betting_pay_rate,
 			user_betting_rate,
+			first_recharge_rate,
+			week_recharge_rate,
 			pay_arpu,
 			pay_arppu,
 			his_registered,
@@ -98,26 +102,28 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			#{dauPayRate},
 			#{bettingPayRate},
 			#{userBettingRate},
+			#{firstRechargeRate},
+			#{weekRechargeRate},
 			#{payArpu},
 			#{payArppu},
 			#{hisRegistered},
 			#{hisRecharge},
 			#{userLtv},
-			#{channelName}, 
-			#{parentId}, 
-			#{channelId}, 
-			#{businessDate}, 
-			#{createTime}, 
-			#{deleteFlag} 
+			#{channelName},
+			#{parentId},
+			#{channelId},
+			#{businessDate},
+			#{createTime},
+			#{deleteFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
 		UPDATE dataware_final_channel_info_all SET
-			dau = #{dau}, 
-			recharge_amount = #{rechargeAmount}, 
-			recharge_count = #{rechargeCount}, 
-			new_users = #{newUsers}, 
+			dau = #{dau},
+			recharge_amount = #{rechargeAmount},
+			recharge_count = #{rechargeCount},
+			new_users = #{newUsers},
 			user_betting_count = #{userBettingCount},
 			user_count = #{userCount},
 			betting_count = #{bettingCount},
@@ -128,6 +134,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			dau_pay_rate = #{dauPayRate},
 			betting_pay_rate = #{bettingPayRate},
 			user_betting_rate = #{userBettingRate},
+			first_recharge_rate = #{firstRechargeRate},
+			week_recharge_rate = #{weekRechargeRate},
 			pay_arpu = #{payArpu},
 			pay_arppu = #{payArppu},
 			his_registered = #{hisRegistered},
