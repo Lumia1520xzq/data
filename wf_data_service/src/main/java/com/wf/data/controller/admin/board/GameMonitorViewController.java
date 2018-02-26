@@ -73,6 +73,9 @@ public class GameMonitorViewController extends ExtJsController {
         }else {
             params.put("parentId", parentId);
         }
+        if (null == gameType){
+            gameType = 0;
+        }
         params.put("gameType",gameType);
         //今天的数据
         params.put("businessDate",businessDate);
