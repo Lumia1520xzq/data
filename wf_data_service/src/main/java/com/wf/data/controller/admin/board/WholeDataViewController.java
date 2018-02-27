@@ -117,6 +117,7 @@ public class WholeDataViewController extends ExtJsController {
                     info.setTotalCost(0.0);
                     info.setCostRate(0.0);
                 }
+
             }
             if(CollectionUtils.isNotEmpty(allList)) {
                 //获取最后一条记录
@@ -319,6 +320,5 @@ public class WholeDataViewController extends ExtJsController {
         }
         return BigDecimalUtil.round(BigDecimalUtil.div(one*100 ,two),2);
     }
-
 
 }
