@@ -62,6 +62,9 @@
                 #{item}
             </foreach>
         </if>
+        <if test="businessOur != null and businessOur != ''">
+            AND t.sign_hour &lt;= #{businessOur}
+        </if>
 
     </select>
 

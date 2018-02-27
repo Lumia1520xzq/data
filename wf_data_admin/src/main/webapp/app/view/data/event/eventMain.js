@@ -14,7 +14,7 @@ Ext.define('WF.view.data.event.eventMain', {
             autoLoad: true,
             url: 'data/admin/event/list.do',
             fields: ['id', 'channelId', 'beginDate', 'endDate', 'eventType', 'title',
-                     'content', 'creater', 'createrName', 'createTime', 'updater', 'updaterName', 'updateTime']
+                'content', 'creater', 'createrName', 'createTime', 'updater', 'updaterName', 'updateTime']
         });
 
         var eventTypeStor = Ext.create('DCIS.Store', {
@@ -33,7 +33,7 @@ Ext.define('WF.view.data.event.eventMain', {
 
         allChannelStore.load({
             callback: function () {
-               sync:true
+                sync:true
             }
         });
 
@@ -77,14 +77,26 @@ Ext.define('WF.view.data.event.eventMain', {
                 xtype: 'datefield',
                 name: 'beginDate',
                 format: 'Y-m-d',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d"),
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.MONTH, -1), "Y-m-d"),
                 fieldLabel: '开始时间'
             }, {
                 xtype: 'datefield',
                 name: 'endDate',
                 format: 'Y-m-d',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d"),
                 fieldLabel: '结束时间'
+            }, {
+                name: 'content',
+                fieldLabel: '事记'
+            }, {
+                text: '导出',
+                xtype: 'button',
+                handler: function () {
+                    window.location.href = '/data/admin/event/export.do?channelId=' + me.down(("[name='channelId']")).value +
+                        '&eventType=' + me.down(("[name='eventType']")).value +
+                        '&beginDate=' + me.down(("[name='beginDate']")).value +
+                        '&endDate=' + me.down(("[name='endDate']")).value +
+                        '&content=' + me.down(("[name='content']")).value;
+                }
             }]
         });
         me.add({
