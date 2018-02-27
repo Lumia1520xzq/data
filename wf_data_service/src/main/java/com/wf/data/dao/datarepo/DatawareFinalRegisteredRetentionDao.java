@@ -11,5 +11,5 @@ public interface DatawareFinalRegisteredRetentionDao extends CrudDao<DatawareFin
 
     DatawareFinalRegisteredRetention getRetentionByDate(Map<String, Object> map);
 
-
+    DatawareFinalRegisteredRetention findByDate(Map<String, Object> map);
 }

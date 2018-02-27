@@ -12,10 +12,12 @@ import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelCost;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelRetention;
+import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredRetention;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelCostService;
 import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
 import com.wf.data.service.data.DatawareFinalChannelRetentionService;
+import com.wf.data.service.data.DatawareFinalRegisteredRetentionService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,8 @@ public class WholeDataViewController extends ExtJsController {
     private DatawareFinalChannelRetentionService datawareFinalChannelRetentionService;
     @Autowired
     private DatawareFinalChannelCostService datawareFinalChannelCostService;
+    @Autowired
+    private DatawareFinalRegisteredRetentionService datawareFinalRegisteredRetentionService;
 
     /**
      * 整体数据概览
@@ -95,14 +99,11 @@ public class WholeDataViewController extends ExtJsController {
                 if(null != retention) {
                     Double usersDayRetention = retention.getUsersDayRetention();
                     Double dayRetention = retention.getDayRetention();
-//                    Double usersRate = retention.getUsersRate();
                     info.setUsersDayRetention(usersDayRetention);
                     info.setDayRetention(dayRetention);
-//                    info.setUsersRate(usersRate);
                 }else{
                     info.setUsersDayRetention(0.0);
                     info.setDayRetention(0.0);
-//                    info.setUsersRate(0.0);
                 }
                 //新用户占比
                 info.setUsersRate(calRate(info.getNewUsers(),info.getDau()));
@@ -111,13 +112,21 @@ public class WholeDataViewController extends ExtJsController {
                     Double totalCost = cost.getTotalCost();
                     Double costRate = cost.getCostRate();
                     info.setTotalCost(totalCost);
-                    info.setCostRate( BigDecimalUtil.round(BigDecimalUtil.mul(costRate,100),2));
+                    info.setCostRate(BigDecimalUtil.round(BigDecimalUtil.mul(costRate,100),2));
                 }
                 else{
                     info.setTotalCost(0.0);
                     info.setCostRate(0.0);
                 }
-
+                //新用户七留
+                DatawareFinalRegisteredRetention registeredRetention = datawareFinalRegisteredRetentionService.findByDate(params);
+                if(null != registeredRetention) {
+                double sevenRetention = registeredRetention.getRetention7();
+                    info.setSevenRetention(sevenRetention);
+                }
+                else{
+                    info.setSevenRetention(0.0);
+                }
             }
             if(CollectionUtils.isNotEmpty(allList)) {
                 //获取最后一条记录
@@ -130,7 +139,6 @@ public class WholeDataViewController extends ExtJsController {
                 params.put("date",beforeDate);
                 DatawareFinalChannelInfoAll lastButOneInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
                 DatawareFinalChannelCost lastButOneCost = datawareFinalChannelCostService.findByDate(params);
-
                 //1、日环比
                 if(null != lastButOneInfoAll) {
                 String dayDauRate = cal(lastInfoAll.getDau(),lastButOneInfoAll.getDau());
@@ -155,14 +163,11 @@ public class WholeDataViewController extends ExtJsController {
                     if(null != lastButOneRetention){
                         String dayUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
                         String dayDayRetentionRate = cal(lastInfoAll.getDayRetention(),lastButOneRetention.getDayRetention());
-//                        String dayUsersRate = cal(lastInfoAll.getUsersRate(),lastButOneRetention.getUsersRate());
                         lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
                         lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
-//                        lastInfoAll.setDayUsersRate(dayUsersRate);
                     }else{
                         lastInfoAll.setDayUsersDayRetentionRate("0%");
                         lastInfoAll.setDayDayRetentionRate("0%");
-//                        lastInfoAll.setDayUsersRate("0%");
                     }
                 }else{
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
@@ -171,18 +176,14 @@ public class WholeDataViewController extends ExtJsController {
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),2));
                     params.put("date",beforeDate);
                     DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
-
                     if(null != lastButOneRetention){
                         String dayUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
                         String dayDayRetentionRate = cal(lastRetention.getDayRetention(),lastButOneRetention.getDayRetention());
-//                        String dayUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
                         lastInfoAll.setDayUsersDayRetentionRate(dayUsersDayRetentionRate);
                         lastInfoAll.setDayDayRetentionRate(dayDayRetentionRate);
-//                        lastInfoAll.setDayUsersRate(dayUsersRate);
                     }else{
                         lastInfoAll.setDayUsersDayRetentionRate("0%");
                         lastInfoAll.setDayDayRetentionRate("0%");
-//                        lastInfoAll.setDayUsersRate("0%");
                     }
                 }
 
@@ -195,6 +196,7 @@ public class WholeDataViewController extends ExtJsController {
                     lastInfoAll.setDayTotalCost("0%");
                     lastInfoAll.setDayCostRate("0%");
                 }
+
                 lastInfoAll.setDayDauRate(dayDauRate);
                 lastInfoAll.setDayRechargeAmountRate(dayRechargeAmountRate);
                 lastInfoAll.setDayRechargeCountRate(dayRechargeCountRate);
@@ -232,7 +234,6 @@ public class WholeDataViewController extends ExtJsController {
                     String weekPayArpuRate = cal(lastInfoAll.getPayArpu(),weekInfoAll.getPayArpu());
                     String weekPayArppuRate = cal(lastInfoAll.getPayArppu(),weekInfoAll.getPayArppu());
                     String weekUsersRate =  cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(weekInfoAll.getNewUsers(),weekInfoAll.getDau()));
-
                     //比较最后一天和昨天
                     Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
                     if(DateUtils.parseDate(endDate).before(yesterday)){
@@ -240,14 +241,11 @@ public class WholeDataViewController extends ExtJsController {
                         if(null != weekRetention){
                             String weekUsersDayRetentionRate = cal(lastInfoAll.getUsersDayRetention(),weekRetention.getUsersDayRetention());
                             String weekDayRetentionRate = cal(lastInfoAll.getDayRetention(),weekRetention.getDayRetention());
-//                            String weekUsersRate = cal(lastInfoAll.getUsersRate(),weekRetention.getUsersRate());
                             lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
                             lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
-//                            lastInfoAll.setWeekUsersRate(weekUsersRate);
                         }else{
                             lastInfoAll.setWeekUsersDayRetentionRate("0%");
                             lastInfoAll.setWeekDayRetentionRate("0%");
-//                            lastInfoAll.setWeekUsersRate("0%");
                         }
                     } else {
                         beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
@@ -259,14 +257,11 @@ public class WholeDataViewController extends ExtJsController {
                         if(null != lastButOneRetention){
                             String weekUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(),lastButOneRetention.getUsersDayRetention());
                             String weekDayRetentionRate = cal(lastRetention.getDayRetention(),lastButOneRetention.getDayRetention());
-//                            String weekUsersRate = cal(lastRetention.getUsersRate(),lastButOneRetention.getUsersRate());
                             lastInfoAll.setWeekUsersDayRetentionRate(weekUsersDayRetentionRate);
                             lastInfoAll.setWeekDayRetentionRate(weekDayRetentionRate);
-//                            lastInfoAll.setWeekUsersRate(weekUsersRate);
                         }else{
                             lastInfoAll.setWeekUsersDayRetentionRate("0%");
                             lastInfoAll.setWeekDayRetentionRate("0%");
-//                            lastInfoAll.setWeekUsersRate("0%");
                         }
                     }
                     if(null != weekCost) {
