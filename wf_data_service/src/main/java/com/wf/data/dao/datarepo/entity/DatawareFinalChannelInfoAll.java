@@ -32,6 +32,9 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double costRate;
 	private Double sevenRetention;
 
+	private Double firstRechargeRate;
+	private Double weekRechargeRate;
+
 	private String dayDauRate;
 	private String weekDauRate;
 
@@ -640,5 +643,21 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	public void setWeekSevenRetentionRate(String weekSevenRetentionRate) {
 		this.weekSevenRetentionRate = weekSevenRetentionRate;
+	}
+
+	public Double getFirstRechargeRate() {
+		return firstRechargeRate;
+	}
+
+	public void setFirstRechargeRate(Double firstRechargeRate) {
+		this.firstRechargeRate = firstRechargeRate;
+	}
+
+	public Double getWeekRechargeRate() {
+		return weekRechargeRate;
+	}
+
+	public void setWeekRechargeRate(Double weekRechargeRate) {
+		this.weekRechargeRate = weekRechargeRate;
 	}
 }
