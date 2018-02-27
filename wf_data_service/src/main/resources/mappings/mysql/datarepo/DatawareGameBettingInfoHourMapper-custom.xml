@@ -16,7 +16,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="businessDate != null and businessDate != ''">
 			AND t.business_date = #{businessDate}
 		</if>
-		<if test="gameType != null and gameType != ''">
+		<if test="gameType != null">
 			AND t.game_type = #{gameType}
 		</if>
 		<if test="channelId != null">
