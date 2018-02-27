@@ -19,11 +19,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 'dau','rechargeAmount',
                 'bettingRate','dauPayRate','bettingPayRate',
                 'newUsers','usersRate','userBettingRate',
-                'usersDayRetention','dayRetention',
+                'usersDayRetention','sevenRetention','dayRetention',
                 'rechargeCount','payArpu','payArppu',
                 'totalCost','costRate',
                 'userCount', 'bettingAmount','resultRate',
-
                 //以下是环比的数据字段
                 "dayDauRate", "weekDauRate",
                 "dayRechargeAmountRate", "weekRechargeAmountRate",
@@ -34,6 +33,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 "dayUsersRate", "weekUsersRate",
                 "dayUserBettingRate", "weekUserBettingRate",
                 "dayUsersDayRetentionRate", "weekUsersDayRetentionRate",
+                "daySevenRetentionRate","weekSevenRetentionRate",
                 "dayDayRetentionRate", "weekDayRetentionRate",
                 "dayRechargeCountRate", "weekRechargeCountRate",
                 "dayPayArpuRate", "weekPayArpuRate",
@@ -342,6 +342,31 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>新用户七留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date18',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'sevenRetention',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'daySevenRetentionRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekSevenRetentionRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi18"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
                                         {width:"31.33%",height:60,html:'<h2>全量用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
@@ -609,6 +634,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var userBettingRate=[];
 
             var usersDayRetention=[];
+            var sevenRetention=[];
             var dayRetention=[];
 
             var rechargeCount=[];
@@ -640,6 +666,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 userBettingRate[i]=re.get('userBettingRate');
 
                 usersDayRetention[i]=re.get('usersDayRetention');
+                sevenRetention[i]=re.get('sevenRetention');
                 dayRetention[i]=re.get('dayRetention');
 
                 rechargeCount[i]=re.get('rechargeCount');
@@ -657,6 +684,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             //最后一天日期是否为昨天以后的数据
             var lastRecord = store.getAt(store.getCount()-1);
             var businessDate1 = [];
+            var businessDate2 = [];
             if(lastRecord != undefined) {
                var lastDay = lastRecord.get("businessDate");
                var now = new Date();
@@ -668,6 +696,17 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                      businessDate1 = businessDate.slice(0,store.getCount()-1);
                 }else{
                      businessDate1 = businessDate;
+                }
+
+                var now1 = new Date();
+                now1.setTime(now1.getTime()-7*24*60*60*1000);
+                var weekBefore = now1.getFullYear()+"-"+(now1.getMonth()+1) + "-" + now1.getDate();
+                if(new Date(lastDay)>=new Date(weekBefore)){
+                    var interval  =  parseInt(Math.abs(new Date(lastDay) - new Date(weekBefore)) /1000/60/60/24)
+                    sevenRetention = sevenRetention.slice(0,store.getCount()-interval);
+                    businessDate2 = businessDate.slice(0,store.getCount()-interval);
+                }else{
+                    businessDate2 = businessDate;
                 }
             }
 
@@ -1384,6 +1423,46 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         smooth:true,
                         data: resultRate
                     }]
+                },
+                {
+                    // title: {text: '新用户七留'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate2
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }
+                    },
+                    series: [{
+                        name: '新用户七留',
+                        type: 'line',
+                        smooth:true,
+                        data: sevenRetention
+                    }]
                 }
             ];
             for (var j=0;j<option.length;j++) {
@@ -1406,6 +1485,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('usersRate').dom.innerHTML = "";
                 Ext.get('userBettingRate').dom.innerHTML = "";
                 Ext.get('usersDayRetention').dom.innerHTML = "";
+                Ext.get('sevenRetention').dom.innerHTML = "";
                 Ext.get('dayRetention').dom.innerHTML = "";
                 Ext.get('rechargeCount').dom.innerHTML = "";
                 Ext.get('payArpu').dom.innerHTML = "";
@@ -1434,6 +1514,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekUserBettingRate').dom.innerHTML = "";
                 Ext.get('dayUsersDayRetentionRate').dom.innerHTML = "";
                 Ext.get('weekUsersDayRetentionRate').dom.innerHTML = "";
+                Ext.get('daySevenRetentionRate').dom.innerHTML = "";
+                Ext.get('weekSevenRetentionRate').dom.innerHTML = "";
                 Ext.get('dayDayRetentionRate').dom.innerHTML = "";
                 Ext.get('weekDayRetentionRate').dom.innerHTML = "";
                 Ext.get('dayRechargeCountRate').dom.innerHTML = "";
@@ -1470,6 +1552,14 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     }
                 }
 
+                for (var t = 0; t < option.length; t++) {
+                    if (t == 18) {
+                        var date = Ext.get('date' + t).dom;
+                        var sevenDate = businessDate2[businessDate2.length - 1];
+                        date.innerHTML = '<div align="center">' + sevenDate + '</div>';
+                    }
+                }
+
                 Ext.get('dau').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('dau') + "</strong></div>";
                 Ext.get('rechargeAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeAmount') + "</strong></div>";
                 Ext.get('bettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('bettingRate') + "%</strong></div>";
@@ -1479,6 +1569,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong></div>";
                 Ext.get('userBettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong></div>";
                 Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersDayRetention[usersDayRetention.length - 1] + "%</strong></div>";
+                Ext.get('sevenRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + sevenRetention[sevenRetention.length - 1] + "%</strong></div>";
                 Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length - 1] + "%</strong></div>";
                 Ext.get('rechargeCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeCount') + "</strong></div>";
                 Ext.get('payArpu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArpu') + "</strong></div>";
@@ -1507,6 +1598,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekUserBettingRate').dom.innerHTML = "周同比：" + r.get('weekUserBettingRate');
                 Ext.get('dayUsersDayRetentionRate').dom.innerHTML = "日环比：" + r.get('dayUsersDayRetentionRate');
                 Ext.get('weekUsersDayRetentionRate').dom.innerHTML = "周同比：" + r.get('weekUsersDayRetentionRate');
+                Ext.get('daySevenRetentionRate').dom.innerHTML = "日环比：" + r.get('daySevenRetentionRate');
+                Ext.get('weekSevenRetentionRate').dom.innerHTML = "周同比：" + r.get('weekSevenRetentionRate');
                 Ext.get('dayDayRetentionRate').dom.innerHTML = "日环比：" + r.get('dayDayRetentionRate');
                 Ext.get('weekDayRetentionRate').dom.innerHTML = "周同比：" + r.get('weekDayRetentionRate');
                 Ext.get('dayRechargeCountRate').dom.innerHTML = "日环比：" + r.get('dayRechargeCountRate');

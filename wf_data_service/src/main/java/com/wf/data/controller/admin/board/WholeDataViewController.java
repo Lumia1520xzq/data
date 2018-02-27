@@ -122,13 +122,13 @@ public class WholeDataViewController extends ExtJsController {
                 DatawareFinalRegisteredRetention registeredRetention = datawareFinalRegisteredRetentionService.findByDate(params);
                 if(null != registeredRetention) {
                 double sevenRetention = registeredRetention.getRetention7();
-                    info.setSevenRetention(sevenRetention);
+                    info.setSevenRetention(BigDecimalUtil.round(BigDecimalUtil.mul(sevenRetention,100),2));
                 }
                 else{
                     info.setSevenRetention(0.0);
                 }
             }
-            if(CollectionUtils.isNotEmpty(allList)) {
+            if(CollectionUtils.isNotEmpty(allList)){
                 //获取最后一条记录
                 DatawareFinalChannelInfoAll lastInfoAll =  allList.get(allList.size()-1);
                 //获取最后一天的日期
@@ -154,7 +154,7 @@ public class WholeDataViewController extends ExtJsController {
                 String dayResultRate = cal(lastInfoAll.getResultRate(),lastButOneInfoAll.getResultRate());
                 String dayPayArpuRate = cal(lastInfoAll.getPayArpu(),lastButOneInfoAll.getPayArpu());
                 String dayPayArppuRate = cal(lastInfoAll.getPayArppu(),lastButOneInfoAll.getPayArppu());
-                String dayUsersRate =  cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(lastButOneInfoAll.getNewUsers(),lastButOneInfoAll.getDau()));
+                String dayUsersRate = cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(lastButOneInfoAll.getNewUsers(),lastButOneInfoAll.getDau()));
 
                 //比较最后一天和昨天
                 Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
