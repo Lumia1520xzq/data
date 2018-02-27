@@ -17,6 +17,8 @@ public interface DatawareConvertDayDao extends CrudDao<DatawareConvertDay> {
 
     List<Long> getUserIdByDate(Map<String, Object> map);
 
+    List<Long> getUserIdList(Map<String, Object> map);
+
     Double getRechargeSumByDate(Map<String, Object> map);
 
     List<Long> getRechargeUserIdsByDate(Map<String, Object> map);
