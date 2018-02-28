@@ -65,7 +65,7 @@ public class RegChannelRechargeController extends ExtJsController {
         if (note.getParentId() == null) {
             return new Page<MallBizLog>();
         }
-        Page<MallBizLog> pageList = mallBizLogService.findPage(new Page<MallBizLog>(note, start, length));
+            Page<MallBizLog> pageList = mallBizLogService.findPage(new Page<MallBizLog>(note, start, length));
         for (MallBizLog mallBizLog : pageList.getData()) {
             UicUser user = uicUserService.getByUserId(mallBizLog.getUserId());
             if (user != null) {

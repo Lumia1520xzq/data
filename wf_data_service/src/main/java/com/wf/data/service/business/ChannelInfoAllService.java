@@ -118,6 +118,7 @@ public class ChannelInfoAllService {
     private void dataKettle(Map<String, Object> params, ChannelInfo channelInfo, String businessDate, Integer flag) {
 
         DatawareFinalChannelInfoAll infoAll = new DatawareFinalChannelInfoAll();
+        infoAll.setWeekRechargeRate(0.00);
         infoAll.setBusinessDate(businessDate);
         if (null == channelInfo) {
             if (flag == 0) {
@@ -284,7 +285,7 @@ public class ChannelInfoAllService {
         String weekBeforeDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(businessDate), -6));
         map.put("businessDate", weekBeforeDate);
         map.put("parentId", parentId);
-        DatawareFinalChannelInfoAll infoAll = datawareFinalChannelInfoAllService.findByDate(map);
+        DatawareFinalChannelInfoAll infoAll = datawareFinalChannelInfoAllService.getInfoByChannel(map);
         if (infoAll == null){
             logger.error("添加渠道汇总记录失败: traceId={}, data={}", TraceIdUtils.getTraceId(),null);
             return;

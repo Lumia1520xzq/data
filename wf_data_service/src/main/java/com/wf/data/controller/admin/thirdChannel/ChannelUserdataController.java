@@ -9,7 +9,6 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
@@ -50,7 +49,6 @@ public class ChannelUserdataController extends ExtJsController {
     @Autowired
     private DatawareUserInfoService userInfoService;
 
-
     /**
      * 投注数据
      *
@@ -79,6 +77,9 @@ public class ChannelUserdataController extends ExtJsController {
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
         Map<String, Object> params = new HashMap<>();
         String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+        if (currentHour.length() == 1) {
+            currentHour = "0" + currentHour;
+        }
         String currentDay = LocalDate.now().toString();//当前日期
 
         params.put("parentId", parentId);
@@ -183,7 +184,6 @@ public class ChannelUserdataController extends ExtJsController {
         return overviewDtos;
     }
 
-
     /**
      * 充值数据
      *
@@ -195,6 +195,9 @@ public class ChannelUserdataController extends ExtJsController {
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
         Map<String, Object> params = new HashMap<>();
         String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+        if (currentHour.length() == 1) {
+            currentHour = "0" + currentHour;
+        }
         String currentDay = LocalDate.now().toString();//当前日期
 
         JSONObject json = getRequestJson();
@@ -303,7 +306,6 @@ public class ChannelUserdataController extends ExtJsController {
         return overviewDtos;
     }
 
-
     /**
      * 转化率数据
      *
@@ -315,6 +317,9 @@ public class ChannelUserdataController extends ExtJsController {
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
         Map<String, Object> params = new HashMap<>();
         String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+        if (currentHour.length() == 1) {
+            currentHour = "0" + currentHour;
+        }
         String currentDay = LocalDate.now().toString();//当前日期
 
         JSONObject json = getRequestJson();
@@ -458,6 +463,9 @@ public class ChannelUserdataController extends ExtJsController {
 
         List<String> datelist = Lists.newArrayList();
         String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+        if (currentHour.length() == 1) {
+            currentHour = "0" + currentHour;
+        }
         String currentDay = LocalDate.now().toString();//当前日期
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
 
@@ -512,7 +520,6 @@ public class ChannelUserdataController extends ExtJsController {
         }
         return overviewDtos;
     }
-
 
     //获取新用户list
     private List<Long> getNewUserIds(String dateStr, Long parentId, Long channelId) {
