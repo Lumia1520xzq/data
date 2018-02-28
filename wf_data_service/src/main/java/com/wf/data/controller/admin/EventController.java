@@ -10,6 +10,7 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.data.entity.DataEvent;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.EventService;
 import com.wf.data.service.UicUserService;
@@ -17,12 +18,15 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jasig.cas.client.util.AssertionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author shihui
@@ -42,6 +46,9 @@ public class EventController extends ExtJsController {
     @Autowired
     private DataDictService dataDictService;
 
+    @Autowired
+    private ChannelInfoService channelInfoService;
+
     /**
      * 查询列表
      */
@@ -52,6 +59,7 @@ public class EventController extends ExtJsController {
         Integer eventType = null;
         String beginDate = null;
         String endDate = null;
+        String content = null;
         Long start = null;
         Long length = null;
 
@@ -62,14 +70,16 @@ public class EventController extends ExtJsController {
             eventType = data.getInteger("eventType");
             beginDate = data.getString("beginDate");
             endDate = data.getString("endDate");
+            content = data.getString("content");
             start = json.getLongValue("start");
             length = json.getLongValue("limit");
         }
 
         //设置默认搜索时间为昨天
-        if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
-            beginDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
-            endDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
+        if (StringUtils.isBlank(beginDate)) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.MONTH, -1);
+            beginDate = com.wf.data.common.utils.DateUtils.formatDate(c.getTime(), com.wf.data.common.utils.DateUtils.DATE_PATTERN);
         }
 
         DataEvent dataEvent = new DataEvent();
@@ -77,6 +87,7 @@ public class EventController extends ExtJsController {
         dataEvent.setEventType(eventType);
         dataEvent.setBeginDate(beginDate);
         dataEvent.setEndDate(endDate);
+        dataEvent.setContent(content);
 
         Page<DataEvent> dataEventPage = new Page<>(dataEvent, start, length);
         dataEventPage = eventService.findPage(dataEvent);
@@ -187,5 +198,66 @@ public class EventController extends ExtJsController {
 
         }
         return success("成功导入" + count + "记录");
+    }
+
+    @RequestMapping("/export")
+    public void export(@RequestParam String channelId, @RequestParam String eventType, @RequestParam String beginDate, @RequestParam String endDate, @RequestParam String content, HttpServletResponse response) {
+        try {
+            DataEvent dataEvent = new DataEvent();
+            if (!channelId.equals("undefined") && !channelId.equals("null") && StringUtils.isNotBlank(channelId)) {
+                dataEvent.setChannelId(Long.parseLong(channelId));
+            }
+            if (!eventType.equals("undefined") && !eventType.equals("null") && StringUtils.isNotBlank(eventType)) {
+                dataEvent.setEventType(Integer.parseInt(eventType));
+            }
+            if (!beginDate.equals("undefined") && !beginDate.equals("null") && StringUtils.isNotBlank(beginDate)) {
+                dataEvent.setBeginDate(formatGTMDate(beginDate));
+            }
+            if (!endDate.equals("undefined") && !endDate.equals("null") && StringUtils.isNotBlank(endDate)) {
+                dataEvent.setEndDate(formatGTMDate(endDate));
+            }
+            if (!content.equals("undefined") && !content.equals("null") && StringUtils.isNotBlank(content)) {
+                dataEvent.setContent(content);
+            }
+            List<DataEvent> events = eventService.findList(dataEvent, 99999999);
+
+            if (events != null) {
+                for (DataEvent event : events) {
+                    //事记类型名称
+                    if (event.getEventType() != null) {
+                        String eventTypeName = dataDictService.getDictByValue("event_type", event.getEventType()).getLabel();
+                        event.setEventTypeName(eventTypeName);
+                    }
+                    if (event.getChannelId() == null) {
+                        event.setChannelId(0L);
+                    }
+                }
+            }
+
+            String fileName = "事记管理数据" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            new ExportExcel("事记管理数据", DataEvent.class).setDataList(events).write(response, fileName).dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 格式化GMT时间
+     *
+     * @param date
+     * @return
+     */
+    public String formatGTMDate(String date) {
+        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
+        Date time = null;
+        try {
+            time = defaultFormat.parse(date);
+            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return gmt.format(time);
     }
 }

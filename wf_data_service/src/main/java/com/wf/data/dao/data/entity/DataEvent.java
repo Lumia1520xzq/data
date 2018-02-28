@@ -20,7 +20,7 @@ public class DataEvent extends DataEntity {
     private String updaterName;
     private String eventTypeName;
 
-    @ExcelField(title="渠道", type=0, align=1, sort=10)
+    @ExcelField(title = "渠道", type = 1, align = 1, sort = 10)
     public Long getChannelId() {
         return this.channelId;
     }
@@ -29,7 +29,7 @@ public class DataEvent extends DataEntity {
         this.channelId = value;
     }
 
-    @ExcelField(title="开始日期", type=0, align=1, sort=20)
+    @ExcelField(title = "开始日期", type = 0, align = 1, sort = 20)
     public String getBeginDate() {
         return this.beginDate;
     }
@@ -38,7 +38,7 @@ public class DataEvent extends DataEntity {
         this.beginDate = value;
     }
 
-    @ExcelField(title="结束日期", type=0, align=1, sort=30)
+    @ExcelField(title = "结束日期", type = 0, align = 1, sort = 30)
     public String getEndDate() {
         return this.endDate;
     }
@@ -55,7 +55,7 @@ public class DataEvent extends DataEntity {
         return this.eventType;
     }
 
-    @ExcelField(title="类别", type=0, align=1, sort=40)
+    @ExcelField(title = "类别", align = 1, sort = 40)
     public String getEventTypeName() {
         return eventTypeName;
     }
@@ -64,7 +64,6 @@ public class DataEvent extends DataEntity {
         this.eventTypeName = eventTypeName;
     }
 
-    @ExcelField(title="标题", type=0, align=1, sort=50)
     public String getTitle() {
         return this.title;
     }
@@ -73,7 +72,7 @@ public class DataEvent extends DataEntity {
         this.title = value;
     }
 
-    @ExcelField(title="事记", type=0, align=1, sort=60)
+    @ExcelField(title = "事记", type = 0, align = 1, sort = 50)
     public String getContent() {
         return this.content;
     }

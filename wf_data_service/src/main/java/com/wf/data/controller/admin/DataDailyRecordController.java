@@ -5,9 +5,9 @@ import com.wf.core.persistence.Page;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.excel.ImportExcel;
-import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
+import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.data.entity.DataDailyRecord;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.service.DataDailyRecordService;
@@ -16,12 +16,15 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jasig.cas.client.util.AssertionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author shihui
@@ -37,7 +40,6 @@ public class DataDailyRecordController extends ExtJsController {
 
     @Autowired
     private DataDictService dataDictService;
-
 
     /**
      * 查询列表
@@ -65,9 +67,10 @@ public class DataDailyRecordController extends ExtJsController {
         }
 
         //设置默认搜索时间为昨天
-        if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
-            beginDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
-            endDate = com.wf.data.common.utils.DateUtils.getYesterdayDate();
+        if (StringUtils.isBlank(beginDate)) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.MONTH, -1);
+            beginDate = DateUtils.formatDate(c.getTime(), DateUtils.DATE_PATTERN);
         }
 
         DataDailyRecord dataDailyRecord = new DataDailyRecord();
@@ -153,14 +156,14 @@ public class DataDailyRecordController extends ExtJsController {
             for (DataDailyRecord entity : list) {
                 try {
                     //插入指标
-                    if (StringUtils.isNotBlank(entity.getIndicatorTypeName())){
+                    if (StringUtils.isNotBlank(entity.getIndicatorTypeName())) {
                         for (DataDict dataDict : indicatorTypeList) {
-                            if (entity.getIndicatorTypeName().equals(dataDict.getLabel())){
+                            if (entity.getIndicatorTypeName().equals(dataDict.getLabel())) {
                                 entity.setIndicatorType(dataDict.getValue());
                                 break;
                             }
                         }
-                        if (entity.getIndicatorType() == null){
+                        if (entity.getIndicatorType() == null) {
                             logger.info("指标不存在！");
                             return error("指标不存在！");
                         }
@@ -182,5 +185,63 @@ public class DataDailyRecordController extends ExtJsController {
 
         }
         return success("成功导入" + count + "记录");
+    }
+
+    @RequestMapping("/export")
+    public void export(@RequestParam String channelId, @RequestParam String indicatorType, @RequestParam String beginDate, @RequestParam String endDate, HttpServletResponse response) {
+        try {
+            DataDailyRecord dataDailyRecord = new DataDailyRecord();
+            if (!channelId.equals("undefined") && !channelId.equals("null") && StringUtils.isNotBlank(channelId)) {
+                dataDailyRecord.setChannelId(Long.parseLong(channelId));
+            }
+            if (!indicatorType.equals("undefined") && !indicatorType.equals("null") && StringUtils.isNotBlank(indicatorType)) {
+                dataDailyRecord.setIndicatorType(Integer.parseInt(indicatorType));
+            }
+            if (!beginDate.equals("undefined") && !beginDate.equals("null") && StringUtils.isNotBlank(beginDate)) {
+                dataDailyRecord.setBeginDate(formatGTMDate(beginDate));
+            }
+            if (!endDate.equals("undefined") && !endDate.equals("null") && StringUtils.isNotBlank(endDate)) {
+                dataDailyRecord.setEndDate(formatGTMDate(endDate));
+            }
+            List<DataDailyRecord> dailyRecords = dataDailyRecordService.findList(dataDailyRecord, 99999999);
+
+            if (dailyRecords != null) {
+                for (DataDailyRecord dailyRecord : dailyRecords) {
+                    //事记类型名称
+                    if (dailyRecord.getIndicatorType() != null) {
+                        String indicatorTypeName = dataDictService.getDictByValue("indicator_type", dailyRecord.getIndicatorType()).getLabel();
+                        dailyRecord.setIndicatorTypeName(indicatorTypeName);
+                    }
+                    if (dailyRecord.getChannelId() == null) {
+                        dailyRecord.setChannelId(0L);
+                    }
+                }
+            }
+
+            String fileName = "事记管理数据" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            new ExportExcel("事记管理数据", DataDailyRecord.class).setDataList(dailyRecords).write(response, fileName).dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 格式化GMT时间
+     *
+     * @param date
+     * @return
+     */
+    public String formatGTMDate(String date) {
+        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
+        Date time = null;
+        try {
+            time = defaultFormat.parse(date);
+            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return gmt.format(time);
     }
 }
