@@ -54,6 +54,13 @@ Ext.define('WF.view.data.event.eventMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/admin/event/export.do?channelId=' + me.down(("[name='channelId']")).value +
+                    '&eventType=' + me.down(("[name='eventType']")).value +
+                    '&beginDate=' + me.down(("[name='beginDate']")).value +
+                    '&endDate=' + me.down(("[name='endDate']")).value +
+                    '&content=' + me.down(("[name='content']")).value;
+            },
             items: [{
                 name: 'channelId',
                 fieldLabel: '渠道',
@@ -87,16 +94,6 @@ Ext.define('WF.view.data.event.eventMain', {
             }, {
                 name: 'content',
                 fieldLabel: '事记'
-            }, {
-                text: '导出',
-                xtype: 'button',
-                handler: function () {
-                    window.location.href = '/data/admin/event/export.do?channelId=' + me.down(("[name='channelId']")).value +
-                        '&eventType=' + me.down(("[name='eventType']")).value +
-                        '&beginDate=' + me.down(("[name='beginDate']")).value +
-                        '&endDate=' + me.down(("[name='endDate']")).value +
-                        '&content=' + me.down(("[name='content']")).value;
-                }
             }]
         });
         me.add({
