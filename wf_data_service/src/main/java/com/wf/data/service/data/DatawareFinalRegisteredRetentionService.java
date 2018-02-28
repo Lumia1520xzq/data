@@ -12,7 +12,12 @@ import java.util.Map;
  */
 @Service
 public class DatawareFinalRegisteredRetentionService extends CrudService<DatawareFinalRegisteredRetentionDao, DatawareFinalRegisteredRetention> {
+
     public DatawareFinalRegisteredRetention getRetentionByDate(Map<String, Object> map) {
         return dao.getRetentionByDate(map);
+    }
+
+    public DatawareFinalRegisteredRetention findByDate(Map<String, Object> map){
+        return dao.findByDate(map);
     }
 }

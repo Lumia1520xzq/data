@@ -197,7 +197,6 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
             var hisMoneyGap = [];
             var hisReturnRate =  [];
 
-
             for (var d=0;d<yesData.length;d++) {
                 hisBusinessHour[d] = hisData[d].businessHour;
                 hisDau[d] = hisData[d].hourDau;
@@ -223,7 +222,7 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
                 Ext.get('gameData2').dom.innerHTML = dataCss + format(todData[index].bettingCount) + end;
                 Ext.get('gameData3').dom.innerHTML = dataCss + format(todData[index].bettingAmount) + end;
                 Ext.get('gameData4').dom.innerHTML = dataCss + format(todData[index].moneyGap) + end;
-                Ext.get('gameData5').dom.innerHTML = dataCss + todData[index].returnRate + end;
+                Ext.get('gameData5').dom.innerHTML = dataCss + todData[index].returnRate + "%" + end;
 
                 var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
                 Ext.get('gameRate0').dom.innerHTML = rateCss + "日环比:"+ judge(todData[index].dayDauRate) +"<br/>" + "周环比:"+ judge(todData[index].weekDauRate) + end;
@@ -242,7 +241,7 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
                 Ext.get('gameData2').dom.innerHTML = dataCss + 0 + end;
                 Ext.get('gameData3').dom.innerHTML = dataCss + 0 + end;
                 Ext.get('gameData4').dom.innerHTML = dataCss + 0 + end;
-                Ext.get('gameData5').dom.innerHTML = dataCss + 0 + end;
+                Ext.get('gameData5').dom.innerHTML = dataCss + 0 + "%" + end;
 
                 var rateCss = "<div align='center' style='line-height:25px;font-size:14px'>";
                 Ext.get('gameRate0').dom.innerHTML = rateCss + "日环比:0%" +"<br/>" + "周环比:0%"+ end;
@@ -376,7 +375,14 @@ Ext.define('WF.view.data.board.GameMonitorViewMain', {
 
         function format(value){
             if(value >= 0){
-                return Ext.util.Format.number(value,"0,000");
+                if(String(value).indexOf(".")>-1){
+                    return Ext.util.Format.number(value,"0.00")+"%";
+                }else{
+                    return Ext.util.Format.number(value,"0,000");
+                }
+            }
+            if(String(value).indexOf(".")>-1){
+                return "-"+Ext.util.Format.number(Math.abs(value),"0.00")+"%";
             }
             return "-"+Ext.util.Format.number(Math.abs(value),"0,000");
         }
