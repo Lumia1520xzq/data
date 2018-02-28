@@ -19,10 +19,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 'dau','rechargeAmount',
                 'bettingRate','dauPayRate','bettingPayRate',
                 'newUsers','usersRate','userBettingRate',
+                'firstRechargeRate','weekRechargeRate',
                 'usersDayRetention','sevenRetention','dayRetention',
                 'rechargeCount','payArpu','payArppu',
                 'totalCost','costRate',
-                'userCount', 'bettingAmount','resultRate',
+                'userCount', 'bettingAmount','resultRate','moneyGap',
+
                 //以下是环比的数据字段
                 "dayDauRate", "weekDauRate",
                 "dayRechargeAmountRate", "weekRechargeAmountRate",
@@ -32,6 +34,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 "dayNewUsersRate", "weekNewUsersRate",
                 "dayUsersRate", "weekUsersRate",
                 "dayUserBettingRate", "weekUserBettingRate",
+                "dayFirstRechargeRate","weekFirstRechargeRate",
+                "dayWeekRechargeRate","weekWeekRechargeRate",
                 "dayUsersDayRetentionRate", "weekUsersDayRetentionRate",
                 "daySevenRetentionRate","weekSevenRetentionRate",
                 "dayDayRetentionRate", "weekDayRetentionRate",
@@ -42,7 +46,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 "dayCostRate", "weekCostRate",
                 "dayUserCountRate", "weekUserCountRate",
                 "dayBettingAmountRate", "weekBettingAmountRate",
-                "dayResultRate", "weekResultRate"
+                "dayResultRate", "weekResultRate",
+                "dayMoneyGapRate","weekMoneyGapRate"
             ]
         });
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -305,6 +310,61 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                     ]
                                 },
                                 {width:"100%",height:240,id:"kpi7"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: '',collapsible: true,align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>首日付费率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date20',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'firstRechargeRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayFirstRechargeRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekFirstRechargeRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi20"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>7日付费率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date21',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekRechargeRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayWeekRechargeRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekWeekRechargeRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi21"}
                             ]
                         }
                     ]
@@ -604,6 +664,36 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             ]
                         }
                     ]
+                },
+                {
+                    title: '',collapsible: true,height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2>流水差</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date19',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'moneyGap',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayMoneyGapRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekMoneyGapRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi19"}
+                            ]
+                        }
+                    ]
                 }
             ]
         });
@@ -633,6 +723,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var usersRate=[];
             var userBettingRate=[];
 
+            var firstRechargeRate=[];
+            var weekRechargeRate=[];
+
             var usersDayRetention=[];
             var sevenRetention=[];
             var dayRetention=[];
@@ -647,6 +740,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var userCount=[];
             var bettingAmount=[];
             var resultRate=[];
+            var moneyGap=[];
 
             for(var i=0;i<store.getCount();i++){
                 var re=store.getAt(i);
@@ -665,6 +759,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 usersRate[i]=re.get('usersRate');
                 userBettingRate[i]=re.get('userBettingRate');
 
+                firstRechargeRate[i]=re.get('firstRechargeRate');
+                weekRechargeRate[i]=re.get('weekRechargeRate');
+
                 usersDayRetention[i]=re.get('usersDayRetention');
                 sevenRetention[i]=re.get('sevenRetention');
                 dayRetention[i]=re.get('dayRetention');
@@ -679,6 +776,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 userCount[i]=re.get('userCount');
                 bettingAmount[i]=re.get('bettingAmount');
                 resultRate[i]=re.get('resultRate');
+                moneyGap[i]=re.get('moneyGap');
             }
 
             //最后一天日期是否为昨天以后的数据
@@ -693,6 +791,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 if(new Date(lastDay)>=new Date(yesterday)){
                      usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
                      dayRetention = dayRetention.slice(0,store.getCount()-1);
+                     firstRechargeRate = firstRechargeRate.slice(0,store.getCount()-1);
                      businessDate1 = businessDate.slice(0,store.getCount()-1);
                 }else{
                      businessDate1 = businessDate;
@@ -704,6 +803,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 if(new Date(lastDay)>=new Date(weekBefore)){
                     var interval  =  parseInt(Math.abs(new Date(lastDay) - new Date(weekBefore)) /1000/60/60/24)
                     sevenRetention = sevenRetention.slice(0,store.getCount()-interval);
+                    weekRechargeRate = weekRechargeRate.slice(0,store.getCount()-interval);
                     businessDate2 = businessDate.slice(0,store.getCount()-interval);
                 }else{
                     businessDate2 = businessDate;
@@ -1463,9 +1563,127 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         smooth:true,
                         data: sevenRetention
                     }]
+                },
+                {
+                    // title: {text: '流水差'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'15%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }
+                    },
+                    series: [{
+                        name: '流水差',
+                        type: 'line',
+                        smooth:true,
+                        data: moneyGap
+                    }]
+                },
+                {
+                    // title: {text: '首日付费率'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate1
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }},
+                    series: [{
+                        name: '首日付费率',
+                        type: 'line',
+                        smooth:true,
+                        data:firstRechargeRate
+                    }]
+                },
+                {
+                    // title: {text: '七日付费率'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate2
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }},
+                    series: [{
+                        name: '七日付费率',
+                        type: 'line',
+                        smooth:true,
+                        data:weekRechargeRate
+                    }]
                 }
             ];
-            for (var j=0;j<option.length;j++) {
+            for (var j=0;j<option.length;j++){
                 me.echarts = echarts.init(Ext.get("kpi"+j).dom);
                 me.echarts.setOption(option[j]);
             }
@@ -1484,6 +1702,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('newUsers').dom.innerHTML = "";
                 Ext.get('usersRate').dom.innerHTML = "";
                 Ext.get('userBettingRate').dom.innerHTML = "";
+                Ext.get('firstRechargeRate').dom.innerHTML = "";
+                Ext.get('weekRechargeRate').dom.innerHTML = "";
                 Ext.get('usersDayRetention').dom.innerHTML = "";
                 Ext.get('sevenRetention').dom.innerHTML = "";
                 Ext.get('dayRetention').dom.innerHTML = "";
@@ -1495,6 +1715,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('userCount').dom.innerHTML = "";
                 Ext.get('bettingAmount').dom.innerHTML = "";
                 Ext.get('resultRate').dom.innerHTML = "";
+                Ext.get('moneyGap').dom.innerHTML = "";
 
                 Ext.get('dayDauRate').dom.innerHTML = "";
                 Ext.get('weekDauRate').dom.innerHTML = "";
@@ -1512,6 +1733,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekUsersRate').dom.innerHTML = "";
                 Ext.get('dayUserBettingRate').dom.innerHTML = "";
                 Ext.get('weekUserBettingRate').dom.innerHTML = "";
+
+                Ext.get('dayFirstRechargeRate').dom.innerHTML = "";
+                Ext.get('weekFirstRechargeRate').dom.innerHTML = "";
+                Ext.get('dayWeekRechargeRate').dom.innerHTML = "";
+                Ext.get('weekWeekRechargeRate').dom.innerHTML = "";
+
                 Ext.get('dayUsersDayRetentionRate').dom.innerHTML = "";
                 Ext.get('weekUsersDayRetentionRate').dom.innerHTML = "";
                 Ext.get('daySevenRetentionRate').dom.innerHTML = "";
@@ -1534,6 +1761,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekBettingAmountRate').dom.innerHTML = "";
                 Ext.get('dayResultRate').dom.innerHTML = "";
                 Ext.get('weekResultRate').dom.innerHTML = "";
+                Ext.get('dayMoneyGapRate').dom.innerHTML = "";
+                Ext.get('weekMoneyGapRate').dom.innerHTML = "";
             }
             else {
 
@@ -1545,7 +1774,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 }
 
                 for (var q = 0; q < option.length; q++) {
-                    if (q == 8 || q == 9) {
+                    if (q == 8 || q == 9 || q==20) {
                         var date = Ext.get('date' + q).dom;
                         var rentionDate = businessDate1[businessDate1.length - 1];
                         date.innerHTML = '<div align="center">' + rentionDate + '</div>';
@@ -1553,7 +1782,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 }
 
                 for (var t = 0; t < option.length; t++) {
-                    if (t == 18) {
+                    if (t == 18 || t==21) {
                         var date = Ext.get('date' + t).dom;
                         var sevenDate = businessDate2[businessDate2.length - 1];
                         date.innerHTML = '<div align="center">' + sevenDate + '</div>';
@@ -1568,6 +1797,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('newUsers').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('newUsers') + "</strong></div>";
                 Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong></div>";
                 Ext.get('userBettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong></div>";
+
+                Ext.get('firstRechargeRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + firstRechargeRate[firstRechargeRate.length - 1] + "%</strong></div>";
+                Ext.get('weekRechargeRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + weekRechargeRate[weekRechargeRate.length - 1] + "%</strong></div>";
+
                 Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersDayRetention[usersDayRetention.length - 1] + "%</strong></div>";
                 Ext.get('sevenRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + sevenRetention[sevenRetention.length - 1] + "%</strong></div>";
                 Ext.get('dayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + dayRetention[dayRetention.length - 1] + "%</strong></div>";
@@ -1579,6 +1812,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('userCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userCount') + "</strong></div>";
                 Ext.get('bettingAmount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + format(r.get('bettingAmount')) + "</strong></div>";
                 Ext.get('resultRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('resultRate') + "%</strong></div>";
+                Ext.get('moneyGap').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + format(r.get('moneyGap')) + "</strong></div>";
 
                 Ext.get('dayDauRate').dom.innerHTML = "日环比：" + r.get('dayDauRate');
                 Ext.get('weekDauRate').dom.innerHTML = "周同比：" + r.get('weekDauRate');
@@ -1596,6 +1830,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekUsersRate').dom.innerHTML = "周同比：" + r.get('weekUsersRate');
                 Ext.get('dayUserBettingRate').dom.innerHTML = "日环比：" + r.get('dayUserBettingRate');
                 Ext.get('weekUserBettingRate').dom.innerHTML = "周同比：" + r.get('weekUserBettingRate');
+
+                Ext.get('dayFirstRechargeRate').dom.innerHTML = "日环比：" + r.get('dayFirstRechargeRate');
+                Ext.get('weekFirstRechargeRate').dom.innerHTML = "周同比：" + r.get('weekFirstRechargeRate');
+                Ext.get('dayWeekRechargeRate').dom.innerHTML = "日环比：" + r.get('dayWeekRechargeRate');
+                Ext.get('weekWeekRechargeRate').dom.innerHTML = "周同比：" + r.get('weekWeekRechargeRate');
+
                 Ext.get('dayUsersDayRetentionRate').dom.innerHTML = "日环比：" + r.get('dayUsersDayRetentionRate');
                 Ext.get('weekUsersDayRetentionRate').dom.innerHTML = "周同比：" + r.get('weekUsersDayRetentionRate');
                 Ext.get('daySevenRetentionRate').dom.innerHTML = "日环比：" + r.get('daySevenRetentionRate');
@@ -1618,6 +1858,8 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekBettingAmountRate').dom.innerHTML = "周同比：" + r.get('weekBettingAmountRate');
                 Ext.get('dayResultRate').dom.innerHTML = "日环比：" + r.get('dayResultRate');
                 Ext.get('weekResultRate').dom.innerHTML = "周同比：" + r.get('weekResultRate');
+                Ext.get('dayMoneyGapRate').dom.innerHTML = "日环比：" + r.get('dayMoneyGapRate');
+                Ext.get('weekMoneyGapRate').dom.innerHTML = "周同比：" + r.get('weekMoneyGapRate');
             }
         }
 

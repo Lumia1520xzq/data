@@ -31,7 +31,7 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double totalCost;
 	private Double costRate;
 	private Double sevenRetention;
-
+	private Double moneyGap;
 	private Double firstRechargeRate;
 	private Double weekRechargeRate;
 
@@ -96,6 +96,14 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	private String daySevenRetentionRate;
 	private String weekSevenRetentionRate;
+
+	private String dayMoneyGapRate;
+	private String weekMoneyGapRate;
+
+	private String dayFirstRechargeRate;
+	private String weekFirstRechargeRate;
+	private String dayWeekRechargeRate;
+	private String weekWeekRechargeRate;
 
 	private Long hisRegistered;
 	private Double hisRecharge;
@@ -659,5 +667,61 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	public void setWeekRechargeRate(Double weekRechargeRate) {
 		this.weekRechargeRate = weekRechargeRate;
+	}
+
+	public Double getMoneyGap() {
+		return moneyGap;
+	}
+
+	public void setMoneyGap(Double moneyGap) {
+		this.moneyGap = moneyGap;
+	}
+
+	public String getDayMoneyGapRate() {
+		return dayMoneyGapRate;
+	}
+
+	public void setDayMoneyGapRate(String dayMoneyGapRate) {
+		this.dayMoneyGapRate = dayMoneyGapRate;
+	}
+
+	public String getWeekMoneyGapRate() {
+		return weekMoneyGapRate;
+	}
+
+	public void setWeekMoneyGapRate(String weekMoneyGapRate) {
+		this.weekMoneyGapRate = weekMoneyGapRate;
+	}
+
+	public String getDayFirstRechargeRate() {
+		return dayFirstRechargeRate;
+	}
+
+	public void setDayFirstRechargeRate(String dayFirstRechargeRate) {
+		this.dayFirstRechargeRate = dayFirstRechargeRate;
+	}
+
+	public String getWeekFirstRechargeRate() {
+		return weekFirstRechargeRate;
+	}
+
+	public void setWeekFirstRechargeRate(String weekFirstRechargeRate) {
+		this.weekFirstRechargeRate = weekFirstRechargeRate;
+	}
+
+	public String getDayWeekRechargeRate() {
+		return dayWeekRechargeRate;
+	}
+
+	public void setDayWeekRechargeRate(String dayWeekRechargeRate) {
+		this.dayWeekRechargeRate = dayWeekRechargeRate;
+	}
+
+	public String getWeekWeekRechargeRate() {
+		return weekWeekRechargeRate;
+	}
+
+	public void setWeekWeekRechargeRate(String weekWeekRechargeRate) {
+		this.weekWeekRechargeRate = weekWeekRechargeRate;
 	}
 }
