@@ -110,9 +110,9 @@ Ext.define('WF.view.thirdChannel.channelRechargeMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.00");
+                        return Ext.util.Format.number(value, "0,000");
                     } else {
-                        return 0.00;
+                        return 0;
                     }
                 }
             }, {

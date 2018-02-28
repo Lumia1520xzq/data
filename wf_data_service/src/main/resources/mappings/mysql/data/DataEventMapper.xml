@@ -24,7 +24,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<sql id="dataEventWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
 		<if test="p.channelId != null and p.channelId != ''">
-			AND t.channel_id = #{p.channelId}
+			AND (t.channel_id = #{p.channelId} OR t.channel_id IS NULL)
 		</if>
 		<if test="p.beginDate != null and p.beginDate != ''">
 			AND t.begin_date >= #{p.beginDate}
@@ -34,6 +34,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="p.eventType != null and p.eventType != ''">
 			AND t.event_type = #{p.eventType}
+		</if>
+		<if test="p.content != null and p.content != ''">
+			AND t.content LIKE CONCAT('%', #{p.content}, '%')
 		</if>
 	</sql>
 	

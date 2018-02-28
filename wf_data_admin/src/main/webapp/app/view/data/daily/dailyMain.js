@@ -47,6 +47,12 @@ Ext.define('WF.view.data.daily.dailyMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/admin/dailyRecord/export.do?channelId=' + me.down(("[name='channelId']")).value +
+                    '&indicatorType=' + me.down(("[name='indicatorType']")).value +
+                    '&beginDate=' + me.down(("[name='beginDate']")).value +
+                    '&endDate=' + me.down(("[name='endDate']")).value;
+            },
             items: [{
                 name: 'channelId',
                 fieldLabel: '渠道',
@@ -71,13 +77,12 @@ Ext.define('WF.view.data.daily.dailyMain', {
                 name: 'beginDate',
                 format: 'Y-m-d',
                 fieldLabel: '开始时间',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.MONTH, -1), "Y-m-d")
             }, {
                 xtype: 'datefield',
                 name: 'endDate',
                 format: 'Y-m-d',
-                fieldLabel: '结束时间',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
+                fieldLabel: '结束时间'
             }]
         });
         me.add({
@@ -100,7 +105,6 @@ Ext.define('WF.view.data.daily.dailyMain', {
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
-                    console.log("channelID:" + value);
                     var index = allChannelStore.find('id', value);
                     if (index != -1) {
                         var record = allChannelStore.getAt(index);
