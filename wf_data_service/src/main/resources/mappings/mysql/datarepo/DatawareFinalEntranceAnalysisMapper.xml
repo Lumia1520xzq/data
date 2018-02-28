@@ -27,6 +27,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<sql id="datawareFinalEntranceAnalysisWhere">
 		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="businessDate != null and businessDate != ''">
+			AND t.business_date = #{businessDate}
+		</if>
+		<if test="eventId != null and eventId != ''">
+			AND t.event_id = #{eventId}
+		</if>
 	</sql>
 	
 	<sql id="datawareFinalEntranceAnalysisJoins">

@@ -2,6 +2,7 @@ package com.wf.data.dao.datarepo.entity;
 
 
 import com.wf.core.persistence.DataEntity;
+import com.wf.core.utils.excel.ExcelField;
 
 public class DatawareFinalEntranceAnalysis extends DataEntity {
     private static final long serialVersionUID = -1;
@@ -18,6 +19,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
     private Double entranceDayRetention;
     private String businessDate;
 
+    @ExcelField(title = "埋点ID", type = 1, align = 2, sort = 3)
     public Long getEventId() {
         return eventId;
     }
@@ -26,6 +28,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.eventId = eventId;
     }
 
+    @ExcelField(title = "埋点名称", type = 1, align = 2, sort = 2)
     public String getEventName() {
         return eventName;
     }
@@ -34,6 +37,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.eventName = eventName;
     }
 
+    @ExcelField(title = "入口活跃用户数(DAU)", type = 1, align = 2, sort = 4)
     public Long getEntranceDau() {
         return entranceDau;
     }
@@ -42,6 +46,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entranceDau = entranceDau;
     }
 
+    @ExcelField(title = "入口DAU占比", type = 1, align = 2, sort = 5)
     public Double getEntranceDauRate() {
         return entranceDauRate;
     }
@@ -50,6 +55,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entranceDauRate = entranceDauRate;
     }
 
+    @ExcelField(title = "入口签到人数", type = 1, align = 2, sort = 6)
     public Long getEntranceSign() {
         return entranceSign;
     }
@@ -58,6 +64,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entranceSign = entranceSign;
     }
 
+    @ExcelField(title = "入口签到转化率", type = 1, align = 2, sort = 7)
     public Double getEntranceSignRate() {
         return entranceSignRate;
     }
@@ -66,6 +73,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entranceSignRate = entranceSignRate;
     }
 
+    @ExcelField(title = "入口投注人数", type = 1, align = 2, sort = 8)
     public Long getEntranceBetting() {
         return entranceBetting;
     }
@@ -74,6 +82,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entranceBetting = entranceBetting;
     }
 
+    @ExcelField(title = "入口投注转化率", type = 1, align = 2, sort = 9)
     public Double getEntranceBettingRate() {
         return entranceBettingRate;
     }
@@ -82,6 +91,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entranceBettingRate = entranceBettingRate;
     }
 
+    @ExcelField(title = "入口付费人数", type = 1, align = 2, sort = 10)
     public Long getEntrancePay() {
         return entrancePay;
     }
@@ -90,6 +100,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entrancePay = entrancePay;
     }
 
+    @ExcelField(title = "入口付费渗透率", type = 1, align = 2, sort = 11)
     public Double getEntrancePayRate() {
         return entrancePayRate;
     }
@@ -98,6 +109,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
         this.entrancePayRate = entrancePayRate;
     }
 
+    @ExcelField(title = "入口次日留存率", type = 1, align = 2, sort = 12)
     public Double getEntranceDayRetention() {
         return entranceDayRetention;
     }
@@ -105,7 +117,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
     public void setEntranceDayRetention(Double entranceDayRetention) {
         this.entranceDayRetention = entranceDayRetention;
     }
-
+    @ExcelField(title = "日期", type = 1, align = 2, sort = 1)
     public String getBusinessDate() {
         return businessDate;
     }
