@@ -9,7 +9,6 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.common.utils.elasticsearch.EsClientFactory;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;

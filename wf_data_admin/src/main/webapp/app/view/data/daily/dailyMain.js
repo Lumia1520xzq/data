@@ -47,6 +47,12 @@ Ext.define('WF.view.data.daily.dailyMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/admin/dailyRecord/export.do?channelId=' + me.down(("[name='channelId']")).value +
+                    '&indicatorType=' + me.down(("[name='indicatorType']")).value +
+                    '&beginDate=' + me.down(("[name='beginDate']")).value +
+                    '&endDate=' + me.down(("[name='endDate']")).value;
+            },
             items: [{
                 name: 'channelId',
                 fieldLabel: '渠道',
@@ -77,15 +83,6 @@ Ext.define('WF.view.data.daily.dailyMain', {
                 name: 'endDate',
                 format: 'Y-m-d',
                 fieldLabel: '结束时间'
-            }, {
-                text: '导出',
-                xtype: 'button',
-                handler: function () {
-                    window.location.href = '/data/admin/dailyRecord/export.do?channelId=' + me.down(("[name='channelId']")).value +
-                        '&indicatorType=' + me.down(("[name='indicatorType']")).value +
-                        '&beginDate=' + me.down(("[name='beginDate']")).value +
-                        '&endDate=' + me.down(("[name='endDate']")).value;
-                }
             }]
         });
         me.add({

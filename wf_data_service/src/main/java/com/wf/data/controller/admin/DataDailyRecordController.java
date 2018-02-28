@@ -218,8 +218,8 @@ public class DataDailyRecordController extends ExtJsController {
                 }
             }
 
-            String fileName = "事记管理数据" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
-            new ExportExcel("事记管理数据", DataDailyRecord.class).setDataList(dailyRecords).write(response, fileName).dispose();
+            String fileName = "日报数据总结" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            new ExportExcel("日报数据总结", DataDailyRecord.class).setDataList(dailyRecords).write(response, fileName).dispose();
         } catch (Exception e) {
             e.printStackTrace();
         }
