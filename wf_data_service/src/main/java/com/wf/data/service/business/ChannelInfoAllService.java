@@ -66,7 +66,6 @@ public class ChannelInfoAllService {
         try {
             Map<String, Object> countParams = new HashMap<>();
             countParams.put("businessDate", searchDay);
-            countParams.put("parentId", 1);
             long count = datawareFinalChannelInfoAllService.getCountByTime(countParams);
             if (count > 0) {
                 datawareFinalChannelInfoAllService.deleteByDate(countParams);
@@ -90,36 +89,18 @@ public class ChannelInfoAllService {
                         Map<String, Object> map = new HashMap<>();
                         map.put("businessDate", searchDay);
                         map.put("channelId", channel);
-
-                        long channelCount = datawareFinalChannelInfoAllService.getCountByTime(map);
-                        if (channelCount > 0) {
-                            datawareFinalChannelInfoAllService.deleteByDate(map);
-                        }
                         dataKettle(map, channelInfo, searchDay, 0);
                     } else {
                         parentChannelList.add(channel);
                         Map<String, Object> parentMap = new HashMap<>();
                         parentMap.put("businessDate", searchDay);
                         parentMap.put("parentId", channel);
-
-                        long parentCount = datawareFinalChannelInfoAllService.getCountByTime(parentMap);
-                        if (parentCount > 0) {
-                            datawareFinalChannelInfoAllService.deleteByDate(parentMap);
-                        }
                         dataKettle(parentMap, channelInfo, searchDay, 0);
                     }
                 }
 
             }
 
-            Map<String, Object> otherMap = new HashMap<>();
-            otherMap.put("businessDate", searchDay);
-            otherMap.put("parentId", 0);
-
-            long parentCount = datawareFinalChannelInfoAllService.getCountByTime(otherMap);
-            if (parentCount > 0) {
-                datawareFinalChannelInfoAllService.deleteByDate(otherMap);
-            }
             //汇总其他渠道
             parentChannelList.add(1L);
             Map<String, Object> params = new HashMap<>();
@@ -137,6 +118,7 @@ public class ChannelInfoAllService {
     private void dataKettle(Map<String, Object> params, ChannelInfo channelInfo, String businessDate, Integer flag) {
 
         DatawareFinalChannelInfoAll infoAll = new DatawareFinalChannelInfoAll();
+        infoAll.setWeekRechargeRate(0.00);
         infoAll.setBusinessDate(businessDate);
         if (null == channelInfo) {
             if (flag == 0) {
@@ -275,14 +257,59 @@ public class ChannelInfoAllService {
             infoAll.setUserLtv(0.00);
         }
 
+
+        //首日付费率 = 注册用户充值人数/注册人数（newUserList）
+        //充值人数
+        List<Long> rechargeUserIdList = datawareConvertDayService.getUserIdByDate(params);
+        if (CollectionUtils.isNotEmpty(rechargeUserIdList) && CollectionUtils.isNotEmpty(newUserList)) {
+            Collection rechargeInterColl = CollectionUtils.intersection(newUserList, rechargeUserIdList);
+            //新用户充值人数
+            List<Long> rechargeList = (List<Long>) rechargeInterColl;
+            infoAll.setFirstRechargeRate(BigDecimalUtil.div(rechargeList.size() * 100, newUserList.size(), 2));
+        } else {
+            infoAll.setFirstRechargeRate(0.00);
+        }
+
         try {
             datawareFinalChannelInfoAllService.save(infoAll);
         } catch (Exception e) {
             logger.error("添加渠道汇总记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(infoAll.toString()));
         }
+        //更新7日付费率
+        updateWeekRechargeRate(params, businessDate,infoAll.getParentId());
 
     }
 
+    private void updateWeekRechargeRate( Map<String, Object> params, String businessDate,Long parentId) {
+        Map<String,Object> map = new HashMap<>();
+        String weekBeforeDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(businessDate), -6));
+        map.put("businessDate", weekBeforeDate);
+        map.put("parentId", parentId);
+        DatawareFinalChannelInfoAll infoAll = datawareFinalChannelInfoAllService.getInfoByChannel(map);
+        if (infoAll == null){
+            logger.error("添加渠道汇总记录失败: traceId={}, data={}", TraceIdUtils.getTraceId(),null);
+            return;
+        }
+        //新增用户数
+        List<Long> newUserList = datawareUserInfoService.getNewUserByDate(params);
+
+        params.put("beginDate", weekBeforeDate);
+        params.put("endDate", businessDate);
+        List<Long> rechargeUserIdList = datawareConvertDayService.getUserIdList(params);
+        if (CollectionUtils.isNotEmpty(rechargeUserIdList) && CollectionUtils.isNotEmpty(newUserList)) {
+            Collection rechargeInterColl = CollectionUtils.intersection(newUserList, rechargeUserIdList);
+            //7日新用户充值人数
+            List<Long> rechargeList = (List<Long>) rechargeInterColl;
+            infoAll.setWeekRechargeRate(BigDecimalUtil.div(rechargeList.size() * 100, newUserList.size(), 2));
+        } else {
+            infoAll.setWeekRechargeRate(0.00);
+        }
+        try {
+            datawareFinalChannelInfoAllService.save(infoAll);
+        } catch (Exception e) {
+            logger.error("添加渠道汇总记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(infoAll.toString()));
+        }
+    }
 
     @Async
     public void dataClean(String startTime, String endTime) {
@@ -426,6 +453,142 @@ public class ChannelInfoAllService {
             datawareFinalChannelInfoAllService.save(info);
         } catch (Exception e) {
             logger.error("添加渠道汇总记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(info.toString()));
+        }
+    }
+
+
+    @Async
+    public void historyRechargeRate(String startTime, String endTime) {
+
+        try {
+
+            if (startTime.equals(endTime)) {
+                forChannelRate(endTime);
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    forChannelRate(searchDate);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
+    }
+
+    private void forChannelRate(String searchDay) {
+        String channelIdList = dataConfigService.getStringValueByName(DataConstants.DATA_DESTINATION_COLLECTING_CHANNEL);
+        if (StringUtils.isBlank(channelIdList)) {
+            logger.error("渠道未设置: traceId={}", TraceIdUtils.getTraceId());
+            return;
+        }
+        try {
+            Map<String, Object> countParams = new HashMap<>();
+            countParams.put("businessDate", searchDay);
+            countParams.put("parentId", 1);
+            DatawareFinalChannelInfoAll info = datawareFinalChannelInfoAllService.getInfoByChannel(countParams);
+            if (null != info) {
+                Map<String, Object> mapAll = new HashMap<>();
+                mapAll.put("businessDate", searchDay);
+                updateRate(mapAll, info,searchDay);
+
+            }
+
+            List<String> channels = Arrays.asList(channelIdList.split(","));
+
+            List<Long> childChannelList = Lists.newArrayList();
+            List<Long> parentChannelList = Lists.newArrayList();
+
+
+            for (String channelStr : channels) {
+                Long channel = Long.valueOf(channelStr);
+                ChannelInfo channelInfo = channelInfoService.get(channel);
+                if (null != channelInfo) {
+                    if (null != channelInfo.getParentId()) {
+                        childChannelList.add(channel);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("businessDate", searchDay);
+                        map.put("channelId", channel);
+
+                        DatawareFinalChannelInfoAll channelInfoAll = datawareFinalChannelInfoAllService.getInfoByChannel(map);
+                        if (null != channelInfoAll) {
+                            updateRate(map, channelInfoAll,searchDay);
+                        }
+
+
+                    } else {
+                        parentChannelList.add(channel);
+                        Map<String, Object> parentMap = new HashMap<>();
+                        parentMap.put("businessDate", searchDay);
+                        parentMap.put("parentId", channel);
+
+                        DatawareFinalChannelInfoAll channelInfoAll = datawareFinalChannelInfoAllService.getInfoByChannel(parentMap);
+                        if (null != channelInfoAll) {
+                            updateRate(parentMap, channelInfoAll,searchDay);
+                        }
+                    }
+                }
+
+            }
+
+
+            Map<String, Object> otherMap = new HashMap<>();
+            otherMap.put("businessDate", searchDay);
+            otherMap.put("parentId", 0);
+            DatawareFinalChannelInfoAll channelInfoAll = datawareFinalChannelInfoAllService.getInfoByChannel(otherMap);
+            if (null != channelInfoAll) {
+                //汇总其他渠道
+                parentChannelList.add(1L);
+                Map<String, Object> params = new HashMap<>();
+                params.put("businessDate", searchDay);
+                params.put("childChannelList", childChannelList);
+                params.put("parentChannelList", parentChannelList);
+                updateRate(params, channelInfoAll,searchDay);
+            }
+
+        } catch (Exception e) {
+            logger.error("添加渠道汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+        }
+    }
+
+    private void updateRate(Map<String, Object> map, DatawareFinalChannelInfoAll infoAll,String searchDay) {
+        //新增用户数
+        List<Long> newUserList = datawareUserInfoService.getNewUserByDate(map);
+        //首日付费率 = 注册用户充值人数/注册人数（newUserList）
+        //充值人数
+        List<Long> rechargeUserIdList = datawareConvertDayService.getUserIdByDate(map);
+        if (CollectionUtils.isNotEmpty(rechargeUserIdList) && CollectionUtils.isNotEmpty(newUserList)) {
+            Collection rechargeInterColl = CollectionUtils.intersection(newUserList, rechargeUserIdList);
+            //新用户充值人数
+            List<Long> rechargeList = (List<Long>) rechargeInterColl;
+            infoAll.setFirstRechargeRate(BigDecimalUtil.div(rechargeList.size() * 100, newUserList.size(), 2));
+        } else {
+            infoAll.setFirstRechargeRate(0.00);
+        }
+
+
+        Date endDate = DateUtils.getNextDate(DateUtils.parseDate(searchDay), 6);
+        String weekAfterDate = DateUtils.formatDate(endDate);
+        if (endDate.getTime() < DateUtils.parseDate(DateUtils.formatCurrentDateYMD()).getTime()) {
+            map.put("beginDate", searchDay);
+            map.put("endDate", weekAfterDate);
+            List<Long> weekRechargeUserIdList = datawareConvertDayService.getUserIdList(map);
+            if (CollectionUtils.isNotEmpty(weekRechargeUserIdList) && CollectionUtils.isNotEmpty(newUserList)) {
+                Collection rechargeInterColl = CollectionUtils.intersection(newUserList, weekRechargeUserIdList);
+                //7日新用户充值人数
+                List<Long> rechargeList = (List<Long>) rechargeInterColl;
+                infoAll.setWeekRechargeRate(BigDecimalUtil.div(rechargeList.size() * 100, newUserList.size(), 2));
+            } else {
+                infoAll.setWeekRechargeRate(0.00);
+            }
+        }
+
+        try {
+            datawareFinalChannelInfoAllService.save(infoAll);
+        } catch (Exception e) {
+            logger.error("添加渠道汇总记录失败: traceId={}, ex={},data={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e), GfJsonUtil.toJSONString(infoAll.toString()));
         }
     }
 

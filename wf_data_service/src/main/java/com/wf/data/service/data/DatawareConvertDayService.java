@@ -27,6 +27,10 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
         return dao.getUserIdByDate(map);
     }
 
+    public List<Long> getUserIdList(Map<String, Object> map) {
+        return dao.getUserIdList(map);
+    }
+
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
