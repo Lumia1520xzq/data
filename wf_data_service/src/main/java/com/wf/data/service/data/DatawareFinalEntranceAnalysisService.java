@@ -18,4 +18,11 @@ public class DatawareFinalEntranceAnalysisService extends CrudService<DatawareFi
        return dao.getAnalysisListByDate(params);
    }
 
+    public List<DatawareFinalEntranceAnalysis> getEntranceAnalysisByDate(Map<String, Object> eaparams) {
+        return dao.getEntranceAnalysisByDate(eaparams);
+    }
+
+    public void deleteByDate(Map<String, Object> params) {
+        dao.deleteByDate(params);
+    }
 }

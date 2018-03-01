@@ -140,5 +140,17 @@
         </if>
     </delete>
 
+    <select id="getBettingUserIdListByDate" resultType="java.lang.Long">
+        SELECT
+            DISTINCT t.user_id
+        FROM
+            dataware_betting_log_day t
+        WHERE
+            t.user_group = 2
+        AND t.delete_flag = 0
+        AND t.betting_date = #{beginDate}
+        AND t.channel_id = #{channelId}
+    </select>
+
 </mapper>
 

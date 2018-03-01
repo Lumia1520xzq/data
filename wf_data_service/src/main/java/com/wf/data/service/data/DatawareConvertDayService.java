@@ -50,4 +50,8 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     public List<Long> getRechargeUserIdsByDate(Map<String, Object> map) {
         return dao.getRechargeUserIdsByDate(map);
     }
+
+    public List<Long> getPayUserIdListByDate(Map<String, Object> payParams) {
+        return dao.getPayUserIdListByDate(payParams);
+    }
 }
