@@ -3,6 +3,7 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
     title: '历史数据清洗',
     xtype: 'historyDataCleanMain',
     closable: true,
+    autoScroll:true,
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -26,9 +27,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_final_channel_info_hour历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='startDate']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='endDate']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='startDate']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='endDate']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/channelInfoHour.do", data, function (result) {
                             if (result.success) {
@@ -81,9 +82,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_user_sign_day历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='start']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='end']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='start']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='end']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/platSignedUser.do", data, function (result) {
                             if (result.success) {
@@ -136,9 +137,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_final_channel_info_all历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='infoStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='infoEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='infoStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='infoEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/channelInfoAll.do", data, function (result) {
                             if (result.success) {
@@ -191,9 +192,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_betting_log_day历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='bettingStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='bettingEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='bettingStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='bettingEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/bettingLogDay.do", data, function (result) {
                             if (result.success) {
@@ -246,9 +247,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_betting_log_hour历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='hourStart']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='hourEnd']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='hourStart']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='hourEnd']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/bettingLogHour.do", data, function (result) {
                             if (result.success) {
@@ -302,9 +303,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_burying_point_day历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='buryingStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='buryingEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='buryingStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='buryingEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/buryingPointDay.do", data, function (result) {
                             if (result.success) {
@@ -357,9 +358,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_burying_point_hour历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='buryingHourStart']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='buryingHourEnd']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='buryingHourStart']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='buryingHourEnd']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/buryingPointHour.do", data, function (result) {
                             if (result.success) {
@@ -400,7 +401,6 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
         });
 
 
-
         me.add({
             border: false,
             store: store,
@@ -414,9 +414,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_convert_day历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='convertStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='convertEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='convertStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='convertEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/convertDay.do", data, function (result) {
                             if (result.success) {
@@ -469,9 +469,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_convert_hour历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='convertHourStart']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='convertHourEnd']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='convertHourStart']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='convertHourEnd']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/convertHour.do", data, function (result) {
                             if (result.success) {
@@ -525,9 +525,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全ltv历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='ltvStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='ltvEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='ltvStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='ltvEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/historyLtv.do", data, function (result) {
                             if (result.success) {
@@ -580,9 +580,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全registeredArpu历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='arpuStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='arpuEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='arpuStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='arpuEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/registeredArpu.do", data, function (result) {
                             if (result.success) {
@@ -636,9 +636,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全registeredRetention历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='retentionStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='retentionEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='retentionStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='retentionEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/registeredRetention.do", data, function (result) {
                             if (result.success) {
@@ -691,9 +691,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全channelConversion历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='conversionStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='conversionEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='conversionStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='conversionEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/channelConversion.do", data, function (result) {
                             if (result.success) {
@@ -746,9 +746,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全channelCost历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='costStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='costEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='costStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='costEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/channelCost.do", data, function (result) {
                             if (result.success) {
@@ -801,9 +801,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全channelRetention历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='channelRetentionStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='channelRetentionEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='channelRetentionStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='channelRetentionEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/channelRetention.do", data, function (result) {
                             if (result.success) {
@@ -856,9 +856,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_user_info历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='userInfoStart']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='userInfoEnd']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='userInfoStart']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='userInfoEnd']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/userInfo.do", data, function (result) {
                             if (result.success) {
@@ -911,9 +911,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全dataware_game_betting_info_hour历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='gameBettingHourStart']").getValue(),'Y-m-d H:i:s'),
-                            endTime: Ext.util.Format.date(me.down("[name='gameBettingHourEnd']").getValue(),'Y-m-d H:i:s')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='gameBettingHourStart']").getValue(), 'Y-m-d H:i:s'),
+                            endTime: Ext.util.Format.date(me.down("[name='gameBettingHourEnd']").getValue(), 'Y-m-d H:i:s')
                         };
                         callapi("data/admin/dataClean/gameBettingHourInfo.do", data, function (result) {
                             if (result.success) {
@@ -967,9 +967,9 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
             todoExec: function () {
                 Ext.Msg.confirm("确认", "确定要补全rechargeRate历史数据吗?", function (button) {
                     if (button == "yes") {
-                        var data= {
-                            startTime: Ext.util.Format.date(me.down("[name='rechargeRateStart']").getValue(),'Y-m-d'),
-                            endTime: Ext.util.Format.date(me.down("[name='rechargeRateEnd']").getValue(),'Y-m-d')
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='rechargeRateStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='rechargeRateEnd']").getValue(), 'Y-m-d')
                         };
                         callapi("data/admin/dataClean/historyRate.do", data, function (result) {
                             if (result.success) {
@@ -1002,6 +1002,62 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
 
             }, {
                 name: 'rechargeRateEnd',
+                fieldLabel: '结束日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }]
+        });
+
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '补全dataware_final_entrance_analysis',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要补全dataware_final_entrance_analysis历史数据吗?", function (button) {
+                    if (button == "yes") {
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='analysisStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='analysisEnd']").getValue(), 'Y-m-d')
+                        };
+                        callapi("data/admin/dataClean/entranceAnalysis.do", data, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            },
+            items: [{
+                name: 'analysisStart',
+                fieldLabel: '开始日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }, {
+                name: 'analysisEnd',
                 fieldLabel: '结束日期',
                 xtype: 'datefield',
                 format: 'Y-m-d'

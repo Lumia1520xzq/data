@@ -41,4 +41,7 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
         return dao.deleteByDate(params);
     }
 
+    public List<Long> getBettingUserIdListByDate(Map<String, Object> bettingParams) {
+        return dao.getBettingUserIdListByDate(bettingParams);
+    }
 }

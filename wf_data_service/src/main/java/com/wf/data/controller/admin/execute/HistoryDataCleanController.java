@@ -54,6 +54,8 @@ public class HistoryDataCleanController extends ExtJsController {
     private UserRegisteredHourService userRegisteredHourService;
     @Autowired
     private GameBettingInfoHourService gameBettingInfoHourService;
+    @Autowired
+    private EntranceAnalysisService entranceAnalysisService;
 
     /**
      * 清洗channelInfoHour表
@@ -80,7 +82,6 @@ public class HistoryDataCleanController extends ExtJsController {
         channelInfoHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
-
 
     /**
      * 清洗platSignedUser表
@@ -134,7 +135,6 @@ public class HistoryDataCleanController extends ExtJsController {
         return success("清洗开始执行");
     }
 
-
     /**
      * 清洗bettingLogDay表
      *
@@ -187,7 +187,6 @@ public class HistoryDataCleanController extends ExtJsController {
         return success("清洗开始执行");
     }
 
-
     /**
      * 清洗buryingPointDay表
      *
@@ -239,7 +238,6 @@ public class HistoryDataCleanController extends ExtJsController {
         buryingPointHourService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
-
 
     /**
      * 清洗convertDay表
@@ -345,7 +343,6 @@ public class HistoryDataCleanController extends ExtJsController {
         return success("清洗开始执行");
     }
 
-
     /**
      * 清洗registeredRetention
      *
@@ -371,7 +368,6 @@ public class HistoryDataCleanController extends ExtJsController {
         registeredRetentionService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
-
 
     /**
      * 清洗channelConversion
@@ -529,6 +525,27 @@ public class HistoryDataCleanController extends ExtJsController {
         }
 
         channelInfoAllService.historyRechargeRate(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    @RequestMapping("/entranceAnalysis")
+    @ResponseBody
+    public Object entranceAnalysis(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+
+        entranceAnalysisService.historyEntranceAnalysis(startTime, endTime);
         return success("清洗开始执行");
     }
 }

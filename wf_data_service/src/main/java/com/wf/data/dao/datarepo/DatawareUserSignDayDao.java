@@ -5,6 +5,7 @@ import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.datarepo.entity.DatawareUserSignDay;
 
+import java.util.List;
 import java.util.Map;
 
 @MyBatisDao(tableName = "dataware_user_sign_day")
@@ -18,4 +19,5 @@ public interface DatawareUserSignDayDao extends CrudDao<DatawareUserSignDay> {
 
     int updateUserGroup(Map<String, Object> map);
 
+    List<Long> getSignedUserIds(Map<String, Object> signParams);
 }

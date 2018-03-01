@@ -72,5 +72,19 @@
 	<delete id="delete">
 		UPDATE uic_behavior_record SET delete_flag = 1 WHERE ID = #{id}
 	</delete>
+
+	<select id="getUserIdsByEntrance" resultType="java.lang.Long">
+		SELECT
+		DISTINCT t.user_id
+		FROM
+		uic_behavior_record t
+		WHERE
+		t.channel_id = #{channelId}
+		AND t.behavior_event_id = #{eventId}
+		AND t.create_time >= CONCAT(#{beginDate} , ' 00:00:00')
+		AND t.create_time &lt;= CONCAT(#{beginDate} , ' 23:59:59')
+		AND t.user_id != 0
+		LIMIT #{limitCount}
+	</select>
 </mapper>
 

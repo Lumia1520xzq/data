@@ -28,10 +28,11 @@ public class DayFinalJob {
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final RegisteredArpuService registeredArpuService = SpringContextHolder.getBean(RegisteredArpuService.class);
     private final RegisteredRetentionService registeredRetentionService = SpringContextHolder.getBean(RegisteredRetentionService.class);
+    private final EntranceAnalysisService entranceAnalysisService = SpringContextHolder.getBean(EntranceAnalysisService.class);
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
-        try {
+        /*try {
             channelCostService.toDoChannelCostAnalysis();
         } catch (Exception e) {
             logger.error("toDoChannelCostAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
@@ -50,10 +51,15 @@ public class DayFinalJob {
             channelConversionService.toDoConversionAnalysis();
         } catch (Exception e) {
             logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }*/
+        //奖多多渠道各个入口用户数据总结
+        try {
+            entranceAnalysisService.toDoEntranceAnalysis();
+        } catch (Exception e) {
+            logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
-
-        String openStr = dataConfigService.getStringValueByName(DataConstants.DATA_FINAL_HOUR_OPEN);
+        /*String openStr = dataConfigService.getStringValueByName(DataConstants.DATA_FINAL_HOUR_OPEN);
 
         String[] openFlag = openStr.split(",");
 
@@ -71,7 +77,7 @@ public class DayFinalJob {
             }
         } catch (Exception e) {
             logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
-        }
+        }*/
 
         logger.info("每日任务调度总job结束:traceId={}", TraceIdUtils.getTraceId());
     }
