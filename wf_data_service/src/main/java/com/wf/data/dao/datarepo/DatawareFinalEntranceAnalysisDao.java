@@ -5,7 +5,10 @@ import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.datarepo.entity.DatawareFinalEntranceAnalysis;
 
+import java.util.List;
+import java.util.Map;
+
 @MyBatisDao(tableName = "dataware_final_entrance_analysis")
 public interface DatawareFinalEntranceAnalysisDao extends CrudDao<DatawareFinalEntranceAnalysis> {
-
+    List<DatawareFinalEntranceAnalysis> getAnalysisListByDate(Map<String,Object> params);
 }

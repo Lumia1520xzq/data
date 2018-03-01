@@ -5,7 +5,18 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.datarepo.DatawareFinalEntranceAnalysisDao">
-	
-
+    <select id="getAnalysisListByDate" resultType="DatawareFinalEntranceAnalysis">
+        SELECT <include refid="datawareFinalEntranceAnalysisColumns"/>
+        FROM dataware_final_entrance_analysis t
+        WHERE 1=1
+        AND t.delete_flag = 0
+        <if test="beginDate != null and beginDate != ''">
+            AND t.business_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.business_date &lt;= #{endDate}
+        </if>
+        order by t.business_date
+    </select>
 </mapper>
 
