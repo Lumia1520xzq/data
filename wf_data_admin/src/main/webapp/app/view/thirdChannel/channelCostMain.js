@@ -14,7 +14,7 @@ Ext.define('WF.view.thirdChannel.channelCostMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/channel/cost/list.do',
-            fields: ['userName', 'userId', 'activityName', 'phyAwardsName', 'rmbAmount', 'createTime'],
+            fields: ['userName', 'userId', 'activityName', 'phyAwardsName', 'rmbAmount', 'updateTime'],
             baseParams: {
                 parentId: me.parameters
             }
@@ -201,7 +201,7 @@ Ext.define('WF.view.thirdChannel.channelCostMain', {
             }, {
                 text: '变更时间',
                 width: 50,
-                dataIndex: 'createTime',
+                dataIndex: 'updateTime',
                 menuDisabled: true,
                 sortable: false
             }]
