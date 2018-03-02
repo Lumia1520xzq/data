@@ -198,6 +198,6 @@ public class EntranceAnalysisService {
         if (d1 == null || d2 == null || d2 == 0L) {
             return 0D;
         }
-        return BigDecimalUtil.div(d1, d2, 2);
+        return BigDecimalUtil.div(d1*100, d2, 2);
     }
 }
