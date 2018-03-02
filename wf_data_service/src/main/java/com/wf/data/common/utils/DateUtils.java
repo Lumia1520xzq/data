@@ -647,4 +647,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         defaultFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return defaultFormat.format(time);
     }
+
+    public  static String formatGTMDate(String date) {
+        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd");
+
+        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
+
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
+        Date time = null;
+        try {
+            time = defaultFormat.parse(date);
+            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return gmt.format(time);
+    }
 }
