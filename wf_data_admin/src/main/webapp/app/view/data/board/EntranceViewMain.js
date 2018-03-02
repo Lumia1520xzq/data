@@ -42,6 +42,9 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             columns: 3,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/entrance/analysis/export.do?businessDate=' + me.down(("[name='searchDate']")).value;
+            },
             items: [
                 {
                     name: 'searchDate',
