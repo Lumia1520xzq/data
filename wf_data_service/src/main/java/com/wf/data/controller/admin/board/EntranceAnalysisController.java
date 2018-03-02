@@ -2,18 +2,16 @@ package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.sun.scenario.effect.impl.prism.ps.PPStoPSWDisplacementMapPeer;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.datarepo.entity.DatawareFinalEntranceAnalysis;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.data.DatawareFinalEntranceAnalysisService;
+import jodd.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,10 +46,14 @@ public class EntranceAnalysisController extends ExtJsController{
      * @return
      */
     @RequestMapping(value = "export")
-    public void exportFile(@RequestParam String businessDate, HttpServletResponse response) {
+    public void exportFile(@Valid @RequestParam String businessDate, HttpServletResponse response) {
         List<DatawareFinalEntranceAnalysis> list = Lists.newArrayList();
         DatawareFinalEntranceAnalysis dto = new DatawareFinalEntranceAnalysis();
-        dto.setBusinessDate(businessDate);
+        if(StringUtil.isNotBlank(businessDate) && !"undefined".equals(businessDate)){
+            dto.setBusinessDate(DateUtils.formatGTMDate(businessDate));
+        }else {
+            dto.setBusinessDate(DateUtils.getYesterdayDate());
+        }
         try {
             list = datawareFinalEntranceAnalysisService.findList(dto, 1000);
             String fileName = "奖多多各入口用户分析表" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";

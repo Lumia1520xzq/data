@@ -26,12 +26,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</sql>
 	
 	<sql id="datawareFinalEntranceAnalysisWhere">
-		t.delete_flag = #{DEL_FLAG_NORMAL}
-		<if test="businessDate != null and businessDate != ''">
-			AND t.business_date = #{businessDate}
+		t.delete_flag = 0
+		<if test="p.businessDate != null and p.businessDate != ''">
+			AND t.business_date = #{p.businessDate}
 		</if>
-		<if test="eventId != null and eventId != ''">
-			AND t.event_id = #{eventId}
+		<if test="p.eventId != null and p.eventId != ''">
+			AND t.event_id = #{p.eventId}
 		</if>
 	</sql>
 	
@@ -43,7 +43,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="findList" resultType="DatawareFinalEntranceAnalysis">
 		SELECT <include refid="datawareFinalEntranceAnalysisColumns"/> FROM dataware_final_entrance_analysis t <include refid="datawareFinalEntranceAnalysisJoins"/>
-		WHERE <include refid="datawareFinalEntranceAnalysisWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+		WHERE <include refid="datawareFinalEntranceAnalysisWhere"/> ORDER BY id  LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_final_entrance_analysis t WHERE <include refid="datawareFinalEntranceAnalysisWhere" />
