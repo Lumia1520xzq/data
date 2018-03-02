@@ -169,6 +169,10 @@ public class EventController extends ExtJsController {
             params.setType("event_type");
             List<DataDict> eventTypeList = dataDictService.findList(params);
             for (DataEvent entity : list) {
+                //数据日期为空，不存储
+                if (StringUtils.isBlank(entity.getBeginDate())) {
+                    continue;
+                }
                 try {
                     entity.setCreater(AssertionHolder.getAssertion().getPrincipal().getName());
                     entity.setCreateTime(new Date());

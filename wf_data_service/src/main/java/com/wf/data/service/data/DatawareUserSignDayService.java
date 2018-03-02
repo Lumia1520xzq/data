@@ -5,6 +5,7 @@ import com.wf.data.dao.datarepo.DatawareUserSignDayDao;
 import com.wf.data.dao.datarepo.entity.DatawareUserSignDay;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,5 +27,9 @@ public class DatawareUserSignDayService extends CrudService<DatawareUserSignDayD
 
     public int updateUserGroup(Map<String, Object> map) {
         return dao.updateUserGroup(map);
+    }
+
+    public List<Long> getSignedUserIds(Map<String, Object> signParams) {
+        return dao.getSignedUserIds(signParams);
     }
 }

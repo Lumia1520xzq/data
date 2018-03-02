@@ -24,4 +24,6 @@ public interface DatawareBettingLogDayDao extends CrudDao<DatawareBettingLogDay>
     List<Long> getBettingUserIdByDate(Map<String, Object> params);
 
     int deleteByDate(Map<String, Object> params);
+
+    List<Long> getBettingUserIdListByDate(Map<String, Object> bettingParams);
 }

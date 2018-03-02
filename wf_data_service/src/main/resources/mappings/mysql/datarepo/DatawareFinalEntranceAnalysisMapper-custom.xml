@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalEntranceAnalysisDao">
+    <select id="getAnalysisListByDate" resultType="DatawareFinalEntranceAnalysis">
+        SELECT <include refid="datawareFinalEntranceAnalysisColumns"/>
+        FROM dataware_final_entrance_analysis t
+        WHERE 1=1
+        AND t.delete_flag = 0
+        <if test="beginDate != null and beginDate != ''">
+            AND t.business_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.business_date &lt;= #{endDate}
+        </if>
+        order by t.business_date
+    </select>
+	<select id="getEntranceAnalysisByDate" resultType="DatawareFinalEntranceAnalysis">
+        SELECT
+          <include refid="datawareFinalEntranceAnalysisColumns"/>
+        FROM
+            dataware_final_entrance_analysis t
+        WHERE
+            1 = 1
+        AND t.business_date = #{beginDate}
+    </select>
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_final_entrance_analysis
+        WHERE 1=1
+        <if test="beginDate != null and beginDate != ''">
+            AND business_date = #{beginDate}
+        </if>
+    </delete>
+
+</mapper>
+
