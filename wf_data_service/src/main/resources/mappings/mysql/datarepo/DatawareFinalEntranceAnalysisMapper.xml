@@ -43,7 +43,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="findList" resultType="DatawareFinalEntranceAnalysis">
 		SELECT <include refid="datawareFinalEntranceAnalysisColumns"/> FROM dataware_final_entrance_analysis t <include refid="datawareFinalEntranceAnalysisJoins"/>
-		WHERE <include refid="datawareFinalEntranceAnalysisWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+		WHERE <include refid="datawareFinalEntranceAnalysisWhere"/> ORDER BY id  LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM dataware_final_entrance_analysis t WHERE <include refid="datawareFinalEntranceAnalysisWhere" />
