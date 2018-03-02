@@ -2,15 +2,12 @@ package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.sun.scenario.effect.impl.prism.ps.PPStoPSWDisplacementMapPeer;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.datarepo.entity.DatawareFinalEntranceAnalysis;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.data.DatawareFinalEntranceAnalysisService;
@@ -103,10 +100,17 @@ public class EntranceAnalysisController extends ExtJsController{
         }
         List<Double> entranceDauRateList = new ArrayList<>();
         List<String> eventNameList = new ArrayList<>();
+        List<Double> entranceSignRateList = new ArrayList<>();
+        List<Double> entranceBettingRateList = new ArrayList<>();
+        List<Double> entrancePayRateList = new ArrayList<>();
         for(DatawareFinalEntranceAnalysis record:lastList){
             entranceDauRateList.add(record.getEntranceDauRate());
             eventNameList.add(record.getEventName());
+            entranceSignRateList.add(record.getEntranceSignRate());
+            entranceBettingRateList.add(record.getEntranceBettingRate());
+            entrancePayRateList.add(record.getEntrancePayRate());
         }
+
         //查找发现页多多游戏的dau
         List<Long> duoDuoDauList = new ArrayList<>();
         List<Long> iconDauList = new ArrayList<>();
@@ -129,47 +133,69 @@ public class EntranceAnalysisController extends ExtJsController{
         List<Double> actCenterDauRate = new ArrayList<>();
         List<Double> pushDauRate = new ArrayList<>();
         List<Double> strongAdvDauRate = new ArrayList<>();
+        //入口签到转化率
+        List<Double> duoduoSignRate = new ArrayList<>();
+        List<Double> iconSignRate = new ArrayList<>();
+        List<Double> bannerSignRate = new ArrayList<>();
+        List<Double> advSignRate = new ArrayList<>();
+        List<Double> gameSignRate = new ArrayList<>();
+        List<Double> rollSignRate = new ArrayList<>();
+        List<Double> pointSignRate = new ArrayList<>();
+        List<Double> actCenterSignRate = new ArrayList<>();
+        List<Double> pushSignRate = new ArrayList<>();
+        List<Double> strongAdvSignRate = new ArrayList<>();
+
         if(CollectionUtils.isNotEmpty(analysisList)){
             for(DatawareFinalEntranceAnalysis record:analysisList){
                 if(eventIds[0].equals(record.getEventId())){
                     duoDuoDauList.add(record.getEntranceDau());
                     duoduoDauRate.add(record.getEntranceDauRate());
+                    duoduoSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[1].equals(record.getEventId())){
                     iconDauList.add(record.getEntranceDau());
                     iconDauRate.add(record.getEntranceDauRate());
+                    iconSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[2].equals(record.getEventId())){
                     bannerDauList.add(record.getEntranceDau());
                     bannerDauRate.add(record.getEntranceDauRate());
+                    bannerSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[3].equals(record.getEventId())){
                     advDauList.add(record.getEntranceDau());
                     advDauRate.add(record.getEntranceDauRate());
+                    advSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[4].equals(record.getEventId())){
                     gameDauList.add(record.getEntranceDau());
                     gameDauRate.add(record.getEntranceDauRate());
+                    gameSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[5].equals(record.getEventId())){
                     rollDauList.add(record.getEntranceDau());
                     rollDauRate.add(record.getEntranceDauRate());
+                    rollSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[6].equals(record.getEventId())){
                     pointDauList.add(record.getEntranceDau());
                     pointDauRate.add(record.getEntranceDauRate());
+                    pointSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[7].equals(record.getEventId())){
                     actCenterDauList.add(record.getEntranceDau());
                     actCenterDauRate.add(record.getEntranceDauRate());
+                    actCenterSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[8].equals(record.getEventId())){
                     pushDauList.add(record.getEntranceDau());
                     pushDauRate.add(record.getEntranceDauRate());
+                    pushSignRate.add(record.getEntranceSignRate());
                 }
                 if(eventIds[9].equals(record.getEventId())){
                     strongAdvDauList.add(record.getEntranceDau());
                     strongAdvDauRate.add(record.getEntranceDauRate());
+                    strongAdvSignRate.add(record.getEntranceSignRate());
                 }
             }
         }
@@ -208,6 +234,22 @@ public class EntranceAnalysisController extends ExtJsController{
 
         map.put("strongAdvDauList",strongAdvDauList);
         map.put("strongAdvDauRate",strongAdvDauRate);
+
+        map.put("entranceSignRateList",entranceSignRateList);
+        map.put("entranceBettingRateList",entranceBettingRateList);
+        map.put("entrancePayRateList",entrancePayRateList);
+
+
+        map.put("duoduoSignRate",duoduoSignRate);
+        map.put("iconSignRate",iconSignRate);
+        map.put("bannerSignRate",bannerSignRate);
+        map.put("advSignRate",advSignRate);
+        map.put("gameSignRate",gameSignRate);
+        map.put("rollSignRate",rollSignRate);
+        map.put("pointSignRate",pointSignRate);
+        map.put("actCenterSignRate",actCenterSignRate);
+        map.put("pushSignRate",pushSignRate);
+        map.put("strongAdvSignRate",strongAdvSignRate);
 
         List<Map<String,Object>> list = new ArrayList<>();
         list.add(map);
