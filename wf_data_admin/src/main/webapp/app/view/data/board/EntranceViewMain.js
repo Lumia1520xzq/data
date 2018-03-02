@@ -16,7 +16,17 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             url:'/data/entrance/analysis/getList.do',
             autoload:false,
             fields:['entranceDauRateList','eventNameList','searchDate','dateList',
-                'yeDuoDuoDauList','yeDuoduoEntranceDauRate'
+                'duoDuoDauList','duoduoDauRate',
+                'iconDauList','iconDauRate',
+
+                'bannerDauList','bannerDauRate',
+                'advDauList','advDauRate',
+                'gameDauList','gameDauRate',
+                'rollDauList','rollDauRate',
+                'pointDauList','pointDauRate',
+                'actCenterDauList','actCenterDauRate',
+                'pushDauList','pushDauRate',
+                'strongAdvDauList','strongAdvDauRate'
             ]
         });
 
@@ -85,8 +95,67 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var eventNameList = store.getAt(0).get("eventNameList");
             var searchDate = store.getAt(0).get("searchDate");
             var dateList = store.getAt(0).get("dateList");
-            var yeDuoDuoDauList = store.getAt(0).get("yeDuoDuoDauList");
-            var yeDuoduoEntranceDauRate = store.getAt(0).get("yeDuoduoEntranceDauRate");
+
+
+
+            var duoDuoDauList = store.getAt(0).get("duoDuoDauList");
+            var iconDauList = store.getAt(0).get("iconDauList");
+            var bannerDauList = store.getAt(0).get("bannerDauList");
+            var advDauList = store.getAt(0).get("advDauList");
+            var gameDauList = store.getAt(0).get("gameDauList");
+            var rollDauList = store.getAt(0).get("rollDauList");
+            var pointDauList = store.getAt(0).get("pointDauList");
+            var actCenterDauList = store.getAt(0).get("actCenterDauList");
+            var pushDauList = store.getAt(0).get("pushDauList");
+            var strongAdvDauList = store.getAt(0).get("strongAdvDauList");
+
+            var duoduoDauRate = store.getAt(0).get("duoduoDauRate");
+            var iconDauRate = store.getAt(0).get("iconDauRate");
+            var bannerDauRate = store.getAt(0).get("bannerDauRate");
+            var advDauRate = store.getAt(0).get("advDauRate");
+            var gameDauRate = store.getAt(0).get("gameDauRate");
+            var rollDauRate = store.getAt(0).get("rollDauRate");
+            var pointDauRate = store.getAt(0).get("pointDauRate");
+            var actCenterDauRate = store.getAt(0).get("actCenterDauRate");
+            var pushDauRate = store.getAt(0).get("pushDauRate");
+            var strongAdvDauRate = store.getAt(0).get("strongAdvDauRate");
+
+            var dauList=[];
+            dauList.push(duoDuoDauList);
+            dauList.push(iconDauList);
+            dauList.push(bannerDauList);
+            dauList.push(advDauList);
+            dauList.push(gameDauList);
+            dauList.push(rollDauList);
+            dauList.push(pointDauList);
+            dauList.push(actCenterDauList);
+            dauList.push(pushDauList);
+            dauList.push(strongAdvDauList);
+
+            var dauRate=[];
+            dauRate.push(duoduoDauRate);
+            dauRate.push(iconDauRate);
+            dauRate.push(bannerDauRate);
+            dauRate.push(advDauRate);
+            dauRate.push(gameDauRate);
+            dauRate.push(rollDauRate);
+            dauRate.push(pointDauRate);
+            dauRate.push(actCenterDauRate);
+            dauRate.push(pushDauRate);
+            dauRate.push(strongAdvDauRate);
+
+            var titleList = [];
+            titleList.push("发现页多多游戏入口--DAU及占比");
+            titleList.push("首页顶部banner右侧小图标入口--DAU及占比");
+            titleList.push("首页顶部banner入口--DAU及占比");
+            titleList.push("新增广告位入口--DAU及占比");
+            titleList.push("我的福利任务(玩游戏)入口--DAU及占比");
+            titleList.push("幸运大转盘(金叶子跳转)入口--DAU及占比");
+            titleList.push("我的积分商城(金叶子跳转)入口--DAU及占比");
+            titleList.push("发现页活动中心入口--DAU及占比");
+            titleList.push("push入口--DAU及占比");
+            titleList.push("强广位入口--DAU及占比");
+
             var arrays =[];
             for(var i = 0;i < entranceDauRateList.length;i++){
                 arrays[i] = {
@@ -127,9 +196,9 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     }
                 ]
             };
+            fun2(titleList[0],dateList,dauList[0],dauRate[0]);
             me.echarts = echarts.init(Ext.get("entPie").dom);
             me.echarts.setOption(pieOption);
-            fun2("发现页多多游戏入口--DAU及占比",dateList,yeDuoDuoDauList,yeDuoduoEntranceDauRate);
 
             // 增加监听事件
             function eConsole(param) {
@@ -137,16 +206,15 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     if (param.type == 'click') {
                         var pieLenght= pieOption.legend.data.length;
                         for(var i=0;i<pieLenght;i++){
-                            everyClick(param,i,pieOption.legend.data[i],data_url[i])
+                            everyClick(param,i,pieOption.legend.data[i],titleList[i],dateList,dauList[i],dauRate[i]);
                         }
                     }
                 }
             }
 
-            var data_url=['http://www.qq.com/','http://www.baidu.com/','http://www.sina.com/','http://www.163.com/','http://www.tmall.com/'];
-            function everyClick(param,i,txt,url){
+            function everyClick(param,i,txt,title,dateList,dauList,dauRate){
                 if(param.seriesIndex==0 && param.dataIndex==i){
-                    window.open (url,'_parent','height=100,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+                    fun2(title,dateList,dauList,dauRate);
                 }
             }
             me.echarts.on("click", eConsole);
@@ -166,7 +234,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                                str +=  params[i].seriesName +':'+params[i].value +"<br/>";
                             }
                             return str;
                         }

@@ -85,7 +85,7 @@ public class EntranceAnalysisController extends ExtJsController{
         //开始时间往前推14天
         String beginDate = DateUtils.getPrevDate(searchDate,14);
         params.put("beginDate",beginDate);
-        params.put("endate",searchDate);
+        params.put("endDate",searchDate);
         //所有的数据
         List<DatawareFinalEntranceAnalysis> analysisList = datawareFinalEntranceAnalysisService.getAnalysisListByDate(params);
         //查找出最后一天的数据
@@ -107,15 +107,69 @@ public class EntranceAnalysisController extends ExtJsController{
             entranceDauRateList.add(record.getEntranceDauRate());
             eventNameList.add(record.getEventName());
         }
-        //查找每天页多多游戏的dau
-        List<Long> yeDuoDuoDauList = new ArrayList<>();
-        //页多多游戏入口dau占比
-        List<Double> yeDuoduoEntranceDauRate = new ArrayList<>();
+        //查找发现页多多游戏的dau
+        List<Long> duoDuoDauList = new ArrayList<>();
+        List<Long> iconDauList = new ArrayList<>();
+        List<Long> bannerDauList = new ArrayList<>();
+        List<Long> advDauList = new ArrayList<>();
+        List<Long> gameDauList = new ArrayList<>();
+        List<Long> rollDauList = new ArrayList<>();
+        List<Long> pointDauList = new ArrayList<>();
+        List<Long> actCenterDauList = new ArrayList<>();
+        List<Long> pushDauList = new ArrayList<>();
+        List<Long> strongAdvDauList = new ArrayList<>();
+        //发现页多多游戏入口dau占比
+        List<Double> duoduoDauRate = new ArrayList<>();
+        List<Double> iconDauRate = new ArrayList<>();
+        List<Double> bannerDauRate = new ArrayList<>();
+        List<Double> advDauRate = new ArrayList<>();
+        List<Double> gameDauRate = new ArrayList<>();
+        List<Double> rollDauRate = new ArrayList<>();
+        List<Double> pointDauRate = new ArrayList<>();
+        List<Double> actCenterDauRate = new ArrayList<>();
+        List<Double> pushDauRate = new ArrayList<>();
+        List<Double> strongAdvDauRate = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(analysisList)){
             for(DatawareFinalEntranceAnalysis record:analysisList){
                 if(eventIds[0].equals(record.getEventId())){
-                    yeDuoDuoDauList.add(record.getEntranceDau());
-                    yeDuoduoEntranceDauRate.add(record.getEntranceDauRate());
+                    duoDuoDauList.add(record.getEntranceDau());
+                    duoduoDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[1].equals(record.getEventId())){
+                    iconDauList.add(record.getEntranceDau());
+                    iconDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[2].equals(record.getEventId())){
+                    bannerDauList.add(record.getEntranceDau());
+                    bannerDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[3].equals(record.getEventId())){
+                    advDauList.add(record.getEntranceDau());
+                    advDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[4].equals(record.getEventId())){
+                    gameDauList.add(record.getEntranceDau());
+                    gameDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[5].equals(record.getEventId())){
+                    rollDauList.add(record.getEntranceDau());
+                    rollDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[6].equals(record.getEventId())){
+                    pointDauList.add(record.getEntranceDau());
+                    pointDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[7].equals(record.getEventId())){
+                    actCenterDauList.add(record.getEntranceDau());
+                    actCenterDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[8].equals(record.getEventId())){
+                    pushDauList.add(record.getEntranceDau());
+                    pushDauRate.add(record.getEntranceDauRate());
+                }
+                if(eventIds[9].equals(record.getEventId())){
+                    strongAdvDauList.add(record.getEntranceDau());
+                    strongAdvDauRate.add(record.getEntranceDauRate());
                 }
             }
         }
@@ -124,8 +178,37 @@ public class EntranceAnalysisController extends ExtJsController{
         map.put("entranceDauRateList",entranceDauRateList);
         map.put("eventNameList",eventNameList);
         map.put("searchDate",searchDate);
-        map.put("yeDuoDuoDauList",yeDuoDuoDauList);
-        map.put("yeDuoduoEntranceDauRate",yeDuoduoEntranceDauRate);
+
+        map.put("duoDuoDauList",duoDuoDauList);
+        map.put("duoduoDauRate",duoduoDauRate);
+
+        map.put("iconDauList",iconDauList);
+        map.put("iconDauRate",iconDauRate);
+
+        map.put("bannerDauList",bannerDauList);
+        map.put("bannerDauRate",bannerDauRate);
+
+        map.put("advDauList",advDauList);
+        map.put("advDauRate",advDauRate);
+
+        map.put("gameDauList",gameDauList);
+        map.put("gameDauRate",gameDauRate);
+
+        map.put("rollDauList",rollDauList);
+        map.put("rollDauRate",rollDauRate);
+
+        map.put("pointDauList",pointDauList);
+        map.put("pointDauRate",pointDauRate);
+
+        map.put("actCenterDauList",actCenterDauList);
+        map.put("actCenterDauRate",actCenterDauRate);
+
+        map.put("pushDauList",pushDauList);
+        map.put("pushDauRate",pushDauRate);
+
+        map.put("strongAdvDauList",strongAdvDauList);
+        map.put("strongAdvDauRate",strongAdvDauRate);
+
         List<Map<String,Object>> list = new ArrayList<>();
         list.add(map);
         return list;
