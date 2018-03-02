@@ -20,7 +20,7 @@ public class DataEvent extends DataEntity {
     private String updaterName;
     private String eventTypeName;
 
-    @ExcelField(title = "渠道", type = 1, align = 1, sort = 10)
+    @ExcelField(title = "渠道", type = 0, align = 1, sort = 10)
     public Long getChannelId() {
         return this.channelId;
     }
