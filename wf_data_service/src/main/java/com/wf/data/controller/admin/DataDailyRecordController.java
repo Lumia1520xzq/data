@@ -154,6 +154,10 @@ public class DataDailyRecordController extends ExtJsController {
             List<DataDict> indicatorTypeList = dataDictService.findList(params);
 
             for (DataDailyRecord entity : list) {
+                //数据日期为空，不存储
+                if(StringUtils.isBlank(entity.getDataTime())){
+                    continue;
+                }
                 try {
                     //插入指标
                     if (StringUtils.isNotBlank(entity.getIndicatorTypeName())) {
