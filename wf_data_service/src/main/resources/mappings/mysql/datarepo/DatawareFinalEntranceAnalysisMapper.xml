@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalEntranceAnalysisDao">
+	
+	<sql id="datawareFinalEntranceAnalysisColumns">
+		t.id,
+		t.event_id,
+		t.event_name,
+		t.entrance_dau,
+		t.entrance_dau_rate,
+		t.entrance_sign,
+		t.entrance_sign_rate,
+		t.entrance_betting,
+		t.entrance_betting_rate,
+		t.entrance_pay,
+		t.entrance_pay_rate,
+		t.entrance_day_retention,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareFinalEntranceAnalysisWhere">
+		t.delete_flag = 0
+		<if test="p.businessDate != null and p.businessDate != ''">
+			AND t.business_date = #{p.businessDate}
+		</if>
+		<if test="p.eventId != null and p.eventId != ''">
+			AND t.event_id = #{p.eventId}
+		</if>
+	</sql>
+	
+	<sql id="datawareFinalEntranceAnalysisJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareFinalEntranceAnalysis">
+		SELECT <include refid="datawareFinalEntranceAnalysisColumns"/> FROM dataware_final_entrance_analysis t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalEntranceAnalysis">
+		SELECT <include refid="datawareFinalEntranceAnalysisColumns"/> FROM dataware_final_entrance_analysis t <include refid="datawareFinalEntranceAnalysisJoins"/>
+		WHERE <include refid="datawareFinalEntranceAnalysisWhere"/> ORDER BY id  LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_entrance_analysis t WHERE <include refid="datawareFinalEntranceAnalysisWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_final_entrance_analysis (
+			id, 
+			event_id, 
+			event_name, 
+			entrance_dau, 
+			entrance_dau_rate, 
+			entrance_sign, 
+			entrance_sign_rate, 
+			entrance_betting, 
+			entrance_betting_rate, 
+			entrance_pay, 
+			entrance_pay_rate, 
+			entrance_day_retention, 
+			business_date, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{eventId}, 
+			#{eventName}, 
+			#{entranceDau}, 
+			#{entranceDauRate}, 
+			#{entranceSign}, 
+			#{entranceSignRate}, 
+			#{entranceBetting}, 
+			#{entranceBettingRate}, 
+			#{entrancePay}, 
+			#{entrancePayRate}, 
+			#{entranceDayRetention}, 
+			#{businessDate}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_final_entrance_analysis SET
+			event_id = #{eventId}, 
+			event_name = #{eventName}, 
+			entrance_dau = #{entranceDau}, 
+			entrance_dau_rate = #{entranceDauRate}, 
+			entrance_sign = #{entranceSign}, 
+			entrance_sign_rate = #{entranceSignRate}, 
+			entrance_betting = #{entranceBetting}, 
+			entrance_betting_rate = #{entranceBettingRate}, 
+			entrance_pay = #{entrancePay}, 
+			entrance_pay_rate = #{entrancePayRate}, 
+			entrance_day_retention = #{entranceDayRetention}, 
+			business_date = #{businessDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_entrance_analysis SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

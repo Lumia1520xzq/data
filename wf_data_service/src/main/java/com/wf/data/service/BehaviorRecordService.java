@@ -6,6 +6,9 @@ import com.wf.data.dao.mycatdata.entity.BehaviorRecord;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class BehaviorRecordService extends CrudService<BehaviorRecordDao, BehaviorRecord> {
 
@@ -16,5 +19,9 @@ public class BehaviorRecordService extends CrudService<BehaviorRecordDao, Behavi
 			entity.setUserId(0L);
 		}
 		super.save(entity);
+	}
+
+	public List<Long> getUserIdsByEntrance(Map<String, Object> dauParams) {
+		return dao.getUserIdsByEntrance(dauParams);
 	}
 }
