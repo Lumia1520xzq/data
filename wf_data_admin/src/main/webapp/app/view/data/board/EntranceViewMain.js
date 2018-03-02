@@ -3,7 +3,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
     title: '数据看板-奖多多各入口用户分析',
     xtype: 'EntranceViewMain',
     closable: true,
-    autoScroll:true,
+    autoScroll: true,
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -12,21 +12,21 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
     initComponent: function () {
         var me = this;
         me.callParent(arguments);
-        var store= Ext.create('DCIS.Store', {
-            url:'/data/entrance/analysis/getList.do',
-            autoload:false,
-            fields:['entranceDauRateList','eventNameList','searchDate','dateList',
-                'duoDuoDauList','duoduoDauRate',
-                'iconDauList','iconDauRate',
+        var store = Ext.create('DCIS.Store', {
+            url: '/data/entrance/analysis/getList.do',
+            autoload: false,
+            fields: ['entranceDauRateList', 'eventNameList', 'searchDate', 'dateList',
+                'duoDuoDauList', 'duoduoDauRate',
+                'iconDauList', 'iconDauRate',
 
-                'bannerDauList','bannerDauRate',
-                'advDauList','advDauRate',
-                'gameDauList','gameDauRate',
-                'rollDauList','rollDauRate',
-                'pointDauList','pointDauRate',
-                'actCenterDauList','actCenterDauRate',
-                'pushDauList','pushDauRate',
-                'strongAdvDauList','strongAdvDauRate'
+                'bannerDauList', 'bannerDauRate',
+                'advDauList', 'advDauRate',
+                'gameDauList', 'gameDauRate',
+                'rollDauList', 'rollDauRate',
+                'pointDauList', 'pointDauRate',
+                'actCenterDauList', 'actCenterDauRate',
+                'pushDauList', 'pushDauRate',
+                'strongAdvDauList', 'strongAdvDauRate'
             ]
         });
 
@@ -40,6 +40,9 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             columns: 3,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/entrance/analysis/export.do?businessDate=' + me.down(("[name='searchDate']")).value;
+            },
             items: [
                 {
                     name: 'searchDate',
@@ -52,50 +55,65 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
         });
 
         me.add({
-            xtype:'panel',
-            layout:'vbox',
-            align : 'stretch',
-            bodyStyle:'border-width:0 0 0 0;',
+            xtype: 'panel',
+            layout: 'vbox',
+            align: 'stretch',
+            bodyStyle: 'border-width:0 0 0 0;',
             items: [{
-                title: '各入口数据',align:'stretch',height:380,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
-                items:[
-                    {width:"100%",height:380,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                        {id:'entPie',width:"45%",height:380,xtype:"panel",layout:'vbox',forceFit:true
-                            // items:[
-                            //     {id:'entPie',width:'100%',height:300,forceFit:true,}
-                            // ]
-                        },
+                title: '各入口数据',
+                align: 'stretch',
+                height: 380,
+                width: "100%",
+                xtype: "panel",
+                layout: 'vbox',
+                bodyStyle: 'border-width:0',
+                forceFit: true,
+                items: [
+                    {
+                        width: "100%",
+                        height: 380,
+                        xtype: "panel",
+                        layout: 'hbox',
+                        forceFit: true,
+                        bodyStyle: 'border-width:0',
+                        items: [
+                            {
+                                id: 'entPie', width: "45%", height: 380, xtype: "panel", layout: 'vbox', forceFit: true
+                                // items:[
+                                //     {id:'entPie',width:'100%',height:300,forceFit:true,}
+                                // ]
+                            },
 
-                        {id:'entMix',width:"45%",height:380,xtype:"panel",layout:'vbox',forceFit:true
-                            // items:[
-                            //     {id:'entMix',width:'100%',height:300,forceFit:true,bodyStyle:'border-width:0'}
-                            // ]
-                        },
-                        {width:"10%",height:380,xtype:"panel",forceFit:true,bodyStyle:'border-width:0'}
+                            {
+                                id: 'entMix', width: "45%", height: 380, xtype: "panel", layout: 'vbox', forceFit: true
+                                // items:[
+                                //     {id:'entMix',width:'100%',height:300,forceFit:true,bodyStyle:'border-width:0'}
+                                // ]
+                            },
+                            {width: "10%", height: 380, xtype: "panel", forceFit: true, bodyStyle: 'border-width:0'}
                         ]
-                      }
-                   ]
-                }
+                    }
+                ]
+            }
             ]
         });
 
-        store.addListener('datachanged',function(){
+        store.addListener('datachanged', function () {
                 fun1();
             }
         );
 
-        store.load ({
-            callback:function(){
+        store.load({
+            callback: function () {
                 fun1();
             }
         });
 
-        function fun1(){
+        function fun1() {
             var entranceDauRateList = store.getAt(0).get("entranceDauRateList");
             var eventNameList = store.getAt(0).get("eventNameList");
             var searchDate = store.getAt(0).get("searchDate");
             var dateList = store.getAt(0).get("dateList");
-
 
 
             var duoDuoDauList = store.getAt(0).get("duoDuoDauList");
@@ -120,7 +138,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var pushDauRate = store.getAt(0).get("pushDauRate");
             var strongAdvDauRate = store.getAt(0).get("strongAdvDauRate");
 
-            var dauList=[];
+            var dauList = [];
             dauList.push(duoDuoDauList);
             dauList.push(iconDauList);
             dauList.push(bannerDauList);
@@ -132,7 +150,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             dauList.push(pushDauList);
             dauList.push(strongAdvDauList);
 
-            var dauRate=[];
+            var dauRate = [];
             dauRate.push(duoduoDauRate);
             dauRate.push(iconDauRate);
             dauRate.push(bannerDauRate);
@@ -156,47 +174,47 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             titleList.push("push入口--DAU及占比");
             titleList.push("强广位入口--DAU及占比");
 
-            var arrays =[];
-            for(var i = 0;i < entranceDauRateList.length;i++){
+            var arrays = [];
+            for (var i = 0; i < entranceDauRateList.length; i++) {
                 arrays[i] = {
-                    value:entranceDauRateList[i],
-                    name:eventNameList[i]
+                    value: entranceDauRateList[i],
+                    name: eventNameList[i]
                 }
             }
 
             var pieOption = {
-                title : {
-                    text: searchDate +'活跃用户各入口来源比例',
-                    x:'center',
-                    textStyle:{ //标题内容的样式
-                        fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
-                        fontWeight:"bold",//可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
-                        fontFamily:"san-serif",//主题文字字体，默认微软雅黑
-                        fontSize:22//主题文字字体大小，默认为18px
+                title: {
+                    text: searchDate + '活跃用户各入口来源比例',
+                    x: 'center',
+                    textStyle: { //标题内容的样式
+                        fontStyle: 'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                        fontWeight: "bold",//可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
+                        fontFamily: "san-serif",//主题文字字体，默认微软雅黑
+                        fontSize: 22//主题文字字体大小，默认为18px
                     }
                 },
-                tooltip : {
+                tooltip: {
                     trigger: 'item',
                     formatter: "{a}<br/>{b}:{c}({d}%)"
                 },
                 legend: {
-                    orient:'vertical',
-                    x:'3%',
-                    top:'5%',
-                    data:eventNameList
+                    orient: 'vertical',
+                    x: '3%',
+                    top: '5%',
+                    data: eventNameList
                 },
-                calculable : true,
-                series : [
+                calculable: true,
+                series: [
                     {
-                        name:'入口来源',
-                        type:'pie',
-                        radius:'55%',
-                        center: ['50%','60%'],
-                        data:arrays
+                        name: '入口来源',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: arrays
                     }
                 ]
             };
-            fun2(titleList[0],dateList,dauList[0],dauRate[0]);
+            fun2(titleList[0], dateList, dauList[0], dauRate[0]);
             me.echarts = echarts.init(Ext.get("entPie").dom);
             me.echarts.setOption(pieOption);
 
@@ -204,75 +222,81 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             function eConsole(param) {
                 if (typeof param.seriesIndex != 'undefined') {
                     if (param.type == 'click') {
-                        var pieLenght= pieOption.legend.data.length;
-                        for(var i=0;i<pieLenght;i++){
-                            everyClick(param,i,pieOption.legend.data[i],titleList[i],dateList,dauList[i],dauRate[i]);
+                        var pieLenght = pieOption.legend.data.length;
+                        for (var i = 0; i < pieLenght; i++) {
+                            everyClick(param, i, pieOption.legend.data[i], titleList[i], dateList, dauList[i], dauRate[i]);
                         }
                     }
                 }
             }
 
-            function everyClick(param,i,txt,title,dateList,dauList,dauRate){
-                if(param.seriesIndex==0 && param.dataIndex==i){
-                    fun2(title,dateList,dauList,dauRate);
+            function everyClick(param, i, txt, title, dateList, dauList, dauRate) {
+                if (param.seriesIndex == 0 && param.dataIndex == i) {
+                    fun2(title, dateList, dauList, dauRate);
                 }
             }
+
             me.echarts.on("click", eConsole);
         }
 
-        function fun2(title,dateList,dauList,dauRateList){
+        function fun2(title, dateList, dauList, dauRateList) {
             var mixOption =
                 {
-                    title: {text:title,left:'center',
-                        textStyle:{//标题内容的样式
-                            fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                    title: {
+                        text: title, left: 'center',
+                        textStyle: {//标题内容的样式
+                            fontStyle: 'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
                             // fontWeight:"bold",
-                            fontFamily:"san-serif",//主题文字字体，默认微软雅黑
-                            fontSize:18//主题文字字体大小，默认为18px
-                        }},
-                    tooltip: {trigger: 'axis',
+                            fontFamily: "san-serif",//主题文字字体，默认微软雅黑
+                            fontSize: 18//主题文字字体大小，默认为18px
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
                         formatter: function (params) {
-                            var str='';
-                            for(var i = 0; i < params.length; i++){
-                                str +=  params[i].seriesName +':'+params[i].value +"<br/>";
+                            var str = '';
+                            for (var i = 0; i < params.length; i++) {
+                                str += params[i].seriesName + ':' + params[i].value + "<br/>";
                             }
                             return str;
                         }
                     },
                     toolbox: {
-                        show : true,
-                        feature : {
-                            mark : {show: true}
+                        show: true,
+                        feature: {
+                            mark: {show: true}
                         }
                     },
-                    calculable : true,
-                    grid:{
-                        left:'4%',
-                        top:'20%',
-                        right:'6%',
-                        bottom:'13%'
+                    calculable: true,
+                    grid: {
+                        left: '4%',
+                        top: '20%',
+                        right: '6%',
+                        bottom: '13%'
                     },
                     xAxis: {
-                        type : 'category',
+                        type: 'category',
                         data: dateList,
-                        "axisLabel":{
+                        "axisLabel": {
                             interval: 0,
-                            rotate:20
+                            rotate: 20
                         }
                     },
                     yAxis: [
-                        {type : 'value',
-                        name:"DAU",
-                        axisLabel : {
-                            formatter: '{value}'
-                        }
+                        {
+                            type: 'value',
+                            name: "DAU",
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
                             // splitLine: {          // 控制Y轴的分隔线(辅助线)
                             //     show: false      // 默认显示，属性show控制显示与
                             // }
                         },
-                        {type : 'value',
-                            name:"DAU占比",
-                            axisLabel : {
+                        {
+                            type: 'value',
+                            name: "DAU占比",
+                            axisLabel: {
                                 formatter: '{value}%'
                             },
                             splitLine: {          // 控制Y轴的分隔线(辅助线)
@@ -283,33 +307,33 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     series: [{
                         name: 'DAU',
                         type: 'bar',
-                        smooth:true,
+                        smooth: true,
                         data: dauList,
                         barWidth: 30,
-                        itemStyle:{
-                            normal:{
-                                color:'cornflowerblue'
+                        itemStyle: {
+                            normal: {
+                                color: 'cornflowerblue'
                             }
                         }
                     },
-                    {
-                        name: 'DAU占比',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        smooth:true,
-                        data: dauRateList,
-                        itemStyle:{
-                            normal:{
-                                color:'green'
+                        {
+                            name: 'DAU占比',
+                            type: 'line',
+                            yAxisIndex: 1,
+                            smooth: true,
+                            data: dauRateList,
+                            itemStyle: {
+                                normal: {
+                                    color: 'green'
+                                }
                             }
                         }
-                    }
                     ]
                 };
-              me.echarts = echarts.init(Ext.get("entMix").dom);
-              me.echarts.setOption(mixOption);
-           }
-      }
+            me.echarts = echarts.init(Ext.get("entMix").dom);
+            me.echarts.setOption(mixOption);
+        }
+    }
 });
 
 
