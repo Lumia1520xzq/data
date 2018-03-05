@@ -1,0 +1,167 @@
+package com.wf.data.service.docking;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.wf.core.log.LogExceptionStackTrace;
+import com.wf.core.utils.APIUtils;
+import com.wf.core.utils.GfJsonUtil;
+import com.wf.core.utils.TraceIdUtils;
+import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dto.JddUserTagDto;
+import com.wf.data.service.UicUserService;
+import org.apache.commons.collections.CollectionUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 定时推送奖多多彩票ID
+ * 1、游戏平台的全量用户彩票ID
+ * 2、昨日新增用户彩票ID
+ *
+ * @author chengsheng.liu
+ * @date 2018年3月5日
+ */
+@Service
+public class SendThirdIdToJddService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private UicUserService uicUserService;
+
+    @Value("${jdd.baseUrl}")
+    private String baseUrl;
+
+    @Value("${jdd.thirdId.url}")
+    private String url;
+
+    private final long pageSize = 5000;
+
+    public void toDoAnalysis() {
+        //昨日新增用户彩票ID
+        Map<String, Object> params = new HashMap<>();
+        String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
+        String endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
+        params.put("userSource", 2);
+        params.put("beginDate", beginDate);
+        params.put("endDate", endDate);
+        getThirdId(params);
+
+        //游戏平台的全量用户彩票ID
+        Map<String, Object> map = new HashMap<>();
+        String endTime = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
+        map.put("userSource", 2);
+        map.put("endDate", endTime);
+        getThirdId(map);
+    }
+
+
+    /**
+     * 昨日新增用户彩票ID
+     */
+    private void getThirdId(Map<String, Object> params) {
+
+        long count = uicUserService.getCountByDate(params);
+        if (count == 0) {
+            return;
+        }
+        //总页数
+        long totalPage = getTotalPage(count);
+        String uuid = APIUtils.getUUID();
+        for (long i = 0; i < totalPage; i++) {
+            long startIndex = getStartIndex(i);
+            params.put("start", startIndex);
+            params.put("length", pageSize);
+            List<String> thirdIdList = uicUserService.getThirdIdList(params);
+
+            if (CollectionUtils.isNotEmpty(thirdIdList)) {
+                String batchEndFlag = "0";
+                if (i++ == totalPage) {
+                    batchEndFlag = "1";
+                }
+                sendThirdId(thirdIdList, uuid, batchEndFlag);
+            }
+
+        }
+
+    }
+
+    public void sendThirdId(List<String> thirdIdList, String uuid, String batchEndFlag) {
+        JddUserTagDto dto = new JddUserTagDto();
+
+        String userIds = String.join(",", thirdIdList).trim();
+        dto.setUserIds(userIds);
+        dto.setBatchId(uuid);
+        dto.setBatchEndFlag(batchEndFlag);
+        dto.setFrom("wf-game");
+        dto.setTagId("");
+
+        request(baseUrl + url, dto);
+    }
+
+    /**
+     * 请求
+     *
+     * @param uri
+     * @param bean
+     * @return
+     */
+    public void request(String uri, JddUserTagDto bean) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(bean);
+            JsonNode response = Unirest.post(uri).body(json).asJson().getBody();
+            if (response.getObject() == null) {
+                logger.error("请求返回值为空:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(json), TraceIdUtils.getTraceId());
+            } else {
+                JSONObject object = new JSONObject(response);
+                boolean result = object.getInt("code") == 0;
+                String data = object.getJSONObject("data").toString();
+                if (!result) {
+                    logger.error("请求数据异常:uri={},data={},json={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(data), GfJsonUtil.toJSONString(bean.toString()), TraceIdUtils.getTraceId());
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("请求数据异常:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(bean.toString()), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+        }
+    }
+
+    /**
+     * 获取分页开始条数ID
+     *
+     * @param pageNum 当前页
+     * @return
+     */
+    private long getStartIndex(long pageNum) {
+        return pageNum * pageSize;
+    }
+
+    /**
+     * 获取总页数
+     *
+     * @param totalRecord
+     * @return
+     */
+    private long getTotalPage(long totalRecord) {
+        long totalPage = 0L;
+        if (totalRecord % pageSize == 0) {
+            totalPage = totalRecord / pageSize;
+        } else {
+            totalPage = totalRecord / pageSize + 1;
+        }
+        return totalPage;
+    }
+
+
+}
