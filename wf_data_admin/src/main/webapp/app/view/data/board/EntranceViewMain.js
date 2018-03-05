@@ -356,7 +356,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                 },
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a}<br/>{b}:{c}({d}%)"
+                    formatter: "{a}:{b}<br/>DAU:{c}<br/>DAU占比:{d}%"
                 },
                 legend: {
                     orient:'vertical',
