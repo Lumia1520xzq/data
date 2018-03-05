@@ -9,7 +9,6 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.datarepo.entity.DatawareFinalEntranceAnalysis;
-import com.wf.data.service.DataDictService;
 import com.wf.data.service.data.DatawareFinalEntranceAnalysisService;
 import jodd.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -35,8 +34,6 @@ public class EntranceAnalysisController extends ExtJsController{
 
     @Autowired
     private DatawareFinalEntranceAnalysisService datawareFinalEntranceAnalysisService;
-    @Autowired
-    private DataDictService dictService;
     private static final Long[] eventIds = {139904L,139902L,139901L,139910L,139905L,139906L,139907L,139903L,139909L,139908L};
 
 
@@ -109,12 +106,14 @@ public class EntranceAnalysisController extends ExtJsController{
         List<Double> entranceSignRateList = new ArrayList<>();
         List<Double> entranceBettingRateList = new ArrayList<>();
         List<Double> entrancePayRateList = new ArrayList<>();
+        List<Double> entranceDayRetentionList = new ArrayList<>();
         for(DatawareFinalEntranceAnalysis record:lastList){
             entranceDauRateList.add(record.getEntranceDauRate());
             eventNameList.add(record.getEventName());
             entranceSignRateList.add(record.getEntranceSignRate());
             entranceBettingRateList.add(record.getEntranceBettingRate());
             entrancePayRateList.add(record.getEntrancePayRate());
+            entranceDayRetentionList.add(record.getEntranceDayRetention());
         }
 
         //查找发现页多多游戏的dau
@@ -151,57 +150,120 @@ public class EntranceAnalysisController extends ExtJsController{
         List<Double> pushSignRate = new ArrayList<>();
         List<Double> strongAdvSignRate = new ArrayList<>();
 
+        List<Double> duoduoBettingRate = new ArrayList<>();
+        List<Double> iconBettingRate = new ArrayList<>();
+        List<Double> bannerBettingRate = new ArrayList<>();
+        List<Double> advBettingRate = new ArrayList<>();
+        List<Double> gameBettingRate = new ArrayList<>();
+        List<Double> rollBettingRate = new ArrayList<>();
+        List<Double> pointBettingRate = new ArrayList<>();
+        List<Double> actCenterBettingRate = new ArrayList<>();
+        List<Double> pushBettingRate = new ArrayList<>();
+        List<Double> strongAdvBettingRate = new ArrayList<>();
+
+        List<Double> duoduoPayRate = new ArrayList<>();
+        List<Double> iconPayRate = new ArrayList<>();
+        List<Double> bannerPayRate = new ArrayList<>();
+        List<Double> advPayRate = new ArrayList<>();
+        List<Double> gamePayRate = new ArrayList<>();
+        List<Double> rollPayRate = new ArrayList<>();
+        List<Double> pointPayRate = new ArrayList<>();
+        List<Double> actCenterPayRate = new ArrayList<>();
+        List<Double> pushPayRate = new ArrayList<>();
+        List<Double> strongAdvPayRate = new ArrayList<>();
+
+        List<Double> duoduoRetentionRate = new ArrayList<>();
+        List<Double> iconRetentionRate = new ArrayList<>();
+        List<Double> bannerRetentionRate = new ArrayList<>();
+        List<Double> advRetentionRate = new ArrayList<>();
+        List<Double> gameRetentionRate = new ArrayList<>();
+        List<Double> rollRetentionRate = new ArrayList<>();
+        List<Double> pointRetentionRate = new ArrayList<>();
+        List<Double> actCenterRetentionRate = new ArrayList<>();
+        List<Double> pushRetentionRate = new ArrayList<>();
+        List<Double> strongAdvRetentionRate = new ArrayList<>();
+
         if(CollectionUtils.isNotEmpty(analysisList)){
             for(DatawareFinalEntranceAnalysis record:analysisList){
                 if(eventIds[0].equals(record.getEventId())){
                     duoDuoDauList.add(record.getEntranceDau());
                     duoduoDauRate.add(record.getEntranceDauRate());
                     duoduoSignRate.add(record.getEntranceSignRate());
+                    duoduoBettingRate.add(record.getEntranceBettingRate());
+                    duoduoPayRate.add(record.getEntrancePayRate());
+                    duoduoRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[1].equals(record.getEventId())){
                     iconDauList.add(record.getEntranceDau());
                     iconDauRate.add(record.getEntranceDauRate());
                     iconSignRate.add(record.getEntranceSignRate());
+                    iconBettingRate.add(record.getEntranceBettingRate());
+                    iconPayRate.add(record.getEntrancePayRate());
+                    iconRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[2].equals(record.getEventId())){
                     bannerDauList.add(record.getEntranceDau());
                     bannerDauRate.add(record.getEntranceDauRate());
                     bannerSignRate.add(record.getEntranceSignRate());
+                    bannerBettingRate.add(record.getEntranceBettingRate());
+                    bannerPayRate.add(record.getEntrancePayRate());
+                    bannerRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[3].equals(record.getEventId())){
                     advDauList.add(record.getEntranceDau());
                     advDauRate.add(record.getEntranceDauRate());
                     advSignRate.add(record.getEntranceSignRate());
+                    advBettingRate.add(record.getEntranceBettingRate());
+                    advPayRate.add(record.getEntrancePayRate());
+                    advRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[4].equals(record.getEventId())){
                     gameDauList.add(record.getEntranceDau());
                     gameDauRate.add(record.getEntranceDauRate());
                     gameSignRate.add(record.getEntranceSignRate());
+                    gameBettingRate.add(record.getEntranceBettingRate());
+                    gamePayRate.add(record.getEntrancePayRate());
+                    gameRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[5].equals(record.getEventId())){
                     rollDauList.add(record.getEntranceDau());
                     rollDauRate.add(record.getEntranceDauRate());
                     rollSignRate.add(record.getEntranceSignRate());
+                    rollBettingRate.add(record.getEntranceBettingRate());
+                    rollPayRate.add(record.getEntrancePayRate());
+                    rollRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[6].equals(record.getEventId())){
                     pointDauList.add(record.getEntranceDau());
                     pointDauRate.add(record.getEntranceDauRate());
                     pointSignRate.add(record.getEntranceSignRate());
+                    pointBettingRate.add(record.getEntranceBettingRate());
+                    pointPayRate.add(record.getEntrancePayRate());
+                    pointRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[7].equals(record.getEventId())){
                     actCenterDauList.add(record.getEntranceDau());
                     actCenterDauRate.add(record.getEntranceDauRate());
                     actCenterSignRate.add(record.getEntranceSignRate());
+                    actCenterBettingRate.add(record.getEntranceBettingRate());
+                    actCenterPayRate.add(record.getEntrancePayRate());
+                    actCenterRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[8].equals(record.getEventId())){
                     pushDauList.add(record.getEntranceDau());
                     pushDauRate.add(record.getEntranceDauRate());
                     pushSignRate.add(record.getEntranceSignRate());
+                    pushBettingRate.add(record.getEntranceBettingRate());
+                    pushPayRate.add(record.getEntrancePayRate());
+                    pushRetentionRate.add(record.getEntranceDayRetention());
                 }
                 if(eventIds[9].equals(record.getEventId())){
                     strongAdvDauList.add(record.getEntranceDau());
                     strongAdvDauRate.add(record.getEntranceDauRate());
                     strongAdvSignRate.add(record.getEntranceSignRate());
+                    strongAdvBettingRate.add(record.getEntranceBettingRate());
+                    strongAdvPayRate.add(record.getEntrancePayRate());
+                    strongAdvRetentionRate.add(record.getEntranceDayRetention());
                 }
             }
         }
@@ -244,7 +306,7 @@ public class EntranceAnalysisController extends ExtJsController{
         map.put("entranceSignRateList",entranceSignRateList);
         map.put("entranceBettingRateList",entranceBettingRateList);
         map.put("entrancePayRateList",entrancePayRateList);
-
+        map.put("entranceDayRetentionList",entranceDayRetentionList);
 
         map.put("duoduoSignRate",duoduoSignRate);
         map.put("iconSignRate",iconSignRate);
@@ -256,6 +318,39 @@ public class EntranceAnalysisController extends ExtJsController{
         map.put("actCenterSignRate",actCenterSignRate);
         map.put("pushSignRate",pushSignRate);
         map.put("strongAdvSignRate",strongAdvSignRate);
+
+        map.put("duoduoBettingRate",duoduoBettingRate);
+        map.put("iconBettingRate",iconBettingRate);
+        map.put("bannerBettingRate",bannerBettingRate);
+        map.put("advBettingRate",advBettingRate);
+        map.put("gameBettingRate",gameBettingRate);
+        map.put("rollBettingRate",rollBettingRate);
+        map.put("pointBettingRate",pointBettingRate);
+        map.put("actCenterBettingRate",actCenterBettingRate);
+        map.put("pushBettingRate",pushBettingRate);
+        map.put("strongAdvBettingRate",strongAdvBettingRate);
+
+        map.put("duoduoPayRate",duoduoPayRate);
+        map.put("iconPayRate",iconPayRate);
+        map.put("bannerPayRate",bannerPayRate);
+        map.put("advPayRate",advPayRate);
+        map.put("gamePayRate",gamePayRate);
+        map.put("rollPayRate",rollPayRate);
+        map.put("pointPayRate",pointPayRate);
+        map.put("actCenterPayRate",actCenterPayRate);
+        map.put("pushPayRate",pushPayRate);
+        map.put("strongAdvPayRate",strongAdvPayRate);
+
+        map.put("duoduoRetentionRate",duoduoRetentionRate);
+        map.put("iconRetentionRate",iconRetentionRate);
+        map.put("bannerRetentionRate",bannerRetentionRate);
+        map.put("advRetentionRate",advRetentionRate);
+        map.put("gameRetentionRate",gameRetentionRate);
+        map.put("rollRetentionRate",rollRetentionRate);
+        map.put("pointRetentionRate",pointRetentionRate);
+        map.put("actCenterRetentionRate",actCenterRetentionRate);
+        map.put("pushRetentionRate",pushRetentionRate);
+        map.put("strongAdvRetentionRate",strongAdvRetentionRate);
 
         List<Map<String,Object>> list = new ArrayList<>();
         list.add(map);

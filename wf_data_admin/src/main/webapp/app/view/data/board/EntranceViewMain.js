@@ -26,9 +26,15 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                 'actCenterDauList','actCenterDauRate',
                 'pushDauList','pushDauRate',
                 'strongAdvDauList','strongAdvDauRate',
-                'entranceSignRateList','entranceBettingRateList','entrancePayRateList',
+                'entranceSignRateList','entranceBettingRateList','entrancePayRateList','entranceDayRetentionList',
                 'duoduoSignRate','iconSignRate','bannerSignRate','advSignRate','gameSignRate',
-                'rollSignRate','pointSignRate','actCenterSignRate','pushSignRate','strongAdvSignRate'
+                'rollSignRate','pointSignRate','actCenterSignRate','pushSignRate','strongAdvSignRate',
+                'duoduoBettingRate','iconBettingRate','bannerBettingRate','advBettingRate','gameBettingRate',
+                'rollBettingRate','pointBettingRate','actCenterBettingRate','pushBettingRate','strongAdvBettingRate',
+                'duoduoPayRate','iconPayRate','bannerPayRate','advPayRate','gamePayRate',
+                'rollPayRate','pointPayRate','actCenterPayRate','pushPayRate','strongAdvPayRate',
+                'duoduoRetentionRate','iconRetentionRate','bannerRetentionRate','advRetentionRate','gameRetentionRate',
+                'rollRetentionRate','pointRetentionRate','actCenterRetentionRate','pushRetentionRate','strongAdvRetentionRate'
             ]
         });
 
@@ -94,6 +100,16 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                         ]
                         }
                     ]
+                },
+                {
+                    title:'留存率',align:'stretch',height:400,width:"100%",xtype:"panel",layout:'vbox',bodyStyle:'border-width:0',forceFit:true,
+                    items:[
+                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                            {id:'entRate3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true},
+                            {id:'entPic3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true},
+                        ]
+                        }
+                    ]
                 }
             ]
         });
@@ -140,6 +156,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var entranceSignRateList = store.getAt(0).get("entranceSignRateList");
             var entranceBettingRateList = store.getAt(0).get("entranceBettingRateList");
             var entrancePayRateList = store.getAt(0).get("entrancePayRateList");
+            var entranceDayRetentionList = store.getAt(0).get("entranceDayRetentionList");
 
             var duoduoSignRate = store.getAt(0).get("duoduoSignRate");
             var iconSignRate = store.getAt(0).get("iconSignRate");
@@ -151,6 +168,39 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var actCenterSignRate = store.getAt(0).get("actCenterSignRate");
             var pushSignRate = store.getAt(0).get("pushSignRate");
             var strongAdvSignRate = store.getAt(0).get("strongAdvSignRate");
+
+            var duoduoBettingRate = store.getAt(0).get("duoduoBettingRate");
+            var iconBettingRate = store.getAt(0).get("iconBettingRate");
+            var bannerBettingRate = store.getAt(0).get("bannerBettingRate");
+            var advBettingRate = store.getAt(0).get("advBettingRate");
+            var gameBettingRate = store.getAt(0).get("gameBettingRate");
+            var rollBettingRate = store.getAt(0).get("rollBettingRate");
+            var pointBettingRate = store.getAt(0).get("pointBettingRate");
+            var actCenterBettingRate = store.getAt(0).get("actCenterBettingRate");
+            var pushBettingRate = store.getAt(0).get("pushBettingRate");
+            var strongAdvBettingRate = store.getAt(0).get("strongAdvBettingRate");
+
+            var duoduoPayRate = store.getAt(0).get("duoduoPayRate");
+            var iconPayRate = store.getAt(0).get("iconPayRate");
+            var bannerPayRate = store.getAt(0).get("bannerPayRate");
+            var advPayRate = store.getAt(0).get("advPayRate");
+            var gamePayRate = store.getAt(0).get("gamePayRate");
+            var rollPayRate = store.getAt(0).get("rollPayRate");
+            var pointPayRate = store.getAt(0).get("pointPayRate");
+            var actCenterPayRate = store.getAt(0).get("actCenterPayRate");
+            var pushPayRate = store.getAt(0).get("pushPayRate");
+            var strongAdvPayRate = store.getAt(0).get("strongAdvPayRate");
+
+            var duoduoRetentionRate = store.getAt(0).get("duoduoRetentionRate");
+            var iconRetentionRate = store.getAt(0).get("iconRetentionRate");
+            var bannerRetentionRate = store.getAt(0).get("bannerRetentionRate");
+            var advRetentionRate = store.getAt(0).get("advRetentionRate");
+            var gameRetentionRate = store.getAt(0).get("gameRetentionRate");
+            var rollRetentionRate = store.getAt(0).get("rollRetentionRate");
+            var pointRetentionRate = store.getAt(0).get("pointRetentionRate");
+            var actCenterRetentionRate = store.getAt(0).get("actCenterRetentionRate");
+            var pushRetentionRate = store.getAt(0).get("pushRetentionRate");
+            var strongAdvRetentionRate = store.getAt(0).get("strongAdvRetentionRate");
 
 
             var dauList=[];
@@ -189,6 +239,42 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             signRate.push(pushSignRate);
             signRate.push(strongAdvSignRate);
 
+            var bettingRate=[];
+            bettingRate.push(duoduoBettingRate);
+            bettingRate.push(iconBettingRate);
+            bettingRate.push(bannerBettingRate);
+            bettingRate.push(advBettingRate);
+            bettingRate.push(gameBettingRate);
+            bettingRate.push(rollBettingRate);
+            bettingRate.push(pointBettingRate);
+            bettingRate.push(actCenterBettingRate);
+            bettingRate.push(pushBettingRate);
+            bettingRate.push(strongAdvBettingRate);
+
+            var payRate=[];
+            payRate.push(duoduoPayRate);
+            payRate.push(iconPayRate);
+            payRate.push(bannerPayRate);
+            payRate.push(advPayRate);
+            payRate.push(gamePayRate);
+            payRate.push(rollPayRate);
+            payRate.push(pointPayRate);
+            payRate.push(actCenterPayRate);
+            payRate.push(pushPayRate);
+            payRate.push(strongAdvPayRate);
+
+            var retentionRate=[];
+            retentionRate.push(duoduoRetentionRate);
+            retentionRate.push(iconRetentionRate);
+            retentionRate.push(bannerRetentionRate);
+            retentionRate.push(advRetentionRate);
+            retentionRate.push(gameRetentionRate);
+            retentionRate.push(rollRetentionRate);
+            retentionRate.push(pointRetentionRate);
+            retentionRate.push(actCenterRetentionRate);
+            retentionRate.push(pushRetentionRate);
+            retentionRate.push(strongAdvRetentionRate);
+
             var titleList = [];
             titleList.push("发现页多多游戏入口--DAU及占比");
             titleList.push("首页顶部banner右侧小图标入口--DAU及占比");
@@ -201,6 +287,54 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             titleList.push("push入口--DAU及占比");
             titleList.push("强广位入口--DAU及占比");
 
+            var signTitleList = [];
+            signTitleList.push("发现页多多游戏入口--签到转化率");
+            signTitleList.push("首页顶部banner右侧小图标入口--签到转化率");
+            signTitleList.push("首页顶部banner入口--签到转化率");
+            signTitleList.push("新增广告位入口--签到转化率");
+            signTitleList.push("我的福利任务(玩游戏)入口--签到转化率");
+            signTitleList.push("幸运大转盘(金叶子跳转)入口--签到转化率");
+            signTitleList.push("我的积分商城(金叶子跳转)入口--签到转化率");
+            signTitleList.push("发现页活动中心入口--签到转化率");
+            signTitleList.push("push入口--签到转化率");
+            signTitleList.push("强广位入口--签到转化率");
+
+            var bettingTitleList = [];
+            bettingTitleList.push("发现页多多游戏入口--投注转化率");
+            bettingTitleList.push("首页顶部banner右侧小图标入口--投注转化率");
+            bettingTitleList.push("首页顶部banner入口--投注转化率");
+            bettingTitleList.push("新增广告位入口--投注转化率");
+            bettingTitleList.push("我的福利任务(玩游戏)入口--投注转化率");
+            bettingTitleList.push("幸运大转盘(金叶子跳转)入口--投注转化率");
+            bettingTitleList.push("我的积分商城(金叶子跳转)入口--投注转化率");
+            bettingTitleList.push("发现页活动中心入口--投注转化率");
+            bettingTitleList.push("push入口--投注转化率");
+            bettingTitleList.push("强广位入口--投注转化率");
+
+            var payTitleList = [];
+            payTitleList.push("发现页多多游戏入口--付费渗透率");
+            payTitleList.push("首页顶部banner右侧小图标入口--付费渗透率");
+            payTitleList.push("首页顶部banner入口--付费渗透率");
+            payTitleList.push("新增广告位入口--付费渗透率");
+            payTitleList.push("我的福利任务(玩游戏)入口--付费渗透率");
+            payTitleList.push("幸运大转盘(金叶子跳转)入口--付费渗透率");
+            payTitleList.push("我的积分商城(金叶子跳转)入口--付费渗透率");
+            payTitleList.push("发现页活动中心入口--付费渗透率");
+            payTitleList.push("push入口--付费渗透率");
+            payTitleList.push("强广位入口--付费渗透率");
+
+            var retentionTitleList = [];
+            retentionTitleList.push("发现页多多游戏入口--次日留存率");
+            retentionTitleList.push("首页顶部banner右侧小图标入口--次日留存率");
+            retentionTitleList.push("首页顶部banner入口--次日留存率");
+            retentionTitleList.push("新增广告位入口--次日留存率");
+            retentionTitleList.push("我的福利任务(玩游戏)入口--次日留存率");
+            retentionTitleList.push("幸运大转盘(金叶子跳转)入口--次日留存率");
+            retentionTitleList.push("我的积分商城(金叶子跳转)入口--次日留存率");
+            retentionTitleList.push("发现页活动中心入口--次日留存率");
+            retentionTitleList.push("push入口--次日留存率");
+            retentionTitleList.push("强广位入口--次日留存率");
+
             var arrays =[];
             for(var i = 0;i < entranceDauRateList.length;i++){
                 arrays[i] = {
@@ -208,7 +342,6 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     name:eventNameList[i]
                 }
             }
-
             var pieOption = {
                 title : {
                     text: searchDate +'活跃用户各入口来源比例',
@@ -226,8 +359,8 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                 },
                 legend: {
                     orient:'vertical',
-                    x:'3%',
-                    top:'5%',
+                    right:'1%',
+                    top:'15%',
                     data:eventNameList
                 },
                 calculable : true,
@@ -236,19 +369,36 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                         name:'入口来源',
                         type:'pie',
                         radius:'55%',
-                        center: ['50%','60%'],
+                        center: ['40%','60%'],
                         data:arrays
                     }
                 ]
             };
-            fun2(titleList[0],dateList,dauList[0],dauRate[0]);
+            entranceAndRate(titleList[0],dateList,dauList[0],dauRate[0]);
             me.echarts = echarts.init(Ext.get("entPie").dom);
             me.echarts.setOption(pieOption);
             me.echarts.on("click", eConsole);
-            fun3(searchDate+"各入口签到转化率",eventNameList,entranceSignRateList,0);
-            fun3(searchDate+"各入口投注转化率",eventNameList,entranceBettingRateList,1);
-            fun3(searchDate+"各入口付费渗透率",eventNameList,entrancePayRateList,2);
 
+            transRate(searchDate+"各入口签到转化率",eventNameList,entranceSignRateList,0);
+            me.echarts.on('click', function(param) {
+            trendPic(signTitleList[param.dataIndex],dateList,signRate[param.dataIndex],0);
+            });
+            transRate(searchDate+"各入口投注转化率",eventNameList,entranceBettingRateList,1);
+            me.echarts.on('click', function(param) {
+            trendPic(bettingTitleList[param.dataIndex],dateList,bettingRate[param.dataIndex],1);
+            });
+            transRate(searchDate+"各入口付费渗透率",eventNameList,entrancePayRateList,2);
+            me.echarts.on('click', function(param) {
+                trendPic(payTitleList[param.dataIndex],dateList,payRate[param.dataIndex],2);
+            });
+            transRate(searchDate+"各入口次日留存率",eventNameList,entranceDayRetentionList,3);
+            me.echarts.on('click', function(param) {
+                trendPic(retentionTitleList[param.dataIndex],dateList,retentionRate[param.dataIndex],3);
+            });
+            trendPic(signTitleList[0],dateList,signRate[0],0);
+            trendPic(bettingTitleList[0],dateList,bettingRate[0],1);
+            trendPic(payTitleList[0],dateList,payRate[0],2);
+            trendPic(retentionTitleList[0],dateList,retentionRate[0],3);
 
             // 增加饼图的监听事件
             function eConsole(param) {
@@ -265,13 +415,74 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             //点击饼图每块区域触发的事件
             function everyClick(param,i,txt,title,dateList,dauList,dauRate){
                 if(param.seriesIndex==0 && param.dataIndex==i){
-                    fun2(title,dateList,dauList,dauRate);
+                    entranceAndRate(title,dateList,dauList,dauRate);
                 }
             }
-
         }
 
-        function fun3(title,eventNameList,rateList,id){
+        function trendPic(title,dateList,transRate,id){
+            var rateOption =
+                {
+                    title: {text:title,left:'center',
+                        textStyle:{//标题内容的样式
+                            fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                            // fontWeight:"bold",
+                            fontFamily:"san-serif",//主题文字字体，默认微软雅黑
+                            fontSize:18//主题文字字体大小，默认为18px
+                        }},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ '转化率:' + params[i].value + '%';
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'7%',
+                        top:'20%',
+                        right:'6%',
+                        bottom:'15%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        data: dateList,
+                        "axisLabel":{
+                            interval: 0,
+                            rotate:50
+                        }
+                    },
+                    yAxis: {type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }
+                    },
+                    series: [{
+                        name: title,
+                        type: 'line',
+                        smooth:true,
+                        data: transRate,
+                        itemStyle:{
+                            normal:{
+                                color:'cornflowerblue'
+                            }
+                        }
+                    }
+                    ]
+                };
+            me.echarts = echarts.init(Ext.get("entPic"+id).dom);
+            me.echarts.setOption(rateOption);
+        }
+
+        function transRate(title,eventNameList,rateList,id){
             var rateOption =
                 {
                     title: {text:title,left:'center',
@@ -332,15 +543,10 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                 };
             me.echarts = echarts.init(Ext.get("entRate"+id).dom);
             me.echarts.setOption(rateOption);
-            me.echarts.on('click', function(param) {
-                if(param.dataIndex == 9){
-
-                }
-            });
         }
 
 
-        function fun2(title,dateList,dauList,dauRateList){
+        function entranceAndRate(title,dateList,dauList,dauRateList){
             var mixOption =
                 {
                     title: {text:title,left:'center',
@@ -354,7 +560,15 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str +=  params[i].seriesName +':'+params[i].value +"<br/>";
+                                if (i == 0){
+                                    str += '日期:'+params[i].name+'<br/>';
+                                }
+                                if(params[i].seriesName=='DAU占比'){
+                                    str +=  params[i].seriesName +':'+params[i].value +"%<br/>";
+                                }
+                                else{
+                                    str +=  params[i].seriesName +':'+params[i].value +"<br/>";
+                                }
                             }
                             return str;
                         }
@@ -367,7 +581,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     },
                     calculable : true,
                     grid:{
-                        left:'4%',
+                        left:'10%',
                         top:'20%',
                         right:'6%',
                         bottom:'13%'
