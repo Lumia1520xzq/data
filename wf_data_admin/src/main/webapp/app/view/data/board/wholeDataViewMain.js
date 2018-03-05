@@ -1570,7 +1570,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         formatter: function (params) {
                             var str='';
                             for(var i = 0; i < params.length; i++){
-                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value + '%';
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
                             }
                             return str;
                         }
