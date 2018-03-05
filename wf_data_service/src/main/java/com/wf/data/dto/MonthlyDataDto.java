@@ -13,11 +13,13 @@ public class MonthlyDataDto implements Serializable {
 	private String month;
 	private Double sumRecharge;
 	private Long sumDau;
-	private Integer days;
 	private Long avgDau;
+	private Integer days;
 	private Double avgDarpu;
 	private Double sumCost;
 	private Double costRate;
+	private Long sumNewUsers;
+	private Long avgNewUsers;
 
 	public String getMonth() {
 		return month;
@@ -81,5 +83,21 @@ public class MonthlyDataDto implements Serializable {
 
 	public void setCostRate(Double costRate) {
 		this.costRate = costRate;
+	}
+
+	public Long getAvgNewUsers() {
+		return avgNewUsers;
+	}
+
+	public void setAvgNewUsers(Long avgNewUsers) {
+		this.avgNewUsers = avgNewUsers;
+	}
+
+	public Long getSumNewUsers() {
+		return sumNewUsers;
+	}
+
+	public void setSumNewUsers(Long sumNewUsers) {
+		this.sumNewUsers = sumNewUsers;
 	}
 }

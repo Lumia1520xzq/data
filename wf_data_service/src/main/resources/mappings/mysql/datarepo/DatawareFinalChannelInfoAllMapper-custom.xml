@@ -72,6 +72,7 @@
         DATE_FORMAT(business_date,'%Y-%m') `month`,
         IFNULL(SUM(recharge_amount),0) sumRecharge,
         IFNULL(SUM(dau),0) sumDau,
+        IFNULL(SUM(new_users),0) sumNewUsers,
         IFNULL(COUNT(id),0) days
         FROM `dataware_final_channel_info_all`
         WHERE 1=1
