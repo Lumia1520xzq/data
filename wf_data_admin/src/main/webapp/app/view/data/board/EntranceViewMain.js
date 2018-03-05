@@ -15,7 +15,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
         var store= Ext.create('DCIS.Store', {
             url:'/data/entrance/analysis/getList.do',
             autoload:false,
-            fields:['entranceDauRateList','eventNameList','searchDate','dateList',
+            fields:['entranceDauRateList','eventNameList','searchDate','dateList',"entranceDauList",
                 'duoDuoDauList','duoduoDauRate',
                 'iconDauList','iconDauRate',
                 'bannerDauList','bannerDauRate',
@@ -127,6 +127,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
 
         function fun1(){
             var entranceDauRateList = store.getAt(0).get("entranceDauRateList");
+            var entranceDauList = store.getAt(0).get("entranceDauList");
             var eventNameList = store.getAt(0).get("eventNameList");
             var searchDate = store.getAt(0).get("searchDate");
             var dateList = store.getAt(0).get("dateList");
@@ -336,9 +337,9 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             retentionTitleList.push("强广位入口--次日留存率");
 
             var arrays =[];
-            for(var i = 0;i < entranceDauRateList.length;i++){
+            for(var i = 0;i < entranceDauList.length;i++){
                 arrays[i] = {
-                    value:entranceDauRateList[i],
+                    value:entranceDauList[i],
                     name:eventNameList[i]
                 }
             }

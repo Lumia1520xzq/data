@@ -102,6 +102,7 @@ public class EntranceAnalysisController extends ExtJsController{
             }
         }
         List<Double> entranceDauRateList = new ArrayList<>();
+        List<Long> entranceDauList = new ArrayList<>();
         List<String> eventNameList = new ArrayList<>();
         List<Double> entranceSignRateList = new ArrayList<>();
         List<Double> entranceBettingRateList = new ArrayList<>();
@@ -109,6 +110,7 @@ public class EntranceAnalysisController extends ExtJsController{
         List<Double> entranceDayRetentionList = new ArrayList<>();
         for(DatawareFinalEntranceAnalysis record:lastList){
             entranceDauRateList.add(record.getEntranceDauRate());
+            entranceDauList.add(record.getEntranceDau());
             eventNameList.add(record.getEventName());
             entranceSignRateList.add(record.getEntranceSignRate());
             entranceBettingRateList.add(record.getEntranceBettingRate());
@@ -270,6 +272,7 @@ public class EntranceAnalysisController extends ExtJsController{
         Map<String,Object> map = new HashMap<>();
         map.put("dateList",dateList);
         map.put("entranceDauRateList",entranceDauRateList);
+        map.put("entranceDauList",entranceDauList);
         map.put("eventNameList",eventNameList);
         map.put("searchDate",searchDate);
 
