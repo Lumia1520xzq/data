@@ -196,7 +196,7 @@ public class ChannelFragmentController extends ExtJsController {
                     out.setGoldAmount(awardsInfo.getGoldAmount() * temp.getChangeNum());
 
                 }
-                out.setCreateTime(temp.getCreateTime());
+                out.setUpdateTime(temp.getUpdateTime());
                 out.setUserId(temp.getUserId());
 
                 list.add(out);

@@ -18,7 +18,7 @@ public class AwardsSendLogInOut {
     private String beginDate;
     private String endDate;
     private Long goldAmount;
-    private  Date createTime;
+    private  Date updateTime;
     private String phyAwardsName;
 
     @ExcelField(title = "奖品名称", type = 1, align = 2, sort = 4)
@@ -63,12 +63,12 @@ public class AwardsSendLogInOut {
         this.rmbAmount = rmbAmount;
     }
     @ExcelField(title = "变更时间", type = 1, align = 2, sort = 6)
-    public Date getCreateTime() {
-        return createTime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Long getActivityId() {
