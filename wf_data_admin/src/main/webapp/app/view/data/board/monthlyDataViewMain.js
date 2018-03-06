@@ -15,7 +15,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
         var store= Ext.create('DCIS.Store', {
             url:'data/month/view/getList.do',
             autoload:false,
-            fields: ["month","sumRecharge",'avgDau','avgDarpu','sumCost','costRate']
+            fields: ["month","sumRecharge",'avgDau','avgDarpu','sumCost','costRate','avgNewUsers']
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -48,12 +48,14 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'monthfield',
-                format: 'Y-m'
+                format: 'Y-m',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.MONTH,-2),"Y-m")
             },{
                 name: 'endTime',
                 fieldLabel: '结束时间',
                 xtype: 'monthfield',
-                format: 'Y-m'
+                format: 'Y-m',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.MONTH),"Y-m")
             }
             ]
         });
@@ -81,8 +83,8 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                         },
                         {width:"33.33%",height:350,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
-                                {id:"monthTitle2",width:"100%",height:50,forceFit:true,bodyStyle:'border-width:0'},
-                                {id:"monthKpi2",width:"100%",height:300,forceFit:true,bodyStyle:'border-width:0'}
+                                {id:"monthTitle5",width:"100%",height:50,forceFit:true,bodyStyle:'border-width:0'},
+                                {id:"monthKpi5",width:"100%",height:300,forceFit:true,bodyStyle:'border-width:0'}
                             ]
                         }
                     ]
@@ -90,6 +92,12 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 {
                     title: '',height:350,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
+                        {width:"33.33%",height:350,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {id:"monthTitle2",width:"100%",height:50,forceFit:true,bodyStyle:'border-width:0'},
+                                {id:"monthKpi2",width:"100%",height:300,forceFit:true,bodyStyle:'border-width:0'}
+                            ]
+                        },
                         {width:"33.33%",height:350,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
                                 {id:"monthTitle3",width:"100%",height:50,forceFit:true,bodyStyle:'border-width:0'},
@@ -125,6 +133,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
             var avgDarpu=[];
             var sumCost=[];
             var costRate=[];
+            var avgNewUsers=[];
 
             for(var i=0;i<store.getCount();i++){
                 var re=store.getAt(i);
@@ -134,6 +143,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 avgDarpu[i]=re.get('avgDarpu');
                 sumCost[i]=re.get('sumCost');
                 costRate[i]=re.get('costRate');
+                avgNewUsers[i]=re.get('avgNewUsers');
             }
 
             var option = [
@@ -423,6 +433,64 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                             }
                         }
                     }]
+                },
+                {
+                    // title: {text: '当月累计新增用户日均值'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '月份:'+params[i].name+'<br/>'+ params[i].seriesName +':' + format(params[i].value);
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'13%',
+                        y:'5%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        data: month
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        },
+                        splitLine: {           // 控制Y轴的分隔线(辅助线)
+                            show: false      // 默认显示，属性show控制显示与
+                        }
+                    },
+                    series: [{
+                        name: '当月累计新增用户日均值',
+                        type: 'bar',
+                        smooth:true,
+                        data: avgNewUsers,
+                        barWidth: 50,
+                        itemStyle:{
+                            normal:{color:'cornflowerblue',   //柱状颜色
+                                label : {
+                                    show : true,  //柱头数字
+                                    position : 'top',
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontWeight:'bold'
+                                    },
+                                    formatter:function (p) {
+                                        return format(p.value);
+                                    }
+                                }
+                            }
+                        }
+                    }]
                 }
             ];
 
@@ -431,7 +499,7 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
                 me.echarts.setOption(option[j]);
             }
 
-            var titles = ["当月累计充值","当月累计DAU日均值","当月累计DARPU日均值","当月累计成本","当月累计成本占比"];
+            var titles = ["当月累计充值","当月累计DAU日均值","当月累计DARPU日均值","当月累计成本","当月累计成本占比","当月累计新增用户日均值"];
             for (var k=0;k<option.length;k++) {
                 var d =  Ext.get("monthTitle"+k).dom;
                 d.innerHTML = "<div align='center' style='line-height:50px;font-size:20px'>"+titles[k]+"</strong></div>";

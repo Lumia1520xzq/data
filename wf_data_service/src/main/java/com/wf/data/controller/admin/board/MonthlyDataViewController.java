@@ -102,12 +102,16 @@ public class MonthlyDataViewController extends ExtJsController {
                 double sumCost = datawareFinalChannelCostService.findMonthCost(params);
                 //6、当月累计成本占比
                 double costRate = cal(sumCost,sumRecharge);
+                //7、当月累计新增用户日均值
+                long sumNewUsers =  info.getSumNewUsers();
+                long avgNewUsers = days == 0 ? 0L:sumNewUsers/days;
                 dto.setMonth(month);
                 dto.setSumRecharge(sumRecharge);
                 dto.setAvgDau(avgDau);
                 dto.setAvgDarpu(avgDarpu);
                 dto.setSumCost(sumCost);
                 dto.setCostRate(costRate);
+                dto.setAvgNewUsers(avgNewUsers);
                 list.add(dto);
             }
         }
