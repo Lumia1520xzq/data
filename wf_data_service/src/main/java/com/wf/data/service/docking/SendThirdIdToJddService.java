@@ -1,6 +1,5 @@
 package com.wf.data.service.docking;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.wf.core.log.LogExceptionStackTrace;
@@ -104,7 +103,7 @@ public class SendThirdIdToJddService {
         dto.setUserIds(userIds);
         dto.setBatchId(uuid);
         dto.setBatchEndFlag(batchEndFlag);
-        dto.setFrom("wf-game");
+        dto.setFrom("game");
         dto.setTagId(tagId);
 
         request(baseUrl + url, dto);
@@ -118,24 +117,28 @@ public class SendThirdIdToJddService {
      * @return
      */
     public void request(String uri, JddUserTagDto bean) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            String json = mapper.writeValueAsString(bean);
-            System.out.println(json);
-            JsonNode response = Unirest.post(uri).body(json).asJson().getBody();
+            String bodyParams = "userIds=" + bean.getUserIds()
+                    + "&batchId=" + bean.getBatchId()
+                    + "&batchEndFlag=" + bean.getBatchEndFlag()
+                    + "&from=" + bean.getFrom() + "&tagId=" + bean.getTagId();
+
+            JsonNode response = Unirest.post(uri)
+                    .header("content-type", "application/x-www-form-urlencoded")
+                    .body(bodyParams).asJson().getBody();
             if (response.getObject() == null) {
-                logger.error("请求返回值为空:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(json), TraceIdUtils.getTraceId());
+                logger.error("请求返回值为空:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(bean.toString()), TraceIdUtils.getTraceId());
             } else {
                 JSONObject object = new JSONObject(response);
-                boolean result = object.getInt("code") == 0;
-                String data = object.getJSONObject("data").toString();
-                if (!result) {
+                String data = object.getJSONObject("object").toString();
+                if (object.getJSONObject("object").get("code").equals(0)) {
+                    logger.info("数据上传成功:uri={},data={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(data), TraceIdUtils.getTraceId());
+                } else {
                     logger.error("请求数据异常:uri={},data={},json={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(data), GfJsonUtil.toJSONString(bean.toString()), TraceIdUtils.getTraceId());
                 }
             }
-
         } catch (Exception e) {
-            logger.error("请求数据异常:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(bean.toString()), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+            logger.error("请求数据异常:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(bean), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
         }
     }
 
