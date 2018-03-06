@@ -55,21 +55,21 @@ public class SendThirdIdToJddService {
         params.put("userSource", 2);
         params.put("beginDate", beginDate);
         params.put("endDate", endDate);
-        getThirdId(params);
+        getThirdId(params, "");
 
         //游戏平台的全量用户彩票ID
         Map<String, Object> map = new HashMap<>();
         String endTime = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
         map.put("userSource", 2);
         map.put("endDate", endTime);
-        getThirdId(map);
+        getThirdId(map, "");
     }
 
 
     /**
      * 昨日新增用户彩票ID
      */
-    private void getThirdId(Map<String, Object> params) {
+    private void getThirdId(Map<String, Object> params, String tagId) {
 
         long count = uicUserService.getCountByDate(params);
         if (count == 0) {
@@ -86,17 +86,17 @@ public class SendThirdIdToJddService {
 
             if (CollectionUtils.isNotEmpty(thirdIdList)) {
                 String batchEndFlag = "0";
-                if (i++ == totalPage) {
+                if (i + 1 == totalPage) {
                     batchEndFlag = "1";
                 }
-                sendThirdId(thirdIdList, uuid, batchEndFlag);
+                sendThirdId(thirdIdList, uuid, batchEndFlag, tagId);
             }
 
         }
 
     }
 
-    public void sendThirdId(List<String> thirdIdList, String uuid, String batchEndFlag) {
+    public void sendThirdId(List<String> thirdIdList, String uuid, String batchEndFlag, String tagId) {
         JddUserTagDto dto = new JddUserTagDto();
 
         String userIds = String.join(",", thirdIdList).trim();
@@ -104,7 +104,7 @@ public class SendThirdIdToJddService {
         dto.setBatchId(uuid);
         dto.setBatchEndFlag(batchEndFlag);
         dto.setFrom("wf-game");
-        dto.setTagId("");
+        dto.setTagId(tagId);
 
         request(baseUrl + url, dto);
     }
@@ -120,6 +120,7 @@ public class SendThirdIdToJddService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(bean);
+            System.out.println(json);
             JsonNode response = Unirest.post(uri).body(json).asJson().getBody();
             if (response.getObject() == null) {
                 logger.error("请求返回值为空:uri={},json={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(json), TraceIdUtils.getTraceId());

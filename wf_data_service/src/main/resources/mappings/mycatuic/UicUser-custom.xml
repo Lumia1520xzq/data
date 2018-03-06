@@ -32,8 +32,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         SELECT from_base64(t.third_id) thirdId
         FROM uic_user t
         WHERE 1=1
+        AND t.third_id IS NOT NULL
         <if test="userSource != null and userSource != ''">
-            AND t.user_source &lt;= #{userSource}
+            AND t.user_source = #{userSource}
         </if>
         <if test="beginDate != null and beginDate != ''">
             AND t.create_time >= #{beginDate}
@@ -41,12 +42,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="endDate != null and endDate != ''">
             AND t.create_time &lt;= #{endDate}
         </if>
-        ORDER BY id ASC LIMIT #{start}, #{length}
+        ORDER BY from_base64(t.third_id) ASC LIMIT #{start}, #{length}
     </select>
 
     <select id="getCountByDate" resultType="long">
         SELECT COUNT(*) FROM uic_user t
         WHERE 1=1
+        AND t.third_id IS NOT NULL
         <if test="userSource != null and userSource != ''">
             AND t.user_source = #{userSource}
         </if>
