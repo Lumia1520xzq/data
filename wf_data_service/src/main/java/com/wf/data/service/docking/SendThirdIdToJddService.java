@@ -7,6 +7,7 @@ import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.APIUtils;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
+import com.wf.data.common.constants.JddTagIdConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dto.JddUserTagDto;
 import com.wf.data.service.UicUserService;
@@ -55,14 +56,14 @@ public class SendThirdIdToJddService {
         params.put("userSource", 2);
         params.put("beginDate", beginDate);
         params.put("endDate", endDate);
-        getThirdId(params, "");
+        getThirdId(params, JddTagIdConstants.YESTERDAY_NEW_GAME_USER);
 
         //游戏平台的全量用户彩票ID
         Map<String, Object> map = new HashMap<>();
         String endTime = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
         map.put("userSource", 2);
         map.put("endDate", endTime);
-        getThirdId(map, "");
+        getThirdId(map, JddTagIdConstants.ALL_GAME_USER);
     }
 
 
