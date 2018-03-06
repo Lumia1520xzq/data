@@ -1064,5 +1064,43 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
 
             }]
         });
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '重置dataware_user_info_extend_base',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要重置dataware_user_info_extend_base的数据吗?", function (button) {
+                    if (button == "yes") {
+                        callapi("data/admin/dataClean/resetUserInfoBase.do", null, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            }
+        });
     }
 });

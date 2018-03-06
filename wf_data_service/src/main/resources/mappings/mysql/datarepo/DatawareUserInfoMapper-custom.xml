@@ -1,127 +1,142 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
 <mapper namespace="com.wf.data.dao.datarepo.DatawareUserInfoDao">
 
-	<select id="getNewUserByDate" resultType="Long">
-		SELECT DISTINCT t.user_id
-		FROM dataware_user_info t
-		WHERE  1=1 AND t.delete_flag = 0
-		AND t.user_group =2
-		AND t.channel_id IS NOT NULL
-		<if test="businessDate != null and businessDate != ''">
-			AND t.registered_date = #{businessDate}
-		</if>
-		<if test="businessHour != null and businessHour != ''">
-			AND t.registered_hour = #{businessHour}
-		</if>
-		<if test="channelId != null and channelId != ''">
-			AND t.channel_id = #{channelId}
-		</if>
-		<if test="parentId != null and parentId != ''">
-			AND t.parent_id = #{parentId}
-		</if>
-		<if test="parentChannelList != null and  parentChannelList.size() != 0">
-			AND t.parent_id not in
-			<foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-		<if test="childChannelList != null and  childChannelList.size() != 0">
-			AND t.channel_id not in
-			<foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
+    <select id="getNewUserByDate" resultType="Long">
+        SELECT DISTINCT t.user_id
+        FROM dataware_user_info t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.user_group =2
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.registered_date = #{businessDate}
+        </if>
+        <if test="businessHour != null and businessHour != ''">
+            AND t.registered_hour = #{businessHour}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getNewUserByTime" resultType="Long">
+        SELECT DISTINCT t.user_id
+        FROM dataware_user_info t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.user_group =2
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.registered_date = #{businessDate}
+        </if>
+        <if test="businessHour != null and businessHour != ''">
+            AND t.registered_hour &lt;= #{businessHour}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+    </select>
+
+
+    <select id="getHistoryUserByDate" resultType="Long">
+        SELECT COUNT(DISTINCT t.user_id)
+        FROM dataware_user_info t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.user_group =2
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.registered_date &lt;= #{businessDate}
+        </if>
+        <if test="businessHour != null and businessHour != ''">
+            AND t.registered_hour = #{businessHour}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="parentChannelList != null and  parentChannelList.size() != 0">
+            AND t.parent_id not in
+            <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="childChannelList != null and  childChannelList.size() != 0">
+            AND t.channel_id not in
+            <foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <delete id="deleteByDate">
+        delete FROM
+        dataware_user_info
+        WHERE 1=1
+        <if test="registeredDate != null and registeredDate != ''">
+            AND registered_date = #{registeredDate}
+        </if>
+        <if test="registeredHour != null and registeredHour != ''">
+            AND registered_hour = #{registeredHour}
+        </if>
+        <if test="startHour != null and startHour != ''">
+            AND registered_hour &gt;= #{startHour}
+        </if>
+        <if test="endHour != null and endHour != ''">
+            AND registered_hour &lt;= #{endHour}
+        </if>
+    </delete>
+
+    <update id="updateUserGroup">
+        UPDATE dataware_user_info SET
+        user_group = #{userGroup}
+        WHERE 1=1 AND delete_flag = 0
+        <if test="registeredDate != null and registeredDate != ''">
+            AND registered_date = #{registeredDate}
+        </if>
+        <if test="userList != null and userList.size()!=0">
+            AND user_id in
+            <foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <select id="getBaseUserInfoLimit" resultType="DatawareUserInfo">
+		SELECT
+			id,
+			user_id,
+			channel_id,
+			registered_time,
+			user_group,
+			registered_date
+		FROM
+			dataware_user_info
+		ORDER BY
+			user_id ASC
+		LIMIT #{minIndex},#{maxIndex}
 	</select>
-
-	<select id="getNewUserByTime" resultType="Long">
-		SELECT DISTINCT t.user_id
-		FROM dataware_user_info t
-		WHERE  1=1 AND t.delete_flag = 0
-		AND t.user_group =2
-		AND t.channel_id IS NOT NULL
-		<if test="businessDate != null and businessDate != ''">
-			AND t.registered_date = #{businessDate}
-		</if>
-		<if test="businessHour != null and businessHour != ''">
-			AND t.registered_hour &lt;= #{businessHour}
-		</if>
-		<if test="channelId != null and channelId != ''">
-			AND t.channel_id = #{channelId}
-		</if>
-		<if test="parentId != null and parentId != ''">
-			AND t.parent_id = #{parentId}
-		</if>
-	</select>
-
-
-	<select id="getHistoryUserByDate" resultType="Long">
-		SELECT COUNT(DISTINCT t.user_id)
-		FROM dataware_user_info t
-		WHERE  1=1 AND t.delete_flag = 0
-		AND t.user_group =2
-		AND t.channel_id IS NOT NULL
-		<if test="businessDate != null and businessDate != ''">
-			AND t.registered_date &lt;= #{businessDate}
-		</if>
-		<if test="businessHour != null and businessHour != ''">
-			AND t.registered_hour = #{businessHour}
-		</if>
-		<if test="channelId != null and channelId != ''">
-			AND t.channel_id = #{channelId}
-		</if>
-		<if test="parentId != null and parentId != ''">
-			AND t.parent_id = #{parentId}
-		</if>
-		<if test="parentChannelList != null and  parentChannelList.size() != 0">
-			AND t.parent_id not in
-			<foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-		<if test="childChannelList != null and  childChannelList.size() != 0">
-			AND t.channel_id not in
-			<foreach collection="childChannelList" index="index" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-	</select>
-
-	<delete id="deleteByDate">
-		delete FROM
-		dataware_user_info
-		WHERE 1=1
-		<if test="registeredDate != null and registeredDate != ''">
-			AND registered_date = #{registeredDate}
-		</if>
-		<if test="registeredHour != null and registeredHour != ''">
-			AND registered_hour = #{registeredHour}
-		</if>
-		<if test="startHour != null and startHour != ''">
-			AND registered_hour &gt;= #{startHour}
-		</if>
-		<if test="endHour != null and endHour != ''">
-			AND registered_hour &lt;= #{endHour}
-		</if>
-	</delete>
-
-	<update id="updateUserGroup">
-		UPDATE dataware_user_info SET
-		user_group = #{userGroup}
-		WHERE 1=1 AND delete_flag = 0
-		<if test="registeredDate != null and registeredDate != ''">
-			AND registered_date = #{registeredDate}
-		</if>
-		<if test="userList != null and userList.size()!=0">
-			AND user_id in
-			<foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-	</update>
 </mapper>
 

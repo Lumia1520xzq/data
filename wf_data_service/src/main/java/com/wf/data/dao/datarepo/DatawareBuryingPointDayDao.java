@@ -24,4 +24,10 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
     List<Long> getGameDauIds(Map<String, Object> map);
 
     int deleteByDate(Map<String, Object> params);
+
+    String getFirstActiveDate(Map<String, Object> userParam);
+
+    String getLastActiveDate(Map<String, Object> userParam);
+
+    Integer getActiveDatesByUser(Map<String, Object> userParam);
 }
