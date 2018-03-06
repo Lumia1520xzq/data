@@ -131,9 +131,7 @@ public class SendThirdIdToJddService {
             } else {
                 JSONObject object = new JSONObject(response);
                 String data = object.getJSONObject("object").toString();
-                if (object.getJSONObject("object").get("code").equals(0)) {
-                    logger.info("数据上传成功:uri={},data={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(data), TraceIdUtils.getTraceId());
-                } else {
+                if (!object.getJSONObject("object").get("code").equals(0)) {
                     logger.error("请求数据异常:uri={},data={},json={}, traceId={}", GfJsonUtil.toJSONString(uri), GfJsonUtil.toJSONString(data), GfJsonUtil.toJSONString(bean.toString()), TraceIdUtils.getTraceId());
                 }
             }
