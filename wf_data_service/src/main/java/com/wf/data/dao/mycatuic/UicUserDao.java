@@ -18,4 +18,10 @@ import java.util.Map;
 public interface UicUserDao extends CrudDao<UicUser> {
 
     List<DatawareUserInfo> findUserInfoByTime(Map<String, Object> map);
+
+    List<String> getThirdIdList(Map<String, Object> map);
+
+    long getCountByDate(Map<String, Object> map);
+
+
 }
