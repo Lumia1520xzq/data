@@ -16,5 +16,32 @@
     <delete id="deleteAll">
         DELETE FROM dataware_user_info_extend_base WHERE 1=1;
     </delete>
+
+    <select id="getByUserId" resultType="DatawareUserInfoExtendBase">
+        SELECT
+          <include refid="datawareUserInfoExtendBaseColumns"/>
+        FROM
+          dataware_user_info_extend_base t
+        WHERE
+              t.user_id = #{userId}
+          AND t.delete_flag = 0
+    </select>
+
+    <select id="getEarliestRegisteDate" resultType="java.lang.String">
+        SELECT
+            t.registered_time
+        FROM
+            dataware_user_info_extend_base t
+        ORDER BY
+            t.registered_time ASC
+        LIMIT 1
+    </select>
+
+    <update id="updateUserGroupAndNewFlag">
+        UPDATE dataware_user_info_extend_base t
+        SET t.user_group = 2,
+         t.new_user_flag = 1
+        WHERE DATE_FORMAT(t.registered_time,'%Y-%m') = #{monthStr};
+    </update>
 </mapper>
 

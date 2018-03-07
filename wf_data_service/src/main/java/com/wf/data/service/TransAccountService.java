@@ -1,8 +1,8 @@
 package com.wf.data.service;
 
 import com.wf.core.service.CrudService;
-import com.wf.data.dao.mycatdata.TransAccountDao;
-import com.wf.data.dao.mycatdata.entity.TransAccount;
+import com.wf.data.dao.mycattrans.TransAccountDao;
+import com.wf.data.dao.mycattrans.entity.TransAccount;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

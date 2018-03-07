@@ -5,8 +5,6 @@ import com.wf.data.dao.datarepo.DatawareUserInfoExtendBaseDao;
 import com.wf.data.dao.datarepo.entity.DatawareUserInfoExtendBase;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 public class DatawareUserInfoExtendBaseService extends CrudService<DatawareUserInfoExtendBaseDao, DatawareUserInfoExtendBase> {
 
@@ -16,6 +14,18 @@ public class DatawareUserInfoExtendBaseService extends CrudService<DatawareUserI
 
     public void deleteAll() {
         dao.deleteAll();
+    }
+
+    public String getEarliestRegisteDate() {
+        return dao.getEarliestRegisteDate();
+    }
+
+    public void updateUserGroupAndNewFlag(String monthStr) {
+        dao.updateUserGroupAndNewFlag(monthStr);
+    }
+
+    public DatawareUserInfoExtendBase getByUserId(Long userId) {
+        return dao.getByUserId(userId);
     }
 }
 
