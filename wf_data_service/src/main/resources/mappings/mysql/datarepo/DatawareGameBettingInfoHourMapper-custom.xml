@@ -50,7 +50,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="endDate != null and endDate != ''">
 			AND business_date &lt;= #{endDate}
 		</if>
-		<if test="gameType != null and gameType != ''">
+		<if test="gameType != null">
 			AND game_type = #{gameType}
 		</if>
 		GROUP BY business_hour

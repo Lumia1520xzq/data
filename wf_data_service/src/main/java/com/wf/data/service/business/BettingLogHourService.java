@@ -46,6 +46,10 @@ public class BettingLogHourService {
     private RoomFishInfoService roomFishInfoService;
     @Autowired
     private ChannelInfoService channelInfoService;
+    @Autowired
+    private TransDealService transDealService;
+
+
 
     public void toDoAnalysis() {
         logger.info("每小时投注汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -113,6 +117,8 @@ public class BettingLogHourService {
                 getBettingLogFromReport(params, uicGroupList);
                 //汇总三张投注信息
                 getBettingLogFromTcard(params, uicGroupList);
+                //汇总球酷投注信息
+                getBettingLogFromCoolBall(params,uicGroupList);
             }
         } catch (Exception e) {
             logger.error("时间格式错误: traceId={}, date={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(date));
@@ -160,6 +166,8 @@ public class BettingLogHourService {
         getBettingLogFromReport(params, uicGroupList);
         //汇总三张投注信息
         getBettingLogFromTcard(params, uicGroupList);
+        //汇总球酷投注信息
+        getBettingLogFromCoolBall(params,uicGroupList);
         //汇总捕鱼投注信息
         getFishInfo(cal.getTime(), calendar.getTime(), uicGroupList);
     }
@@ -209,6 +217,45 @@ public class BettingLogHourService {
         }
 
     }
+
+    /**
+     * 球酷投注信息
+     * @param params
+     * @return
+     */
+    private void getBettingLogFromCoolBall(Map<String, Object> params, List<Long> uicGroupList) {
+        try {
+            List<DatawareBettingLogHour> bettingLogHourList = transDealService.getGameBettingRecord(params);
+            for (DatawareBettingLogHour logHour : bettingLogHourList) {
+                logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
+                logHour.setGameType(101);
+                DataDict dataDict = dataDictService.getDictByValue("game_type", logHour.getGameType());
+                if (null != dataDict) {
+                    logHour.setGameName(dataDict.getLabel());
+                }
+                if (null != logHour.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
+                    if (null != channelInfo) {
+                        if (null == channelInfo.getParentId()) {
+                            logHour.setParentId(logHour.getChannelId());
+                        } else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
+                    }
+                }
+            }
+            try {
+                if (CollectionUtils.isNotEmpty(bettingLogHourList)) {
+                    datawareBettingLogHourService.batchSave(bettingLogHourList);
+                }
+            } catch (Exception e) {
+                logger.error("FromCoolBall添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            }
+        } catch (Exception e) {
+            logger.error("FromCoolBall获取记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+        }
+    }
+
 
     /**
      * 三张投注信息
@@ -385,6 +432,8 @@ public class BettingLogHourService {
                 getBettingLogFromReport(map, uicGroupList);
                 //汇总三张投注信息
                 getBettingLogFromTcard(map, uicGroupList);
+                //汇总球酷投注信息
+                getBettingLogFromCoolBall(map, uicGroupList);
                 //汇总捕鱼投注信息
                 getFishInfo(DateUtils.parseDateTime(startTime), DateUtils.parseDateTime(endTime), uicGroupList);
 
@@ -453,8 +502,10 @@ public class BettingLogHourService {
             getBettingLogFromReport(params, uicGroupList);
             //汇总三张投注信息
             getBettingLogFromTcard(params, uicGroupList);
-            //汇总捕鱼投注信息
+            //汇总球酷投注信息
+            getBettingLogFromCoolBall(params,uicGroupList);
         }
+        //汇总捕鱼投注信息
         getFishInfo(DateUtils.parseDateTime(startTime), DateUtils.parseDateTime(endTime), uicGroupList);
     }
 }
