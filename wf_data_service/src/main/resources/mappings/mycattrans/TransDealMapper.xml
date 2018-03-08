@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.mycattrans.TransDealDao">
+	
+	<sql id="transDealColumns">
+		t.id,
+		t.user_id,
+		t.game_id,
+		t.business_id,
+		t.change_note_id,
+		t.amount,
+		t.business_type,
+		t.phase,
+		t.callback_count,
+		t.callback_status,
+		t.channel_id,
+		t.remark,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="transDealWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="transDealJoins">
+	</sql>
+	
+	<select id="get" resultType="TransDeal">
+		SELECT <include refid="transDealColumns"/> FROM trans_deal t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="TransDeal">
+		SELECT <include refid="transDealColumns"/> FROM trans_deal t <include refid="transDealJoins"/>
+		WHERE <include refid="transDealWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM trans_deal t WHERE <include refid="transDealWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO trans_deal (
+			id, 
+			user_id, 
+			game_id, 
+			business_id, 
+			change_note_id, 
+			amount, 
+			business_type, 
+			phase, 
+			callback_count, 
+			callback_status, 
+			channel_id, 
+			remark, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{gameId}, 
+			#{businessId}, 
+			#{changeNoteId}, 
+			#{amount}, 
+			#{businessType}, 
+			#{phase}, 
+			#{callbackCount}, 
+			#{callbackStatus}, 
+			#{channelId}, 
+			#{remark}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE trans_deal SET
+			user_id = #{userId}, 
+			game_id = #{gameId}, 
+			business_id = #{businessId}, 
+			change_note_id = #{changeNoteId}, 
+			amount = #{amount}, 
+			business_type = #{businessType}, 
+			phase = #{phase}, 
+			callback_count = #{callbackCount}, 
+			callback_status = #{callbackStatus}, 
+			channel_id = #{channelId}, 
+			remark = #{remark}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE trans_deal SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
