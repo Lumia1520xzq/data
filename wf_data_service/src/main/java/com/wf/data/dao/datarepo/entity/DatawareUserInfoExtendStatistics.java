@@ -17,8 +17,8 @@ public class DatawareUserInfoExtendStatistics extends DataEntity {
     private Double totalWarsProfit;
     private Double totalWarsBetting;
     private Integer rechargeType;
-    private java.util.Date firstRechargeTime;
-    private java.util.Date lastRechargeTime;
+    private String firstRechargeTime;
+    private String lastRechargeTime;
     private Double totalRechargeAmount;
     private Long totalRechargeCount;
     private Double averageRechargeAmount;
@@ -105,19 +105,19 @@ public class DatawareUserInfoExtendStatistics extends DataEntity {
         this.rechargeType = rechargeType;
     }
 
-    public Date getFirstRechargeTime() {
+    public String getFirstRechargeTime() {
         return firstRechargeTime;
     }
 
-    public void setFirstRechargeTime(Date firstRechargeTime) {
+    public void setFirstRechargeTime(String firstRechargeTime) {
         this.firstRechargeTime = firstRechargeTime;
     }
 
-    public Date getLastRechargeTime() {
+    public String getLastRechargeTime() {
         return lastRechargeTime;
     }
 
-    public void setLastRechargeTime(Date lastRechargeTime) {
+    public void setLastRechargeTime(String lastRechargeTime) {
         this.lastRechargeTime = lastRechargeTime;
     }
 

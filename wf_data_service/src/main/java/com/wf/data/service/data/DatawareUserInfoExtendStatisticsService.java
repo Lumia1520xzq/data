@@ -11,5 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatawareUserInfoExtendStatisticsService extends CrudService<DatawareUserInfoExtendStatisticsDao, DatawareUserInfoExtendStatistics> {
 
-
+    public void deleteAll() {
+        dao.deleteAll();
+    }
 }

@@ -8,4 +8,5 @@ import com.wf.data.dao.datarepo.entity.DatawareUserInfoExtendStatistics;
 @MyBatisDao(tableName = "dataware_user_info_extend_statistics")
 public interface DatawareUserInfoExtendStatisticsDao extends CrudDao<DatawareUserInfoExtendStatistics> {
 
+    void deleteAll();
 }
