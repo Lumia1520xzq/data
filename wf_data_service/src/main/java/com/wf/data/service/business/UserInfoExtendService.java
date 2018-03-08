@@ -66,7 +66,9 @@ public class UserInfoExtendService {
             }
 
             /* 分页查询dataware_user_info数据**/
-            long userCount = userInfoService.getCountByTime(new HashMap<>());
+            HashMap<String,Object> alluserInfoParam = new HashMap<>();
+            alluserInfoParam.put("yesterdayParam",YESTERDAY);
+            long userCount = userInfoService.getCountByTime(alluserInfoParam);
             int pageCount = (int) Math.ceil(1.0 * userCount / PAGE_SIZE);//算出总共需要多少页
             for (int i = 1; i <= pageCount; i++) {
                 long minIndex = (i - 1) * PAGE_SIZE;
@@ -74,6 +76,7 @@ public class UserInfoExtendService {
                 Map<String, Object> params = new HashMap<>();
                 params.put("minIndex", minIndex);
                 params.put("maxIndex", maxIndex);
+                params.put("endDate",YESTERDAY);
                 List<DatawareUserInfo> userInfos = userInfoService.getBaseUserInfoLimit(params);
                 if (CollectionUtils.isNotEmpty(userInfos)) {
                     for (DatawareUserInfo userInfo : userInfos) {
@@ -83,7 +86,7 @@ public class UserInfoExtendService {
             }
 
         } catch (Exception e) {
-            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            logger.error("重置用户维度基本信息失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
             return;
         }
         logger.info("用户维度基本信息表重置结束:traceId={}", TraceIdUtils.getTraceId());
