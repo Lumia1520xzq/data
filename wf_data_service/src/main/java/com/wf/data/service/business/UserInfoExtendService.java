@@ -58,7 +58,7 @@ public class UserInfoExtendService {
     @Autowired
     private DatawareConvertDayService convertDayService;
     @Autowired
-    DatawareUserInfoExtendStatisticsService userInfoExtendStatisticsService;
+    private DatawareUserInfoExtendStatisticsService userInfoExtendStatisticsService;
 
     /**
      * 重置dataware_user_info_extend_base
