@@ -40,4 +40,16 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
+
+    public String getFirstActiveDate(Map<String, Object> userParam) {
+        return dao.getFirstActiveDate(userParam);
+    }
+
+    public String getLastActiveDate(Map<String, Object> userParam) {
+        return dao.getLastActiveDate(userParam);
+    }
+
+    public Integer getActiveDatesByUser(Map<String, Object> userParam) {
+        return dao.getActiveDatesByUser(userParam);
+    }
 }

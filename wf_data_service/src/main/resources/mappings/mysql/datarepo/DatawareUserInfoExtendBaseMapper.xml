@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareUserInfoExtendBaseDao">
+	
+	<sql id="datawareUserInfoExtendBaseColumns">
+		t.id,
+		t.user_id,
+		t.channel_id,
+		t.parent_id,
+		t.registered_time,
+		t.new_user_flag,
+		t.user_group,
+		t.no_use_gold_amount,
+		t.cost_amount,
+		t.first_active_date,
+		t.last_active_date,
+		t.active_dates,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareUserInfoExtendBaseWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareUserInfoExtendBaseJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareUserInfoExtendBase">
+		SELECT <include refid="datawareUserInfoExtendBaseColumns"/> FROM dataware_user_info_extend_base t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareUserInfoExtendBase">
+		SELECT <include refid="datawareUserInfoExtendBaseColumns"/> FROM dataware_user_info_extend_base t <include refid="datawareUserInfoExtendBaseJoins"/>
+		WHERE <include refid="datawareUserInfoExtendBaseWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_user_info_extend_base t WHERE <include refid="datawareUserInfoExtendBaseWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_user_info_extend_base (
+			id, 
+			user_id, 
+			channel_id, 
+			parent_id, 
+			registered_time, 
+			new_user_flag, 
+			user_group, 
+			no_use_gold_amount, 
+			cost_amount, 
+			first_active_date, 
+			last_active_date, 
+			active_dates, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{userId}, 
+			#{channelId}, 
+			#{parentId}, 
+			#{registeredTime}, 
+			#{newUserFlag}, 
+			#{userGroup}, 
+			#{noUseGoldAmount}, 
+			#{costAmount}, 
+			#{firstActiveDate}, 
+			#{lastActiveDate}, 
+			#{activeDates}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_user_info_extend_base SET
+			user_id = #{userId}, 
+			channel_id = #{channelId}, 
+			parent_id = #{parentId}, 
+			registered_time = #{registeredTime}, 
+			new_user_flag = #{newUserFlag}, 
+			user_group = #{userGroup}, 
+			no_use_gold_amount = #{noUseGoldAmount}, 
+			cost_amount = #{costAmount}, 
+			first_active_date = #{firstActiveDate}, 
+			last_active_date = #{lastActiveDate}, 
+			active_dates = #{activeDates}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_user_info_extend_base SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
