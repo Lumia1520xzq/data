@@ -232,6 +232,7 @@ public class UserInfoExtendService {
         userInfoExtendBase.setFirstActiveDate(firstActiveDate);
         userInfoExtendBase.setLastActiveDate(lastActiveDate);
         userInfoExtendBase.setActiveDates(activeDates);
+        userInfoExtendBase.setUpdateTime(new Date());
         //首日新用户；1：不是，0：是；
         if (userInfo.getRegisteredDate().equals(YESTERDAY)) {
             userInfoExtendBase.setNewUserFlag(0);
@@ -328,6 +329,7 @@ public class UserInfoExtendService {
         userInfoExtendStatistics.setTotalRechargeCount(totalRechargeCount);
         userInfoExtendStatistics.setAverageRechargeAmount(averageRechargeAmount);
         userInfoExtendStatistics.setRechargeType(rechargeType);
+        userInfoExtendStatistics.setUpdateTime(new Date());
         userInfoExtendStatisticsService.save(userInfoExtendStatistics);
 
     }

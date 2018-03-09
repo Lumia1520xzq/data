@@ -33,7 +33,7 @@ public class DayFinalJob {
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
-        try {
+        /*try {
             channelCostService.toDoChannelCostAnalysis();
         } catch (Exception e) {
             logger.error("toDoChannelCostAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
@@ -78,7 +78,7 @@ public class DayFinalJob {
             }
         } catch (Exception e) {
             logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
-        }
+        }*/
 
         //用户基本信息维度表清洗
         try {

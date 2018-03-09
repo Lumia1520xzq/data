@@ -120,7 +120,8 @@
 			total_recharge_count = #{totalRechargeCount}, 
 			average_recharge_amount = #{averageRechargeAmount}, 
 			shop_profit = #{shopProfit}, 
-			shop_betting = #{shopBetting}, 
+			shop_betting = #{shopBetting},
+			update_time = #{updateTime},
 			delete_flag = #{deleteFlag} 
 		WHERE id = #{id}
 	</update>
