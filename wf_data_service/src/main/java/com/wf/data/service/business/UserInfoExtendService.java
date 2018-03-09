@@ -248,10 +248,16 @@ public class UserInfoExtendService {
      * 保存用户投注，充值数据
      */
     private void saveStatisticsInfo(Long userId, Double useAmount, Double costAmount) {
-        DatawareUserInfoExtendStatistics userInfoExtendStatistics = new DatawareUserInfoExtendStatistics();
+
         Map<String, Object> baseParam = new HashMap<>();
         baseParam.put("userId", userId);
         baseParam.put("endDate", YESTERDAY);
+
+        DatawareUserInfoExtendStatistics userInfoExtendStatistics = userInfoExtendStatisticsService.getByUserId(baseParam);
+        if (userInfoExtendStatistics == null){//新用户
+            userInfoExtendStatistics = new DatawareUserInfoExtendStatistics();
+            userInfoExtendStatistics.setUserId(userId);
+        }
 
         Double totalBettingAmount = 0D;
         Double totalResultAmount = 0D;
@@ -308,7 +314,6 @@ public class UserInfoExtendService {
         //用户盈亏状态
         profitAmount = getProfitAmount(useAmount, costAmount, totalWarsProfit, totalRechargeAmount, totalWarsBetting);
 
-        userInfoExtendStatistics.setUserId(userId);
         userInfoExtendStatistics.setTotalBettingAmount(totalBettingAmount);
         userInfoExtendStatistics.setTotalResultAmount(totalResultAmount);
         userInfoExtendStatistics.setTotalDiffAmount(totalDiffAmount);

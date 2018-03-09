@@ -6,7 +6,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 <!-- 存放手写的sql -->
 <mapper namespace="com.wf.data.dao.wars.WarsRoomDao">
 	<select id="getTotalWarsProfitByUser" resultType="Double">
-		SELECT sum(IFNULL(amount,0))
+		SELECT IFNULL(sum(amount),0)
 		FROM
 		wars_room
 		WHERE
@@ -18,7 +18,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="getTotalWarsBettingByUser" resultType="Double">
-		SELECT sum(IFNULL(amount,0))
+		SELECT IFNULL(sum(amount),0)
 		FROM
 		wars_room
 		WHERE
