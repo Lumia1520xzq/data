@@ -12,9 +12,9 @@ public class DatawareUserInfoExtendGame extends DataEntity {
 	private String firstActiveTime;
 	private Integer newUserFlag;
 	private Double sumBettingAmount;
-	private Long sumBettingCount;
+	private Integer sumBettingCount;
 	private Double sevenSumBettingAmount;
-	private Long sevenSumBettingCount;
+	private Integer sevenSumBettingCount;
 
 	public Long getUserId() {
 		return userId;
@@ -56,14 +56,6 @@ public class DatawareUserInfoExtendGame extends DataEntity {
 		this.sumBettingAmount = sumBettingAmount;
 	}
 
-	public Long getSumBettingCount() {
-		return sumBettingCount;
-	}
-
-	public void setSumBettingCount(Long sumBettingCount) {
-		this.sumBettingCount = sumBettingCount;
-	}
-
 	public Double getSevenSumBettingAmount() {
 		return sevenSumBettingAmount;
 	}
@@ -72,11 +64,19 @@ public class DatawareUserInfoExtendGame extends DataEntity {
 		this.sevenSumBettingAmount = sevenSumBettingAmount;
 	}
 
-	public Long getSevenSumBettingCount() {
+	public Integer getSumBettingCount() {
+		return sumBettingCount;
+	}
+
+	public void setSumBettingCount(Integer sumBettingCount) {
+		this.sumBettingCount = sumBettingCount;
+	}
+
+	public Integer getSevenSumBettingCount() {
 		return sevenSumBettingCount;
 	}
 
-	public void setSevenSumBettingCount(Long sevenSumBettingCount) {
+	public void setSevenSumBettingCount(Integer sevenSumBettingCount) {
 		this.sevenSumBettingCount = sevenSumBettingCount;
 	}
 }

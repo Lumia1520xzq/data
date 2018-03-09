@@ -45,11 +45,7 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
         return dao.getBettingUserIdListByDate(bettingParams);
     }
 
-    public DatawareBettingLogDay getInfoByUser(Map<String, Object> baseParam) {
-        return dao.getInfoByUser(baseParam);
-    }
-
-    public Long getBettingCountByUser(Map<String, Object> baseParam) {
-        return dao.getBettingCountByUser(baseParam);
+    public TcardDto  getBettingByUserIdAndGameType(Map<String, Object> params){
+        return dao.getBettingByUserIdAndGameType(params);
     }
 }
