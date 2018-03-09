@@ -145,4 +145,9 @@ public interface DataConstants {
 
     String DATA_FINAL_HOUR_OPEN = "data_final_hour_open";
 
+    /**
+     * 用户维度清洗的游戏信息游戏数
+     */
+    String DATA_DATAWARE_USERINFO_EXTEND_GAME = "data_dataware_userinfo_extend_game";
+
 }

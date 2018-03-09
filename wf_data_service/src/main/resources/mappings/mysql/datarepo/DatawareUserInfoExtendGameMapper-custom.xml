@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareUserInfoExtendGameDao">
+
+    <select id="getByUserIdAndGameType" resultType="DatawareUserInfoExtendGame">
+        SELECT
+        <include refid="datawareUserInfoExtendGameColumns"/>
+        FROM
+        dataware_user_info_extend_game t
+        WHERE 1=1
+        AND t.delete_flag = 0
+        <if test="userId != null">
+        and t.user_id = #{userId}
+        </if>
+        <if test="gameType != null">
+        and t.game_type = #{gameType}
+        </if>
+        limit 1
+    </select>
+
+</mapper>
+
