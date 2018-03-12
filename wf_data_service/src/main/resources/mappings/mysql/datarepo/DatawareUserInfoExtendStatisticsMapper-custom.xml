@@ -15,5 +15,27 @@
         FROM dataware_user_info_extend_statistics t WHERE user_id = #{userId}
     </select>
 
+
+    <select id="getProfitByUserId" resultType="DatawareUserInfoExtendStatistics">
+        SELECT
+        b.user_id userId,
+        s.profit_amount profitAmount,
+        s.total_recharge_amount totalRechargeAmount,
+        s.total_wars_profit totalWarsProfit,
+        s.total_wars_betting totalWarsBetting,
+        b.cost_amount costAmount,
+        b.no_use_gold_amount noUseGoldAmount
+        FROM
+        dataware_user_info_extend_base b
+        LEFT JOIN
+        `dataware_user_info_extend_statistics` s
+        ON s.user_id = b.user_id
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND b.user_id = #{userId}
+        </if>
+        ORDER BY b.cost_amount DESC LIMIT #{start}, #{length}
+    </select>
+
 </mapper>
 

@@ -16,7 +16,7 @@ Ext.define('WF.view.business.userProfitMain', {
             fields: [
                 'userName', 'userId', 'profitAmount',
                 'totalRechargeAmount', 'totalWarsProfit', 'costAmount',
-                'totalWarsBetting', 'useGoldAmount'
+                'totalWarsBetting', 'noUseGoldAmount'
             ]
         });
 
@@ -136,7 +136,7 @@ Ext.define('WF.view.business.userProfitMain', {
                 {
                     text: 'S3',//剩余金叶子
                     width: 30,
-                    dataIndex: 'useGoldAmount',
+                    dataIndex: 'noUseGoldAmount',
                     menuDisabled: true,
                     sortable: false,
                     renderer: function (value) {
