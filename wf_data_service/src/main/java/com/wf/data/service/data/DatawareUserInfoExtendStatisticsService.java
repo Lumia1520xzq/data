@@ -5,6 +5,7 @@ import com.wf.data.dao.datarepo.DatawareUserInfoExtendStatisticsDao;
 import com.wf.data.dao.datarepo.entity.DatawareUserInfoExtendStatistics;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,4 +21,10 @@ public class DatawareUserInfoExtendStatisticsService extends CrudService<Datawar
     public DatawareUserInfoExtendStatistics getByUserId(Map<String, Object> baseParam) {
         return dao.getByUserId(baseParam);
     }
+
+    public List<DatawareUserInfoExtendStatistics> getProfitByUserId(Map<String, Object> baseParam) {
+        return dao.getProfitByUserId(baseParam);
+    }
+
+
 }

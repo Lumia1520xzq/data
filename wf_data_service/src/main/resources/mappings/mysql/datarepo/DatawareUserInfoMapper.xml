@@ -45,7 +45,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND t.registered_hour &lt;= #{endHour}
 		</if>
 		<if test="yesterdayParam != null and yesterdayParam != ''">
-			AND t.registered_date &lt; #{yesterdayParam}
+			AND t.registered_date &lt;= #{yesterdayParam}
 		</if>
 	</select>
 
