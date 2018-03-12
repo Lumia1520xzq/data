@@ -44,6 +44,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="endHour != null and endHour != ''">
 			AND t.registered_hour &lt;= #{endHour}
 		</if>
+		<if test="yesterdayParam != null and yesterdayParam != ''">
+			AND t.registered_date &lt;= #{yesterdayParam}
+		</if>
 	</select>
 
 	<select id="get" resultType="DatawareUserInfo">

@@ -5,6 +5,7 @@ import com.wf.data.dao.mall.InventoryPhyAwardsSendlogDao;
 import com.wf.data.dao.mall.entity.InventoryPhyAwardsSendlog;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -14,4 +15,7 @@ public class InventoryPhyAwardsSendlogService extends CrudService<InventoryPhyAw
         return dao.getRmbAmountByChannel(map);
     }
 
+    public Double getRmbAmountByUserId(Map<String, Object> userParam) {
+        return dao.getRmbAmountByUserId(userParam);
+    }
 }

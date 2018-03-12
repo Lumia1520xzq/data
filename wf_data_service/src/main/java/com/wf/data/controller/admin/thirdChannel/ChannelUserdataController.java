@@ -387,12 +387,12 @@ public class ChannelUserdataController extends ExtJsController {
                     //获取投注清洗表数据
                     DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
                     if (null != bettingLogHour) {
-                        recharUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
+                        bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
                     }
                     //获取充值清洗表数据
                     DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
                     if (null != convertHour) {
-                        bUserCount = convertHour.getRechargeUserCount();
+                        recharUserCount = convertHour.getRechargeUserCount();
                     }
                 }
             } else {//用户类型：所有用户
