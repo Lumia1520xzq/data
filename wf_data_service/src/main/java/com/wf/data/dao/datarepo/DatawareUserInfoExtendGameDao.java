@@ -10,4 +10,12 @@ import java.util.Map;
 @MyBatisDao(tableName = "dataware_user_info_extend_game")
 public interface DatawareUserInfoExtendGameDao extends CrudDao<DatawareUserInfoExtendGame> {
     DatawareUserInfoExtendGame getByUserIdAndGameType(Map<String,Object> params);
+
+    void updateNewUserFlag(String month);
+
+    Long getAllCount();
+
+    void deleteAll();
+
+    void updateBettingData(Map<String,Object> params);
 }

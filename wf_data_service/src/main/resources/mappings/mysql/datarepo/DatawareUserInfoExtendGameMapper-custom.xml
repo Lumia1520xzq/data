@@ -5,6 +5,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.wf.data.dao.datarepo.DatawareUserInfoExtendGameDao">
+    <select id="getAllCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM dataware_user_info_extend_game t
+        WHERE t.delete_flag = 0;
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM dataware_user_info_extend_game WHERE 1=1;
+    </delete>
 
     <select id="getByUserIdAndGameType" resultType="DatawareUserInfoExtendGame">
         SELECT
@@ -21,6 +30,31 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         </if>
         limit 1
     </select>
+
+    <update id="updateNewUserFlag">
+        UPDATE `dataware_user_info_extend_game`
+        SET new_user_flag=1
+        WHERE new_user_flag=0
+        <if test="month != null">
+        AND DATE_FORMAT(first_active_time,'%Y-%m') = #{month}
+        </if>
+    </update>
+
+    <update id="updateBettingData">
+        UPDATE `dataware_user_info_extend_game`
+        SET
+        sum_betting_amount = #{sumBettingAmount},
+        sum_betting_count = #{sumBettingCount},
+        seven_sum_betting_amount = #{sevenSumBettingAmount},
+        seven_sum_betting_count = #{sevenSumBettingCount}
+        WHERE 1=1
+        <if test="userId != null">
+            and user_id = #{userId}
+        </if>
+        <if test="gameType != null">
+            and game_type = #{gameType}
+        </if>
+    </update>
 
 </mapper>
 
