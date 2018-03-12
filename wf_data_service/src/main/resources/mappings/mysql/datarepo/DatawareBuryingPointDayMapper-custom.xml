@@ -150,5 +150,44 @@
         </if>
     </delete>
 
+    <select id="getFirstActiveDate" resultType="java.lang.String">
+        SELECT
+            burying_date
+        FROM
+            `dataware_burying_point_day` t
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND t.user_id = #{userId}
+        </if>
+        ORDER BY
+            t.burying_date ASC
+        LIMIT 1;
+    </select>
+
+    <select id="getLastActiveDate" resultType="java.lang.String">
+        SELECT
+        burying_date
+        FROM
+        `dataware_burying_point_day` t
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND t.user_id = #{userId}
+        </if>
+        ORDER BY
+        t.burying_date DESC
+        LIMIT 1;
+    </select>
+
+    <select id="getActiveDatesByUser" resultType="java.lang.Integer">
+        SELECT
+        COUNT(DISTINCT burying_date)
+        FROM
+        `dataware_burying_point_day` t
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND t.user_id = #{userId}
+        </if>
+    </select>
+
 </mapper>
 

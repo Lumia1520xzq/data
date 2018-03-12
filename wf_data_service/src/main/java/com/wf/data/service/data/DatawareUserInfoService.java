@@ -36,4 +36,8 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
     public int updateUserGroup(Map<String, Object> map) {
         return dao.updateUserGroup(map);
     }
+
+    public List<DatawareUserInfo> getBaseUserInfoLimit(Map<String, Object> params) {
+        return dao.getBaseUserInfoLimit(params);
+    }
 }

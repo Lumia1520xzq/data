@@ -15,4 +15,5 @@ public interface InventoryPhyAwardsSendlogDao extends CrudDao<InventoryPhyAwards
 
     Double getRmbAmountByChannel(Map<String,Object> map);
 
+    Double getRmbAmountByUserId(Map<String, Object> userParam);
 }

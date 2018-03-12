@@ -220,5 +220,45 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		AND t.channel_id = #{channelId}
 		AND t.convert_date = #{beginDate}
 	</select>
+
+	<select id="getInfoByUser" resultType="DatawareConvertDay">
+		SELECT
+			IFNULL(SUM(t.third_amount),0) AS third_amount,
+			IFNULL(SUM(t.recharge_count),0) AS recharge_count
+		FROM
+			dataware_convert_day t
+		WHERE
+			t.delete_flag = 0
+		AND t.user_id = #{userId}
+		AND t.convert_date &lt;= #{endDate};
+	</select>
+
+	<select id="getFirstRechargeTime" resultType="String">
+		SELECT
+			t.convert_date
+		FROM
+			dataware_convert_day t
+		WHERE
+			t.delete_flag = 0
+		AND t.user_id = #{userId}
+		AND t.convert_date &lt;= #{endDate}
+		ORDER BY
+			t.convert_date ASC
+		LIMIT 1
+	</select>
+
+	<select id="getLastRechargeTime" resultType="String">
+		SELECT
+			t.convert_date
+		FROM
+			dataware_convert_day t
+		WHERE
+			t.delete_flag = 0
+		AND t.user_id = #{userId}
+		AND t.convert_date &lt;= #{endDate}
+		ORDER BY
+			t.convert_date DESC
+		LIMIT 1
+	</select>
 </mapper>
 

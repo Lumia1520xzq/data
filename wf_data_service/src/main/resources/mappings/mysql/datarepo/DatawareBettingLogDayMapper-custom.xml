@@ -152,5 +152,29 @@
         AND t.channel_id = #{channelId}
     </select>
 
+    <select id="getInfoByUser" resultType="DatawareBettingLogDay">
+        SELECT
+            SUM(betting_amount) bettingAmount,
+            SUM(result_amount) resultAmount,
+            SUM(betting_count) bettingCount
+        FROM
+          dataware_betting_log_day
+        WHERE
+          user_group = 2
+        AND user_id = #{userId}
+        AND betting_date &lt;= #{endDate}
+    </select>
+
+    <select id="getBettingCountByUser" resultType="java.lang.Long">
+        SELECT
+          COUNT(*)
+        FROM
+          `dataware_betting_log_day`
+        WHERE
+          user_group = 2
+        AND user_id = #{userId}
+        AND betting_date &lt;= #{endDate}
+    </select>
+
 </mapper>
 
