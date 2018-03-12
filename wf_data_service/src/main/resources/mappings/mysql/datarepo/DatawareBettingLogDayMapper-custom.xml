@@ -178,7 +178,6 @@
 
     <select id="getBettingByUserIdAndGameType" resultType="com.wf.data.dto.TcardDto">
         SELECT
-        betting_date searchDate,
         IFNULL(COUNT(DISTINCT user_id),0) userCount,
         IFNULL(SUM(betting_amount),0) bettingAmount,
         IFNULL(SUM(betting_count),0) bettingCount,
