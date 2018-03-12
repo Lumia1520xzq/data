@@ -23,4 +23,6 @@ public interface DatawareUserInfoDao extends CrudDao<DatawareUserInfo> {
     int updateUserGroup(Map<String, Object> map);
 
     List<DatawareUserInfo> getBaseUserInfoLimit(Map<String, Object> params);
+
+    DatawareUserInfo getByUserId(Long userId);
 }
