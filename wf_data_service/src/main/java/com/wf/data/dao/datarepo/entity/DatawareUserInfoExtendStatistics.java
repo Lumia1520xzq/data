@@ -1,6 +1,5 @@
 package com.wf.data.dao.datarepo.entity;
 
-
 import com.wf.core.persistence.DataEntity;
 
 import java.util.Date;
@@ -17,13 +16,12 @@ public class DatawareUserInfoExtendStatistics extends DataEntity {
     private Double totalWarsProfit;
     private Double totalWarsBetting;
     private Integer rechargeType;
+    private Integer rechargeTypeEve;
     private String firstRechargeTime;
     private String lastRechargeTime;
     private Double totalRechargeAmount;
     private Long totalRechargeCount;
     private Double averageRechargeAmount;
-    private Double shopProfit;
-    private Double shopBetting;
 
     public Long getUserId() {
         return userId;
@@ -105,6 +103,14 @@ public class DatawareUserInfoExtendStatistics extends DataEntity {
         this.rechargeType = rechargeType;
     }
 
+    public Integer getRechargeTypeEve() {
+        return rechargeTypeEve;
+    }
+
+    public void setRechargeTypeEve(Integer rechargeTypeEve) {
+        this.rechargeTypeEve = rechargeTypeEve;
+    }
+
     public String getFirstRechargeTime() {
         return firstRechargeTime;
     }
@@ -145,19 +151,4 @@ public class DatawareUserInfoExtendStatistics extends DataEntity {
         this.averageRechargeAmount = averageRechargeAmount;
     }
 
-    public Double getShopProfit() {
-        return shopProfit;
-    }
-
-    public void setShopProfit(Double shopProfit) {
-        this.shopProfit = shopProfit;
-    }
-
-    public Double getShopBetting() {
-        return shopBetting;
-    }
-
-    public void setShopBetting(Double shopBetting) {
-        this.shopBetting = shopBetting;
-    }
 }

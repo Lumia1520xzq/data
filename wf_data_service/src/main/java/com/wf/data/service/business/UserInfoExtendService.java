@@ -254,6 +254,10 @@ public class UserInfoExtendService {
         baseParam.put("userId", userId);
         baseParam.put("endDate", YESTERDAY);
 
+        Map<String,Object> rechargeEveParam = new HashMap<>();
+        rechargeEveParam.put("userId", userId);
+        rechargeEveParam.put("endDate", DateUtils.getPrevDate(YESTERDAY,1));
+
         DatawareUserInfoExtendStatistics userInfoExtendStatistics = userInfoExtendStatisticsService.getByUserId(baseParam);
         if (userInfoExtendStatistics == null){//新用户
             userInfoExtendStatistics = new DatawareUserInfoExtendStatistics();
@@ -269,6 +273,7 @@ public class UserInfoExtendService {
         Double totalWarsProfit;
         Double totalWarsBetting;
         Integer rechargeType;
+        Integer rechargeTypeEve;
         String firstRechargeTime;
         String lastRechargeTime;
         Double totalRechargeAmount = 0D;
@@ -276,8 +281,9 @@ public class UserInfoExtendService {
         Double averageRechargeAmount;
         //获取用户投注信息
         DatawareBettingLogDay bettingLogDay = bettingLogDayService.getInfoByUser(baseParam);
-        //获取用户充值信息
+        //获取用户充值信息(T-1)
         DatawareConvertDay convertDay = convertDayService.getInfoByUser(baseParam);
+        DatawareConvertDay convertDayEve = convertDayService.getInfoByUser(rechargeEveParam);
 
         /*用户投注信息*/
         if (null != bettingLogDay) {
@@ -299,13 +305,16 @@ public class UserInfoExtendService {
 
         /*用户充值信息*/
         if (convertDay != null) {
-            //累计充值金额
+            //累计充值金额（T-1）
             totalRechargeAmount = convertDay.getThirdAmount();
             //累计充值次数
             totalRechargeCount = Long.parseLong(convertDay.getRechargeCount().toString());
         }
-        //用户分层
+        //用户分层(T-1)
         rechargeType = getUserRechargeType(totalRechargeAmount);
+
+        //用户分层(T-2)
+        rechargeTypeEve = getUserRechargeType(convertDayEve.getThirdAmount());
         //首次充值时间
         firstRechargeTime = convertDayService.getFirstRechargeTime(baseParam);
         //最后一次充值时间
@@ -329,6 +338,7 @@ public class UserInfoExtendService {
         userInfoExtendStatistics.setTotalRechargeCount(totalRechargeCount);
         userInfoExtendStatistics.setAverageRechargeAmount(averageRechargeAmount);
         userInfoExtendStatistics.setRechargeType(rechargeType);
+        userInfoExtendStatistics.setRechargeTypeEve(rechargeTypeEve);
         userInfoExtendStatistics.setUpdateTime(new Date());
         userInfoExtendStatisticsService.save(userInfoExtendStatistics);
 
@@ -350,7 +360,7 @@ public class UserInfoExtendService {
         double totalWarsProfitRmb = BigDecimalUtil.div(totalWarsProfit, 1000);
         double totalWarsBettingRmb = BigDecimalUtil.div(totalWarsBetting, 1000);
         double cost = BigDecimalUtil.add(BigDecimalUtil.add(useAmountRmb, costAmount), totalWarsProfitRmb);
-        double profit = BigDecimalUtil.add(costAmount, totalWarsBettingRmb);
+        double profit = BigDecimalUtil.add(totalRechargeAmount, totalWarsBettingRmb);
         return BigDecimalUtil.sub(cost, profit);
     }
 
