@@ -136,15 +136,19 @@ public class UserInfoExtendService {
         //2.修改活跃用户信息
         if (CollectionUtils.isNotEmpty(activeUserIds)) {
             for (Long activeUserId : activeUserIds) {
-                DatawareUserInfoExtendBase userInfoExtendBase = userInfoExtendBaseService.getByUserId(activeUserId);
-                if (userInfoExtendBase == null) {//新增用户
-                    //获取新用户基本信息
-                    DatawareUserInfo userInfo = userInfoService.get(activeUserId);
-                    if (userInfo != null) {
-                        saveBaseInfo(userInfo);
+                try {
+                    DatawareUserInfoExtendBase userInfoExtendBase = userInfoExtendBaseService.getByUserId(activeUserId);
+                    if (userInfoExtendBase == null) {//新增用户
+                        //获取新用户基本信息
+                        DatawareUserInfo userInfo = userInfoService.getByUserId(activeUserId);
+                        if (userInfo != null) {
+                            saveBaseInfo(userInfo);
+                        }
+                    } else {//老用户
+                        updateUserExtendInfo(userInfoExtendBase);
                     }
-                } else {//老用户
-                    updateUserExtendInfo(userInfoExtendBase);
+                }catch(Exception e){
+                    logger.error("DatawareUserInfo中用户ID重复：traceId={}", TraceIdUtils.getTraceId());
                 }
             }
         }
