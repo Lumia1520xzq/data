@@ -6,6 +6,50 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.wf.data.dao.mycattrans.TransDealDao">
 
+    <select id="getGameBettingRecord" resultType="com.wf.data.dao.datarepo.entity.DatawareBettingLogHour">
+        SELECT
+        t.user_id userId,
+        t.channel_id channelId,
+        IFNULL(COUNT(CASE WHEN t.money_flag = 1 THEN t.business_id END),0) bettingCount,
+        IFNULL(SUM(CASE WHEN t.money_flag = 1 THEN t.change_money END),0) bettingAmount,
+        IFNULL(SUM(CASE WHEN t.money_flag = 2 THEN t.change_money END),0) resultAmount,
+        t.betting_date bettingDate,
+        t.betting_hour bettingHour
+        FROM
+        (
+        SELECT
+        b.user_id,
+        b.channel_id,
+        b.business_id,
+        b.betting_date,
+        b.betting_hour,
+        b.money_flag,
+        SUM(b.change_money) change_money FROM
+        (SELECT
+        user_id,
+        channel_id,
+        business_id,
+        DATE_FORMAT(create_time,"%Y-%m-%d") betting_date,
+        DATE_FORMAT(create_time,"%H") betting_hour,
+        CASE WHEN business_type IN (100001,100003) THEN 1
+         WHEN business_type = 100002 THEN 2
+         END money_flag,
+        CASE WHEN business_type = 100003 THEN -1*amount ELSE amount END change_money
+        FROM trans_deal
+        WHERE 1=1
+        <if test="channelId != null">
+            AND channel_id = #{channelId}
+        </if>
+        AND delete_flag = 0
+        AND create_time BETWEEN #{beginDate} AND #{endDate}
+        ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H") LIMIT 1000000
+        )
+        b
+        GROUP BY b.user_id,b.channel_id,b.business_id,b.betting_date,b.betting_hour,b.money_flag LIMIT 1000000
+        )t
+        GROUP BY t.user_id,t.channel_id,t.betting_date,t.betting_hour
+        ORDER BY t.betting_date,t.betting_hour LIMIT 1000000;
+    </select>
 
 </mapper>
 

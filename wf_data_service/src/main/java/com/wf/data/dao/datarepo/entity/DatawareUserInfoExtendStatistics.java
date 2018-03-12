@@ -2,8 +2,6 @@ package com.wf.data.dao.datarepo.entity;
 
 import com.wf.core.persistence.DataEntity;
 
-import java.util.Date;
-
 public class DatawareUserInfoExtendStatistics extends DataEntity {
     private static final long serialVersionUID = -1;
     private Long userId;
@@ -22,6 +20,34 @@ public class DatawareUserInfoExtendStatistics extends DataEntity {
     private Double totalRechargeAmount;
     private Long totalRechargeCount;
     private Double averageRechargeAmount;
+
+    private String userName;
+    private Double noUseGoldAmount;
+    private Double costAmount;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Double getNoUseGoldAmount() {
+        return noUseGoldAmount;
+    }
+
+    public void setNoUseGoldAmount(Double noUseGoldAmount) {
+        this.noUseGoldAmount = noUseGoldAmount;
+    }
+
+    public Double getCostAmount() {
+        return costAmount;
+    }
+
+    public void setCostAmount(Double costAmount) {
+        this.costAmount = costAmount;
+    }
 
     public Long getUserId() {
         return userId;
