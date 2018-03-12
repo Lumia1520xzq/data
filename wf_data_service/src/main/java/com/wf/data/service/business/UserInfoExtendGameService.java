@@ -24,13 +24,13 @@ import java.util.*;
 
 /**
  * @author shihui
- * @date 2018/3/5
+ * date 2018/3/5
  */
 
 @Service
 public class UserInfoExtendGameService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    //每次查询数量
+    /**每次查询数量*/
     private static final long PAGE_SIZE = 50000;
     private static final String YESTERDAY = DateUtils.getYesterdayDate();
     private static final String YESMONTH = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),1),DateUtils.MONTH_PATTERN);
@@ -58,7 +58,6 @@ public class UserInfoExtendGameService {
                 datawareUserInfoExtendGameService.deleteAll();
             }
             String gameStr = dataConfigService.findByName(DataConstants.DATA_DATAWARE_USERINFO_EXTEND_GAME).getValue();
-            List<DatawareUserInfoExtendGame> list = new ArrayList<>();
             /*分页查询dataware_user_info_extend_game数据*/
             HashMap<String, Object> alluserInfoParam = new HashMap<>();
             alluserInfoParam.put("yesterdayParam", YESTERDAY);
@@ -75,6 +74,7 @@ public class UserInfoExtendGameService {
                 List<DatawareUserInfo> userInfos = userInfoService.getBaseUserInfoLimit(params);
                 if (CollectionUtils.isNotEmpty(userInfos)) {
                     for (DatawareUserInfo userInfo : userInfos) {
+                        List<DatawareUserInfoExtendGame> list = new ArrayList<>();
                         if(StringUtils.isNotEmpty(gameStr)) {
                             String[] games = gameStr.split(",");
                             Map<String,Object> map = new HashMap<>();
@@ -84,20 +84,21 @@ public class UserInfoExtendGameService {
                                 map.put("gameType",Integer.parseInt(game));
                                 DatawareBettingLogDay bettingLogDay = bettingLogDayService.getByUserIdAndGameType(map);
                                 //如果有投注信息
-                                if(bettingLogDay != null){
+                                if(bettingLogDay != null) {
                                     DatawareUserInfoExtendGame newRecord = new DatawareUserInfoExtendGame();
                                     newRecord.setUserId(userInfo.getUserId());
                                     newRecord.setGameType(Integer.parseInt(game));
                                     newRecord.setNewUserFlag(1);
                                     newRecord.setFirstActiveTime(bettingLogDay.getBettingDate());
+                                    map.put("beginDate",null);
                                     map.put("endDate",YESTERDAY);
-                                    TcardDto dto = bettingLogDayService.getBettingByUserIdAndGameType(params);
+                                    TcardDto dto = bettingLogDayService.getBettingByUserIdAndGameType(map);
                                     //累计投注金额
                                     newRecord.setSumBettingAmount(dto.getBettingAmount());
                                     //累计投注次数
                                     newRecord.setSumBettingCount(dto.getBettingCount());
-                                    params.put("beginDate",DAY_WEEK_BEFORE);
-                                    dto = bettingLogDayService.getBettingByUserIdAndGameType(params);
+                                    map.put("beginDate",DAY_WEEK_BEFORE);
+                                    dto = bettingLogDayService.getBettingByUserIdAndGameType(map);
                                     //近7日累计投注金额
                                     newRecord.setSevenSumBettingAmount(dto.getBettingAmount());
                                     //近7日累计投注次数
@@ -105,10 +106,10 @@ public class UserInfoExtendGameService {
                                     list.add(newRecord);
                                 }
                             }
+                            datawareUserInfoExtendGameService.batchSave(list);
                         }
                     }
                 }
-                datawareUserInfoExtendGameService.batchSave(list);
             }
         } catch (Exception e) {
             logger.error("重置用户维度基本信息失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));

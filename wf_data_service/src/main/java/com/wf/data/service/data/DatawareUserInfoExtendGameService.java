@@ -72,12 +72,14 @@ public class DatawareUserInfoExtendGameService extends CrudService<DatawareUserI
                     list.add(newRecord);
                 }else{
                     params.put("beginDate",dayWeekBefore);
+                    params.put("endDate",yesterDay);
                     TcardDto dto = datawareBettingLogDayService.getBettingByUserIdAndGameType(params);
                     //近七日投注金额
                     Double sevenSumBettingAmount = dto.getBettingAmount();
                     //七日投注次数
                     Integer sevenSumBettingCount = dto.getBettingCount();
                     params.put("beginDate",null);
+                    params.put("endDate",yesterDay);
                     dto = datawareBettingLogDayService.getBettingByUserIdAndGameType(params);
                     Double sumBettingAmount = dto.getBettingAmount();
                     Integer sumBettingCount= dto.getBettingCount();

@@ -30,6 +30,7 @@ public class DayFinalJob {
     private final RegisteredRetentionService registeredRetentionService = SpringContextHolder.getBean(RegisteredRetentionService.class);
     private final EntranceAnalysisService entranceAnalysisService = SpringContextHolder.getBean(EntranceAnalysisService.class);
     private final UserInfoExtendService userInfoExtendService = SpringContextHolder.getBean(UserInfoExtendService.class);
+    private final UserInfoExtendGameService userInfoExtendGameService = SpringContextHolder.getBean(UserInfoExtendGameService.class);
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -85,6 +86,12 @@ public class DayFinalJob {
             userInfoExtendService.toDoAnalysis();
         }catch (Exception e){
             logger.error("userInfoExtendService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        //用户基本信息维度表清洗(各游戏)
+        try {
+            userInfoExtendGameService.toDoAnalysis();
+        }catch (Exception e){
+            logger.error("userInfoExtendGameService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
         logger.info("每日任务调度总job结束:traceId={}", TraceIdUtils.getTraceId());

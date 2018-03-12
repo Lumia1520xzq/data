@@ -4,6 +4,7 @@ package com.wf.data.dao.datarepo;
 import com.wf.core.persistence.CrudDao;
 import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.datarepo.entity.DatawareUserInfoExtendGame;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 public interface DatawareUserInfoExtendGameDao extends CrudDao<DatawareUserInfoExtendGame> {
     DatawareUserInfoExtendGame getByUserIdAndGameType(Map<String,Object> params);
 
-    void updateNewUserFlag(String month);
+    void updateNewUserFlag(@Param("month")String month);
 
     Long getAllCount();
 
