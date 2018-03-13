@@ -33,7 +33,7 @@
         ON t1.phy_awards_id=t2.id
         WHERE 1=1
         AND t1.delete_flag=0
-        AND t1.update_time BETWEEN #{beginDate} AND #{endDate}
+        AND t1.send_time BETWEEN #{beginDate} AND #{endDate}
         AND t1.receive_status=3
         <if test="activityIds != null and activityIds.size() !=0">
             AND t1.activity_id in
