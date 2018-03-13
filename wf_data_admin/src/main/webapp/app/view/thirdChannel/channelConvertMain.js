@@ -15,7 +15,7 @@ Ext.define('WF.view.thirdChannel.channelConvertMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/business/convert/list.do',
-            fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'updateTime'],
+            fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'successTime'],
             baseParams: {
                 parentId: me.parameters
             }
@@ -201,7 +201,7 @@ Ext.define('WF.view.thirdChannel.channelConvertMain', {
             }, {
                 text: '到账时间',
                 width: 100,
-                dataIndex: 'updateTime',
+                dataIndex: 'successTime',
                 menuDisabled: true,
                 sortable: false
             }]

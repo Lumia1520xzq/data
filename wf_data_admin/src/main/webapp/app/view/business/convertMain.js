@@ -13,7 +13,7 @@ Ext.define('WF.view.business.convertMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/business/convert/list.do',
-            fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'updateTime']
+            fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'successTime']
         });
 
         var productTypeStore = Ext.create('DCIS.Store', {
@@ -203,7 +203,7 @@ Ext.define('WF.view.business.convertMain', {
             }, {
                 text: '到账时间',
                 width: 100,
-                dataIndex: 'updateTime',
+                dataIndex: 'successTime',
                 menuDisabled: true,
                 sortable: false
             }]
