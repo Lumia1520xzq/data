@@ -44,6 +44,9 @@
     <import resource="app-db-mysql-platform.xml"/>
     <import resource="app-db-mysql-mall.xml"/>
     <import resource="app-db-mysql-datarepo.xml"/>
+    <import resource="app-db-mycat-trans.xml"/>
+    <import resource="app-db-mysql-wars.xml"/>
+    <import resource="app-db-mysql-taurus.xml" />
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
         <constructor-arg index="0" value="${es.ips}"/>
