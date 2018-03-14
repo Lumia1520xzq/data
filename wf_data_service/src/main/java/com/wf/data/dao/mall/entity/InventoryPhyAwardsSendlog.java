@@ -3,6 +3,7 @@ package com.wf.data.dao.mall.entity;
 
 import com.wf.core.persistence.DataEntity;
 
+import java.util.Date;
 import java.util.List;
 
 public class InventoryPhyAwardsSendlog extends DataEntity {
@@ -31,6 +32,52 @@ public class InventoryPhyAwardsSendlog extends DataEntity {
 	private Long goldAmount;
 	private Double rmbAmount;
 	private String thirdId;
+
+	private String qq;
+	private Integer groupId;
+	private Long channelId;
+	private String phyName;
+	private Date sendTime;
+
+	public String getQq() {
+		return qq;
+	}
+
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+
+	public Integer getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
+
+	public Long getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(Long channelId) {
+		this.channelId = channelId;
+	}
+
+	public String getPhyName() {
+		return phyName;
+	}
+
+	public void setPhyName(String phyName) {
+		this.phyName = phyName;
+	}
+
+	public Date getSendTime() {
+		return sendTime;
+	}
+
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
+	}
 
 	public Double getRmbAmount() {
 		return rmbAmount;

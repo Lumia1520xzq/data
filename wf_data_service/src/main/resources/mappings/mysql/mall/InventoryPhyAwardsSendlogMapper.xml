@@ -11,6 +11,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.awards_entity,
 		t.phy_awards_id,
 		t.user_id,
+		t.qq,
 		t.receiver_name,
 		t.receiver_mobile,
 		t.receiver_address,
@@ -18,7 +19,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.receive_remark,
 		t.business_id,
 		t.activity_id,
+		t.group_id,
 		t.callback_queue,
+		t.channel_id,
+		t.activity_type,
+		t.phy_name,
+		t.send_time,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
@@ -48,10 +54,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>  
 		
 		<if test="p.beginDate != null and p.beginDate !=''">
-			AND t.update_time >= CONCAT(#{p.beginDate} , ':00')
+			AND t.send_time >= CONCAT(#{p.beginDate} , ':00')
 		</if>
 		<if test="p.endDate != null and p.endDate !=''">
-			AND t.update_time &lt;= CONCAT(#{p.endDate} , ':59')
+			AND t.send_time &lt;= CONCAT(#{p.endDate} , ':59')
 		</if>
 	</sql>
 	
@@ -75,29 +81,41 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			awards_entity, 
 			phy_awards_id, 
 			user_id, 
-			receiver_name, 
-			receiver_mobile, 
-			receiver_address, 
-			receive_status, 
-			receive_remark, 
-			business_id, 
-			activity_id, 
-			callback_queue, 
-			create_time, 
-			delete_flag 
+			qq,
+			receiver_name,
+			receiver_mobile,
+			receiver_address,
+			receive_status,
+			receive_remark,
+			business_id,
+			activity_id,
+			group_id,
+			callback_queue,
+			channel_id,
+			activity_type,
+			phy_name,
+			send_time,
+			create_time,
+			delete_flag
 		) VALUES (
-			#{id}, 
-			#{awardsEntity}, 
-			#{phyAwardsId}, 
-			#{userId}, 
-			#{receiverName}, 
-			#{receiverMobile}, 
-			#{receiverAddress}, 
-			#{receiveStatus}, 
-			#{receiveRemark}, 
-			#{businessId}, 
-			#{activityId}, 
-			#{callbackQueue}, 
+			#{id},
+			#{awardsEntity},
+			#{phyAwardsId},
+			#{userId},
+			#{qq},
+			#{receiverName},
+			#{receiverMobile},
+			#{receiverAddress},
+			#{receiveStatus},
+			#{receiveRemark},
+			#{businessId},
+			#{activityId},
+			#{groupId},
+			#{callbackQueue},
+			#{channelId},
+			#{activityType},
+			#{phyName},
+			#{sendTime},
 			#{createTime}, 
 			#{deleteFlag} 
 		)
@@ -108,14 +126,20 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			awards_entity = #{awardsEntity}, 
 			phy_awards_id = #{phyAwardsId}, 
 			user_id = #{userId}, 
-			receiver_name = #{receiverName}, 
-			receiver_mobile = #{receiverMobile}, 
-			receiver_address = #{receiverAddress}, 
-			receive_status = #{receiveStatus}, 
-			receive_remark = #{receiveRemark}, 
-			business_id = #{businessId}, 
-			activity_id = #{activityId}, 
-			callback_queue = #{callbackQueue}, 
+			qq = #{qq},
+			receiver_name = #{receiverName},
+			receiver_mobile = #{receiverMobile},
+			receiver_address = #{receiverAddress},
+			receive_status = #{receiveStatus},
+			receive_remark = #{receiveRemark},
+			business_id = #{businessId},
+			activity_id = #{activityId},
+			group_id = #{groupId},
+			callback_queue = #{callbackQueue},
+			channel_id = #{channelId},
+			activity_type = #{activityType},
+			phy_name = #{phyName},
+			send_time = #{sendTime},
 			delete_flag = #{deleteFlag} 
 		WHERE id = #{id}
 	</update>
