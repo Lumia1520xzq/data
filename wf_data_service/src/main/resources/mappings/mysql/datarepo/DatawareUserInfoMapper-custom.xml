@@ -148,7 +148,7 @@
         SELECT
         <include refid="datawareUserInfoColumns"/>
         FROM dataware_user_info t
-        WHERE t.user_id = #{userId}
+        WHERE t.user_id = #{userId} AND t.delete_flag = 0
     </select>
 </mapper>
 
