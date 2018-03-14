@@ -383,7 +383,7 @@ public class UserInfoExtendService {
             rechargeType = 2;
         } else if (totalRechargeAmount >= 1000 && totalRechargeAmount < 10000) {
             rechargeType = 3;
-        } else if (totalRechargeAmount >= 10000 && totalRechargeAmount < 10000) {
+        } else if (totalRechargeAmount >= 10000 && totalRechargeAmount < 100000) {
             rechargeType = 4;
         } else {
             rechargeType = 5;
