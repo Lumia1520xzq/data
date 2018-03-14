@@ -58,6 +58,9 @@ public class HistoryDataCleanController extends ExtJsController {
     private EntranceAnalysisService entranceAnalysisService;
     @Autowired
     private UserInfoExtendService userInfoExtendService;
+    @Autowired
+    private UserInfoExtendGameService userInfoExtendGameService;
+
 
     /**
      * 清洗channelInfoHour表
@@ -555,6 +558,13 @@ public class HistoryDataCleanController extends ExtJsController {
     @ResponseBody
     public Object resetUserInfoBase(HttpServletRequest request) {
         userInfoExtendService.resetUserInfoBase();
+        return success("清洗开始执行");
+    }
+
+    @RequestMapping("/resetUserInfoGame")
+    @ResponseBody
+    public Object resetUserInfoGame(HttpServletRequest request) {
+        userInfoExtendGameService.resetUserInfoExtendGame();
         return success("清洗开始执行");
     }
 

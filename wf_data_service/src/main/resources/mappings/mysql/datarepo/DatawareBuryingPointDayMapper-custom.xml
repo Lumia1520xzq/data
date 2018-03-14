@@ -74,6 +74,9 @@
         <if test="businessDate != null and businessDate != ''">
             AND t.burying_date = #{businessDate}
         </if>
+        <if test="gameType != null and gameType != ''">
+            AND t.game_type = #{gameType}
+        </if>
         <if test="channelId != null">
             AND t.channel_id = #{channelId}
         </if>
