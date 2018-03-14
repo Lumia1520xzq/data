@@ -239,6 +239,7 @@ public class UserInfoExtendService {
         userInfoExtendBase.setLastActiveDate(lastActiveDate);
         userInfoExtendBase.setActiveDates(activeDates);
         userInfoExtendBase.setUpdateTime(new Date());
+        userInfoExtendBase.setParentId(userInfo.getParentId());
         //首日新用户；1：不是，0：是；
         if (userInfo.getRegisteredDate().equals(YESTERDAY)) {
             userInfoExtendBase.setNewUserFlag(0);
@@ -378,17 +379,19 @@ public class UserInfoExtendService {
      * @return
      */
     private Integer getUserRechargeType(Double totalRechargeAmount) {
-        int rechargeType = 0;
-        if (totalRechargeAmount >= 1 && totalRechargeAmount < 100) {
+        int rechargeType;//累充为
+        if (totalRechargeAmount.equals(0D)) {
             rechargeType = 1;
-        } else if (totalRechargeAmount >= 100 && totalRechargeAmount < 1000) {
+        } else if (totalRechargeAmount >= 1 && totalRechargeAmount < 100) {
             rechargeType = 2;
-        } else if (totalRechargeAmount >= 1000 && totalRechargeAmount < 10000) {
+        } else if (totalRechargeAmount >= 100 && totalRechargeAmount < 1000) {
             rechargeType = 3;
-        } else if (totalRechargeAmount >= 10000 && totalRechargeAmount < 10000) {
+        } else if (totalRechargeAmount >= 1000 && totalRechargeAmount < 10000) {
             rechargeType = 4;
-        } else {
+        } else if (totalRechargeAmount >= 10000 && totalRechargeAmount < 100000) {
             rechargeType = 5;
+        } else {
+            rechargeType = 6;
         }
         return rechargeType;
     }
