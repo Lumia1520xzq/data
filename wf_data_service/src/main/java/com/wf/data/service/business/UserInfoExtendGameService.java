@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * @author shihui
- * date 2018/3/5
+ * @author Joe Huang
+ * date 2018/3/14
  */
 
 @Service
@@ -48,7 +48,7 @@ public class UserInfoExtendGameService {
     private DatawareUserInfoExtendGameService  datawareUserInfoExtendGameService;
 
     /**
-     * 重置dataware_user_info_extend_game
+     * 重置 dataware_user_info_extend_game
      */
     public void resetUserInfoExtendGame(){
         try {
