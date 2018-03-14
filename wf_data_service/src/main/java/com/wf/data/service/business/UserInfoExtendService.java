@@ -197,7 +197,7 @@ public class UserInfoExtendService {
             Date endDate = new SimpleDateFormat("yyyy-MM").parse(DateUtils.getYesterdayDate());//定义结束日期
             Calendar dd = Calendar.getInstance();//定义日期实例
             dd.setTime(beginDate);//设置日期起始时间
-            while (dd.getTime().before(endDate)) {//判断是否到结束日期
+            while (dd.getTime().before(endDate) || dd.getTime().equals(endDate)) {//判断是否到结束日期
                 String monthStr = DateUtils.formatDate(dd.getTime(), DateUtils.MONTH_PATTERN);
                 userInfoExtendBaseService.updateUserGroupAndNewFlag(monthStr);
                 dd.add(Calendar.MONTH, 1);//进行当前日期月份加1
