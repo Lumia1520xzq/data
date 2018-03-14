@@ -147,8 +147,8 @@ public class UserInfoExtendService {
                     } else {//老用户
                         updateUserExtendInfo(userInfoExtendBase);
                     }
-                }catch(Exception e){
-                    logger.error("DatawareUserInfo中用户ID重复：traceId={}", TraceIdUtils.getTraceId());
+                } catch (Exception e) {
+                    logger.error("DatawareUserInfo中用户ID:" + activeUserId + "重复：traceId={}", TraceIdUtils.getTraceId());
                 }
             }
         }
@@ -157,6 +157,7 @@ public class UserInfoExtendService {
 
     /**
      * 修改活跃用户维度信息
+     *
      * @param userInfoExtendBase
      */
     private void updateUserExtendInfo(DatawareUserInfoExtendBase userInfoExtendBase) {
@@ -177,6 +178,7 @@ public class UserInfoExtendService {
         userInfoExtendBase.setCostAmount(costAmount);
         userInfoExtendBase.setLastActiveDate(lastActiveDate);
         userInfoExtendBase.setActiveDates(activeDates);
+        userInfoExtendBase.setNewUserFlag(1);
         userInfoExtendBaseService.save(userInfoExtendBase);
 
         //保存用户投注，充值数据
@@ -195,7 +197,7 @@ public class UserInfoExtendService {
             Date endDate = new SimpleDateFormat("yyyy-MM").parse(DateUtils.getYesterdayDate());//定义结束日期
             Calendar dd = Calendar.getInstance();//定义日期实例
             dd.setTime(beginDate);//设置日期起始时间
-            while (dd.getTime().before(endDate)) {//判断是否到结束日期
+            while (dd.getTime().before(endDate) || dd.getTime().equals(endDate)) {//判断是否到结束日期
                 String monthStr = DateUtils.formatDate(dd.getTime(), DateUtils.MONTH_PATTERN);
                 userInfoExtendBaseService.updateUserGroupAndNewFlag(monthStr);
                 dd.add(Calendar.MONTH, 1);//进行当前日期月份加1
@@ -258,12 +260,12 @@ public class UserInfoExtendService {
         baseParam.put("userId", userId);
         baseParam.put("endDate", YESTERDAY);
 
-        Map<String,Object> rechargeEveParam = new HashMap<>();
+        Map<String, Object> rechargeEveParam = new HashMap<>();
         rechargeEveParam.put("userId", userId);
-        rechargeEveParam.put("endDate", DateUtils.getPrevDate(YESTERDAY,1));
+        rechargeEveParam.put("endDate", DateUtils.getPrevDate(YESTERDAY, 1));
 
         DatawareUserInfoExtendStatistics userInfoExtendStatistics = userInfoExtendStatisticsService.getByUserId(baseParam);
-        if (userInfoExtendStatistics == null){//新用户
+        if (userInfoExtendStatistics == null) {//新用户
             userInfoExtendStatistics = new DatawareUserInfoExtendStatistics();
             userInfoExtendStatistics.setUserId(userId);
         }

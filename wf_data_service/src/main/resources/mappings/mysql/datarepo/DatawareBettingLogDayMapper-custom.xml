@@ -176,5 +176,50 @@
         AND betting_date &lt;= #{endDate}
     </select>
 
+    <select id="getBettingByUserIdAndGameType" resultType="com.wf.data.dto.TcardDto">
+        SELECT
+        IFNULL(COUNT(DISTINCT user_id),0) userCount,
+        IFNULL(SUM(betting_amount),0) bettingAmount,
+        IFNULL(SUM(betting_count),0) bettingCount,
+        IFNULL(SUM(result_amount),0) resultAmount
+        FROM `dataware_betting_log_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        <if test="userId != null and userId != ''">
+            AND user_id= #{userId}
+        </if>
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND betting_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND betting_date &lt;= #{endDate}
+        </if>
+        AND delete_flag=0
+    </select>
+
+    <select id="getByUserIdAndGameType" resultType="DatawareBettingLogDay">
+        SELECT
+        <include refid="datawareBettingLogDayColumns"/>
+        FROM
+        dataware_betting_log_day t
+        WHERE 1=1
+        AND t.delete_flag = 0
+        <if test="userId != null">
+        AND t.user_id = #{userId}
+        </if>
+        <if test="gameType != null">
+        AND t.game_type = #{gameType}
+        </if>
+        ORDER BY betting_date ASC limit 1
+    </select>
 </mapper>
 
