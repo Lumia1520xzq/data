@@ -40,4 +40,8 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
     public List<DatawareUserInfo> getBaseUserInfoLimit(Map<String, Object> params) {
         return dao.getBaseUserInfoLimit(params);
     }
+
+    public DatawareUserInfo getByUserId(Long userId) {
+        return dao.getByUserId(userId);
+    }
 }

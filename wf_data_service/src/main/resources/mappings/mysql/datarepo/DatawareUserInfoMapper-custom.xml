@@ -143,5 +143,12 @@
 			user_id ASC
 		LIMIT #{minIndex},#{maxIndex}
 	</select>
+
+    <select id="getByUserId" resultType="DatawareUserInfo">
+        SELECT
+        <include refid="datawareUserInfoColumns"/>
+        FROM dataware_user_info t
+        WHERE t.user_id = #{userId}
+    </select>
 </mapper>
 
