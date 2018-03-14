@@ -71,9 +71,9 @@ Ext.define('WF.view.business.userProfitMain', {
                     sortable: false,
                     renderer: function (value) {
                         if (value == null) {
-                            return '0.0000';
+                            return '0.00';
                         } else {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value, "0,000.00");
                         }
                     }
                 },
@@ -85,9 +85,9 @@ Ext.define('WF.view.business.userProfitMain', {
                     sortable: false,
                     renderer: function (value) {
                         if (value == null) {
-                            return '0.0000';
+                            return '0.00';
                         } else {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value, "0,000.00");
                         }
                     }
                 },
@@ -99,9 +99,9 @@ Ext.define('WF.view.business.userProfitMain', {
                     sortable: false,
                     renderer: function (value) {
                         if (value == null) {
-                            return '0.0000';
+                            return '0.00';
                         } else {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value, "0,000.00");
                         }
                     }
                 },
@@ -113,9 +113,9 @@ Ext.define('WF.view.business.userProfitMain', {
                     sortable: false,
                     renderer: function (value) {
                         if (value == null) {
-                            return '0.0000';
+                            return '0.00';
                         } else {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value, "0,000.00");
                         }
                     }
                 },
@@ -127,9 +127,9 @@ Ext.define('WF.view.business.userProfitMain', {
                     sortable: false,
                     renderer: function (value) {
                         if (value == null) {
-                            return '0.0000';
+                            return '0.00';
                         } else {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value, "0,000.00");
                         }
                     }
                 },
@@ -141,9 +141,9 @@ Ext.define('WF.view.business.userProfitMain', {
                     sortable: false,
                     renderer: function (value) {
                         if (value == null) {
-                            return '0.0000';
+                            return '0.00';
                         } else {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value/1000, "0,000.00");
                         }
                     }
                 }
