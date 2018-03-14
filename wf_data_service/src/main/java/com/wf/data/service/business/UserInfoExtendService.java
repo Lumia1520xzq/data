@@ -177,6 +177,7 @@ public class UserInfoExtendService {
         userInfoExtendBase.setCostAmount(costAmount);
         userInfoExtendBase.setLastActiveDate(lastActiveDate);
         userInfoExtendBase.setActiveDates(activeDates);
+        userInfoExtendBase.setNewUserFlag(1);
         userInfoExtendBaseService.save(userInfoExtendBase);
 
         //保存用户投注，充值数据
