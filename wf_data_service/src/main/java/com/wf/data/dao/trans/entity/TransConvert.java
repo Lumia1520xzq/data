@@ -3,6 +3,8 @@ package com.wf.data.dao.trans.entity;
 
 import com.wf.core.persistence.DataEntity;
 
+import java.util.Date;
+
 public class TransConvert extends DataEntity {
 
     private Long userId;
@@ -12,13 +14,19 @@ public class TransConvert extends DataEntity {
     private Double thirdAmount;
     private Integer source;
     private Integer payType;
+    private Integer payMethod;
     private Integer status;
-    private String tradeType;
-    private Integer bizType;
-    private Long channelId;
+    private String merchantCode;
     private Integer auditVersion;
+    private Long channelId;
+    private Integer gameId;
+    private Integer notifyUrl;
+    private String gameProp;
+    private Integer bizType;
     private String requestOrderId;
     private Integer requestOrderNotifyStatus;
+    private Date successTime;
+    private String tradeType;
 
     private Long bizTarget;
     private String ip;
@@ -28,6 +36,55 @@ public class TransConvert extends DataEntity {
     private String endTime;
     private Long parentId;
     private String userName;
+
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public String getMerchantCode() {
+        return merchantCode;
+    }
+
+    public void setMerchantCode(String merchantCode) {
+        this.merchantCode = merchantCode;
+    }
+
+    public Integer getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(Integer gameId) {
+        this.gameId = gameId;
+    }
+
+    public Integer getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(Integer notifyUrl) {
+        this.notifyUrl = notifyUrl;
+    }
+
+    public String getGameProp() {
+        return gameProp;
+    }
+
+    public void setGameProp(String gameProp) {
+        this.gameProp = gameProp;
+    }
+
+    public Date getSuccessTime() {
+        return successTime;
+    }
+
+    public void setSuccessTime(Date successTime) {
+        this.successTime = successTime;
+    }
 
     public String getUserName() {
         return userName;
