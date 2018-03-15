@@ -25,7 +25,6 @@ public class DayDimensionCleanJob {
     private final UserInfoExtendGameService userInfoExtendGameService = SpringContextHolder.getBean(UserInfoExtendGameService.class);
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
 
-
     public void execute() {
         logger.info("每日用户维度清洗任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
         String flagStr = dataConfigService.findByName(DataConstants.DATA_DATAWARE_DIMENSION_CLEAN_FLAG).getValue();

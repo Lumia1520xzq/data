@@ -35,8 +35,6 @@ public class UserInfoExtendService {
     //每次查询数量
     private static final long PAGE_SIZE = 50000;
 
-    private static final String YESTERDAY = DateUtils.getYesterdayDate();
-
     @Autowired
     private DatawareUserInfoService userInfoService;
     @Autowired
@@ -64,6 +62,7 @@ public class UserInfoExtendService {
      * 重置dataware_user_info_extend_base
      */
     public void resetUserInfoBase() {
+        String yesterday = DateUtils.getYesterdayDate();
         try {
             //删除原有数据
             long allUserBaseCount = userInfoExtendBaseService.getAllCount();
@@ -74,7 +73,7 @@ public class UserInfoExtendService {
 
             /* 分页查询dataware_user_info数据**/
             HashMap<String, Object> alluserInfoParam = new HashMap<>();
-            alluserInfoParam.put("yesterdayParam", YESTERDAY);
+            alluserInfoParam.put("yesterdayParam", yesterday);
             long userCount = userInfoService.getCountByTime(alluserInfoParam);
             int pageCount = (int) Math.ceil(1.0 * userCount / PAGE_SIZE);//算出总共需要多少页
             for (int i = 1; i <= pageCount; i++) {
@@ -83,7 +82,7 @@ public class UserInfoExtendService {
                 Map<String, Object> params = new HashMap<>();
                 params.put("minIndex", minIndex);
                 params.put("maxIndex", maxIndex);
-                params.put("endDate", YESTERDAY);
+                params.put("endDate", yesterday);
                 List<DatawareUserInfo> userInfos = userInfoService.getBaseUserInfoLimit(params);
                 if (CollectionUtils.isNotEmpty(userInfos)) {
                     for (DatawareUserInfo userInfo : userInfos) {
@@ -103,6 +102,7 @@ public class UserInfoExtendService {
      * 定时清洗用户基本信息
      */
     public void toDoAnalysis() {
+        String yesterday = DateUtils.getYesterdayDate();
     /* 更改用户分类和用户状态*/
         //1.重置用户分类和用户状态
         resetUserGroup();
@@ -130,7 +130,7 @@ public class UserInfoExtendService {
     /* 获取活跃用户，只更改活跃用户的信息*/
         //1.获取昨天所有活跃用户
         Map<String, Object> bpParam = new HashMap<>();
-        bpParam.put("businessDate", YESTERDAY);
+        bpParam.put("businessDate", yesterday);
         List<Long> activeUserIds = buryingPointDayService.getUserIdListByChannel(bpParam);
 
         //2.修改活跃用户信息
@@ -166,7 +166,12 @@ public class UserInfoExtendService {
         userParam.put("userId", userId);
 
         //剩余金叶子数
-        Double useAmount = judgeNull(transAccountService.getUseAmountByUserId(userParam));
+        Double useAmount = 0D;
+        try {
+            useAmount = judgeNull(transAccountService.getUseAmountByUserId(userParam));
+        } catch (Exception e) {
+            logger.error("获取剩余金叶子错误，用户ID：" + userId + "traceId={}", TraceIdUtils.getTraceId());
+        }
         //出口成本
         Double costAmount = judgeNull(phyAwardsSendlogService.getRmbAmountByUserId(userParam));
         //最后一次活跃时间
@@ -214,6 +219,7 @@ public class UserInfoExtendService {
      * @param userInfo
      */
     private void saveBaseInfo(DatawareUserInfo userInfo) {
+        String yesterday = DateUtils.getYesterdayDate();
         DatawareUserInfoExtendBase userInfoExtendBase = new DatawareUserInfoExtendBase();
 
         Map<String, Object> userParam = new HashMap<>();
@@ -241,7 +247,7 @@ public class UserInfoExtendService {
         userInfoExtendBase.setUpdateTime(new Date());
         userInfoExtendBase.setParentId(userInfo.getParentId());
         //首日新用户；1：不是，0：是；
-        if (userInfo.getRegisteredDate().equals(YESTERDAY)) {
+        if (userInfo.getRegisteredDate().equals(yesterday)) {
             userInfoExtendBase.setNewUserFlag(0);
         } else {
             userInfoExtendBase.setNewUserFlag(1);
@@ -256,14 +262,14 @@ public class UserInfoExtendService {
      * 保存用户投注，充值数据
      */
     private void saveStatisticsInfo(Long userId, Double useAmount, Double costAmount) {
-
+        String yesterday = DateUtils.getYesterdayDate();
         Map<String, Object> baseParam = new HashMap<>();
         baseParam.put("userId", userId);
-        baseParam.put("endDate", YESTERDAY);
+        baseParam.put("endDate", yesterday);
 
         Map<String, Object> rechargeEveParam = new HashMap<>();
         rechargeEveParam.put("userId", userId);
-        rechargeEveParam.put("endDate", DateUtils.getPrevDate(YESTERDAY, 1));
+        rechargeEveParam.put("endDate", DateUtils.getPrevDate(yesterday, 1));
 
         DatawareUserInfoExtendStatistics userInfoExtendStatistics = userInfoExtendStatisticsService.getByUserId(baseParam);
         if (userInfoExtendStatistics == null) {//新用户
@@ -380,7 +386,7 @@ public class UserInfoExtendService {
      */
     private Integer getUserRechargeType(Double totalRechargeAmount) {
         int rechargeType;//累充为
-        if (totalRechargeAmount.equals(0D)) {
+        if (totalRechargeAmount == null || totalRechargeAmount.equals(0D)) {
             rechargeType = 1;
         } else if (totalRechargeAmount >= 1 && totalRechargeAmount < 100) {
             rechargeType = 2;
