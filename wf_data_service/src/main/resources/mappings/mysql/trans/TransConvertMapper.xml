@@ -15,12 +15,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.third_amount,
 		t.source,
 		t.pay_type,
+		t.pay_method,
 		t.status,
+		t.merchant_code,
+		t.audit_version,
+		t.channel_id,
 		t.biz_type,
 		t.request_order_id,
 		t.request_order_notify_status,
-		t.audit_version,
-		t.channel_id,
+		t.success_time,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
@@ -36,10 +39,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND t.biz_type = #{p.bizType}
 		</if>
 		<if test="p.startTime!=null and p.startTime!=''">
-			AND t.update_time &gt;= #{p.startTime}
+			AND t.success_time &gt;= #{p.startTime}
 		</if>
 		<if test="p.endTime!=null and p.endTime!=''">
-			AND t.update_time &lt;= #{p.endTime}
+			AND t.success_time &lt;= #{p.endTime}
 		</if>
 		<if test="p.channelId != null">
 			AND channel_id = #{p.channelId}
@@ -57,7 +60,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="findList" resultType="TransConvert">
 		SELECT <include refid="transConvertColumns"/> FROM trans_convert t <include refid="transConvertJoins"/>
-		WHERE <include refid="transConvertWhere"/> ORDER BY update_time desc LIMIT #{start}, #{length}
+		WHERE <include refid="transConvertWhere"/> ORDER BY success_time desc LIMIT #{start}, #{length}
 	</select>
 	<select id="count" resultType="long">
 		SELECT COUNT(*) FROM trans_convert t WHERE <include refid="transConvertWhere" />
@@ -73,23 +76,35 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			third_amount, 
 			source, 
 			pay_type, 
+			pay_method,
 			status,
+			merchant_code,
 			audit_version,
-			channel_id, 
-			create_time, 
-			delete_flag 
+			channel_id,
+			biz_type,
+			request_order_id,
+			request_order_notify_status,
+			success_time,
+			create_time,
+			delete_flag
 		) VALUES (
-			#{id}, 
-			#{userId}, 
-			#{orderSn}, 
-			#{amount}, 
-			#{thirdOrderSn}, 
-			#{thirdAmount}, 
-			#{source}, 
-			#{payType}, 
+			#{id},
+			#{userId},
+			#{orderSn},
+			#{amount},
+			#{thirdOrderSn},
+			#{thirdAmount},
+			#{source},
+			#{payType},
+			#{payMethod},
 			#{status},
+			#{merchantCode},
 			#{auditVersion},
-			#{channelId}, 
+			#{channelId},
+			#{bizType},
+			#{requestOrderId},
+			#{requestOrderNotifyStatus},
+			#{successTime},
 			#{createTime}, 
 			#{deleteFlag} 
 		)
@@ -104,8 +119,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			third_amount = #{thirdAmount}, 
 			source = #{source}, 
 			pay_type = #{payType}, 
-			status = #{status}, 
-			channel_id = #{channelId}, 
+			pay_method = #{payMethod},
+			status = #{status},
+			merchant_code = #{merchantCode},
+			audit_version = #{auditVersion},
+			channel_id = #{channelId},
+			biz_type = #{bizType},
+			request_order_id = #{requestOrderId},
+			request_order_notify_status = #{requestOrderNotifyStatus},
+			success_time = #{successTime},
 			delete_flag = #{deleteFlag} 
 		WHERE id = #{id}
 	</update>

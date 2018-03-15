@@ -168,7 +168,8 @@ public class GameMonitorViewController extends ExtJsController {
                 info.setHourBettingCount(record.getHourBettingCount()/7);
                 info.setHourBettingAmount(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourBettingAmount(),7),0));
                 info.setHourMoneyGap(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourBettingAmount()-record.getHourReturnAmount(),7),0));
-                info.setHourReturnRate(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourReturnAmount()*100,record.getHourBettingAmount()),2));
+                info.setHourReturnRate(record.getHourBettingAmount() == null || record.getHourBettingAmount() == 0 ? 0:
+                        BigDecimalUtil.round(BigDecimalUtil.div(record.getHourReturnAmount()*100,record.getHourBettingAmount()),2));
                 historyData.add(info);
             }
         }

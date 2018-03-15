@@ -26,7 +26,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="findSumRechargeByTime" resultType="Double">
 		SELECT IFNULL(SUM(third_amount),0) FROM `trans_convert`
 		WHERE STATUS=8 AND delete_flag=0
-		AND create_time BETWEEN #{beginDate} AND #{endDate}
+		AND success_time BETWEEN #{beginDate} AND #{endDate}
 		<if test="channelId != null and channelId != ''">
 		AND channel_id = #{channelId}
 		</if>
@@ -45,7 +45,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		SELECT IFNULL(SUM(third_amount),0) incomeAmount
 		FROM `trans_convert`
 		WHERE STATUS=8 AND delete_flag=0
-		AND create_time BETWEEN #{beginDate} AND #{endDate}
+		AND success_time BETWEEN #{beginDate} AND #{endDate}
 		<if test="channelId != null and channelId != ''">
 			AND channel_id = #{channelId}
 		</if>
@@ -60,27 +60,27 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="getRechargeNumByUserIdAndDate" resultType="Double">
 	  SELECT IFNULL(sum(third_amount),0) FROM `trans_convert`
       WHERE `status`=8 AND delete_flag=0
-      AND user_id=#{userId} AND DATE_FORMAT(create_time,'%Y-%m-%d')= #{date}
+      AND user_id=#{userId} AND DATE_FORMAT(success_time,'%Y-%m-%d')= #{date}
 	</select>
 
 
 	<select id="getMinRechargeTimeByDate" resultType="java.util.Date">
-	 SELECT MIN(create_time) FROM `trans_convert`
+	 SELECT MIN(success_time) FROM `trans_convert`
 	 WHERE `status`=8 AND delete_flag=0  
 	 AND user_id=#{userId} 
-	 AND create_time between #{beginDate} and #{endDate} 
+	 AND success_time between #{beginDate} and #{endDate}
 	</select>
 
 	<select id="findRechargeUserIdsTillTime" resultType="Long">
 	  SELECT DISTINCT user_id FROM `trans_convert`
       WHERE `status`=8 AND delete_flag=0
-      AND create_time &lt; #{date}
+      AND success_time &lt; #{date}
 	</select>
 
     <select id="findUserIdsBySumRecharge" resultType="Long">
 		SELECT user_id
 	    FROM `trans_convert`
-	    WHERE status = 8 and delete_flag=0 and create_time &lt; #{date}
+	    WHERE status = 8 and delete_flag=0 and success_time &lt; #{date}
 	    group by user_id
 	    <choose>
 		<when test="endNum == 0">
@@ -101,10 +101,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	from `trans_convert`
 	WHERE status = 8 and delete_flag=0
 	<if test="beginDate != null and beginDate != ''">
-		and create_time &gt;= #{beginDate}
+		and success_time &gt;= #{beginDate}
 	</if>
 	<if test="endDate != null and endDate != ''">
-		and create_time &lt;= #{endDate}
+		and success_time &lt;= #{endDate}
 	</if>
 	<if test="channelId != null and channelId != ''">
 	AND channel_id = #{channelId}
@@ -124,7 +124,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 	<select id="getRechargeCountByDay" resultType="Long">
 	select IFNULL(count(id),0) from `trans_convert`
-	WHERE status = 8 and delete_flag=0 and create_time between #{beginDate} and #{endDate}
+	WHERE status = 8 and delete_flag=0 and success_time between #{beginDate} and #{endDate}
 	<if test="channelId != null and channelId != ''">
 	AND channel_id = #{channelId}
 	</if>
@@ -137,7 +137,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		SELECT user_id,sum(third_amount) business_money 
         FROM `trans_convert` 
         WHERE `status`=8 AND delete_flag=0 
-        AND create_time BETWEEN #{beginDate} and #{endDate}
+        AND success_time BETWEEN #{beginDate} and #{endDate}
      	group by user_id
 	</select>
 
@@ -149,14 +149,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         COUNT(1) rechargeCount,
         SUM(third_amount) thirdAmount,
         biz_type bizType,
-        DATE_FORMAT(update_time,"%H") convertHour,
-        DATE_FORMAT(update_time,"%Y-%m-%d") convertDate
+        DATE_FORMAT(success_time,"%H") convertHour,
+        DATE_FORMAT(success_time,"%Y-%m-%d") convertDate
         FROM `trans_convert`
         WHERE 1=1
-        AND update_time BETWEEN #{beginDate} and #{endDate}
+        AND success_time BETWEEN #{beginDate} and #{endDate}
         AND status=8
         AND delete_flag=0
-        GROUP BY user_id, channel_id,biz_type,DATE_FORMAT(update_time,"%H"),DATE_FORMAT(update_time,"%Y-%m-%d")
+        GROUP BY user_id, channel_id,biz_type,DATE_FORMAT(success_time,"%H"),DATE_FORMAT(success_time,"%Y-%m-%d")
 	</select>
 
 	<select id="sumDataByConds" resultType="Double">
@@ -179,10 +179,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND t.third_order_sn = #{thirdOrderSn}
 		</if>
 		<if test="startTime!=null and startTime!=''">
-			AND t.update_time &gt;= #{startTime}
+			AND t.success_time &gt;= #{startTime}
 		</if>
 		<if test="endTime!=null and endTime!=''">
-			AND t.update_time &lt;= #{endTime}
+			AND t.success_time &lt;= #{endTime}
 		</if>
 		<if test="channelId != null">
 			AND channel_id = #{channelId}
