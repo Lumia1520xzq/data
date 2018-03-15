@@ -32,9 +32,6 @@ public class UserInfoExtendGameService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     /**每次查询数量*/
     private static final long PAGE_SIZE = 50000;
-    private static final String YESTERDAY = DateUtils.getYesterdayDate();
-    private static final String YESMONTH = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),1),DateUtils.MONTH_PATTERN);
-    private static final String DAY_WEEK_BEFORE = DateUtils.formatDate(com.wf.core.utils.type.DateUtils.getPrevDate(new Date(),7));
 
     @Autowired
     private DatawareUserInfoService userInfoService;
@@ -51,6 +48,8 @@ public class UserInfoExtendGameService {
      * 重置 dataware_user_info_extend_game
      */
     public void resetUserInfoExtendGame(){
+        String yesterday = DateUtils.getYesterdayDate();
+        String dayWeekBefore = DateUtils.formatDate(com.wf.core.utils.type.DateUtils.getPrevDate(new Date(),7));
         try {
             //删除原有数据
             long allUserExtendGameCount = datawareUserInfoExtendGameService.getAllCount();
@@ -60,7 +59,7 @@ public class UserInfoExtendGameService {
             String gameStr = dataConfigService.findByName(DataConstants.DATA_DATAWARE_USERINFO_EXTEND_GAME).getValue();
             /*分页查询dataware_user_info_extend_game数据*/
             HashMap<String, Object> alluserInfoParam = new HashMap<>();
-            alluserInfoParam.put("yesterdayParam", YESTERDAY);
+            alluserInfoParam.put("yesterdayParam", yesterday);
             long userCount = userInfoService.getCountByTime(alluserInfoParam);
             //页数
             int pageCount = (int) Math.ceil(1.0 * userCount / PAGE_SIZE);
@@ -70,7 +69,7 @@ public class UserInfoExtendGameService {
                 Map<String, Object> params = new HashMap<>();
                 params.put("minIndex", minIndex);
                 params.put("maxIndex", maxIndex);
-                params.put("endDate", YESTERDAY);
+                params.put("endDate", yesterday);
                 List<DatawareUserInfo> userInfos = userInfoService.getBaseUserInfoLimit(params);
                 if (CollectionUtils.isNotEmpty(userInfos)) {
                     for (DatawareUserInfo userInfo : userInfos) {
@@ -91,13 +90,13 @@ public class UserInfoExtendGameService {
                                     newRecord.setNewUserFlag(1);
                                     newRecord.setFirstActiveTime(bettingLogDay.getBettingDate());
                                     map.put("beginDate",null);
-                                    map.put("endDate",YESTERDAY);
+                                    map.put("endDate",yesterday);
                                     TcardDto dto = bettingLogDayService.getBettingByUserIdAndGameType(map);
                                     //累计投注金额
                                     newRecord.setSumBettingAmount(dto.getBettingAmount());
                                     //累计投注次数
                                     newRecord.setSumBettingCount(dto.getBettingCount());
-                                    map.put("beginDate",DAY_WEEK_BEFORE);
+                                    map.put("beginDate",dayWeekBefore);
                                     dto = bettingLogDayService.getBettingByUserIdAndGameType(map);
                                     //近7日累计投注金额
                                     newRecord.setSevenSumBettingAmount(dto.getBettingAmount());
@@ -122,12 +121,14 @@ public class UserInfoExtendGameService {
      * 定时清洗用户基本信息
      */
     public void toDoAnalysis() {
+    String yesterday = DateUtils.getYesterdayDate();
+    String yesMonth = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),1),DateUtils.MONTH_PATTERN);
     //1.把用户标识为新用户的新用户改成老用户
-    datawareUserInfoExtendGameService.updateNewUserFlag(YESMONTH);
+    datawareUserInfoExtendGameService.updateNewUserFlag(yesMonth);
     /* 获取每个游戏的活跃用户，只更改活跃用户的信息*/
         //1.获取昨天的每个对应的活跃用户
         Map<String, Object> param = new HashMap<>();
-        param.put("businessDate", YESTERDAY);
+        param.put("businessDate", yesterday);
         String gameStr = dataConfigService.findByName(DataConstants.DATA_DATAWARE_USERINFO_EXTEND_GAME).getValue();
         if(StringUtils.isNotEmpty(gameStr)) {
             String[] games = gameStr.split(",");
