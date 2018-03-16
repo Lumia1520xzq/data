@@ -291,8 +291,8 @@ public class ChannelInfoAllService {
             return;
         }
         //新增用户数
+        params.put("businessDate",weekBeforeDate);
         List<Long> newUserList = datawareUserInfoService.getNewUserByDate(params);
-
         params.put("beginDate", weekBeforeDate);
         params.put("endDate", businessDate);
         List<Long> rechargeUserIdList = datawareConvertDayService.getUserIdList(params);

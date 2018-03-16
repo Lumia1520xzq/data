@@ -315,7 +315,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     ]
                 },
                 {
-                    title: '',collapsible: true,align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
@@ -666,7 +666,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     ]
                 },
                 {
-                    title: '',collapsible: true,height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    height:300,align:'stretch',width:"100%", xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
                             items:[
@@ -791,7 +791,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 if(new Date(lastDay)>=new Date(yesterday)){
                      usersDayRetention = usersDayRetention.slice(0,store.getCount()-1);
                      dayRetention = dayRetention.slice(0,store.getCount()-1);
-                     firstRechargeRate = firstRechargeRate.slice(0,store.getCount()-1);
+                     // firstRechargeRate = firstRechargeRate.slice(0,store.getCount()-1);
                      businessDate1 = businessDate.slice(0,store.getCount()-1);
                 }else{
                      businessDate1 = businessDate;
@@ -1629,7 +1629,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
-                        data: businessDate1
+                        data: businessDate
                     },
                     yAxis: {
                         type : 'value',
@@ -1774,7 +1774,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 }
 
                 for (var q = 0; q < option.length; q++) {
-                    if (q == 8 || q == 9 || q==20) {
+                    if (q == 8 || q == 9) {
                         var date = Ext.get('date' + q).dom;
                         var rentionDate = businessDate1[businessDate1.length - 1];
                         date.innerHTML = '<div align="center">' + rentionDate + '</div>';
@@ -1798,7 +1798,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('usersRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('usersRate') + "%</strong></div>";
                 Ext.get('userBettingRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userBettingRate') + "%</strong></div>";
 
-                Ext.get('firstRechargeRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + firstRechargeRate[firstRechargeRate.length - 1] + "%</strong></div>";
+                Ext.get('firstRechargeRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('firstRechargeRate') + "%</strong></div>";
                 Ext.get('weekRechargeRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + weekRechargeRate[weekRechargeRate.length - 1] + "%</strong></div>";
 
                 Ext.get('usersDayRetention').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + usersDayRetention[usersDayRetention.length - 1] + "%</strong></div>";
