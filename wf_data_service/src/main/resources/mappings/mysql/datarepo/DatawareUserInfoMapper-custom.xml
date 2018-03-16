@@ -128,6 +128,7 @@
 		SELECT
 			id,
 			user_id,
+            parent_id,
 			channel_id,
 			registered_time,
 			user_group,
