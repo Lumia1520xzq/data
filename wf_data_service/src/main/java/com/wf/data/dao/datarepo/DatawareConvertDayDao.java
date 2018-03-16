@@ -37,4 +37,6 @@ public interface DatawareConvertDayDao extends CrudDao<DatawareConvertDay> {
     String getFirstRechargeTime(Map<String, Object> baseParam);
 
     String getLastRechargeTime(Map<String, Object> baseParam);
+
+    List<Long> getUsersByRechargeType(Map<String, Object> convertParams);
 }

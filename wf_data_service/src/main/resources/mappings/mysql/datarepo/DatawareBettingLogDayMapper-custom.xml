@@ -133,8 +133,8 @@
 
     <delete id="deleteByDate">
         delete FROM
-		dataware_betting_log_day
-		WHERE 1=1
+        dataware_betting_log_day
+        WHERE 1=1
         <if test="bettingDate != null and bettingDate != ''">
             AND betting_date = #{bettingDate}
         </if>
@@ -214,10 +214,10 @@
         WHERE 1=1
         AND t.delete_flag = 0
         <if test="userId != null">
-        AND t.user_id = #{userId}
+            AND t.user_id = #{userId}
         </if>
         <if test="gameType != null">
-        AND t.game_type = #{gameType}
+            AND t.game_type = #{gameType}
         </if>
         ORDER BY betting_date ASC limit 1
     </select>

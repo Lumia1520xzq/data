@@ -11,14 +11,13 @@ import com.wf.data.service.BehaviorRecordService;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.data.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -44,7 +43,7 @@ public class EntranceAnalysisService {
     @Autowired
     private DatawareUserInfoExtendBaseService userInfoExtendBaseService;
     @Autowired
-    private DatawareUserInfoExtendStatisticsService userInfoExtendStatisticsService;
+    private DatawareBuryingPointDayService buryingPointDayService;
 
     public void toDoEntranceAnalysis() {
         logger.info("每天奖多多各入口用户数据统计开始:traceId={}", TraceIdUtils.getTraceId());
@@ -96,132 +95,216 @@ public class EntranceAnalysisService {
         Long channelId = ChannelConstants.JS_CHANNEL;
         //奖多多所有入口
         List<DataDict> entranceDicts = dictService.getDictList("jdd_entrance_type");
-        //所有入口总日活
-        Long totalDAU = 0L;
+
+        //参数对象
+        Map<String, Object> dauParams = new HashMap<>();
+        Map<String, Object> signParams = new HashMap<>();
+        Map<String, Object> bettingParams = new HashMap<>();
+        Map<String, Object> payParams = new HashMap<>();
+        Map<String, Object> yesDauParams = new HashMap<>();
+        Map<String, Object> eaparams = new HashMap<>();
+
+        //局部变量
+        List<Long> activeUsers;
+        List<Long> convertUsers;
+
+        //渠道当天所有活跃用户
+        Map<String, Object> paramMap1 = new HashMap<>();
+        paramMap1.put("businessDate", beginDate);
+        paramMap1.put("parentId", channelId);
+        List<Long> allChannelUsers = buryingPointDayService.getUserIdListByChannel(paramMap1);
 
         for (DataDict entranceDict : entranceDicts) {
-            for (DataDict userActiveDict : userActiveTypeList) {//循环获取活跃用户分类
-                for (DataDict userConvertDict : userConvertTypeList) {//循环获取充值用户分类
-                    List<Long> usersParam = getParamUsers(userActiveDict.getValue(), userConvertDict.getValue(), channelId);
-                    DatawareFinalEntranceAnalysis finalEntranceAnalysis = new DatawareFinalEntranceAnalysis();
-                    Long entranceDau;
-                    Long entranceSign;
-                    Double entranceSignRate;
-                    Long entranceBetting;
-                    Double entranceBettingRate;
-                    Long entrancePay;
-                    Double entrancePayRate;
-                    Double entranceDayRetention;
+            //入口信息
+            Long eventId = Long.parseLong(entranceDict.getValue().toString());
+            String eventName = entranceDict.getLabel();
 
-                    /*DAU **/
-                    Map<String, Object> dauParams = new HashMap<>();
-                    dauParams.put("beginDate", beginDate);
-                    dauParams.put("channelId", channelId);
-                    dauParams.put("eventId", entranceDict.getValue());
-                    dauParams.put("limitCount", 50000);
-                    //当前入口dau
-                    List<Long> entranceUserIds = behaviorRecordService.getUserIdsByEntrance(dauParams);
-                    entranceDau = Long.parseLong(String.valueOf(entranceUserIds.size()));
-                    totalDAU += entranceDau;
+            //当前入口DAU
+            dauParams.put("beginDate", beginDate);
+            dauParams.put("channelId", channelId);
+            dauParams.put("eventId", entranceDict.getValue());
+            dauParams.put("limitCount", 50000);
+            List<Long> entranceAllUserIds = behaviorRecordService.getUserIdsByEntrance(dauParams);
 
-                    /*签到人数 **/
-                    Map<String, Object> signParams = new HashMap<>();
-                    signParams.put("beginDate", beginDate);
-                    signParams.put("channelId", channelId);
-                    List<Long> signedUserIds = signDayService.getSignedUserIds(signParams);
-                    //取当前入口的签到人数
-                    Collection signedEntranceUserList = CollectionUtils.intersection(entranceUserIds, signedUserIds);
-                    entranceSign = Long.parseLong(String.valueOf(signedEntranceUserList.size()));//签到人数
-                    entranceSignRate = cal(entranceSign, entranceDau);//签到转化率
-
-                    /*投注人数 **/
-                    Map<String, Object> bettingParams = new HashMap<>();
-                    bettingParams.put("beginDate", beginDate);
-                    bettingParams.put("channelId", channelId);
-                    List<Long> bettingUserIdList = bettingLogDayService.getBettingUserIdListByDate(bettingParams);
-                    Collection bettingEntranceUserList = CollectionUtils.intersection(entranceUserIds, bettingUserIdList);
-                    entranceBetting = Long.parseLong(String.valueOf(bettingEntranceUserList.size()));//投注人数
-                    entranceBettingRate = cal(entranceBetting, entranceDau);//投注转化率
-
-                    /*充值人数 **/
-                    Map<String, Object> payParams = new HashMap<>();
-                    payParams.put("beginDate", beginDate);
-                    payParams.put("channelId", channelId);
-                    List<Long> payUserIdList = convertDayService.getPayUserIdListByDate(payParams);
-                    Collection payntranceUserList = CollectionUtils.intersection(entranceUserIds, payUserIdList);
-                    entrancePay = Long.parseLong(String.valueOf(payntranceUserList.size()));//付费人数
-                    entrancePayRate = cal(entrancePay, entranceDau);//付费转化率
-
-                    /*次日留存 **/
-                    Map<String, Object> yesDauParams = new HashMap<>();
-                    yesDauParams.put("beginDate", DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(beginDate), -1)));
-                    yesDauParams.put("channelId", channelId);
-                    yesDauParams.put("eventId", entranceDict.getValue());
-                    yesDauParams.put("limitCount", 50000);
-                    //前一天入口dau
-                    List<Long> yesEntranceUserIds = behaviorRecordService.getUserIdsByEntrance(yesDauParams);
-                    Collection DayRetentionUserIdList = CollectionUtils.intersection(yesEntranceUserIds, entranceUserIds);
-                    Long DayRetentionUserCount = Long.parseLong(String.valueOf(DayRetentionUserIdList.size()));
-                    entranceDayRetention = cal(DayRetentionUserCount, entranceDau);
-
-                    finalEntranceAnalysis.setBusinessDate(beginDate);
-                    finalEntranceAnalysis.setEventId(Long.parseLong(entranceDict.getValue().toString()));
-                    finalEntranceAnalysis.setEventName(entranceDict.getLabel());
-                    finalEntranceAnalysis.setEntranceDau(entranceDau);
-                    finalEntranceAnalysis.setEntranceDauRate(0D);
-                    finalEntranceAnalysis.setEntranceSign(entranceSign);
-                    finalEntranceAnalysis.setEntranceSignRate(entranceSignRate);
-                    finalEntranceAnalysis.setEntranceBetting(entranceBetting);
-                    finalEntranceAnalysis.setEntranceBettingRate(entranceBettingRate);
-                    finalEntranceAnalysis.setEntrancePay(entrancePay);
-                    finalEntranceAnalysis.setEntrancePayRate(entrancePayRate);
-                    finalEntranceAnalysis.setEntranceDayRetention(entranceDayRetention);
-                    entranceAnalysisService.save(finalEntranceAnalysis);
-
-                    //更新入口dau占比
-                    Map<String, Object> eaparams = new HashMap<>();
-                    eaparams.put("beginDate", beginDate);
-                    List<DatawareFinalEntranceAnalysis> entranceAnalyses = entranceAnalysisService.getEntranceAnalysisByDate(eaparams);
-                    if (CollectionUtils.isNotEmpty(entranceAnalyses)) {
-                        for (DatawareFinalEntranceAnalysis entranceAnalysis : entranceAnalyses) {
-                            //当前入口dau占比
-                            Double entranceDauRate = cal(entranceAnalysis.getEntranceDau(), totalDAU);
-                            entranceAnalysis.setEntranceDauRate(entranceDauRate);
-                            entranceAnalysisService.save(entranceAnalysis);
-                        }
-                    }
+            //循环获取充值用户分类
+            for (DataDict userConvertDict : userConvertTypeList) {
+                DatawareFinalEntranceAnalysis finalEntranceAnalysis = new DatawareFinalEntranceAnalysis();
+                if (userConvertDict.getValue() == 0) {//所有用户
+                    convertUsers = entranceAllUserIds;
+                } else {
+                    convertUsers = getConvertUserIds(userConvertDict.getValue(), channelId, beginDate, entranceAllUserIds);
                 }
+                entranceAllUserIds = ListUtils.intersection(entranceAllUserIds, convertUsers);
+                finalEntranceAnalysis.setEventId(eventId);
+                finalEntranceAnalysis.setEventName(eventName);
+                finalEntranceAnalysis.setActiveUserType(0);
+                finalEntranceAnalysis.setConvertUserType(userConvertDict.getValue());
+                finalEntranceAnalysis.setBusinessDate(beginDate);
+                saveInfo(channelId, entranceAllUserIds, finalEntranceAnalysis);
+            }
+
+            //循环获取活跃用户分类
+            for (DataDict userActiveDict : userActiveTypeList) {
+                DatawareFinalEntranceAnalysis finalEntranceAnalysis = new DatawareFinalEntranceAnalysis();
+                if (userActiveDict.getValue() == 0) {//所有用户
+                    activeUsers = entranceAllUserIds;
+                } else {
+                    activeUsers = getActiveUserIds(userActiveDict.getValue(), channelId, beginDate);
+                }
+                entranceAllUserIds = ListUtils.intersection(entranceAllUserIds, activeUsers);
+                finalEntranceAnalysis.setEventId(eventId);
+                finalEntranceAnalysis.setEventName(eventName);
+                finalEntranceAnalysis.setActiveUserType(userActiveDict.getValue());
+                finalEntranceAnalysis.setConvertUserType(0);
+                finalEntranceAnalysis.setBusinessDate(beginDate);
+                saveInfo(channelId, entranceAllUserIds, finalEntranceAnalysis);
             }
         }
     }
 
-    private List<Long> getParamUsers(Integer userActiveType, Integer userConvertType, Long channelId) {
-        //获取前15天日期
-        String currentDate = LocalDate.now().minusDays(15).toString();
-        //是否新用户
-        String newUserFlag = "1";
-        if (userActiveType == 1) {
+    private void saveInfo(Long channelId, List<Long> entranceUserIds, DatawareFinalEntranceAnalysis finalEntranceAnalysis) {
+
+        Long entranceDau = Long.parseLong(String.valueOf(entranceUserIds.size()));
+        Long eventId = finalEntranceAnalysis.getEventId();
+        String eventName = finalEntranceAnalysis.getEventName();
+        String beginDate = finalEntranceAnalysis.getBusinessDate();
+
+        /*签到人数 **/
+        Map<String, Object> signParams = new HashMap<>();
+        signParams.put("beginDate", beginDate);
+        signParams.put("channelId", channelId);
+        List<Long> signedUserIds = signDayService.getSignedUserIds(signParams);
+        //取当前入口的签到人数
+        Collection signedEntranceUserList = CollectionUtils.intersection(entranceUserIds, signedUserIds);
+        Long entranceSign = Long.parseLong(String.valueOf(signedEntranceUserList.size()));//签到人数
+        Double entranceSignRate = cal(entranceSign, entranceDau);//签到转化率
+
+        /*投注人数 **/
+        Map<String, Object> bettingParams = new HashMap<>();
+        bettingParams.put("beginDate", beginDate);
+        bettingParams.put("channelId", channelId);
+        List<Long> bettingUserIdList = bettingLogDayService.getBettingUserIdListByDate(bettingParams);
+        Collection bettingEntranceUserList = CollectionUtils.intersection(entranceUserIds, bettingUserIdList);
+        Long entranceBetting = Long.parseLong(String.valueOf(bettingEntranceUserList.size()));//投注人数
+        Double entranceBettingRate = cal(entranceBetting, entranceDau);//投注转化率
+
+        /*充值人数 **/
+        Map<String, Object> payParams = new HashMap<>();
+        payParams.put("beginDate", beginDate);
+        payParams.put("channelId", channelId);
+        List<Long> payUserIdList = convertDayService.getPayUserIdListByDate(payParams);
+        Collection payntranceUserList = CollectionUtils.intersection(entranceUserIds, payUserIdList);
+        Long entrancePay = Long.parseLong(String.valueOf(payntranceUserList.size()));//付费人数
+        Double entrancePayRate = cal(entrancePay, entranceDau);//付费转化率
+
+        /*次日留存 **/
+        Map<String, Object> yesDauParams = new HashMap<>();
+        yesDauParams.put("beginDate", DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(beginDate), -1)));
+        yesDauParams.put("channelId", channelId);
+        yesDauParams.put("eventId", eventId);
+        yesDauParams.put("limitCount", 50000);
+        //前一天入口dau
+        List<Long> yesEntranceUserIds = behaviorRecordService.getUserIdsByEntrance(yesDauParams);
+        Collection DayRetentionUserIdList = CollectionUtils.intersection(yesEntranceUserIds, entranceUserIds);
+        Long DayRetentionUserCount = Long.parseLong(String.valueOf(DayRetentionUserIdList.size()));
+        Double entranceDayRetention = cal(DayRetentionUserCount, entranceDau);
+
+        finalEntranceAnalysis.setEntranceDau(entranceDau);
+        finalEntranceAnalysis.setEntranceDauRate(0D);
+        finalEntranceAnalysis.setEntranceSign(entranceSign);
+        finalEntranceAnalysis.setEntranceSignRate(entranceSignRate);
+        finalEntranceAnalysis.setEntranceBetting(entranceBetting);
+        finalEntranceAnalysis.setEntranceBettingRate(entranceBettingRate);
+        finalEntranceAnalysis.setEntrancePay(entrancePay);
+        finalEntranceAnalysis.setEntrancePayRate(entrancePayRate);
+        finalEntranceAnalysis.setEntranceDayRetention(entranceDayRetention);
+        entranceAnalysisService.save(finalEntranceAnalysis);
+    }
+
+    /**
+     * 根据用户分层获取用户id
+     *
+     * @param userConvertType
+     * @param channelId
+     * @param searchDate
+     * @return
+     */
+    private List<Long> getConvertUserIds(Integer userConvertType, Long channelId, String searchDate, List<Long> entranceAllUserIds) {
+
+        //获取充值用户
+        List<Long> convertUsers = new ArrayList<>();
+        Integer minAmount = null;
+        Integer maxAmount = null;
+        switch (userConvertType) {
+            case 2:
+                minAmount = 1;
+                maxAmount = 100;
+                break;
+            case 3:
+                minAmount = 100;
+                maxAmount = 1000;
+                break;
+            case 4:
+                minAmount = 1000;
+                maxAmount = 10000;
+                break;
+            case 5:
+                minAmount = 10000;
+                maxAmount = 100000;
+                break;
+            case 6:
+                minAmount = 100000;
+                break;
+        }
+        Map<String, Object> convertParams = new HashMap<>();
+        convertParams.put("parentId", channelId);
+        convertParams.put("searchDate", searchDate);
+        convertParams.put("rechargeType", userConvertType);
+        convertParams.put("minAmount", minAmount);
+        convertParams.put("maxAmount", maxAmount);
+        convertUsers = convertDayService.getUsersByRechargeType(convertParams);
+
+        //获取活跃用户中未充值用户
+        if (userConvertType == 1) {
+            //获取渠道所有用户
+            Map<String, Object> addUserParam = new HashMap<>();
+            addUserParam.put("beginDate", searchDate);
+            addUserParam.put("channelId", channelId);
+            addUserParam.put("limitCount", 50000);
+            convertUsers = (List<Long>) CollectionUtils.disjunction(entranceAllUserIds, convertUsers);
+        }
+        return convertUsers;
+    }
+
+    /**
+     * 获取活跃分类用户ID
+     *
+     * @param userActiveType
+     * @param channelId
+     * @param searchDate
+     * @return
+     */
+    private List<Long> getActiveUserIds(Integer userActiveType, Long channelId, String searchDate) {
+        String lastFifteenDate = DateUtils.getPrevDate(searchDate, 15);//获取前15天日期
+        String newUserFlag = null;
+        String activeFlag = null;//是否活跃(0：活跃，1：未活跃)
+        if (userActiveType == 1) {//新增用户
             newUserFlag = "0";
         }
-
-        List<Long> users = new ArrayList<>();
-        if (userActiveType == 0 || userConvertType == 0) {
-            return users;
+        if (userActiveType == 2) {//老用户-近15天活跃
+            activeFlag = "0";
         }
-
+        if (userActiveType == 3) {//老用户-近15天未活跃
+            activeFlag = "1";
+        }
         Map<String, Object> activeParams = new HashMap<>();
         activeParams.put("channelId", channelId);
-        activeParams.put("lastActiveDate", currentDate);
+        activeParams.put("searchDate", searchDate);
+        activeParams.put("lastActiveDate", lastFifteenDate);
         activeParams.put("newUserFlag", newUserFlag);
+        activeParams.put("activeFlag", activeFlag);
 
-        //活跃用户
-        List<Long> activeUsers = userInfoExtendBaseService.getUserIdByDate(activeParams);
-
-        //充值用户
-
-        //交集
-
-        return users;
+        return userInfoExtendBaseService.getUserIdByDate(activeParams);
     }
 
     private Double cal(Long d1, Long d2) {

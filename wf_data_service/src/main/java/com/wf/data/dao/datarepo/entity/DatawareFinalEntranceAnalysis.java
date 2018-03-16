@@ -1,6 +1,5 @@
 package com.wf.data.dao.datarepo.entity;
 
-
 import com.wf.core.persistence.DataEntity;
 import com.wf.core.utils.excel.ExcelField;
 
@@ -18,6 +17,8 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
     private Double entrancePayRate;
     private Double entranceDayRetention;
     private String businessDate;
+    private Integer activeUserType;
+    private Integer convertUserType;
 
     @ExcelField(title = "埋点ID", type = 1, align = 2, sort = 3)
     public Long getEventId() {
@@ -117,6 +118,7 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
     public void setEntranceDayRetention(Double entranceDayRetention) {
         this.entranceDayRetention = entranceDayRetention;
     }
+
     @ExcelField(title = "日期", type = 1, align = 2, sort = 1)
     public String getBusinessDate() {
         return businessDate;
@@ -124,5 +126,21 @@ public class DatawareFinalEntranceAnalysis extends DataEntity {
 
     public void setBusinessDate(String businessDate) {
         this.businessDate = businessDate;
+    }
+
+    public Integer getActiveUserType() {
+        return activeUserType;
+    }
+
+    public void setActiveUserType(Integer activeUserType) {
+        this.activeUserType = activeUserType;
+    }
+
+    public Integer getConvertUserType() {
+        return convertUserType;
+    }
+
+    public void setConvertUserType(Integer convertUserType) {
+        this.convertUserType = convertUserType;
     }
 }
