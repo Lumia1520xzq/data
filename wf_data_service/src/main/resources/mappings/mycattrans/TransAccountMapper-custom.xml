@@ -13,6 +13,7 @@
 		<if test="userId != null and userId != ''">
 			AND t.user_id = #{userId}
 		</if>
+		limit 1
 	</select>
 
 </mapper>

@@ -1,7 +1,6 @@
 package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.scenario.effect.impl.prism.ps.PPStoPSWDisplacementMapPeer;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
@@ -160,6 +159,7 @@ public class WholeDataViewController extends ExtJsController {
                 String dayPayArppuRate = cal(lastInfoAll.getPayArppu(),lastButOneInfoAll.getPayArppu());
                 String dayUsersRate = cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(lastButOneInfoAll.getNewUsers(),lastButOneInfoAll.getDau()));
                 String dayMoneyGapRate = cal(lastInfoAll.getMoneyGap(),lastButOneInfoAll.getBettingAmount()-lastButOneInfoAll.getResultAmount());
+                String dayFirstRechargeRate = cal(lastInfoAll.getFirstRechargeRate(),lastButOneInfoAll.getFirstRechargeRate());
                 //比较最后一天和昨天
                 Date yesterday = DateUtils.parseDate(DateUtils.getYesterdayDate());
                 if(DateUtils.parseDate(endDate).before(yesterday)){
@@ -173,8 +173,6 @@ public class WholeDataViewController extends ExtJsController {
                         lastInfoAll.setDayUsersDayRetentionRate("0%");
                         lastInfoAll.setDayDayRetentionRate("0%");
                     }
-                    String dayFirstRechargeRate = cal(lastInfoAll.getFirstRechargeRate(),lastButOneInfoAll.getFirstRechargeRate());
-                    lastInfoAll.setDayFirstRechargeRate(dayFirstRechargeRate);
                 }else{
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
                     params.put("date",beforeDate);
@@ -192,12 +190,6 @@ public class WholeDataViewController extends ExtJsController {
                     }else{
                         lastInfoAll.setDayUsersDayRetentionRate("0%");
                         lastInfoAll.setDayDayRetentionRate("0%");
-                    }
-                    if(null != lastButOneInfoAllOne){
-                       String dayFirstRechargeRate = cal(lastInfoAllOne.getFirstRechargeRate(),lastButOneInfoAllOne.getFirstRechargeRate());
-                       lastInfoAll.setDayFirstRechargeRate(dayFirstRechargeRate);
-                    }else{
-                       lastInfoAll.setDayFirstRechargeRate("0%");
                     }
                 }
                     //比较最后一天之前七天
@@ -260,6 +252,7 @@ public class WholeDataViewController extends ExtJsController {
                 lastInfoAll.setDayPayArppuRate(dayPayArppuRate);
                 lastInfoAll.setDayUsersRate(dayUsersRate);
                 lastInfoAll.setDayMoneyGapRate(dayMoneyGapRate);
+                lastInfoAll.setDayFirstRechargeRate(dayFirstRechargeRate);
                 }
                 //一周前的日期
                 String weekBeforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),7));
@@ -284,7 +277,7 @@ public class WholeDataViewController extends ExtJsController {
                     String weekPayArppuRate = cal(lastInfoAll.getPayArppu(),weekInfoAll.getPayArppu());
                     String weekUsersRate =  cal(calRate(lastInfoAll.getNewUsers(),lastInfoAll.getDau()),calRate(weekInfoAll.getNewUsers(),weekInfoAll.getDau()));
                     String weekMoneyGapRate = cal(lastInfoAll.getMoneyGap(),weekInfoAll.getBettingAmount()- weekInfoAll.getResultAmount());
-
+                    String weekFirstRechargeRate = cal(lastInfoAll.getFirstRechargeRate(),weekInfoAll.getFirstRechargeRate());
                     //比较最后一天和昨天
                     Date yesterday =  DateUtils.parseDate(DateUtils.getYesterdayDate());
                     if(DateUtils.parseDate(endDate).before(yesterday)){
@@ -298,8 +291,6 @@ public class WholeDataViewController extends ExtJsController {
                             lastInfoAll.setWeekUsersDayRetentionRate("0%");
                             lastInfoAll.setWeekDayRetentionRate("0%");
                         }
-                        String weekFirstRechargeRate = cal(lastInfoAll.getFirstRechargeRate(),weekInfoAll.getFirstRechargeRate());
-                        lastInfoAll.setWeekFirstRechargeRate(weekFirstRechargeRate);
                     } else {
                         beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate),1));
                         params.put("date",beforeDate);
@@ -318,14 +309,7 @@ public class WholeDataViewController extends ExtJsController {
                             lastInfoAll.setWeekUsersDayRetentionRate("0%");
                             lastInfoAll.setWeekDayRetentionRate("0%");
                         }
-                        if(null != lastButOneInfoAllThree){
-                            String weekFirstRechargeRate = cal(lastInfoAllThree.getFirstRechargeRate(),lastButOneInfoAllThree.getFirstRechargeRate());
-                            lastInfoAll.setWeekFirstRechargeRate(weekFirstRechargeRate);
-                        }else{
-                            lastInfoAll.setWeekFirstRechargeRate("0%");
-                        }
                     }
-
                     //比较最后一天和前七天
                     Date weekDay = DateUtils.getPrevDate(DateUtils.parseDate(DateUtils.formatDate(new Date())),6);
                     if(DateUtils.parseDate(endDate).before(weekDay)){
@@ -386,6 +370,8 @@ public class WholeDataViewController extends ExtJsController {
                     lastInfoAll.setWeekPayArppuRate(weekPayArppuRate);
                     lastInfoAll.setWeekUsersRate(weekUsersRate);
                     lastInfoAll.setWeekMoneyGapRate(weekMoneyGapRate);
+                    lastInfoAll.setWeekFirstRechargeRate(weekFirstRechargeRate);
+
                 }
             }
             return  allList;
@@ -414,7 +400,6 @@ public class WholeDataViewController extends ExtJsController {
         }
         return BigDecimalUtil.round(BigDecimalUtil.div(one*100 ,two),2);
     }
-
 
 
 }
