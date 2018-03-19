@@ -128,25 +128,25 @@
     </update>
 
     <select id="getBaseUserInfoLimit" resultType="DatawareUserInfo">
-        SELECT
-        id,
-        user_id,
-        channel_id,
-        parent_id,
-        registered_time,
-        user_group,
-        registered_date
-        FROM
-        dataware_user_info
-        WHERE 1=1
+		SELECT
+			id,
+			user_id,
+            parent_id,
+			channel_id,
+			registered_time,
+			user_group,
+			registered_date
+		FROM
+			dataware_user_info
+			WHERE 1=1
         AND delete_flag = 0
         <if test="endDate != null and endDate != ''">
             AND registered_date &lt;= #{endDate}
         </if>
-        ORDER BY
-        user_id ASC
-        LIMIT #{minIndex},#{maxIndex}
-    </select>
+		ORDER BY
+			user_id ASC
+		LIMIT #{minIndex},#{maxIndex}
+	</select>
 
     <select id="getByUserId" resultType="DatawareUserInfo">
         SELECT
