@@ -67,4 +67,8 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     public String getLastRechargeTime(Map<String, Object> baseParam) {
         return dao.getLastRechargeTime(baseParam);
     }
+
+    public List<Long> getUsersByRechargeType(Map<String, Object> convertParams) {
+        return dao.getUsersByRechargeType(convertParams);
+    }
 }
