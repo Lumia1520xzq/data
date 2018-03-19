@@ -7,33 +7,37 @@ package com.wf.data.common.constants;
 public interface UserRechargeTypeConstants {
 
     /**
-     * 累充0
+     * 新注册用户
      */
-    int RECHARGE_TYPE_0 = 0;
-
+    int NEW_USER_TYPE_0 = 0;
     /**
-     * 累充1-100
+     * 累充0
      */
     int RECHARGE_TYPE_1 = 1;
 
     /**
-     * 累充100-1000
+     * 累充1-100
      */
     int RECHARGE_TYPE_2 = 2;
 
     /**
-     * 累充1000-10000
+     * 累充100-1000
      */
     int RECHARGE_TYPE_3 = 3;
 
     /**
-     * 累充10000-100000
+     * 累充1000-10000
      */
     int RECHARGE_TYPE_4 = 4;
 
     /**
-     * 累充10万以上
+     * 累充10000-100000
      */
     int RECHARGE_TYPE_5 = 5;
+
+    /**
+     * 累充10万以上
+     */
+    int RECHARGE_TYPE_6 = 6;
 
 }
