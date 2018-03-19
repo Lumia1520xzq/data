@@ -25,6 +25,4 @@ public class DatawareUserInfoExtendStatisticsService extends CrudService<Datawar
     public List<DatawareUserInfoExtendStatistics> getProfitByUserId(Map<String, Object> baseParam) {
         return dao.getProfitByUserId(baseParam);
     }
-
-
 }

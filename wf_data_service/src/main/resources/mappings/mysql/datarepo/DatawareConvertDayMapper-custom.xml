@@ -260,5 +260,32 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			t.convert_date DESC
 		LIMIT 1
 	</select>
+
+	<select id="getUsersByRechargeType" resultType="java.lang.Long">
+		SELECT DISTINCT
+		t.user_id
+		FROM
+		dataware_convert_day t
+		WHERE
+		t.delete_flag = 0
+		<if test="parentId != null and parentId != ''">
+			AND t.parent_id = #{parentId}
+		</if>
+		<if test="searchDate != null and searchDate != ''">
+			AND t.convert_date &lt;= #{searchDate}
+		</if>
+		<if test="(minAmount != null and minAmount != '') or (maxAmount != null and maxAmount != '')">
+			GROUP BY
+			t.user_id
+			HAVING
+			1=1
+			<if test="minAmount != null and minAmount != ''">
+				AND SUM(t.third_amount) >= #{minAmount}
+			</if>
+			<if test="maxAmount != null and maxAmount != ''">
+				AND SUM(t.third_amount) &lt; #{maxAmount}
+			</if>
+		</if>
+	</select>
 </mapper>
 

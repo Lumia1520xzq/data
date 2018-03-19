@@ -102,7 +102,7 @@ public class UserInfoExtendService {
      * 定时清洗用户基本信息
      */
     public void toDoAnalysis() {
-    String yesterday = DateUtils.getYesterdayDate();
+        String yesterday = DateUtils.getYesterdayDate();
     /* 更改用户分类和用户状态*/
         //1.重置用户分类和用户状态
         resetUserGroup();
@@ -166,7 +166,12 @@ public class UserInfoExtendService {
         userParam.put("userId", userId);
 
         //剩余金叶子数
-        Double useAmount = judgeNull(transAccountService.getUseAmountByUserId(userParam));
+        Double useAmount = 0D;
+        try {
+            useAmount = judgeNull(transAccountService.getUseAmountByUserId(userParam));
+        } catch (Exception e) {
+            logger.error("获取剩余金叶子错误，用户ID：" + userId + "traceId={}", TraceIdUtils.getTraceId());
+        }
         //出口成本
         Double costAmount = judgeNull(phyAwardsSendlogService.getRmbAmountByUserId(userParam));
         //最后一次活跃时间
@@ -367,8 +372,8 @@ public class UserInfoExtendService {
         double useAmountRmb = BigDecimalUtil.div(useAmount, 1000);
         double totalWarsProfitRmb = BigDecimalUtil.div(totalWarsProfit, 1000);
         double totalWarsBettingRmb = BigDecimalUtil.div(totalWarsBetting, 1000);
-        double cost = BigDecimalUtil.add(BigDecimalUtil.add(useAmountRmb, costAmount), totalWarsProfitRmb);
-        double profit = BigDecimalUtil.add(totalRechargeAmount, totalWarsBettingRmb);
+        double cost = BigDecimalUtil.add(BigDecimalUtil.add(useAmountRmb, costAmount), totalWarsBettingRmb);
+        double profit = BigDecimalUtil.add(totalRechargeAmount, totalWarsProfitRmb);
         return BigDecimalUtil.sub(cost, profit);
     }
 
