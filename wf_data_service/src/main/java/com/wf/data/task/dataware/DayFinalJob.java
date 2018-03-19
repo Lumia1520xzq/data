@@ -8,6 +8,7 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.business.*;
+import com.wf.data.service.data.DatawareFinalRechargeTagAnalysisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,8 @@ public class DayFinalJob {
     private final RegisteredArpuService registeredArpuService = SpringContextHolder.getBean(RegisteredArpuService.class);
     private final RegisteredRetentionService registeredRetentionService = SpringContextHolder.getBean(RegisteredRetentionService.class);
     private final EntranceAnalysisService entranceAnalysisService = SpringContextHolder.getBean(EntranceAnalysisService.class);
+    private final DatawareFinalRechargeTagAnalysisService tagAnalysisService = SpringContextHolder.getBean(DatawareFinalRechargeTagAnalysisService.class);
+
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -74,6 +77,15 @@ public class DayFinalJob {
         try {
             if ("true".equals(openFlag[2])) {
                 registeredRetentionService.toDoAnalysis();
+            }
+        } catch (Exception e) {
+            logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+
+
+        try {
+            if ("true".equals(openFlag[4])) {
+                tagAnalysisService.toDoAnalysis();
             }
         } catch (Exception e) {
             logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));

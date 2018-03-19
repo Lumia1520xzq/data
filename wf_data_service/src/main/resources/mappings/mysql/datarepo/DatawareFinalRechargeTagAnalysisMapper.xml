@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalRechargeTagAnalysisDao">
+	
+	<sql id="datawareFinalRechargeTagAnalysisColumns">
+		t.id,
+		t.dau,
+		t.dau_rate,
+		t.total_user_count,
+		t.total_user_rate,
+		t.login_count,
+		t.betting_amount,
+		t.result_amount,
+		t.diff_amount,
+		t.result_rate,
+		t.betting_user_count,
+		t.betting_count,
+		t.betting_rate,
+		t.betting_arpu,
+		t.average_betting_count,
+		t.average_betting_asp,
+		t.recharge_user_count,
+		t.third_amount,
+		t.recharge_count,
+		t.recharge_rate,
+		t.dau_recharge_rate,
+		t.betting_recharge_rate,
+		t.darppu_rate,
+		t.point_pay_rate,
+		t.pay_success_rate,
+		t.average_pay_count,
+		t.average_pay_amount,
+		t.day_retention,
+		t.week_retention,
+		t.week_lost_rate,
+		t.user_tag,
+		t.channel_name,
+		t.parent_id,
+		t.channel_id,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareFinalRechargeTagAnalysisWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareFinalRechargeTagAnalysisJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareFinalRechargeTagAnalysis">
+		SELECT <include refid="datawareFinalRechargeTagAnalysisColumns"/> FROM dataware_final_recharge_tag_analysis t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalRechargeTagAnalysis">
+		SELECT <include refid="datawareFinalRechargeTagAnalysisColumns"/> FROM dataware_final_recharge_tag_analysis t <include refid="datawareFinalRechargeTagAnalysisJoins"/>
+		WHERE <include refid="datawareFinalRechargeTagAnalysisWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_recharge_tag_analysis t WHERE <include refid="datawareFinalRechargeTagAnalysisWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_final_recharge_tag_analysis (
+			id, 
+			dau, 
+			dau_rate, 
+			total_user_count, 
+			total_user_rate, 
+			login_count, 
+			betting_amount, 
+			result_amount, 
+			diff_amount, 
+			result_rate, 
+			betting_user_count, 
+			betting_count, 
+			betting_rate, 
+			betting_arpu, 
+			average_betting_count, 
+			average_betting_asp, 
+			recharge_user_count, 
+			third_amount, 
+			recharge_count, 
+			recharge_rate, 
+			dau_recharge_rate, 
+			betting_recharge_rate, 
+			darppu_rate, 
+			point_pay_rate, 
+			pay_success_rate, 
+			average_pay_count, 
+			average_pay_amount, 
+			day_retention, 
+			week_retention, 
+			week_lost_rate, 
+			user_tag, 
+			channel_name, 
+			parent_id, 
+			channel_id, 
+			business_date, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{dau}, 
+			#{dauRate}, 
+			#{totalUserCount}, 
+			#{totalUserRate}, 
+			#{loginCount}, 
+			#{bettingAmount}, 
+			#{resultAmount}, 
+			#{diffAmount}, 
+			#{resultRate}, 
+			#{bettingUserCount}, 
+			#{bettingCount}, 
+			#{bettingRate}, 
+			#{bettingArpu}, 
+			#{averageBettingCount}, 
+			#{averageBettingAsp}, 
+			#{rechargeUserCount}, 
+			#{thirdAmount}, 
+			#{rechargeCount}, 
+			#{rechargeRate}, 
+			#{dauRechargeRate}, 
+			#{bettingRechargeRate}, 
+			#{darppuRate}, 
+			#{pointPayRate}, 
+			#{paySuccessRate}, 
+			#{averagePayCount}, 
+			#{averagePayAmount}, 
+			#{dayRetention}, 
+			#{weekRetention}, 
+			#{weekLostRate}, 
+			#{userTag}, 
+			#{channelName}, 
+			#{parentId}, 
+			#{channelId}, 
+			#{businessDate}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_final_recharge_tag_analysis SET
+			dau = #{dau}, 
+			dau_rate = #{dauRate}, 
+			total_user_count = #{totalUserCount}, 
+			total_user_rate = #{totalUserRate}, 
+			login_count = #{loginCount}, 
+			betting_amount = #{bettingAmount}, 
+			result_amount = #{resultAmount}, 
+			diff_amount = #{diffAmount}, 
+			result_rate = #{resultRate}, 
+			betting_user_count = #{bettingUserCount}, 
+			betting_count = #{bettingCount}, 
+			betting_rate = #{bettingRate}, 
+			betting_arpu = #{bettingArpu}, 
+			average_betting_count = #{averageBettingCount}, 
+			average_betting_asp = #{averageBettingAsp}, 
+			recharge_user_count = #{rechargeUserCount}, 
+			third_amount = #{thirdAmount}, 
+			recharge_count = #{rechargeCount}, 
+			recharge_rate = #{rechargeRate}, 
+			dau_recharge_rate = #{dauRechargeRate}, 
+			betting_recharge_rate = #{bettingRechargeRate}, 
+			darppu_rate = #{darppuRate}, 
+			point_pay_rate = #{pointPayRate}, 
+			pay_success_rate = #{paySuccessRate}, 
+			average_pay_count = #{averagePayCount}, 
+			average_pay_amount = #{averagePayAmount}, 
+			day_retention = #{dayRetention}, 
+			week_retention = #{weekRetention}, 
+			week_lost_rate = #{weekLostRate}, 
+			user_tag = #{userTag}, 
+			channel_name = #{channelName}, 
+			parent_id = #{parentId}, 
+			channel_id = #{channelId}, 
+			business_date = #{businessDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_recharge_tag_analysis SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
