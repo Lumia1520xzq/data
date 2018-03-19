@@ -43,60 +43,78 @@ public class NewChannelDataJob {
     private static final String COMMA = ",";
 
     public void execute() {
-        logger.info("开始每日各渠道关键数据分析:traceId={}", TraceIdUtils.getTraceId());
+        logger.info("开始新版每日各渠道关键数据分析:traceId={}", TraceIdUtils.getTraceId());
+        //所有渠道的数据
+        channelsData(DataConstants.NEW_CHANNEL_DATA_RECEIVER,DataConstants.NEW_DATA_DAILY_CHANNELS);
+        //奖多多单独渠道的数据
+        channelsData(DataConstants.NEW_CHANNEL_DATA_JDD_RECEIVER,DataConstants.NEW_DATA_JDD_DAILY_CHANNELS);
+    }
+
+    private void channelsData(String receiver_str,String channels_str){
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
         String prvDate = DateUtils.formatDate(DateUtils.getPrevDate(new Date(),2));
         while (count <= TIMES) {
             String contentTemp = "<table border='1' cellspacing=1 cellpadding=5 style='text-align:center;border-collapse:collapse'>"+
-             "<tr style='font-weight:bold'><td style='background-color:#D6D6D6;'>searchDate日报</td><td bgcolor='#FF6666' colspan=2>降幅超过30%</td><td bgcolor='#FFE4E1' colspan=2>降幅小于30%</td><td bgcolor='#00991F' colspan=2>涨幅大于30%</td><td bgcolor='ccffcc' colspan=2>涨幅小于30%</td><td></td><td></td><td></td><td></td><td></td></tr>"+
-            "<tr style='font-weight:bold;background-color:#206A9C;color:white'><td>渠道</td><td>充值金额</td><td>充值人数</td><td>日活人数</td><td>新增人数</td><td>投注用户数</td><td>投注转化率</td><td>付费渗透率</td><td>新用户投注转化率</td><td>新用户次留</td><td>投注流水</td><td>返奖流水</td><td>返奖率</td><td>流水差</td></tr>";
+                    "<tr style='font-weight:bold'><td style='background-color:#D6D6D6;'>searchDate日报</td><td bgcolor='#FF6666' colspan=2>降幅超过30%</td><td bgcolor='#FFE4E1' colspan=2>降幅小于30%</td><td bgcolor='#00991F' colspan=2>涨幅大于30%</td><td bgcolor='ccffcc' colspan=2>涨幅小于30%</td><td></td><td></td><td></td><td></td><td></td></tr>"+
+                    "<tr style='font-weight:bold;background-color:#206A9C;color:white'><td>渠道</td><td>充值金额</td><td>充值人数</td><td>日活人数</td><td>新增人数</td><td>投注用户数</td><td>投注转化率</td><td>付费渗透率</td><td>新用户投注转化率</td><td>新用户次留</td><td>投注流水</td><td>返奖流水</td><td>返奖率</td><td>流水差</td></tr>";
             String tableEnd = "</table>";
             try {
                 // 获取收件人 ------ 收件人要改
-                String receivers = dataConfigService.findByName(DataConstants.NEW_CHANNEL_DATA_RECEIVER).getValue();
+                String receivers = dataConfigService.findByName(receiver_str).getValue();
                 if (StringUtils.isNotEmpty(receivers)) {
                     StringBuilder content = new StringBuilder();
                     content.append(contentTemp.replace("searchDate",date));
-                    String channelStrs = dataConfigService.findByName(DataConstants.NEW_DATA_DAILY_CHANNELS).getValue();
+                    String channelStrs = dataConfigService.findByName(channels_str).getValue();
+                    String title = "";
                     if(StringUtils.isNotEmpty(channelStrs)) {
                         String[] channels = channelStrs.split(COMMA);
                         List<Long> mainChannels = channelInfoService.findMainChannelIds();
                         for (String channelStr:channels) {
-                          long channelId = Long.parseLong(channelStr);
-                          ChannelInfo channelInfo = channelInfoService.get(channelId);
-                          if(mainChannels.contains(channelId)) {
-                              content.append(buildData(date,channelId,null).replace("channelName",channelInfo.getName()));
-                          } else {
-                              content.append(buildData(date,null,channelId).replace("channelName",channelInfo.getName()));
-                          }
+                            long channelId = Long.parseLong(channelStr);
+                            ChannelInfo channelInfo = channelInfoService.get(channelId);
+                            if(mainChannels.contains(channelId)) {
+                                content.append(buildData(date,channelId,null).replace("channelName",channelInfo.getName()));
+                            } else {
+                                content.append(buildData(date,null,channelId).replace("channelName",channelInfo.getName()));
+                            }
                         }
-                        content.append(buildData(date,1L,null).replace("channelName","合计"));
-                        content.append(buildData(prvDate,1L,null).replace("channelName","前日合计"));
-                        content.append(getMonthRecharge(date).replace("channelName","当月累计"));
+                        //所有的渠道
+                        if(DataConstants.NEW_DATA_DAILY_CHANNELS.equals(channels_str)){
+                            content.append(buildData(date,1L,null).replace("channelName","合计"));
+                            content.append(buildData(prvDate,1L,null).replace("channelName","前日合计"));
+                            content.append(getMonthRecharge(date,1L).replace("channelName","当月累计"));
+                            title = "每日各渠道关键数据分析汇总(%s)";
+                        }
+                        //奖多多单独的渠道
+                        if(DataConstants.NEW_DATA_JDD_DAILY_CHANNELS.equals(channels_str)){
+                            content.append(buildData(prvDate,100001L,null).replace("channelName","前日合计"));
+                            content.append(getMonthRecharge(date,100001L).replace("channelName","当月累计"));
+                            title = "每日奖多多渠道关键数据分析汇总(%s)";
+                        }
                     }
                     content.append(tableEnd);
                     content.insert(0, date +"数据如下" + "<br/><br/>");
                     // 发送邮件
                     for (String to : receivers.split(COMMA)) {
                         try {
-                            emailHander.sendHtml(to,String.format("每日各渠道关键数据分析汇总(%s)",DateUtils.getDate()),content.toString());
+                            emailHander.sendHtml(to,String.format(title,DateUtils.getDate()),content.toString());
                         } catch (MessagingException e) {
-                            logger.error("每日各渠道关键数据邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                            logger.error("新版每日各渠道关键数据邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
                     }
                 } else {
-                    logger.error("每日各渠道关键数据分析接收人未设置，traceId={}", TraceIdUtils.getTraceId());
+                    logger.error("新版每日各渠道关键数据分析接收人未设置，traceId={}", TraceIdUtils.getTraceId());
                 }
-                logger.info("每日各渠道关键数据邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
+                logger.info("新版每日各渠道关键数据邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error("每日各渠道关键数据发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    logger.error("新版每日各渠道关键数据发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
-                    logger.error("每日各渠道关键数据发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    logger.error("新版每日各渠道关键数据发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
             }
         }
@@ -106,7 +124,7 @@ public class NewChannelDataJob {
     /**
      * 当月累计充值
      */
-    private String getMonthRecharge(String date){
+    private String getMonthRecharge(String date,Long parentId){
         String template = "<tr><td style='background-color:#D6D6D6;'>channelName</td><td>sumRecharge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
         StringBuilder sb = new StringBuilder();
         Map<String,Object> params = new HashMap<>();
@@ -114,7 +132,7 @@ public class NewChannelDataJob {
         String endMonth = DateUtils.formatDate(DateUtils.parseDate(date), DateUtils.MONTH_PATTERN);
         params.put("beginMonth",beginMonth);
         params.put("endMonth",endMonth);
-        params.put("parentId",1);
+        params.put("parentId",parentId);
         List<MonthlyDataDto> infoAllList = infoAllService.findMonthSumData(params);
         Double sumRecharge = 0.0;
         if(CollectionUtils.isNotEmpty(infoAllList)){
@@ -273,6 +291,5 @@ public class NewChannelDataJob {
     private String format(double num) {
         return new DecimalFormat(",###,##0").format(num);
     }
-
 
 }

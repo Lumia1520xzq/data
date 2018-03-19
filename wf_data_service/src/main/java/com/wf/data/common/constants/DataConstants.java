@@ -51,6 +51,11 @@ public interface DataConstants {
     String NEW_CHANNEL_DATA_RECEIVER = "new_channel_data_receiver";
 
     /**
+     * 新版每日各渠道 奖多多 数据收件人
+     */
+     String NEW_CHANNEL_DATA_JDD_RECEIVER = "new_channel_data_jdd_receiver";
+
+    /**
      * 每日各渠道关键数据的渠道
      */
     String DATA_DAILY_CHANNELS = "data_daily_channels";
@@ -58,6 +63,10 @@ public interface DataConstants {
      * 新版每日各渠道关键数据
      */
     String NEW_DATA_DAILY_CHANNELS = "new_data_daily_channels";
+    /**
+     * 新版每日各渠道 奖多多 渠道
+     */
+    String NEW_DATA_JDD_DAILY_CHANNELS = "new_data_jdd_daily_channels";
 
     /**
      * 同ip个数设置
