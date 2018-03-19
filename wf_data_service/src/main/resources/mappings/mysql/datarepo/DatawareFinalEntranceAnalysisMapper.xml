@@ -9,7 +9,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<sql id="datawareFinalEntranceAnalysisColumns">
 		t.id,
 		t.active_user_type,
-		t.covert_user_type,
+		t.convert_user_type,
 		t.event_id,
 		t.event_name,
 		t.entrance_dau,
@@ -55,7 +55,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		INSERT INTO dataware_final_entrance_analysis (
 			id,
 			active_user_type,
-			covert_user_type,
+			convert_user_type,
 			event_id, 
 			event_name, 
 			entrance_dau, 
@@ -95,7 +95,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		UPDATE dataware_final_entrance_analysis SET
 			event_id = #{eventId},
 			active_user_type = #{activeUserType},
-			covert_user_type = #{convertUserType},
+			convert_user_type = #{convertUserType},
 			event_name = #{eventName}, 
 			entrance_dau = #{entranceDau}, 
 			entrance_dau_rate = #{entranceDauRate}, 

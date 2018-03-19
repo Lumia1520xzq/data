@@ -262,7 +262,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="getUsersByRechargeType" resultType="java.lang.Long">
-		SELECT
+		SELECT DISTINCT
 		t.user_id
 		FROM
 		dataware_convert_day t
@@ -274,7 +274,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="searchDate != null and searchDate != ''">
 			AND t.convert_date &lt;= #{searchDate}
 		</if>
-		<if test="minAmount != null and minAmount != '' and maxAmount != null and maxAmount != ''">
+		<if test="(minAmount != null and minAmount != '') or (maxAmount != null and maxAmount != '')">
 			GROUP BY
 			t.user_id
 			HAVING
