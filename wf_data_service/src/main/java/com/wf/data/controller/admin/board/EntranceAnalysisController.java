@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author lcs
@@ -68,9 +65,13 @@ public class EntranceAnalysisController extends ExtJsController{
 
         JSONObject json = getRequestJson();
         String searchDate = null;
+        String activeUserType = null;
+        String convertUserType = null;
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             searchDate = data.getString("searchDate");
+            activeUserType = data.getString("activeUserType");
+            convertUserType = data.getString("convertUserType");
         }
         try {
             if (StringUtils.isBlank(searchDate)) {

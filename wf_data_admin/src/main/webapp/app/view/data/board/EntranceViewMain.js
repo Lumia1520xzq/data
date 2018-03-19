@@ -37,6 +37,16 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                 'rollRetentionRate','pointRetentionRate','actCenterRetentionRate','pushRetentionRate','strongAdvRetentionRate'
             ]
         });
+        var activeUserTypeStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getUserType.do?type=user_active_type',
+            autoLoad: true,
+            fields: ['label', 'value']
+        });
+        var convertUserTypeStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getUserType.do?type=user_convert_type',
+            autoLoad: true,
+            fields: ['label', 'value']
+        });
 
         me.add({
             border: false,
@@ -58,6 +68,30 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     xtype: 'datefield',
                     format: 'Y-m-d'
                     // value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-30),"Y-m-d")
+                },
+                {
+                    name: 'activeUserType',
+                    fieldLabel: '按活跃对用户分类',
+                    xtype: 'combo',
+                    emptyText: "--请选择--",
+                    displayField: 'label',
+                    valueField: "value",
+                    editable: true,
+                    queryMode: "local",
+                    width:250,
+                    store: activeUserTypeStore
+                },
+                {
+                    name: 'convertUserType',
+                    fieldLabel: '按充值对用户分类',
+                    xtype: 'combo',
+                    emptyText: "--请选择--",
+                    displayField: 'label',
+                    valueField: "value",
+                    editable: true,
+                    queryMode: "local",
+                    width:250,
+                    store: convertUserTypeStore
                 }
             ]
         });
@@ -106,7 +140,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     items:[
                         {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
                             {id:'entRate3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true},
-                            {id:'entPic3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true},
+                            {id:'entPic3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true}
                         ]
                         }
                     ]
