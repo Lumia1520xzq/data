@@ -190,7 +190,8 @@ public class EntranceAnalysisService {
                         entranceAnalysis.setEntranceDauRate(entranceDauRate);
                     } else {
                         //获取当前入口dau
-                        eaparams.put("eventId", entranceAnalysis.getEventId());
+                        eaparams.put("activeUserType", entranceAnalysis.getActiveUserType().toString());
+                        eaparams.put("convertUserType", entranceAnalysis.getConvertUserType().toString());
                         Long entranceDau = entranceAnalysisService.getCurrentEntranceDau(eaparams);
                         entranceDauRate = cal(entranceAnalysis.getEntranceDau(), entranceDau);
                         entranceAnalysis.setEntranceDauRate(entranceDauRate);

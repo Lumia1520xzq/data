@@ -57,7 +57,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
     <select id="getCurrentEntranceDau" resultType="java.lang.Long">
         SELECT
-            t.entrance_dau
+            sum(t.entrance_dau)
         FROM
             dataware_final_entrance_analysis t
         WHERE
