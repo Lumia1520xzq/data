@@ -290,9 +290,6 @@ public class CommonDataController extends ExtJsController {
     public Object getUserType(HttpServletRequest request) {
         String type = request.getParameter("type");
         List<DataDict>  dictList = dataDictService.findListByType(type);
-        for (DataDict dict : dictList) {
-            dict.setLabel(dict.getLabel() + "(" + dict.getValue() + ")");
-        }
         return dictList;
     }
 }
