@@ -44,4 +44,5 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
     public DatawareUserInfo getByUserId(Long userId) {
         return dao.getByUserId(userId);
     }
+
 }

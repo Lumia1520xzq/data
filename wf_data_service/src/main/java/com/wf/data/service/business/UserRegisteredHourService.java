@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -60,10 +61,8 @@ public class UserRegisteredHourService {
             hourUserInfo(uicGroupList);
         }
 
-
         logger.info("每小时注册汇总结束:traceId={}", TraceIdUtils.getTraceId());
     }
-
 
     private void hourUserInfo(List<Long> uicGroupList) {
         Calendar cal = Calendar.getInstance();
@@ -98,9 +97,10 @@ public class UserRegisteredHourService {
 
         if ("23".equals(searchHour)) {
             Map<String, Object> userMap = new HashMap<>();
-            userMap.put("userGroup", 2);
-            userMap.put("registeredDate", searchDay);
-            datawareUserInfoService.updateUserGroup(userMap);
+            //userMap.put("userGroup", 2);
+            //userMap.put("registeredDate", searchDay);
+            resetUserGroup();
+            //datawareUserInfoService.updateUserGroup(userMap);
             if (CollectionUtils.isNotEmpty(uicGroupList)) {
                 userMap.put("userGroup", 1);
                 userMap.put("userList", uicGroupList);
@@ -159,7 +159,6 @@ public class UserRegisteredHourService {
         return userGroupFlag;
     }
 
-
     @Async
     public void dataClean(String startTime, String endTime) {
         List<Long> uicGroupList = Lists.newArrayList();
@@ -188,7 +187,6 @@ public class UserRegisteredHourService {
                     datawareUserInfoService.deleteByDate(params);
                 }
 
-
                 Map<String, Object> map = new HashMap<>();
                 map.put("beginDate", startTime);
                 map.put("endDate", endTime);
@@ -201,7 +199,6 @@ public class UserRegisteredHourService {
             logger.error("错误: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
             return;
         }
-
 
         logger.info("老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
@@ -239,7 +236,6 @@ public class UserRegisteredHourService {
                 startHour = "";
             }
 
-
             Map<String, Object> params = new HashMap<>();
             params.put("registeredDate", registeredDate);
             params.put("startHour", startHour);
@@ -254,6 +250,28 @@ public class UserRegisteredHourService {
             map.put("beginDate", beginDate);
             map.put("endDate", endDate);
             UserInfo(map, uicGroupList);
+        }
+    }
+
+    private void resetUserGroup() {
+         /* 按月循环更新*/
+        try {
+            //获取第一个用户注册时间
+            String earliestRegisteDate = "2016-12";
+            Date beginDate = new SimpleDateFormat("yyyy-MM").parse(earliestRegisteDate);//定义开始日期
+            Date endDate = new SimpleDateFormat("yyyy-MM").parse(DateUtils.getYesterdayDate());//定义结束日期
+            Calendar dd = Calendar.getInstance();//定义日期实例
+            dd.setTime(beginDate);//设置日期起始时间
+            while (dd.getTime().before(endDate) || dd.getTime().equals(endDate)) {//判断是否到结束日期
+                String monthStr = DateUtils.formatDate(dd.getTime(), DateUtils.MONTH_PATTERN);
+                Map<String, Object> userGroupparam = new HashMap<>();
+                userGroupparam.put("monthStr", monthStr);
+                userGroupparam.put("userGroup", 2);
+                datawareUserInfoService.updateUserGroup(userGroupparam);
+                dd.add(Calendar.MONTH, 1);//进行当前日期月份加1
+            }
+        } catch (Exception e) {
+            logger.error("dataware_user_info重置用户灰名单失败: traceId={}", TraceIdUtils.getTraceId());
         }
     }
 }

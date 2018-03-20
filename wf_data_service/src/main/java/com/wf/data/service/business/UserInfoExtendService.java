@@ -372,8 +372,8 @@ public class UserInfoExtendService {
         double useAmountRmb = BigDecimalUtil.div(useAmount, 1000);
         double totalWarsProfitRmb = BigDecimalUtil.div(totalWarsProfit, 1000);
         double totalWarsBettingRmb = BigDecimalUtil.div(totalWarsBetting, 1000);
-        double cost = BigDecimalUtil.add(BigDecimalUtil.add(useAmountRmb, costAmount), totalWarsProfitRmb);
-        double profit = BigDecimalUtil.add(totalRechargeAmount, totalWarsBettingRmb);
+        double cost = BigDecimalUtil.add(BigDecimalUtil.add(useAmountRmb, costAmount), totalWarsBettingRmb);
+        double profit = BigDecimalUtil.add(totalRechargeAmount, totalWarsProfitRmb);
         return BigDecimalUtil.sub(cost, profit);
     }
 
