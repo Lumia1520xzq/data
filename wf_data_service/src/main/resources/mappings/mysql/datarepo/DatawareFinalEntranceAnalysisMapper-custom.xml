@@ -10,6 +10,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         FROM dataware_final_entrance_analysis t
         WHERE 1=1
         AND t.delete_flag = 0
+        <if test="activeUserType != null">
+            AND t.active_user_type = #{activeUserType}
+        </if>
+        <if test="convertUserType != null">
+            AND t.convert_user_type = #{convertUserType}
+        </if>
         <if test="beginDate != null and beginDate != ''">
             AND t.business_date &gt;= #{beginDate}
         </if>
