@@ -84,6 +84,12 @@
 		AND t.create_time >= CONCAT(#{beginDate} , ' 00:00:00')
 		AND t.create_time &lt;= CONCAT(#{beginDate} , ' 23:59:59')
 		AND t.user_id != 0
+		<if test="userIds != null and userIds.size() != 0">
+			AND t.user_id in
+			<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
 		LIMIT #{limitCount}
 	</select>
 </mapper>

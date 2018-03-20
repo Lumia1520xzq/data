@@ -43,5 +43,23 @@
          t.new_user_flag = 1
         WHERE DATE_FORMAT(t.registered_time,'%Y-%m') = #{monthStr};
     </update>
+
+    <select id="getUserIdByDate" resultType="java.lang.Long">
+        SELECT DISTINCT
+          t.user_id
+        FROM
+          dataware_user_info_extend_base t
+        WHERE
+            t.user_group = 2
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="lastActiveDate != null and lastActiveDate != ''">
+            AND t.last_active_date &lt;= #{lastActiveDate}
+        </if>
+        <if test="newUserFlag != null and newUserFlag != ''">
+            AND t.new_user_flag = #{newUserFlag}
+        </if>
+    </select>
 </mapper>
 

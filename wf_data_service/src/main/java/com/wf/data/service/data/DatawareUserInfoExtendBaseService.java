@@ -5,6 +5,9 @@ import com.wf.data.dao.datarepo.DatawareUserInfoExtendBaseDao;
 import com.wf.data.dao.datarepo.entity.DatawareUserInfoExtendBase;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class DatawareUserInfoExtendBaseService extends CrudService<DatawareUserInfoExtendBaseDao, DatawareUserInfoExtendBase> {
 
@@ -26,6 +29,10 @@ public class DatawareUserInfoExtendBaseService extends CrudService<DatawareUserI
 
     public DatawareUserInfoExtendBase getByUserId(Long userId) {
         return dao.getByUserId(userId);
+    }
+
+    public List<Long> getUserIdByDate(Map<String, Object> activeParams) {
+        return dao.getUserIdByDate(activeParams);
     }
 }
 
