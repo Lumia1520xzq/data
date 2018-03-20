@@ -33,7 +33,6 @@ public class EntranceAnalysisController extends ExtJsController{
     private DatawareFinalEntranceAnalysisService datawareFinalEntranceAnalysisService;
     private static final Long[] eventIds = {139904L,139902L,139901L,139910L,139905L,139906L,139907L,139903L,139909L,139908L};
 
-
     /**
      * 导出用户数据
      *
@@ -87,6 +86,14 @@ public class EntranceAnalysisController extends ExtJsController{
         String beginDate = DateUtils.getPrevDate(searchDate,14);
         params.put("beginDate",beginDate);
         params.put("endDate",searchDate);
+        if(activeUserType == null){
+            activeUserType = "0";
+        }
+        if(convertUserType == null){
+            convertUserType = "0";
+        }
+        params.put("activeUserType",activeUserType);
+        params.put("convertUserType",convertUserType);
         //所有的数据
         List<DatawareFinalEntranceAnalysis> analysisList = datawareFinalEntranceAnalysisService.getAnalysisListByDate(params);
         //查找出最后一天的数据
@@ -102,6 +109,16 @@ public class EntranceAnalysisController extends ExtJsController{
                 }
             }
         }
+
+        List<String> yesDateList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(analysisList)){
+            for(DatawareFinalEntranceAnalysis record:analysisList){
+                if(!yesDateList.contains(minusAndSub(record.getBusinessDate()))){
+                    yesDateList.add(minusAndSub(record.getBusinessDate()));
+                }
+            }
+        }
+
         List<Double> entranceDauRateList = new ArrayList<>();
         List<Long> entranceDauList = new ArrayList<>();
         List<String> eventNameList = new ArrayList<>();
@@ -271,11 +288,15 @@ public class EntranceAnalysisController extends ExtJsController{
             }
         }
         Map<String,Object> map = new HashMap<>();
+        String yesterday = DateUtils.getPrevDate(searchDate,1);
+
         map.put("dateList",dateList);
+        map.put("yesDateList",yesDateList);
         map.put("entranceDauRateList",entranceDauRateList);
         map.put("entranceDauList",entranceDauList);
         map.put("eventNameList",eventNameList);
         map.put("searchDate",searchDate);
+        map.put("yesterday",yesterday);
 
         map.put("duoDuoDauList",duoDuoDauList);
         map.put("duoduoDauRate",duoduoDauRate);
@@ -369,6 +390,16 @@ public class EntranceAnalysisController extends ExtJsController{
         return date.substring(index+1);
     }
 
+
+    private static String minusAndSub(String date){
+        if(StringUtils.isBlank(date)){
+            return null;
+        }
+        //往前推一天
+        String yesterday =  DateUtils.getPrevDate(date,1);
+        int index = yesterday.indexOf("-");
+        return yesterday.substring(index+1);
+    }
 
 }
 

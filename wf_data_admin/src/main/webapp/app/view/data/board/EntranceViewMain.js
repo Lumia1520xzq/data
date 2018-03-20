@@ -15,7 +15,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
         var store= Ext.create('DCIS.Store', {
             url:'/data/entrance/analysis/getList.do',
             autoload:false,
-            fields:['entranceDauRateList','eventNameList','searchDate','dateList',"entranceDauList",
+            fields:['entranceDauRateList','eventNameList','searchDate','dateList','yesDateList','entranceDauList','yesterday',
                 'duoDuoDauList','duoduoDauRate',
                 'iconDauList','iconDauRate',
                 'bannerDauList','bannerDauRate',
@@ -164,7 +164,10 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var entranceDauList = store.getAt(0).get("entranceDauList");
             var eventNameList = store.getAt(0).get("eventNameList");
             var searchDate = store.getAt(0).get("searchDate");
+            var yesterday = store.getAt(0).get("yesterday");
             var dateList = store.getAt(0).get("dateList");
+            var yesDateList = store.getAt(0).get("yesDateList");
+            console.log(yesDateList);
 
             var duoDuoDauList = store.getAt(0).get("duoDuoDauList");
             var iconDauList = store.getAt(0).get("iconDauList");
@@ -426,14 +429,14 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             me.echarts.on('click', function(param) {
                 trendPic(payTitleList[param.dataIndex],dateList,payRate[param.dataIndex],2);
             });
-            transRate(searchDate+"各入口次日留存率",eventNameList,entranceDayRetentionList,3);
+            transRate(yesterday+"各入口次日留存率",eventNameList,entranceDayRetentionList,3);
             me.echarts.on('click', function(param) {
-                trendPic(retentionTitleList[param.dataIndex],dateList,retentionRate[param.dataIndex],3);
+                trendPic(retentionTitleList[param.dataIndex],yesDateList,retentionRate[param.dataIndex],3);
             });
             trendPic(signTitleList[0],dateList,signRate[0],0);
             trendPic(bettingTitleList[0],dateList,bettingRate[0],1);
             trendPic(payTitleList[0],dateList,payRate[0],2);
-            trendPic(retentionTitleList[0],dateList,retentionRate[0],3);
+            trendPic(retentionTitleList[0],yesDateList,retentionRate[0],3);
 
             // 增加饼图的监听事件
             function eConsole(param) {
