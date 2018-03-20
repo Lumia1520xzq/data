@@ -79,7 +79,16 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     editable: true,
                     queryMode: "local",
                     width:250,
-                    store: activeUserTypeStore
+                    store: activeUserTypeStore,
+                    listeners :{
+                        change:function(obj,val) {
+                            convertUserTypeStore.load({
+                                params: {
+                                    signal:val
+                                }
+                            });
+                        }
+                    }
                 },
                 {
                     name: 'convertUserType',
@@ -91,7 +100,16 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     editable: true,
                     queryMode: "local",
                     width:250,
-                    store: convertUserTypeStore
+                    store: convertUserTypeStore,
+                    listeners :{
+                        change:function(obj,val) {
+                            activeUserTypeStore.load({
+                                params: {
+                                    signal:val
+                                }
+                            });
+                        }
+                    }
                 }
             ]
         });
@@ -167,7 +185,6 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var yesterday = store.getAt(0).get("yesterday");
             var dateList = store.getAt(0).get("dateList");
             var yesDateList = store.getAt(0).get("yesDateList");
-            console.log(yesDateList);
 
             var duoDuoDauList = store.getAt(0).get("duoDuoDauList");
             var iconDauList = store.getAt(0).get("iconDauList");

@@ -287,9 +287,22 @@ public class CommonDataController extends ExtJsController {
     }
 
     @RequestMapping("/getUserType")
-    public Object getUserType(HttpServletRequest request) {
+    public Object getUserType(HttpServletRequest request){
+        List<DataDict>  dictList = new ArrayList<>();
         String type = request.getParameter("type");
-        List<DataDict>  dictList = dataDictService.findListByType(type);
+        JSONObject json = getRequestJson();
+        Integer signal = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null && data.size() > 0) {
+            signal = data.getInteger("signal");
+        }
+        if(signal != null && signal > 0){
+            DataDict dict =  dataDictService.getDictByValue(type,0);
+            dictList.add(dict);
+            return dictList;
+        }
+        dictList = dataDictService.findListByType(type);
         return dictList;
     }
+
 }
