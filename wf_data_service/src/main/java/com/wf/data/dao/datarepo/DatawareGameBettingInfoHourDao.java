@@ -19,4 +19,6 @@ public interface DatawareGameBettingInfoHourDao extends CrudDao<DatawareGameBett
     long getCountByTime(Map<String, Object> params);
 
     void deleteByDate(Map<String, Object> params);
+
+    DatawareGameBettingInfoHour getInfoByDate(Map<String, Object> params);
 }
