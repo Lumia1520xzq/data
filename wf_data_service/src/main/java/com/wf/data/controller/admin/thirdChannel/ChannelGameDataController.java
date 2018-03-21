@@ -9,11 +9,8 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareGameBettingInfoHour;
 import com.wf.data.dto.DailyReportDto;
-import com.wf.data.service.data.DatawareBettingLogHourService;
-import com.wf.data.service.data.DatawareBuryingPointHourService;
 import com.wf.data.service.data.DatawareGameBettingInfoHourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +31,6 @@ import java.util.Map;
 @RequestMapping("/data/admin/channel/gamedata")
 public class ChannelGameDataController extends ExtJsController {
 
-    @Autowired
-    private DatawareBuryingPointHourService buryingPointHourService;
-
-    @Autowired
-    private DatawareBettingLogHourService bettingLogHourService;
     @Autowired
     private DatawareGameBettingInfoHourService gameBettingInfoHourService;
 
@@ -63,7 +55,7 @@ public class ChannelGameDataController extends ExtJsController {
         }
 
         //默认为所有游戏
-        if (gameType == null){
+        if (gameType == null) {
             gameType = "0";
         }
 
@@ -100,6 +92,9 @@ public class ChannelGameDataController extends ExtJsController {
                 //设置小时参数
                 if (dateStr.equals(DateUtils.getDate())) {
                     String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+                    if (currentHour.length() == 1) {
+                        currentHour = "0" + currentHour;
+                    }
                     params.put("businessHour", currentHour);
                 } else {
                     params.put("businessHour", 23);
@@ -109,6 +104,8 @@ public class ChannelGameDataController extends ExtJsController {
                 //从游戏清洗表获取数据(dataware_game_betting_info_hour)
                 DatawareGameBettingInfoHour gameBettingInfoHour = gameBettingInfoHourService.getInfoByDate(params);
 
+                dto.setSearchDate(dateStr);
+                dto.setGameType(Integer.parseInt(gameType));
                 if (null != gameBettingInfoHour) {
                     //游戏DAU
                     Integer dau = Integer.parseInt(gameBettingInfoHour.getDau().toString());
@@ -131,8 +128,6 @@ public class ChannelGameDataController extends ExtJsController {
                     //返奖率=返奖流水/投注流水
                     String returnRate = calRate(resultAmount, bettingAmount);
 
-                    dto.setSearchDate(dateStr);
-                    dto.setGameType(Integer.parseInt(gameType));
                     dto.setDau(dau);
                     dto.setBettingUserCount(bettingUserCount);
                     dto.setBettingCount(bettingCount);
@@ -142,8 +137,8 @@ public class ChannelGameDataController extends ExtJsController {
                     dto.setAsp(beetingASP);
                     dto.setAmountGap(diffAmoutn);
                     dto.setReturnRate(returnRate);
-                    list.add(dto);
                 }
+                list.add(dto);
             }
         }
         return list;
