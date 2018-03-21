@@ -71,7 +71,7 @@ public class EntranceAnalysisService {
                 List<String> datelist = DateUtils.getDateList(startTime, endTime);
                 for (String searchDate : datelist) {
                     Map<String, Object> params = new HashMap<>();
-                    params.put("beginDate", endTime);
+                    params.put("beginDate", searchDate);
                     List<DatawareFinalEntranceAnalysis> analysisServices = entranceAnalysisService.getEntranceAnalysisByDate(params);
                     if (analysisServices.size() > 0) {
                         entranceAnalysisService.deleteByDate(params);
