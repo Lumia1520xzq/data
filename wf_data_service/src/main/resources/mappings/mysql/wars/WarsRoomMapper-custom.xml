@@ -12,7 +12,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		WHERE
 		1 = 1
 		AND status = 8
-		AND delete_flag = 0
 		AND ((invitee_user_id = #{userId} AND result_status = -1) OR (user_id = #{userId} AND result_status = 1))
 		AND create_time &lt;= CONCAT(#{endDate} , ' 23:59:59')
 	</select>
@@ -24,7 +23,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		WHERE
 		1 = 1
 		AND status = 8
-		AND delete_flag = 0
 		AND ((invitee_user_id = #{userId} AND result_status = 1 ) OR (user_id = #{userId} AND result_status = -1))
 		AND create_time &lt;= CONCAT(#{endDate} , ' 23:59:59')
 	</select>
