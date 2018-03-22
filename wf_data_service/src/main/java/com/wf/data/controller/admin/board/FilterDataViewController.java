@@ -3,19 +3,26 @@ package com.wf.data.controller.admin.board;
 import com.alibaba.fastjson.JSONObject;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
+import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.controller.response.DataViewExcelResponse;
+import com.wf.data.controller.response.FilterDataViewExcelResponse;
 import com.wf.data.dao.base.entity.ChannelInfo;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelConversion;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelConversionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 转化漏斗看板
@@ -51,10 +58,10 @@ public class FilterDataViewController extends ExtJsController {
         } catch (Exception e) {
             logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
-        String beginDate =  DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(searchDate),30));
+        String beginDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(searchDate), 30));
         String endDate = searchDate;
         Map<String, Object> params = new HashMap<>(3);
-        if(null == parentId){
+        if (null == parentId) {
             parentId = 1L;
         }
         ChannelInfo channelInfo = channelInfoService.get(parentId);
@@ -64,12 +71,115 @@ public class FilterDataViewController extends ExtJsController {
             } else {
                 params.put("parentId", parentId);
             }
-        }else {
+        } else {
             params.put("parentId", parentId);
         }
-            params.put("beginDate",beginDate);
-            params.put("endDate",endDate);
-            return conversionService.getByChannelAndDate(params);
+        params.put("beginDate", beginDate);
+        params.put("endDate", endDate);
+        return conversionService.getByChannelAndDate(params);
+    }
+
+    /**
+     * 数据下载
+     */
+    @RequestMapping("/export")
+    public void export(@RequestParam String parentId, @RequestParam String searchDate, HttpServletResponse response) {
+        List<FilterDataViewExcelResponse> responses = new ArrayList<>();
+        try {
+
+            /* 整理参数*/
+            Long parentIdParam = null;
+            String beginDateParam = null;
+            try {
+                if (!judgeParamIsBank(parentId)) {
+                    parentIdParam = Long.parseLong(parentId);
+                }
+                if (judgeParamIsBank(searchDate)) {//开始/结束日期为空
+                    beginDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
+                } else {
+                    beginDateParam = formatGTMDate(searchDate);
+                }
+            } catch (Exception e) {
+                logger.error("导出核心指标总览数据时查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId());
+            }
+
+            Map<String, Object> params = new HashMap<>(3);
+            if (null == parentIdParam) {
+                parentIdParam = 1L;
+            }
+            ChannelInfo channelInfo = channelInfoService.get(parentIdParam);
+            if (null != channelInfo) {
+                if (null != channelInfo.getParentId()) {
+                    params.put("channelId", parentIdParam);
+                } else {
+                    params.put("parentId", parentIdParam);
+                }
+            } else {
+                params.put("parentId", parentIdParam);
+            }
+            params.put("beginDate", beginDateParam);
+            params.put("endDate", beginDateParam);
+
+            /*获取数据*/
+            List<DatawareFinalChannelConversion> finalChannelConversions = conversionService.getByChannelAndDate(params);
+            if (finalChannelConversions.size() == 1) {//数据唯一，否则数据不正确
+                DatawareFinalChannelConversion channelConversion = finalChannelConversions.get(0);
+                if (null != channelConversion) {
+                    FilterDataViewExcelResponse excelResponse = new FilterDataViewExcelResponse();
+                    excelResponse.setBusinessDate(channelConversion.getBusinessDate());
+                    excelResponse.setDauCount(channelConversion.getDauCount());
+                    excelResponse.setGamedauCount(channelConversion.getGamedauCount());
+                    excelResponse.setBettingCount(channelConversion.getBettingCount());
+                    excelResponse.setRechargeCount(channelConversion.getRechargeCount());
+                    excelResponse.setRegisteredCount(channelConversion.getRegisteredCount());
+                    excelResponse.setDauRegistered(channelConversion.getDauRegistered());
+                    excelResponse.setGamedauRegistered(channelConversion.getGamedauRegistered());
+                    excelResponse.setBettingRegistered(channelConversion.getBettingRegistered());
+                    excelResponse.setRechargeRegistered(channelConversion.getRechargeRegistered());
+                    excelResponse.setDauOlder(channelConversion.getDauOlder());
+                    excelResponse.setGamedauOlder(channelConversion.getGamedauOlder());
+                    excelResponse.setBettingOlder(channelConversion.getBettingOlder());
+                    excelResponse.setRechargeOlder(channelConversion.getRechargeOlder());
+                    responses.add(excelResponse);
+                } else {
+                    logger.error("导出转化漏斗分析数据-未获取到DatawareFinalChannelConversion数据: traceId={}, data={}", TraceIdUtils.getTraceId());
+                }
+            } else {
+                logger.error("导出转化漏斗分析数据-取到DatawareFinalChannelConversion数据不止一条: traceId={}, data={}", TraceIdUtils.getTraceId());
+            }
+
+            String fileName = "转化漏斗分析" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            new ExportExcel("转化漏斗分析", FilterDataViewExcelResponse.class).setDataList(responses).write(response, fileName).dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean judgeParamIsBank(String param) {
+        if (param.equals("undefined") || param.equals("null") || StringUtils.isBlank(param)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 格式化GMT时间
+     *
+     * @param date
+     * @return
+     */
+    public String formatGTMDate(String date) {
+        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd");
+        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
+        Date time = null;
+        try {
+            time = defaultFormat.parse(date);
+            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return gmt.format(time);
     }
 
 }
