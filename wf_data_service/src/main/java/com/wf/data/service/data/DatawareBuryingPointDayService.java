@@ -36,7 +36,6 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public List<Long> getGameDauIds(Map<String, Object> map) {
         return dao.getGameDauIds(map);
     }
-
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
     }
@@ -56,4 +55,9 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public Long getUserPointCount(Map<String, Object> map) {
         return dao.getUserPointCount(map);
     }
+
+    public List<Long> getUserIdByDates(Map<String, Object> map) {
+        return dao.getUserIdByDates(map);
+    }
+
 }

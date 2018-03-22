@@ -61,14 +61,4 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
         return dao.getByUserIdAndGameType(params);
     }
 
-
-    public List<Long> getActiveUserIds(Map<String, Object> bettingParams) {
-        return dao.getActiveUserIds(bettingParams);
-    }
-
-    public List<Long> getRechargeUserIds(Map<String, Object> bettingParams) {
-        return dao.getRechargeUserIds(bettingParams);
-    }
-
-
 }

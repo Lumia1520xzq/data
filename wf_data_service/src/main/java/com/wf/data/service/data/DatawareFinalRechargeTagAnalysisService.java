@@ -59,6 +59,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
                 dataKettle(item, yesterdayDate, twoDayBefore);
                 daysRetention(item, yesterdayDate, 1);
                 daysRetention(item, yesterdayDate, 6);
+                userLost(item, yesterdayDate);
             }
         } catch (Exception e) {
             logger.error("添加渠道汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
@@ -112,18 +113,84 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
     /**
      * 用户流失
+     *
      * @param channelInfo
      * @param yesterdayDate
-     * @param day
      */
-    private void userLost(ChannelInfo channelInfo, String yesterdayDate, int day) {
+    private void userLost(ChannelInfo channelInfo, String yesterdayDate) {
+        Map<String, Object> params = new HashMap<>();
+        if (channelInfo != null) {
+            params.put("parentId", channelInfo.getId());
+        } else {
+            params.put("parentId", 1);
+        }
+        String businessDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -7));
+        String beginDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -6));
+        params.put("businessDate", yesterdayDate);
+        params.put("userTag", UserRechargeTypeConstants.NEW_USER_TYPE_0);
 
+        DatawareFinalRechargeTagAnalysis tagAnalysis = getTagAnalysisDate(params);
+        if (null == tagAnalysis) return;
+
+        Map<String, Object> userParams = new HashMap<>();
+        Map<String, Object> retentionParams = new HashMap<>();
+
+        if (channelInfo != null) {
+            userParams.put("parentId", channelInfo.getParentId());
+            retentionParams.put("parentId", channelInfo.getParentId());
+        } else {
+            userParams.remove("parentId");
+            retentionParams.remove("parentId");
+        }
+        userParams.put("beginDate", beginDate);
+        userParams.put("endDate", yesterdayDate);
+
+        List<Long> dauUserList = datawareBuryingPointDayService.getUserIdByDates(userParams);
+
+        retentionParams.put("businessDate", businessDate);
+        //新注册用户
+        List<Long> registerdList = datawareUserInfoService.getNewUserByDate(retentionParams);
+        if (CollectionUtils.isEmpty(registerdList)) {
+            tagAnalysis.setWeekLostRate(0.00);
+        } else {
+            Collection interColl = CollectionUtils.subtract(registerdList, dauUserList);
+            //标签用户且活跃的用户
+            List<Long> newUserDauList = (List<Long>) interColl;
+            if (CollectionUtils.isEmpty(newUserDauList)) {
+                tagAnalysis.setWeekLostRate(0.00);
+            } else {
+                tagAnalysis.setWeekLostRate(BigDecimalUtil.div(newUserDauList.size() * 100, registerdList.size(), 2));
+            }
+        }
+
+        save(tagAnalysis);
+
+        for (int i = 1; i <= 6; i++) {
+            params.remove("userTag");
+            params.put("userTag", i);
+            DatawareFinalRechargeTagAnalysis tagDto = getTagAnalysisDate(params);
+            List<Long> oldUserList = userRechargeType(retentionParams, i);
+            if (CollectionUtils.isEmpty(oldUserList)) {
+                tagDto.setWeekLostRate(0.00);
+            } else {
+                Collection userInterColl = CollectionUtils.subtract(oldUserList, dauUserList);
+                //标签用户且活跃的用户
+                List<Long> userDauList = (List<Long>) userInterColl;
+                if (CollectionUtils.isEmpty(userDauList)) {
+                    tagDto.setWeekLostRate(0.00);
+                } else {
+                    tagDto.setWeekLostRate(BigDecimalUtil.div(userDauList.size() * 100, oldUserList.size(), 2));
+                }
+            }
+            save(tagDto);
+        }
 
 
     }
 
     /**
      * 更新用户留存
+     *
      * @param channelInfo
      * @param yesterdayDate
      * @param day
