@@ -85,6 +85,12 @@
         <if test="parentId != null and parentId != ''">
             AND t.parent_id = #{parentId}
         </if>
+        <if test="userList != null and  userList.size() != 0">
+            AND t.user_id in
+            <foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <if test="parentChannelList != null and  parentChannelList.size() != 0">
             AND t.parent_id not in
             <foreach collection="parentChannelList" index="index" item="item" open="(" separator="," close=")">
@@ -220,6 +226,86 @@
         AND t.game_type = #{gameType}
         </if>
         ORDER BY betting_date ASC limit 1
+    </select>
+
+    <select id="getActiveUserIds" resultType="Long">
+        SELECT
+        DISTINCT user_id
+        FROM `dataware_betting_log_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        AND user_id IN (
+        SELECT DISTINCT t.user_id
+        FROM dataware_user_info t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.user_group =2
+        AND t.channel_id IS NOT NULL
+        <if test="businessDate != null and businessDate != ''">
+            AND t.registered_date = #{businessDate}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        )
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND betting_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND betting_date &lt;= #{endDate}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
+    <select id="getRechargeUserIds" resultType="Long">
+        SELECT
+        DISTINCT user_id
+        FROM `dataware_betting_log_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        AND user_id IN (
+        SELECT DISTINCT t.user_id
+        FROM `dataware_convert_day` t
+        WHERE 1=1
+        AND t.channel_id IS NOT NULL
+        AND t.delete_flag = 0
+        <if test="businessDate != null and businessDate != ''">
+            AND t.convert_date &lt;= #{businessDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
+        GROUP BY user_id HAVING SUM(third_amount) >= #{havingBegin}
+        <if test="havingEnd != null and havingEnd != ''">
+            AND SUM(third_amount) &lt; #{havingEnd}
+        </if>
+        )
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND betting_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND betting_date &lt;= #{endDate}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
     </select>
 </mapper>
 

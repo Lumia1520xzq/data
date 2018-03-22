@@ -6,7 +6,6 @@ import com.wf.data.dao.datarepo.entity.DatawareConvertDay;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +20,10 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     }
 
     public DatawareFinalChannelInfoAll getConvertByDate(Map<String, Object> map) {
+        return dao.getConvertByDate(map);
+    }
+
+    public DatawareFinalChannelInfoAll getRechargeByDate(Map<String, Object> map) {
         return dao.getConvertByDate(map);
     }
 
@@ -66,5 +69,9 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
 
     public String getLastRechargeTime(Map<String, Object> baseParam) {
         return dao.getLastRechargeTime(baseParam);
+    }
+
+    public List<Long> getTotalAmountUserId(Map<String, Object> payParams) {
+        return dao.getTotalAmountUserId(payParams);
     }
 }

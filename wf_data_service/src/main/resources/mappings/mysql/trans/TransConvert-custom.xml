@@ -192,5 +192,33 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 
+
+	<select id="getCreateOrderUserId" resultType="Long">
+		SELECT distinct user_id
+		FROM trans_convert t
+		WHERE t.delete_flag=0
+		<if test="userList != null and  userList.size() != 0">
+			AND t.user_id in
+			<foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="status!=null and status!=''">
+			AND t.status = #{status}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND t.success_time &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND t.success_time &lt;= #{endTime}
+		</if>
+		<if test="channelId != null">
+			AND channel_id = #{channelId}
+		</if>
+		<if test="parentId != null ">
+			AND channel_id LIKE CONCAT(#{parentId}, '%')
+		</if>
+	</select>
+
 </mapper>
 

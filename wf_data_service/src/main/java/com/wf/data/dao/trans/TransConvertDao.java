@@ -44,4 +44,6 @@ public interface TransConvertDao extends CrudDao<TransConvert> {
 	List<DatawareConvertHour> findConvertList(Map<String,Object> map);
 
 	Double sumDataByConds(Map<String, Object> dataParam);
+
+	Long getCreateOrderUserId(Map<String, Object> dataParam);
 }

@@ -7,9 +7,9 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
     private static final long serialVersionUID = -1;
     private Long dau;
     private Double dauRate;
-    private Long totalUserCount;
+    private java.lang.Long totalUserCount;
     private Double totalUserRate;
-    private Long loginCount;
+    private Double loginCount;
     private Double bettingAmount;
     private Double resultAmount;
     private Double diffAmount;
@@ -18,18 +18,18 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
     private Long bettingCount;
     private Double bettingRate;
     private Double bettingArpu;
-    private Long averageBettingCount;
-    private Long averageBettingAsp;
-    private Integer rechargeUserCount;
+    private Double averageBettingCount;
+    private Double averageBettingAsp;
+    private Long rechargeUserCount;
     private Double thirdAmount;
-    private Integer rechargeCount;
+    private Long rechargeCount;
     private Double rechargeRate;
     private Double dauRechargeRate;
     private Double bettingRechargeRate;
     private Double darppuRate;
     private Double pointPayRate;
     private Double paySuccessRate;
-    private Long averagePayCount;
+    private Double averagePayCount;
     private Double averagePayAmount;
     private Double dayRetention;
     private Double weekRetention;
@@ -73,11 +73,11 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         this.totalUserRate = totalUserRate;
     }
 
-    public Long getLoginCount() {
+    public Double getLoginCount() {
         return loginCount;
     }
 
-    public void setLoginCount(Long loginCount) {
+    public void setLoginCount(Double loginCount) {
         this.loginCount = loginCount;
     }
 
@@ -145,27 +145,27 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         this.bettingArpu = bettingArpu;
     }
 
-    public Long getAverageBettingCount() {
+    public Double getAverageBettingCount() {
         return averageBettingCount;
     }
 
-    public void setAverageBettingCount(Long averageBettingCount) {
+    public void setAverageBettingCount(Double averageBettingCount) {
         this.averageBettingCount = averageBettingCount;
     }
 
-    public Long getAverageBettingAsp() {
+    public Double getAverageBettingAsp() {
         return averageBettingAsp;
     }
 
-    public void setAverageBettingAsp(Long averageBettingAsp) {
+    public void setAverageBettingAsp(Double averageBettingAsp) {
         this.averageBettingAsp = averageBettingAsp;
     }
 
-    public Integer getRechargeUserCount() {
+    public Long getRechargeUserCount() {
         return rechargeUserCount;
     }
 
-    public void setRechargeUserCount(Integer rechargeUserCount) {
+    public void setRechargeUserCount(Long rechargeUserCount) {
         this.rechargeUserCount = rechargeUserCount;
     }
 
@@ -177,11 +177,11 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         this.thirdAmount = thirdAmount;
     }
 
-    public Integer getRechargeCount() {
+    public Long getRechargeCount() {
         return rechargeCount;
     }
 
-    public void setRechargeCount(Integer rechargeCount) {
+    public void setRechargeCount(Long rechargeCount) {
         this.rechargeCount = rechargeCount;
     }
 
@@ -233,11 +233,11 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         this.paySuccessRate = paySuccessRate;
     }
 
-    public Long getAveragePayCount() {
+    public Double getAveragePayCount() {
         return averagePayCount;
     }
 
-    public void setAveragePayCount(Long averagePayCount) {
+    public void setAveragePayCount(Double averagePayCount) {
         this.averagePayCount = averagePayCount;
     }
 
@@ -320,7 +320,7 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         info.setDauRate(0.00);
         info.setTotalUserCount(0L);
         info.setTotalUserRate(0.00);
-        info.setLoginCount(0L);
+        info.setLoginCount(0.00);
         info.setBettingAmount(0.00);
         info.setResultAmount(0.00);
         info.setDiffAmount(0.00);
@@ -329,18 +329,18 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         info.setBettingCount(0L);
         info.setBettingRate(0.00);
         info.setBettingArpu(0.00);
-        info.setAverageBettingCount(0L);
-        info.setAverageBettingAsp(0L);
-        info.setRechargeUserCount(0);
+        info.setAverageBettingCount(0.00);
+        info.setAverageBettingAsp(0.00);
+        info.setRechargeUserCount(0L);
         info.setThirdAmount(0.00);
-        info.setRechargeCount(0);
+        info.setRechargeCount(0L);
         info.setRechargeRate(0.00);
         info.setDauRechargeRate(0.00);
         info.setBettingRechargeRate(0.00);
         info.setDarppuRate(0.00);
         info.setPointPayRate(0.00);
         info.setPaySuccessRate(0.00);
-        info.setAverageBettingCount(0L);
+        info.setAverageBettingCount(0.00);
         info.setAveragePayAmount(0.00);
         info.setDayRetention(0.00);
         info.setWeekRetention(0.00);

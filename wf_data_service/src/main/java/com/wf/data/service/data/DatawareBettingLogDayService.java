@@ -44,6 +44,7 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
     public List<Long> getBettingUserIdListByDate(Map<String, Object> bettingParams) {
         return dao.getBettingUserIdListByDate(bettingParams);
     }
+
     public DatawareBettingLogDay getInfoByUser(Map<String, Object> baseParam) {
         return dao.getInfoByUser(baseParam);
     }
@@ -52,11 +53,22 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
         return dao.getBettingCountByUser(baseParam);
     }
 
-    public TcardDto  getBettingByUserIdAndGameType(Map<String, Object> params){
+    public TcardDto getBettingByUserIdAndGameType(Map<String, Object> params) {
         return dao.getBettingByUserIdAndGameType(params);
     }
 
-    public DatawareBettingLogDay getByUserIdAndGameType(Map<String,Object> params){
+    public DatawareBettingLogDay getByUserIdAndGameType(Map<String, Object> params) {
         return dao.getByUserIdAndGameType(params);
     }
+
+
+    public List<Long> getActiveUserIds(Map<String, Object> bettingParams) {
+        return dao.getActiveUserIds(bettingParams);
+    }
+
+    public List<Long> getRechargeUserIds(Map<String, Object> bettingParams) {
+        return dao.getRechargeUserIds(bettingParams);
+    }
+
+
 }
