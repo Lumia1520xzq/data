@@ -8,6 +8,7 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.business.*;
+import com.wf.data.service.data.DatawareFinalRechargeTagAnalysisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,8 @@ public class DayFinalJob {
     private final RegisteredArpuService registeredArpuService = SpringContextHolder.getBean(RegisteredArpuService.class);
     private final RegisteredRetentionService registeredRetentionService = SpringContextHolder.getBean(RegisteredRetentionService.class);
     private final EntranceAnalysisService entranceAnalysisService = SpringContextHolder.getBean(EntranceAnalysisService.class);
+    private final DatawareFinalRechargeTagAnalysisService tagAnalysisService = SpringContextHolder.getBean(DatawareFinalRechargeTagAnalysisService.class);
+
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -52,12 +55,7 @@ public class DayFinalJob {
         } catch (Exception e) {
             logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
-        //奖多多渠道各个入口用户数据总结
-        try {
-            entranceAnalysisService.toDoEntranceAnalysis();
-        } catch (Exception e) {
-            logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
-        }
+
 
         String openStr = dataConfigService.getStringValueByName(DataConstants.DATA_FINAL_HOUR_OPEN);
 
@@ -77,6 +75,24 @@ public class DayFinalJob {
             }
         } catch (Exception e) {
             logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+
+
+        try {
+            if ("true".equals(openFlag[4])) {
+                tagAnalysisService.toDoAnalysis();
+            }
+        } catch (Exception e) {
+            logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+
+        //奖多多渠道各个入口用户数据总结
+        try {
+            if ("true".equals(openFlag[5])) {
+                entranceAnalysisService.toDoEntranceAnalysis();
+            }
+        } catch (Exception e) {
+            logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
         logger.info("每日任务调度总job结束:traceId={}", TraceIdUtils.getTraceId());

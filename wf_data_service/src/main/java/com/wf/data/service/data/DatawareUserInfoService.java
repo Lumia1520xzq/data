@@ -45,4 +45,13 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
         return dao.getByUserId(userId);
     }
 
+    /**
+     * 获取未充值的老用户
+     * @param map
+     * @return
+     */
+    public List<Long> getNonRechargeUserId(Map<String, Object> map) {
+        return dao.getNonRechargeUserId(map);
+    }
+
 }

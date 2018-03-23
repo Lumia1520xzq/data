@@ -31,5 +31,10 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
 
     Integer getActiveDatesByUser(Map<String, Object> userParam);
 
+    long getUserPointCount(Map<String, Object> userParam);
+
+    List<Long> getUserIdByDates(Map<String, Object> map);
+
+
     List<Long> getActiveUsersInFifteenDay(Map<String, Object> activeUserParam);
 }

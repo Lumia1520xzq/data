@@ -11,7 +11,7 @@
 <html>
 <head>
   <link rel="shortcut icon" href="" type="image/x-icon"/>
-  <title>平台数据管理中心</title>
+  <title>玩蜂大数据分析管理平台</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body id="ext-body">
