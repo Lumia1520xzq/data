@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.management.ObjectName;
 import java.util.*;
 
 /**
@@ -41,7 +40,7 @@ public class EntranceAnalysisService {
     @Autowired
     private DatawareConvertDayService convertDayService;
     @Autowired
-    private DatawareFinalEntranceAnalysisService entranceAnalysisService;
+    private DatawareFinalEntranceAnalysisService datawareFinalEntranceAnalysisService;
     @Autowired
     private DatawareBuryingPointDayService buryingPointDayService;
     @Autowired
@@ -50,7 +49,7 @@ public class EntranceAnalysisService {
     public void toDoEntranceAnalysis() {
         logger.info("每天奖多多各入口用户数据统计开始:traceId={}", TraceIdUtils.getTraceId());
 
-        entranceAnalysis(DateUtils.getYesterdayDate());
+        doEntranceAnalysis(DateUtils.getYesterdayDate());
 
         logger.info("每天奖多多各入口用户数据统计结束:traceId={}", TraceIdUtils.getTraceId());
     }
@@ -62,21 +61,21 @@ public class EntranceAnalysisService {
             if (startTime.equals(endTime)) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("beginDate", endTime);
-                List<DatawareFinalEntranceAnalysis> analysisServices = entranceAnalysisService.getEntranceAnalysisByDate(params);
-                if (analysisServices.size() > 0) {
-                    entranceAnalysisService.deleteByDate(params);
+                List<DatawareFinalEntranceAnalysis> analysisServices = datawareFinalEntranceAnalysisService.getEntranceAnalysisByDate(params);
+                if (CollectionUtils.isNotEmpty(analysisServices)) {
+                    datawareFinalEntranceAnalysisService.deleteByDate(params);
                 }
-                entranceAnalysis(endTime);
+                doEntranceAnalysis(endTime);
             } else {
                 List<String> datelist = DateUtils.getDateList(startTime, endTime);
                 for (String searchDate : datelist) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("beginDate", searchDate);
-                    List<DatawareFinalEntranceAnalysis> analysisServices = entranceAnalysisService.getEntranceAnalysisByDate(params);
-                    if (analysisServices.size() > 0) {
-                        entranceAnalysisService.deleteByDate(params);
+                    List<DatawareFinalEntranceAnalysis> analysisServices = datawareFinalEntranceAnalysisService.getEntranceAnalysisByDate(params);
+                    if (CollectionUtils.isNotEmpty(analysisServices)) {
+                        datawareFinalEntranceAnalysisService.deleteByDate(params);
                     }
-                    entranceAnalysis(searchDate);
+                    doEntranceAnalysis(searchDate);
                 }
             }
 
@@ -87,10 +86,9 @@ public class EntranceAnalysisService {
         logger.info("奖多多入口用户老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
-    private void entranceAnalysis(String beginDate) {
+    private void doEntranceAnalysis(String beginDate) {
         //前一天（T-2）
         String beforeBeginDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(beginDate), -1));
-
         //活跃用户分类
         List<DataDict> userActiveTypeList = dictService.getDictList("user_active_type");
         //充值用户分类
@@ -192,7 +190,7 @@ public class EntranceAnalysisService {
                     continue;
                 } else {
                     activeUsers = getActiveUserIds(userActiveDict.getValue(), channelNewUsers, channelAvtiveUsers, allChannelUsers);
-                    dayBeforeActiveUsers = getActiveUserIds(userActiveDict.getValue(), dayBeforeChannelNewUsers, dayBeforeChannelAvtiveUsers, allChannelUsers);
+                    dayBeforeActiveUsers = getActiveUserIds(userActiveDict.getValue(), dayBeforeChannelNewUsers, dayBeforeChannelAvtiveUsers, dayBeforeAllChannelUsers);
                 }
                 //当前入口T-1日既活跃又符合活跃分类的用户
                 List<Long> entranceUserIdByType = ListUtils.intersection(entranceAllUserIds, activeUsers);
@@ -210,13 +208,13 @@ public class EntranceAnalysisService {
         //更新入口dau占比
         Map<String, Object> eaparams = new HashMap<>();
         eaparams.put("beginDate", beginDate);
-        List<DatawareFinalEntranceAnalysis> entranceAnalyses = entranceAnalysisService.getEntranceAnalysisByDate(eaparams);
-        Double entranceDauRate = 0D;
+        List<DatawareFinalEntranceAnalysis> entranceAnalyses = datawareFinalEntranceAnalysisService.getEntranceAnalysisByDate(eaparams);
+        Double entranceDauRate;
 
         //所有用户DAU
         eaparams.put("activeUserType", "0");
         eaparams.put("convertUserType", "0");
-        Long totalDAU = entranceAnalysisService.getAllEntranceDau(eaparams);
+        Long totalDAU = datawareFinalEntranceAnalysisService.getAllEntranceDau(eaparams);
 
         if (CollectionUtils.isNotEmpty(entranceAnalyses)) {
             for (DatawareFinalEntranceAnalysis entranceAnalysis : entranceAnalyses) {
@@ -229,11 +227,11 @@ public class EntranceAnalysisService {
                         //获取当前入口dau
                         eaparams.put("activeUserType", entranceAnalysis.getActiveUserType().toString());
                         eaparams.put("convertUserType", entranceAnalysis.getConvertUserType().toString());
-                        Long entranceDau = entranceAnalysisService.getCurrentEntranceDau(eaparams);
+                        Long entranceDau = datawareFinalEntranceAnalysisService.getCurrentEntranceDau(eaparams);
                         entranceDauRate = cal(entranceAnalysis.getEntranceDau(), entranceDau);
                         entranceAnalysis.setEntranceDauRate(entranceDauRate);
                     }
-                    entranceAnalysisService.save(entranceAnalysis);
+                    datawareFinalEntranceAnalysisService.save(entranceAnalysis);
                 }
             }
         }
@@ -269,7 +267,6 @@ public class EntranceAnalysisService {
                           List<Long> allChannelUsers, List<Long> dayBeforeEntranceUserIds) {
 
         Long entranceDau = Long.parseLong(String.valueOf(entranceUserIds.size()));
-        //Long eventId = finalEntranceAnalysis.getEventId();
         String beginDate = finalEntranceAnalysis.getBusinessDate();
 
         /*签到人数 **/
@@ -301,8 +298,8 @@ public class EntranceAnalysisService {
         Double entrancePayRate = cal(entrancePay, entranceDau);//付费转化率
 
         /*次日留存 **/
-        Collection DayRetentionUserIdList = CollectionUtils.intersection(dayBeforeEntranceUserIds, entranceUserIds);
-        Long dayRetentionUserCount = Long.parseLong(String.valueOf(DayRetentionUserIdList.size()));
+        Collection dayRetentionUserIdList = CollectionUtils.intersection(dayBeforeEntranceUserIds, entranceUserIds);
+        Long dayRetentionUserCount = Long.parseLong(String.valueOf(dayRetentionUserIdList.size()));
         Long dayBeforeEntranceUserCount = Long.parseLong(String.valueOf(dayBeforeEntranceUserIds.size()));
         Double entranceDayRetention = cal(dayRetentionUserCount, dayBeforeEntranceUserCount);
 
@@ -315,7 +312,7 @@ public class EntranceAnalysisService {
         finalEntranceAnalysis.setEntrancePay(entrancePay);
         finalEntranceAnalysis.setEntrancePayRate(entrancePayRate);
         finalEntranceAnalysis.setEntranceDayRetention(entranceDayRetention);
-        entranceAnalysisService.save(finalEntranceAnalysis);
+        datawareFinalEntranceAnalysisService.save(finalEntranceAnalysis);
     }
 
     //根据用户分层获取用户ID
@@ -385,7 +382,7 @@ public class EntranceAnalysisService {
             }
             return noActiveUsers;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     private Double cal(Long d1, Long d2) {
