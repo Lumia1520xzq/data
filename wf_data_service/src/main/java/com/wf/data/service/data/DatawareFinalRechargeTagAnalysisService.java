@@ -228,8 +228,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         Map<String, Object> retentionParams = new HashMap<>();
 
         if (channelInfo != null) {
-            userParams.put("parentId", channelInfo.getParentId());
-            retentionParams.put("parentId", channelInfo.getParentId());
+            userParams.put("parentId", channelInfo.getId());
+            retentionParams.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             retentionParams.remove("parentId");
@@ -253,7 +253,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         if (CollectionUtils.isEmpty(newUserDauList)) {
             tagAnalysis.setDayRetention(0.00);
         } else {
-            if (0 != tagAnalysis.getDau()) {
+            if (CollectionUtils.isNotEmpty(registerdDauList)) {
                 if (day == 1) {
                     tagAnalysis.setDayRetention(BigDecimalUtil.div(newUserDauList.size() * 100, registerdDauList.size(), 2));
                 } else {
@@ -278,7 +278,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             if (CollectionUtils.isEmpty(userDauList)) {
                 tagAnalysis.setDayRetention(0.00);
             } else {
-                if (0 != tagAnalysis.getDau()) {
+                if (CollectionUtils.isNotEmpty(oldDauList)) {
                     if (day == 1) {
                         tagAnalysis.setDayRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
                     } else {
