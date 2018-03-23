@@ -42,6 +42,10 @@ Ext.define('WF.view.data.board.filterDataViewMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/filter/view/export.do?parentId=' + me.down(("[name='parentId']")).value +
+                    '&searchDate=' + me.down(("[name='searchDate']")).value;
+            },
             items: [{
                 name: 'parentId',
                 fieldLabel: '主渠道',

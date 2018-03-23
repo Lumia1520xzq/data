@@ -73,7 +73,8 @@
         IFNULL(SUM(recharge_amount),0) sumRecharge,
         IFNULL(SUM(dau),0) sumDau,
         IFNULL(SUM(new_users),0) sumNewUsers,
-        IFNULL(COUNT(id),0) days
+        IFNULL(COUNT(id),0) days,
+        parent_id
         FROM `dataware_final_channel_info_all`
         WHERE 1=1
         <if test="beginMonth != null and beginMonth != ''">
