@@ -217,10 +217,10 @@
         </if>
 
         <if test="channelId != null">
-            AND channel_id = #{channelId}
+            AND t.channel_id = #{channelId}
         </if>
         <if test="parentId != null ">
-            AND channel_id LIKE CONCAT(#{parentId}, '%')
+            AND t.channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
     </select>
 
