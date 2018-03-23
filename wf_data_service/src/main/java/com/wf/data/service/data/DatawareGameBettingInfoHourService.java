@@ -28,5 +28,9 @@ public class DatawareGameBettingInfoHourService extends CrudService<DatawareGame
 	public void deleteByDate(Map<String, Object> params) {
 		dao.deleteByDate(params);
 	}
+
+    public DatawareGameBettingInfoHour getInfoByDate(Map<String, Object> params) {
+        return dao.getInfoByDate(params);
+    }
 }
 

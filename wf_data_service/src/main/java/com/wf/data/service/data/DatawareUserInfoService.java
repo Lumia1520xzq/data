@@ -53,4 +53,5 @@ public class DatawareUserInfoService extends CrudService<DatawareUserInfoDao, Da
     public List<Long> getNonRechargeUserId(Map<String, Object> map) {
         return dao.getNonRechargeUserId(map);
     }
+
 }

@@ -15,7 +15,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
         var store= Ext.create('DCIS.Store', {
             url:'/data/entrance/analysis/getList.do',
             autoload:false,
-            fields:['entranceDauRateList','eventNameList','searchDate','dateList',"entranceDauList",
+            fields:['entranceDauRateList','eventNameList','searchDate','dateList','yesDateList','entranceDauList','yesterday',
                 'duoDuoDauList','duoduoDauRate',
                 'iconDauList','iconDauRate',
                 'bannerDauList','bannerDauRate',
@@ -36,6 +36,16 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                 'duoduoRetentionRate','iconRetentionRate','bannerRetentionRate','advRetentionRate','gameRetentionRate',
                 'rollRetentionRate','pointRetentionRate','actCenterRetentionRate','pushRetentionRate','strongAdvRetentionRate'
             ]
+        });
+        var activeUserTypeStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getUserType.do?type=user_active_type',
+            autoLoad: true,
+            fields: ['label', 'value']
+        });
+        var convertUserTypeStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getUserType.do?type=user_convert_type',
+            autoLoad: true,
+            fields: ['label', 'value']
         });
 
         me.add({
@@ -58,6 +68,48 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     xtype: 'datefield',
                     format: 'Y-m-d'
                     // value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-30),"Y-m-d")
+                },
+                {
+                    name: 'activeUserType',
+                    fieldLabel: '按活跃对用户分类',
+                    xtype: 'combo',
+                    emptyText: "--请选择--",
+                    displayField: 'label',
+                    valueField: "value",
+                    editable: true,
+                    queryMode: "local",
+                    width:250,
+                    store: activeUserTypeStore,
+                    listeners :{
+                        change:function(obj,val) {
+                            convertUserTypeStore.load({
+                                params: {
+                                    signal:val
+                                }
+                            });
+                        }
+                    }
+                },
+                {
+                    name: 'convertUserType',
+                    fieldLabel: '按充值对用户分类',
+                    xtype: 'combo',
+                    emptyText: "--请选择--",
+                    displayField: 'label',
+                    valueField: "value",
+                    editable: true,
+                    queryMode: "local",
+                    width:250,
+                    store: convertUserTypeStore,
+                    listeners :{
+                        change:function(obj,val) {
+                            activeUserTypeStore.load({
+                                params: {
+                                    signal:val
+                                }
+                            });
+                        }
+                    }
                 }
             ]
         });
@@ -106,7 +158,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     items:[
                         {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
                             {id:'entRate3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true},
-                            {id:'entPic3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true},
+                            {id:'entPic3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true}
                         ]
                         }
                     ]
@@ -130,7 +182,9 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var entranceDauList = store.getAt(0).get("entranceDauList");
             var eventNameList = store.getAt(0).get("eventNameList");
             var searchDate = store.getAt(0).get("searchDate");
+            var yesterday = store.getAt(0).get("yesterday");
             var dateList = store.getAt(0).get("dateList");
+            var yesDateList = store.getAt(0).get("yesDateList");
 
             var duoDuoDauList = store.getAt(0).get("duoDuoDauList");
             var iconDauList = store.getAt(0).get("iconDauList");
@@ -392,14 +446,14 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             me.echarts.on('click', function(param) {
                 trendPic(payTitleList[param.dataIndex],dateList,payRate[param.dataIndex],2);
             });
-            transRate(searchDate+"各入口次日留存率",eventNameList,entranceDayRetentionList,3);
+            transRate(yesterday+"各入口次日留存率",eventNameList,entranceDayRetentionList,3);
             me.echarts.on('click', function(param) {
-                trendPic(retentionTitleList[param.dataIndex],dateList,retentionRate[param.dataIndex],3);
+                trendPic(retentionTitleList[param.dataIndex],yesDateList,retentionRate[param.dataIndex],3);
             });
             trendPic(signTitleList[0],dateList,signRate[0],0);
             trendPic(bettingTitleList[0],dateList,bettingRate[0],1);
             trendPic(payTitleList[0],dateList,payRate[0],2);
-            trendPic(retentionTitleList[0],dateList,retentionRate[0],3);
+            trendPic(retentionTitleList[0],yesDateList,retentionRate[0],3);
 
             // 增加饼图的监听事件
             function eConsole(param) {

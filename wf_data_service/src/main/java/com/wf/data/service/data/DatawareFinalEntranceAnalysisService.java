@@ -25,4 +25,12 @@ public class DatawareFinalEntranceAnalysisService extends CrudService<DatawareFi
     public void deleteByDate(Map<String, Object> params) {
         dao.deleteByDate(params);
     }
+
+    public Long getAllEntranceDau(Map<String, Object> eaparams) {
+       return dao.getAllEntranceDau(eaparams);
+    }
+
+    public Long getCurrentEntranceDau(Map<String, Object> eaparams) {
+       return dao.getCurrentEntranceDau(eaparams);
+    }
 }

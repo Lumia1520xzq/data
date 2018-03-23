@@ -42,4 +42,6 @@ public interface DatawareConvertDayDao extends CrudDao<DatawareConvertDay> {
 
     List<Long> getTotalAmountUserId(Map<String, Object> payParams);
 
+
+    List<Long> getUsersByRechargeType(Map<String, Object> convertParams);
 }

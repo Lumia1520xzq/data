@@ -10,6 +10,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         FROM dataware_final_entrance_analysis t
         WHERE 1=1
         AND t.delete_flag = 0
+        <if test="activeUserType != null">
+            AND t.active_user_type = #{activeUserType}
+        </if>
+        <if test="convertUserType != null">
+            AND t.convert_user_type = #{convertUserType}
+        </if>
         <if test="beginDate != null and beginDate != ''">
             AND t.business_date &gt;= #{beginDate}
         </if>
@@ -36,6 +42,45 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             AND business_date = #{beginDate}
         </if>
     </delete>
+
+    <select id="getAllEntranceDau" resultType="java.lang.Long">
+        SELECT
+            SUM(t.entrance_dau)
+        FROM
+            dataware_final_entrance_analysis t
+        WHERE
+            t.delete_flag = 0
+            <if test="beginDate != null and beginDate != ''">
+                AND t.business_date = #{beginDate}
+            </if>
+            <if test="activeUserType != null and activeUserType != ''">
+                AND t.active_user_type = #{activeUserType}
+            </if>
+            <if test="convertUserType != null and convertUserType != ''">
+                AND t.convert_user_type = #{convertUserType}
+            </if>
+    </select>
+
+    <select id="getCurrentEntranceDau" resultType="java.lang.Long">
+        SELECT
+            sum(t.entrance_dau)
+        FROM
+            dataware_final_entrance_analysis t
+        WHERE
+            t.delete_flag = 0
+        <if test="beginDate != null and beginDate != ''">
+            AND t.business_date = #{beginDate}
+        </if>
+        <if test="activeUserType != null and activeUserType != ''">
+            AND t.active_user_type = #{activeUserType}
+        </if>
+        <if test="convertUserType != null and convertUserType != ''">
+            AND t.convert_user_type = #{convertUserType}
+        </if>
+        <if test="eventId != null and eventId != ''">
+            AND t.event_id = #{eventId}
+        </if>
+    </select>
 
 </mapper>
 

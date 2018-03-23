@@ -15,4 +15,8 @@ public interface DatawareFinalEntranceAnalysisDao extends CrudDao<DatawareFinalE
     List<DatawareFinalEntranceAnalysis> getEntranceAnalysisByDate(Map<String, Object> eaparams);
 
     void deleteByDate(Map<String, Object> params);
+
+    Long getAllEntranceDau(Map<String, Object> eaparams);
+
+    Long getCurrentEntranceDau(Map<String, Object> eaparams);
 }

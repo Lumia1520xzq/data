@@ -113,6 +113,9 @@
         UPDATE dataware_user_info SET
         user_group = #{userGroup}
         WHERE 1=1 AND delete_flag = 0
+        <if test="monthStr != null and monthStr != ''">
+            AND DATE_FORMAT(registered_time,'%Y-%m') = #{monthStr}
+        </if>
         <if test="registeredDate != null and registeredDate != ''">
             AND registered_date = #{registeredDate}
         </if>

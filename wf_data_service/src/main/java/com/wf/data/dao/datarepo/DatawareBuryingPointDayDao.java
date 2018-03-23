@@ -22,6 +22,7 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
     List<Long> getHistoryDauIds(Map<String, Object> map);
 
     List<Long> getGameDauIds(Map<String, Object> map);
+
     int deleteByDate(Map<String, Object> params);
 
     String getFirstActiveDate(Map<String, Object> userParam);
@@ -34,4 +35,6 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
 
     List<Long> getUserIdByDates(Map<String, Object> map);
 
+
+    List<Long> getActiveUsersInFifteenDay(Map<String, Object> activeUserParam);
 }

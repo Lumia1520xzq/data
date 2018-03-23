@@ -240,5 +240,23 @@
         AND delete_flag=0
     </select>
 
+    <select id="getActiveUsersInFifteenDay" resultType="java.lang.Long">
+        SELECT DISTINCT
+            t.user_id
+        FROM
+            dataware_burying_point_day t
+        WHERE
+            t.delete_flag = 0
+        <if test="channelId != null and channelId != ''">
+          AND t.parent_id = #{channelId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+          AND t.burying_date >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.burying_date &lt;= #{endDate}
+        </if>
+    </select>
+
 </mapper>
 
