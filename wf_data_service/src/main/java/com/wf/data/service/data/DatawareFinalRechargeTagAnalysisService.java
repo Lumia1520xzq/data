@@ -473,7 +473,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
                 info.setTotalUserRate(BigDecimalUtil.div(info.getDau() * 100, info.getTotalUserCount(), 2));
                 Long totalLoginCount = loginCount(newUserDauList, params);
                 if (totalLoginCount == null) totalLoginCount = 0L;
-                info.setLoginCount(BigDecimalUtil.div(Double.valueOf(totalLoginCount), info.getDau(), 2));
+                if (0 != info.getDau()) {
+                    info.setLoginCount(BigDecimalUtil.div(Double.valueOf(totalLoginCount), info.getDau(), 2));
+                }
             }
         }
         return info;
