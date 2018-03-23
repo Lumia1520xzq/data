@@ -24,7 +24,7 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     }
 
     public DatawareFinalChannelInfoAll getRechargeByDate(Map<String, Object> map) {
-        return dao.getConvertByDate(map);
+        return dao.getRechargeByDate(map);
     }
 
     public List<Long> getUserIdByDate(Map<String, Object> map) {

@@ -39,9 +39,9 @@
 
     <select id="getRechargeByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll">
         SELECT
-        COUNT(DISTINCT t.user_id) userCount,
-        SUM(t.third_amount) rechargeAmount,
-        sum(t.recharge_count) rechargeCount
+        IFNULL(COUNT(DISTINCT t.user_id),0) userCount,
+        IFNULL(SUM(t.third_amount),0) rechargeAmount,
+        IFNULL(sum(t.recharge_count),0) rechargeCount
         FROM `dataware_convert_day` t
         WHERE 1=1
         AND t.channel_id IS NOT NULL

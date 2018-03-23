@@ -67,10 +67,10 @@
 
     <select id="getBettingByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll">
         SELECT
-        COUNT(DISTINCT t.user_id) userCount,
-        SUM(t.betting_amount) bettingAmount,
-        SUM(t.betting_count) bettingCount,
-        SUM(t.result_amount) resultAmount
+        IFNULL(COUNT(DISTINCT t.user_id),0) userCount,
+        IFNULL(SUM(t.betting_amount),0) bettingAmount,
+        IFNULL(SUM(t.betting_count),0) bettingCount,
+        IFNULL( SUM(t.result_amount),0) resultAmount
         FROM `dataware_betting_log_day` t
         WHERE 1=1
         AND t.user_group=2
@@ -139,8 +139,8 @@
 
     <delete id="deleteByDate">
         delete FROM
-		dataware_betting_log_day
-		WHERE 1=1
+        dataware_betting_log_day
+        WHERE 1=1
         <if test="bettingDate != null and bettingDate != ''">
             AND betting_date = #{bettingDate}
         </if>
@@ -220,10 +220,10 @@
         WHERE 1=1
         AND t.delete_flag = 0
         <if test="userId != null">
-        AND t.user_id = #{userId}
+            AND t.user_id = #{userId}
         </if>
         <if test="gameType != null">
-        AND t.game_type = #{gameType}
+            AND t.game_type = #{gameType}
         </if>
         ORDER BY betting_date ASC limit 1
     </select>

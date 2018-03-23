@@ -342,6 +342,7 @@ public class DatawareFinalRechargeTagAnalysis extends DataEntity {
         info.setPaySuccessRate(0.00);
         info.setAverageBettingCount(0.00);
         info.setAveragePayAmount(0.00);
+        info.setAveragePayCount(0.00);
         info.setDayRetention(0.00);
         info.setWeekRetention(0.00);
         info.setWeekLostRate(0.00);

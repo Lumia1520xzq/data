@@ -5,6 +5,7 @@ import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.service.CrudService;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
+import com.wf.core.utils.type.MapUtils;
 import com.wf.data.common.constants.UserRechargeTypeConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
@@ -14,9 +15,8 @@ import com.wf.data.dao.datarepo.entity.DatawareFinalRechargeTagAnalysis;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.TransConvertService;
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,7 +26,6 @@ import java.util.*;
  */
 @Service
 public class DatawareFinalRechargeTagAnalysisService extends CrudService<DatawareFinalRechargeTagAnalysisDao, DatawareFinalRechargeTagAnalysis> {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private ChannelInfoService channelInfoService;
     @Autowired
@@ -53,6 +52,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         try {
             //汇总全部渠道数据
             dataKettle(null, yesterdayDate, twoDayBefore);
+            daysRetention(null, yesterdayDate, 1);
+            daysRetention(null, yesterdayDate, 6);
+            userLost(null, yesterdayDate);
             List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
             for (ChannelInfo item : channelInfoList) {
                 //汇总各个主渠道数据
@@ -72,28 +74,27 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         DatawareFinalRechargeTagAnalysis info = setChannelInfo(channelInfo, yesterdayDate);
         Map<String, Object> userParams = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        Map<String, Object> recparams = new HashMap<>();
 
         if (channelInfo != null) {
-            userParams.put("parentId", channelInfo.getParentId());
-            params.put("parentId", channelInfo.getParentId());
+            userParams.put("parentId", channelInfo.getId());
+            params.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             params.remove("parentId");
         }
         userParams.put("businessDate", yesterdayDate);
-
+        //获取昨天的所有活跃
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(userParams);
 
-        recparams.put("businessDate", yesterdayDate);
-        DatawareFinalChannelInfoAll infoAll = datawareConvertDayService.getRechargeByDate(recparams);
-        //新注册用户
+        //获取昨天的所有充值相关信息
+        DatawareFinalChannelInfoAll infoAll = datawareConvertDayService.getRechargeByDate(userParams);
+        //获取昨天新注册用户
         List<Long> registerdList = datawareUserInfoService.getNewUserByDate(userParams);
+        //计算新用户的活跃相关信息
         info = getDauInfo(info, registerdList, dauUserList, userParams);
-        info = getBettingInfo(info, registerdList, userParams);
+        info = getBettingInfo(info, registerdList, dauUserList, userParams);
         info = getRechargeInfo(info, registerdList, infoAll.getBettingAmount(), userParams);
         info.setUserTag(UserRechargeTypeConstants.NEW_USER_TYPE_0);
-
         save(info);
 
 
@@ -104,7 +105,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             DatawareFinalRechargeTagAnalysis userRechargeType = setChannelInfo(channelInfo, yesterdayDate);
             List<Long> oldUserList = userRechargeType(params, i);
             userRechargeType = getDauInfo(userRechargeType, oldUserList, dauUserList, userParams);
-            userRechargeType = getBettingInfo(userRechargeType, oldUserList, userParams);
+            userRechargeType = getBettingInfo(userRechargeType, oldUserList,dauUserList, userParams);
             userRechargeType = getRechargeInfo(userRechargeType, oldUserList, infoAll.getBettingAmount(), userParams);
             userRechargeType.setUserTag(i);
             save(userRechargeType);
@@ -136,8 +137,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         Map<String, Object> retentionParams = new HashMap<>();
 
         if (channelInfo != null) {
-            userParams.put("parentId", channelInfo.getParentId());
-            retentionParams.put("parentId", channelInfo.getParentId());
+            userParams.put("parentId", channelInfo.getId());
+            retentionParams.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             retentionParams.remove("parentId");
@@ -224,6 +225,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(userParams);
 
         //新注册用户
+        retentionParams.put("businessDate", businessDate);
         List<Long> registerdList = datawareUserInfoService.getNewUserByDate(retentionParams);
 
         Collection interColl = CollectionUtils.intersection(registerdList, dauUserList);
@@ -297,6 +299,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         info.setThirdAmount(rechargeAmount);
         info.setRechargeCount(rechargeCount);
         info.setRechargeUserCount(userCount);
+        if (totalAmount == null) totalAmount = 0.00;
         if (0 != totalAmount) {
             info.setRechargeRate(BigDecimalUtil.div(info.getThirdAmount() * 100, totalAmount, 2));
         }
@@ -327,18 +330,18 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
     }
 
     private Long doCreateOrderUserId(List<Long> entitys, Map<String, Object> params, int startIndex, int endIndex) {
-        Map<String, Object> map = params;
+        params.remove("userList");
         List<Long> userList = entitys.subList(startIndex, endIndex);
-        map.put("userList", userList);
-        return transConvertService.getCreateOrderUserId(map);
+        params.put("userList", userList);
+        return transConvertService.getCreateOrderUserId(params);
 
     }
 
     private DatawareFinalChannelInfoAll doGetRechargeInfo(List<Long> entitys, Map<String, Object> params, int startIndex, int endIndex) {
-        Map<String, Object> map = params;
+        params.remove("userList");
         List<Long> userList = entitys.subList(startIndex, endIndex);
-        map.put("userList", userList);
-        return datawareConvertDayService.getRechargeByDate(map);
+        params.put("userList", userList);
+        return datawareConvertDayService.getRechargeByDate(params);
 
     }
 
@@ -349,7 +352,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
      * @param tagUserList
      * @param params
      */
-    private DatawareFinalRechargeTagAnalysis getBettingInfo(DatawareFinalRechargeTagAnalysis info, List<Long> tagUserList, Map<String, Object> params) {
+    private DatawareFinalRechargeTagAnalysis getBettingInfo(DatawareFinalRechargeTagAnalysis info, List<Long> tagUserList,List<Long> dauUserList, Map<String, Object> params) {
 
         if (CollectionUtils.isEmpty(tagUserList)) {
             return info;
@@ -358,7 +361,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         Double bettingAmount = 0.00;
         Double resultAmount = 0.00;
-        Double diffAmount = 0.00;
+        Double diffAmount ;
         Double resultRate = 0.00;
         Long bettingUserCount = 0L;
         Long bettingCount = 0L;
@@ -366,9 +369,12 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         Double bettingArpu = 0.00;
         Double averageBettingCount = 0.00;
         Double averageBettingAsp = 0.00;
+        Collection interColl = CollectionUtils.intersection(tagUserList, dauUserList);
+        //标签用户且活跃的用户
+        List<Long> userDauList = (List<Long>) interColl;
 
 
-        while (i < tagUserList.size()) {
+        while (i < userDauList.size()) {
             int var10002 = i;
             i += 1000;
             DatawareFinalChannelInfoAll infoAll = doGetBettingInfo(tagUserList, params, var10002, i >= tagUserList.size() ? tagUserList.size() : i);
@@ -389,8 +395,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         info.setResultRate(resultRate);
         info.setBettingUserCount(bettingUserCount);
         info.setBettingCount(bettingCount);
-        if (0 != tagUserList.size()) {
-            bettingRate = BigDecimalUtil.div(info.getBettingUserCount() * 100, tagUserList.size(), 2);
+        if (0 != userDauList.size()) {
+            bettingRate = BigDecimalUtil.div(info.getBettingUserCount() * 100, userDauList.size(), 2);
         }
         info.setBettingRate(bettingRate);
         if (0 != info.getBettingUserCount()) {
@@ -398,8 +404,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         }
         info.setBettingArpu(bettingArpu);
 
-        if (0 != tagUserList.size()) {
-            averageBettingCount = BigDecimalUtil.div(info.getBettingCount(), tagUserList.size(), 0);
+        if (0 != userDauList.size()) {
+            averageBettingCount = BigDecimalUtil.div(info.getBettingCount(), userDauList.size(), 0);
         }
         info.setAverageBettingCount(averageBettingCount);
         if (0 != info.getBettingCount()) {
@@ -410,8 +416,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
     }
 
 
-    private DatawareFinalChannelInfoAll doGetBettingInfo(List<Long> entitys, Map<String, Object> map, int startIndex, int endIndex) {
-        Map<String, Object> params = map;
+    private DatawareFinalChannelInfoAll doGetBettingInfo(List<Long> entitys, Map<String, Object> params, int startIndex, int endIndex) {
+        params.remove("userList");
         List<Long> userList = entitys.subList(startIndex, endIndex);
         params.put("userList", userList);
         return datawareBettingLogDayService.getBettingByDate(params);
@@ -431,8 +437,16 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         if (CollectionUtils.isNotEmpty(tagUserList)) {
             if (CollectionUtils.isNotEmpty(dauUserList)) {
-                info = getDauData(info, tagUserList, dauUserList);
-                Long totalLoginCount = loginCount(tagUserList, params);
+                Collection interColl = CollectionUtils.intersection(tagUserList, dauUserList);
+                //标签用户且活跃的用户
+                List<Long> newUserDauList = (List<Long>) interColl;
+                if (CollectionUtils.isNotEmpty(newUserDauList)) {
+                    info.setDau(Long.valueOf(newUserDauList.size()));
+                }
+                info.setDauRate(BigDecimalUtil.div(info.getDau() * 100, dauUserList.size(), 2));
+                info.setTotalUserCount(Long.valueOf(tagUserList.size()));
+                info.setTotalUserRate(BigDecimalUtil.div(info.getDau() * 100, info.getTotalUserCount(), 2));
+                Long totalLoginCount = loginCount(newUserDauList, params);
                 if (totalLoginCount == null) totalLoginCount = 0L;
                 info.setLoginCount(BigDecimalUtil.div(Double.valueOf(totalLoginCount), Double.valueOf(tagUserList.size()), 2));
             }
@@ -449,9 +463,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
     private List<Long> userRechargeType(Map<String, Object> map, int rechargeType) {
         Map<String, Object> params = map;
         List<Long> oldUserList = Lists.newArrayList();
-
         if (rechargeType == UserRechargeTypeConstants.RECHARGE_TYPE_1) {
             //累充0老用户
+
             oldUserList = datawareUserInfoService.getNonRechargeUserId(params);
         } else if (rechargeType == UserRechargeTypeConstants.RECHARGE_TYPE_2) {
             //累充1-100老用户
@@ -505,30 +519,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         return info;
     }
 
-
-    /**
-     * 活跃数据
-     *
-     * @param dto
-     * @param userList
-     * @param dauUserList
-     * @return
-     */
-    private DatawareFinalRechargeTagAnalysis getDauData(DatawareFinalRechargeTagAnalysis dto, List<Long> userList, List<Long> dauUserList) {
-
-        Collection interColl = CollectionUtils.intersection(userList, dauUserList);
-        //标签用户且活跃的用户
-        List<Long> newUserDauList = (List<Long>) interColl;
-        if (null != userList) {
-            dto.setDau(Long.valueOf(newUserDauList.size()));
-        }
-        dto.setDauRate(BigDecimalUtil.div(dto.getDau() * 100, dauUserList.size(), 2));
-        dto.setTotalUserCount(Long.valueOf(userList.size()));
-        dto.setTotalUserRate(BigDecimalUtil.div(dto.getDau() * 100, dto.getTotalUserCount(), 2));
-        return dto;
-    }
-
-
     /**
      * 人均登陆次数
      * 一千个用户循环一次
@@ -540,7 +530,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
     private Long loginCount(List<Long> entitys, Map<String, Object> params) {
         Long loginCount = 0L;
         int i = 0;
-
         while (i < entitys.size()) {
             int var10002 = i;
             i += 1000;
@@ -551,16 +540,66 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
     }
 
     private Long doGetLoginCount(List<Long> entitys, Map<String, Object> params, int startIndex, int endIndex) {
-        Map<String, Object> map = params;
+        params.remove("userList");
         List<Long> userList = entitys.subList(startIndex, endIndex);
-        map.put("userList", userList);
-        return datawareBuryingPointDayService.getUserPointCount(map);
+        params.put("userList", userList);
+        return datawareBuryingPointDayService.getUserPointCount(params);
 
     }
 
 
     public DatawareFinalRechargeTagAnalysis getTagAnalysisDate(Map<String, Object> map) {
         return dao.getTagAnalysisDate(map);
+    }
+
+
+    @Async
+    public void historyEntranceAnalysis(String startTime, String endTime) {
+        try {
+
+            if (startTime.equals(endTime)) {
+                dao.deleteByDate(MapUtils.toMap("businessDate", endTime));
+                String twoDayBefore = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(endTime), -1));
+                //汇总全部渠道数据
+                dataKettle(null, endTime, twoDayBefore);
+                daysRetention(null, endTime, 1);
+                daysRetention(null, endTime, 6);
+                userLost(null, endTime);
+                List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
+                for (ChannelInfo item : channelInfoList) {
+                    //汇总各个主渠道数据
+                    dataKettle(item, endTime, twoDayBefore);
+                    daysRetention(item, endTime, 1);
+                    daysRetention(item, endTime, 6);
+                    userLost(item, endTime);
+                }
+            } else {
+                List<String> datelist = DateUtils.getDateList(startTime, endTime);
+                for (String searchDate : datelist) {
+                    dao.deleteByDate(MapUtils.toMap("businessDate", searchDate));
+                    String twoDayBefore = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate), -1));
+                    //汇总全部渠道数据
+                    dataKettle(null, searchDate, twoDayBefore);
+                    daysRetention(null, searchDate, 1);
+                    daysRetention(null, searchDate, 6);
+                    userLost(null, searchDate);
+                    List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
+                    for (ChannelInfo item : channelInfoList) {
+                        //汇总各个主渠道数据
+                        dataKettle(item, searchDate, twoDayBefore);
+                        daysRetention(item, searchDate, 1);
+                        daysRetention(item, searchDate, 6);
+                        userLost(item, searchDate);
+                    }
+
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            return;
+        }
+        logger.info("用户分层分析老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
 }

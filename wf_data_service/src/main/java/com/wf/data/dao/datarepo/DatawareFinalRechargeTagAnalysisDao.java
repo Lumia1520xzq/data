@@ -11,4 +11,6 @@ import java.util.Map;
 public interface DatawareFinalRechargeTagAnalysisDao extends CrudDao<DatawareFinalRechargeTagAnalysis> {
 
     DatawareFinalRechargeTagAnalysis getTagAnalysisDate(Map<String,Object> map);
+
+    int deleteByDate(Map<String,Object> map);
 }
