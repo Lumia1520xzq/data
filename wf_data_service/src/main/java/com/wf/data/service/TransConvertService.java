@@ -86,4 +86,7 @@ public class TransConvertService extends CrudService<TransConvertDao, TransConve
         return dao.getCreateOrderUserId(dataParam);
     }
 
+    public List<TransConvert> getByPayAgentMerchant(TransConvert transConvert) {
+        return dao.getByPayAgentMerchant(transConvert);
+    }
 }

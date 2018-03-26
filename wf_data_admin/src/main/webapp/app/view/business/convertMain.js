@@ -13,7 +13,7 @@ Ext.define('WF.view.business.convertMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/business/convert/list.do',
-            fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'successTime']
+            fields: ['userId','userName', 'thirdAmount', 'bizType', 'orderSn', 'channelId', 'createTime', 'successTime','merchantCode']
         });
 
         var productTypeStore = Ext.create('DCIS.Store', {
@@ -119,6 +119,16 @@ Ext.define('WF.view.business.convertMain', {
                 name: 'endTime',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '结束时间',
+            }, {
+                colspan: 1,
+                name: 'merchantCode',
+                xtype: 'searchfield',
+                displayField: 'merchantCode',
+                valueField: "merchantCode",
+                queryMode: "local",
+                store: 'payAgentMerchanStore',
+                editable: false,
+                fieldLabel: '商户'
             }]
         });
         me.add({
@@ -194,6 +204,12 @@ Ext.define('WF.view.business.convertMain', {
                     }
                     return '--';
                 }
+            }, {
+                text: '商户号',
+                width: 120,
+                dataIndex: 'merchantCode',
+                menuDisabled: true,
+                sortable: false
             }, {
                 text: '创建时间',
                 width: 100,
