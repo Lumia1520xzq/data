@@ -114,6 +114,16 @@ Ext.define('WF.view.business.csConvertMain', {
                 name: 'endTime',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '结束时间',
+            }, {
+                colspan: 1,
+                name: 'merchantCode',
+                xtype: 'searchfield',
+                displayField: 'merchantCode',
+                valueField: "merchantCode",
+                queryMode: "local",
+                store: 'payAgentMerchanStore',
+                editable: false,
+                fieldLabel: '商户'
             }]
         });
         me.add({
