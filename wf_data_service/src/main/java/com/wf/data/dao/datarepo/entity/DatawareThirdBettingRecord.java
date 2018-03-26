@@ -16,10 +16,19 @@ public class DatawareThirdBettingRecord extends DataEntity {
     private String channelName;
     private Long channelId;
     private String businessDate;
+    private Long dau;
 
 
     private String startTime;
     private String endTime;
+
+    public Long getDau() {
+        return dau;
+    }
+
+    public void setDau(Long dau) {
+        this.dau = dau;
+    }
 
     public String getStartTime() {
         return startTime;

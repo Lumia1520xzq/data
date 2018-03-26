@@ -285,13 +285,13 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             //标签用户且活跃的用户
             List<Long> userDauList = (List<Long>) userInterColl;
             if (CollectionUtils.isEmpty(userDauList)) {
-                tagAnalysis.setDayRetention(0.00);
+                tagDto.setDayRetention(0.00);
             } else {
                 if (CollectionUtils.isNotEmpty(oldDauList)) {
                     if (day == 1) {
-                        tagAnalysis.setDayRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
+                        tagDto.setDayRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
                     } else {
-                        tagAnalysis.setWeekRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
+                        tagDto.setWeekRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
                     }
                 }
             }
@@ -813,13 +813,13 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             //标签用户且活跃的用户
             List<Long> userDauList = (List<Long>) userInterColl;
             if (CollectionUtils.isEmpty(userDauList)) {
-                tagAnalysis.setDayRetention(0.00);
+                tagDto.setDayRetention(0.00);
             } else {
                 if (CollectionUtils.isNotEmpty(oldDauList)) {
                     if (day == 1) {
-                        tagAnalysis.setDayRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
+                        tagDto.setDayRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
                     } else {
-                        tagAnalysis.setWeekRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
+                        tagDto.setWeekRetention(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
                     }
                 }
             }

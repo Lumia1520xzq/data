@@ -8,6 +8,7 @@
 
     <sql id="datawareThirdBettingRecordColumns">
 		t.id,
+		t.dau,
 		t.user_count,
 		t.betting_count,
 		t.betting_amount,
@@ -62,42 +63,45 @@
         <include refid="datawareThirdBettingRecordWhere"/>
     </select>
 
-    <insert id="insert">
+	<insert id="insert">
 		INSERT INTO dataware_third_betting_record (
-		id,
-		user_count,
-		betting_count,
-		betting_amount,
-		result_amount,
-		result_rate,
-		betting_arpu,
-		betting_asp,
-		game_type,
-		channel_name,
-		channel_id,
-		business_date,
-		create_time,
-		delete_flag
+			id,
+			dau,
+			user_count,
+			betting_count,
+			betting_amount,
+			result_amount,
+			result_rate,
+			betting_arpu,
+			betting_asp,
+			game_type,
+			channel_name,
+			channel_id,
+			business_date,
+			create_time,
+			delete_flag
 		) VALUES (
-		#{id},
-		#{userCount},
-		#{bettingCount},
-		#{bettingAmount},
-		#{resultAmount},
-		#{resultRate},
-		#{bettingArpu},
-		#{bettingAsp},
-		#{gameType},
-		#{channelName},
-		#{channelId},
-		#{businessDate},
-		#{createTime},
-		#{deleteFlag}
+			#{id},
+			#{dau},
+			#{userCount},
+			#{bettingCount},
+			#{bettingAmount},
+			#{resultAmount},
+			#{resultRate},
+			#{bettingArpu},
+			#{bettingAsp},
+			#{gameType},
+			#{channelName},
+			#{channelId},
+			#{businessDate},
+			#{createTime},
+			#{deleteFlag}
 		)
 	</insert>
 
-    <update id="update">
+	<update id="update">
 		UPDATE dataware_third_betting_record SET
+			dau = #{dau},
 			user_count = #{userCount},
 			betting_count = #{bettingCount},
 			betting_amount = #{bettingAmount},
