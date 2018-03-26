@@ -126,8 +126,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             params.put("parentId", 1);
         }
         String businessDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -7));
+        String rechargeDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -8));
         String beginDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -6));
-        params.put("businessDate", yesterdayDate);
+        params.put("businessDate", businessDate);
         params.put("userTag", UserRechargeTypeConstants.NEW_USER_TYPE_0);
 
         DatawareFinalRechargeTagAnalysis tagAnalysis = getTagAnalysisDate(params);
@@ -135,13 +136,16 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         Map<String, Object> userParams = new HashMap<>();
         Map<String, Object> retentionParams = new HashMap<>();
+        Map<String, Object> rechargeParams = new HashMap<>();
 
         if (channelInfo != null) {
             userParams.put("parentId", channelInfo.getId());
             retentionParams.put("parentId", channelInfo.getId());
+            rechargeParams.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             retentionParams.remove("parentId");
+            rechargeParams.remove("parentId");
         }
         userParams.put("beginDate", beginDate);
         userParams.put("endDate", yesterdayDate);
@@ -175,11 +179,12 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         save(tagAnalysis);
 
+        rechargeParams.put("businessDate", rechargeDate);
         for (int i = 1; i <= 6; i++) {
             params.remove("userTag");
             params.put("userTag", i);
             DatawareFinalRechargeTagAnalysis tagDto = getTagAnalysisDate(params);
-            List<Long> oldUserList = userRechargeType(retentionParams, i);
+            List<Long> oldUserList = userRechargeType(rechargeParams, i);
             Collection oldInterColl = CollectionUtils.intersection(oldUserList, tagDauUserList);
             //活跃的标签用户
             List<Long> oldDauList = (List<Long>) oldInterColl;
@@ -217,6 +222,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             params.put("parentId", 1);
         }
         String businessDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -day));
+        String rechargeDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(businessDate), -1));
         params.put("businessDate", businessDate);
         params.put("userTag", UserRechargeTypeConstants.NEW_USER_TYPE_0);
 
@@ -225,13 +231,16 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         Map<String, Object> userParams = new HashMap<>();
         Map<String, Object> retentionParams = new HashMap<>();
+        Map<String, Object> rechargeParams = new HashMap<>();
 
         if (channelInfo != null) {
             userParams.put("parentId", channelInfo.getId());
             retentionParams.put("parentId", channelInfo.getId());
+            rechargeParams.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             retentionParams.remove("parentId");
+            rechargeParams.remove("parentId");
         }
         userParams.put("businessDate", yesterdayDate);
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(userParams);
@@ -262,11 +271,12 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         }
         save(tagAnalysis);
 
+        rechargeParams.put("businessDate", rechargeDate);
         for (int i = 1; i <= 6; i++) {
             params.remove("userTag");
             params.put("userTag", i);
             DatawareFinalRechargeTagAnalysis tagDto = getTagAnalysisDate(params);
-            List<Long> oldUserList = userRechargeType(params, i);
+            List<Long> oldUserList = userRechargeType(rechargeParams, i);
             Collection oldInterColl = CollectionUtils.intersection(oldUserList, tagDauUserList);
             //活跃的标签用户
             List<Long> oldDauList = (List<Long>) oldInterColl;
@@ -473,7 +483,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
                 info.setTotalUserRate(BigDecimalUtil.div(info.getDau() * 100, info.getTotalUserCount(), 2));
                 Long totalLoginCount = loginCount(newUserDauList, params);
                 if (totalLoginCount == null) totalLoginCount = 0L;
-                info.setLoginCount(BigDecimalUtil.div(Double.valueOf(totalLoginCount), info.getDau(), 2));
+                if (0 != info.getDau()) {
+                    info.setLoginCount(BigDecimalUtil.div(Double.valueOf(totalLoginCount), info.getDau(), 2));
+                }
             }
         }
         return info;
@@ -589,14 +601,14 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
                 dataKettle(null, endTime, twoDayBefore);
                 historyDaysRetention(null, endTime, 1);
                 historyDaysRetention(null, endTime, 6);
-                userLost(null, endTime);
+                historyUserLost(null, endTime);
                 List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
                 for (ChannelInfo item : channelInfoList) {
                     //汇总各个主渠道数据
                     dataKettle(item, endTime, twoDayBefore);
                     historyDaysRetention(item, endTime, 1);
                     historyDaysRetention(item, endTime, 6);
-                    userLost(item, endTime);
+                    historyUserLost(item, endTime);
                 }
             } else {
                 List<String> datelist = DateUtils.getDateList(startTime, endTime);
@@ -607,14 +619,14 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
                     dataKettle(null, searchDate, twoDayBefore);
                     historyDaysRetention(null, searchDate, 1);
                     historyDaysRetention(null, searchDate, 6);
-                    userLost(null, searchDate);
+                    historyUserLost(null, searchDate);
                     List<ChannelInfo> channelInfoList = channelInfoService.findMainChannel();
                     for (ChannelInfo item : channelInfoList) {
                         //汇总各个主渠道数据
                         dataKettle(item, searchDate, twoDayBefore);
                         historyDaysRetention(item, searchDate, 1);
                         historyDaysRetention(item, searchDate, 6);
-                        userLost(item, searchDate);
+                        historyUserLost(item, searchDate);
                     }
 
                 }
@@ -627,6 +639,100 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         logger.info("用户分层分析老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
+
+    /**
+     * 用户流失
+     *
+     * @param channelInfo
+     * @param searchDate
+     */
+    private void historyUserLost(ChannelInfo channelInfo, String searchDate) {
+        Map<String, Object> params = new HashMap<>();
+        if (channelInfo != null) {
+            params.put("parentId", channelInfo.getId());
+        } else {
+            params.put("parentId", 1);
+        }
+        String endDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate), 6));
+        String beginDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate), 1));
+        String rechargeDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate), -1));
+        params.put("businessDate", searchDate);
+        params.put("userTag", UserRechargeTypeConstants.NEW_USER_TYPE_0);
+
+        DatawareFinalRechargeTagAnalysis tagAnalysis = getTagAnalysisDate(params);
+        if (null == tagAnalysis) return;
+
+        Map<String, Object> userParams = new HashMap<>();
+        Map<String, Object> retentionParams = new HashMap<>();
+        Map<String, Object> rechargeParams = new HashMap<>();
+
+        if (channelInfo != null) {
+            userParams.put("parentId", channelInfo.getId());
+            retentionParams.put("parentId", channelInfo.getId());
+            rechargeParams.put("parentId", channelInfo.getId());
+        } else {
+            userParams.remove("parentId");
+            retentionParams.remove("parentId");
+            rechargeParams.remove("parentId");
+        }
+        userParams.put("beginDate", beginDate);
+        userParams.put("endDate", endDate);
+
+        List<Long> dauUserList = datawareBuryingPointDayService.getUserIdByDates(userParams);
+
+
+        retentionParams.put("businessDate", searchDate);
+        //新注册用户
+        List<Long> registerdList = datawareUserInfoService.getNewUserByDate(retentionParams);
+
+
+        List<Long> tagDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(retentionParams);
+
+        Collection registerdInterColl = CollectionUtils.intersection(registerdList, tagDauUserList);
+        //活跃的标签用户
+        List<Long> registerdDauList = (List<Long>) registerdInterColl;
+
+        if (CollectionUtils.isEmpty(registerdDauList)) {
+            tagAnalysis.setWeekLostRate(0.00);
+        } else {
+            Collection interColl = CollectionUtils.subtract(registerdDauList, dauUserList);
+            //标签用户且活跃的用户
+            List<Long> newUserDauList = (List<Long>) interColl;
+            if (CollectionUtils.isEmpty(newUserDauList)) {
+                tagAnalysis.setWeekLostRate(0.00);
+            } else {
+                tagAnalysis.setWeekLostRate(BigDecimalUtil.div(newUserDauList.size() * 100, registerdDauList.size(), 2));
+            }
+        }
+
+        save(tagAnalysis);
+
+        rechargeParams.put("businessDate", rechargeDate);
+        for (int i = 1; i <= 6; i++) {
+            params.remove("userTag");
+            params.put("userTag", i);
+            DatawareFinalRechargeTagAnalysis tagDto = getTagAnalysisDate(params);
+            List<Long> oldUserList = userRechargeType(rechargeParams, i);
+            Collection oldInterColl = CollectionUtils.intersection(oldUserList, tagDauUserList);
+            //活跃的标签用户
+            List<Long> oldDauList = (List<Long>) oldInterColl;
+            if (CollectionUtils.isEmpty(oldDauList)) {
+                tagDto.setWeekLostRate(0.00);
+            } else {
+                Collection userInterColl = CollectionUtils.subtract(oldDauList, dauUserList);
+                //标签用户且活跃的用户
+                List<Long> userDauList = (List<Long>) userInterColl;
+                if (CollectionUtils.isEmpty(userDauList)) {
+                    tagDto.setWeekLostRate(0.00);
+                } else {
+                    tagDto.setWeekLostRate(BigDecimalUtil.div(userDauList.size() * 100, oldDauList.size(), 2));
+                }
+            }
+            save(tagDto);
+        }
+
+
+    }
 
     /**
      * 更新用户留存
@@ -644,6 +750,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             params.put("parentId", 1);
         }
         String businessDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate), day));
+        String beforeBusinessDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(searchDate), -1));
         params.put("businessDate", searchDate);
         params.put("userTag", UserRechargeTypeConstants.NEW_USER_TYPE_0);
 
@@ -652,19 +759,23 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         Map<String, Object> userParams = new HashMap<>();
         Map<String, Object> retentionParams = new HashMap<>();
+        Map<String, Object> beforeParams = new HashMap<>();
 
         if (channelInfo != null) {
             userParams.put("parentId", channelInfo.getId());
             retentionParams.put("parentId", channelInfo.getId());
+            beforeParams.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             retentionParams.remove("parentId");
+            beforeParams.remove("parentId");
         }
         userParams.put("businessDate", businessDate);
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdListByChannel(userParams);
 
         //新注册用户
         retentionParams.put("businessDate", searchDate);
+        beforeParams.put("businessDate", beforeBusinessDate);
         List<Long> registerdList = datawareUserInfoService.getNewUserByDate(retentionParams);
 
         List<Long> tagDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(retentionParams);
@@ -693,7 +804,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             params.remove("userTag");
             params.put("userTag", i);
             DatawareFinalRechargeTagAnalysis tagDto = getTagAnalysisDate(params);
-            List<Long> oldUserList = userRechargeType(params, i);
+            List<Long> oldUserList = userRechargeType(beforeParams, i);
             Collection oldInterColl = CollectionUtils.intersection(oldUserList, tagDauUserList);
             //活跃的标签用户
             List<Long> oldDauList = (List<Long>) oldInterColl;
