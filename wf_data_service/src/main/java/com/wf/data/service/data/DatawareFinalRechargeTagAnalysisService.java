@@ -126,8 +126,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             params.put("parentId", 1);
         }
         String businessDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -7));
+        String rechargeDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -8));
         String beginDate = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(yesterdayDate), -6));
-        params.put("businessDate", yesterdayDate);
+        params.put("businessDate", businessDate);
         params.put("userTag", UserRechargeTypeConstants.NEW_USER_TYPE_0);
 
         DatawareFinalRechargeTagAnalysis tagAnalysis = getTagAnalysisDate(params);
@@ -135,13 +136,16 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         Map<String, Object> userParams = new HashMap<>();
         Map<String, Object> retentionParams = new HashMap<>();
+        Map<String, Object> rechargeParams = new HashMap<>();
 
         if (channelInfo != null) {
             userParams.put("parentId", channelInfo.getId());
             retentionParams.put("parentId", channelInfo.getId());
+            rechargeParams.put("parentId", channelInfo.getId());
         } else {
             userParams.remove("parentId");
             retentionParams.remove("parentId");
+            rechargeParams.remove("parentId");
         }
         userParams.put("beginDate", beginDate);
         userParams.put("endDate", yesterdayDate);
@@ -175,11 +179,12 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         save(tagAnalysis);
 
+        rechargeParams.put("businessDate", rechargeDate);
         for (int i = 1; i <= 6; i++) {
             params.remove("userTag");
             params.put("userTag", i);
             DatawareFinalRechargeTagAnalysis tagDto = getTagAnalysisDate(params);
-            List<Long> oldUserList = userRechargeType(retentionParams, i);
+            List<Long> oldUserList = userRechargeType(rechargeParams, i);
             Collection oldInterColl = CollectionUtils.intersection(oldUserList, tagDauUserList);
             //活跃的标签用户
             List<Long> oldDauList = (List<Long>) oldInterColl;
