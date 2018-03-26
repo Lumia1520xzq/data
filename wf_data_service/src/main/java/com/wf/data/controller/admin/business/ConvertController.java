@@ -1,6 +1,5 @@
 package com.wf.data.controller.admin.business;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.mycatuic.entity.UicUser;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * @author chris
+ * @author shihui
  * @date 2017/3/11
  */
 @RestController
