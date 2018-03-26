@@ -6,13 +6,10 @@ import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.trans.entity.TransConvert;
 import com.wf.data.service.TransConvertService;
-import com.wf.data.service.trans.PayAgentMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * @author shihui
@@ -22,8 +19,6 @@ import java.util.Date;
 @RequestMapping(value = "/data/admin/trans/payAgentMerchant")
 public class PayAgentMerchantController extends ExtJsController {
 
-    @Autowired
-    private PayAgentMerchantService payAgentMerchantService;
     @Autowired
     private TransConvertService transConvertService;
 

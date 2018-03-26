@@ -195,6 +195,9 @@
         <if test="parentId != null ">
             AND channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
+        <if test="merchantCode != null and merchantCode != ''">
+            AND merchant_code = #{merchantCode}
+        </if>
     </select>
 
 
