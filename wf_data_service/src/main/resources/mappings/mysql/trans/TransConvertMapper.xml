@@ -50,7 +50,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="p.parentId != null ">
 			AND channel_id LIKE CONCAT(#{p.parentId}, '%')
 		</if>
-		<if test="p.merchantCode != null ">
+		<if test="p.merchantCode != null and p.merchantCode != ''">
 			AND merchant_code = #{p.merchantCode}
 		</if>
 	</sql>
