@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.trans.PayAgentMerchantDao">
+	
+	<sql id="payAgentMerchantColumns">
+		t.id,
+		t.agent_id,
+		t.merchant_code,
+		t.company,
+		t.attach,
+		t.enable,
+		t.delete_flag,
+		t.update_time,
+		t.create_time
+	</sql>
+	
+	<sql id="payAgentMerchantWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.agentId != null">
+			AND t.agent_id = #{p.agentId}
+		</if>
+		<if test="p.enable != null">
+			AND t.enable = #{p.enable}
+		</if>
+		<if test="p.merchantCode != null and p.merchantCode!=''">
+			AND t.merchant_code = #{p.merchantCode}
+		</if>
+	</sql>
+	
+	<sql id="payAgentMerchantJoins">
+	</sql>
+	
+	<select id="get" resultType="PayAgentMerchant">
+		SELECT <include refid="payAgentMerchantColumns"/> FROM pay_agent_merchant t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="PayAgentMerchant">
+		SELECT <include refid="payAgentMerchantColumns"/> FROM pay_agent_merchant t <include refid="payAgentMerchantJoins"/>
+		WHERE <include refid="payAgentMerchantWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM pay_agent_merchant t WHERE <include refid="payAgentMerchantWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pay_agent_merchant (
+			id, 
+			agent_id,
+			merchant_code,
+			company,
+			attach,
+			enable,
+			delete_flag, 
+			create_time 
+		) VALUES (
+			#{id}, 
+			#{agentId},
+			#{merchantCode},
+			#{company},
+			#{attach},
+			#{enable},
+			#{deleteFlag}, 
+			#{createTime} 
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pay_agent_merchant SET
+			agent_id = #{agentId},
+			merchant_code = #{merchantCode},
+			company=#{company},
+			attach = #{attach},
+			enable = #{enable},
+			delete_flag = #{deleteFlag}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE pay_agent_merchant SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+

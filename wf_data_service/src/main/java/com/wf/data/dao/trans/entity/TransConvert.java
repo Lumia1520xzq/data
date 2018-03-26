@@ -36,6 +36,7 @@ public class TransConvert extends DataEntity {
     private String endTime;
     private Long parentId;
     private String userName;
+    private Integer rechargeCount;
 
 
     public Integer getPayMethod() {
@@ -245,5 +246,13 @@ public class TransConvert extends DataEntity {
 
     public void setRequestOrderNotifyStatus(Integer requestOrderNotifyStatus) {
         this.requestOrderNotifyStatus = requestOrderNotifyStatus;
+    }
+
+    public Integer getRechargeCount() {
+        return rechargeCount;
+    }
+
+    public void setRechargeCount(Integer rechargeCount) {
+        this.rechargeCount = rechargeCount;
     }
 }

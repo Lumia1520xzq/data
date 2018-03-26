@@ -9,10 +9,12 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.mycatuic.entity.UicUser;
+import com.wf.data.dao.trans.entity.PayAgentMerchant;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.UicUserService;
+import com.wf.data.service.trans.PayAgentMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,6 +42,8 @@ public class CommonDataController extends ExtJsController {
     private DataConfigService dataConfigService;
     @Autowired
     private DataDictService dataDictService;
+    @Autowired
+    private PayAgentMerchantService payAgentMerchantService;
 
 
     /**
@@ -303,6 +307,25 @@ public class CommonDataController extends ExtJsController {
         }
         dictList = dataDictService.findListByType(type);
         return dictList;
+    }
+
+    @RequestMapping("/getPayAgentMerchants")
+    public Object getPayAgentMerchants(){
+        PayAgentMerchant payAgentMerchant = new PayAgentMerchant();
+        JSONObject json = getRequestJson();
+
+        String keyword = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null && data.size() > 0) {
+            keyword = data.getString("data");
+        }
+
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = keyword.trim();
+            payAgentMerchant.setMerchantCode(keyword);
+        }
+        Page<PayAgentMerchant> page = payAgentMerchantService.findPage(new Page<>(payAgentMerchant));
+        return page;
     }
 
 }
