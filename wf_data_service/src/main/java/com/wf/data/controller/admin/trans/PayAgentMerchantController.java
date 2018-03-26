@@ -7,9 +7,13 @@ import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.trans.entity.TransConvert;
 import com.wf.data.service.TransConvertService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author shihui
@@ -39,7 +43,7 @@ public class PayAgentMerchantController extends ExtJsController {
 
         //设置默认搜索时间为一个月
         if (StringUtils.isBlank(startTime) || StringUtils.isBlank(endTime)) {
-            startTime = DateUtils.getYesterdayDate();
+            startTime = DateUtils.getDate();
             endTime = DateUtils.getDate(DateUtils.DATE_PATTERN);
         }
 
@@ -47,8 +51,26 @@ public class PayAgentMerchantController extends ExtJsController {
         transConvert.setMerchantCode(merchantCode);
         transConvert.setStartTime(startTime);
         transConvert.setEndTime(endTime);
-
         return transConvertService.getByPayAgentMerchant(transConvert);
+    }
+
+    /**
+     * 查询列表
+     */
+    @RequestMapping("/sumData")
+    public Object sumData(@RequestBody TransConvert transConvert) {
+        if (StringUtils.isNotBlank(transConvert.getStartTime())) {
+            transConvert.setStartTime(transConvert.getStartTime() + " 00:00:00");
+        }
+        if (StringUtils.isNotBlank(transConvert.getEndTime())) {
+            transConvert.setEndTime(transConvert.getEndTime() + " 23:59:59");
+        }
+        Map<String,Object> mapParam = new HashMap<>();
+        mapParam.put("startTime",transConvert.getStartTime());
+        mapParam.put("endTime",transConvert.getEndTime());
+        mapParam.put("merchantCode",transConvert.getMerchantCode());
+        Double data = transConvertService.sumDataByConds(mapParam);
+        return data == null ? 0D : data;
     }
 
 }

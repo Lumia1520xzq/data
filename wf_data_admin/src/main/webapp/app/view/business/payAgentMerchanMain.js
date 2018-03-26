@@ -27,7 +27,7 @@ Ext.define('WF.view.business.payAgentMerchanMain', {
             buildField: "Manual",
             forceFit: false,
             sumData: function () {
-                callapi("data/admin/business/convert/sumData.do", me.down('dataform').form.getValues(), function (response) {
+                callapi("data/admin/trans/payAgentMerchant/sumData.do", me.down('dataform').form.getValues(), function (response) {
                     me.down("[name='sumData']").setValue(Ext.util.Format.number(response, "0,000.00") + " 元");
                 });
             },
@@ -46,7 +46,7 @@ Ext.define('WF.view.business.payAgentMerchanMain', {
                 name: 'startTime',
                 format: 'Y-m-d',
                 fieldLabel: '开始时间',
-                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
+                value:Ext.util.Format.date(Ext.Date.add(new Date()),"Y-m-d")
             }, {
                 xtype: 'datefield',
                 name: 'endTime',
@@ -54,6 +54,17 @@ Ext.define('WF.view.business.payAgentMerchanMain', {
                 fieldLabel: '结束时间',
                 value:Ext.util.Format.date(Ext.Date.add(new Date()),"Y-m-d")
             }]
+        });
+
+        me.add({
+            items: [{
+                xtype: 'displayfield',
+                name: 'sumData',
+                value: 0,
+                fieldLabel: '<span style="font-size:14px;font-weight:bold">充值金额合计：</span>',
+                padding: 5
+            }],
+            layout: 'hbox'
         });
 
         me.add({
@@ -75,7 +86,7 @@ Ext.define('WF.view.business.payAgentMerchanMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     } else {
                         return 0.00;
                     }
@@ -88,7 +99,7 @@ Ext.define('WF.view.business.payAgentMerchanMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     } else {
                         return 0;
                     }
