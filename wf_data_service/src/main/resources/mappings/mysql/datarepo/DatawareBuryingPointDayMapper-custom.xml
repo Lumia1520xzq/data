@@ -192,6 +192,53 @@
         </if>
     </select>
 
+    <select id="getUserPointCount" resultType="long">
+        SELECT IFNULL(SUM(t.point_count),0)
+        FROM `dataware_burying_point_day` t
+        WHERE 1=1
+        AND t.channel_id IS NOT NULL
+        AND user_group=2
+        AND delete_flag=0
+        <if test="businessDate != null and businessDate != ''">
+            AND t.burying_date = #{businessDate}
+        </if>
+        <if test="channelId != null">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null">
+            AND t.parent_id = #{parentId}
+        </if>
+        <if test="userList != null and  userList.size() != 0">
+            AND t.user_id in
+            <foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+
+    <select id="getUserIdByDates" resultType="long">
+        SELECT
+        DISTINCT user_id
+        FROM `dataware_burying_point_day`
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND burying_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND burying_date &lt;= #{endDate}
+        </if>
+        AND user_group=2
+        AND delete_flag=0
+    </select>
+
     <select id="getActiveUsersInFifteenDay" resultType="java.lang.Long">
         SELECT DISTINCT
             t.user_id

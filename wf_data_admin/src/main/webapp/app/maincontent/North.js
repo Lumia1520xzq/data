@@ -6,7 +6,7 @@
 	region : "north",
 	border : false,
 	html : '<div id="head">'
-			+ '<div id="logo" class="FONT">平台数据管理中心</div>'
+			+ '<div id="logo" class="FONT">玩蜂大数据分析管理平台</div>'
 			+ '<div id="inform"><ul><li><a>欢迎访问！'
 			+ '</a>'
 			+ '</li><li><a><img src="./resources/images/icon1.jpg" width="21" height="22" />'+$USER.longName

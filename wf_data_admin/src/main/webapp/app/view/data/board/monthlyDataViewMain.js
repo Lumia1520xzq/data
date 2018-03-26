@@ -33,6 +33,11 @@ Ext.define('WF.view.data.board.monthlyDataViewMain',{
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/month/view/export.do?parentId=' + me.down(("[name='parentId']")).value +
+                    '&startTime=' + me.down(("[name='startTime']")).value +
+                    '&endTime=' + me.down(("[name='endTime']")).value;
+            },
             items: [{
                 name: 'parentId',
                 fieldLabel: '主渠道',

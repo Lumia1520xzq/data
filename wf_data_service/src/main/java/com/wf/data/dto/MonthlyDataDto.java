@@ -1,5 +1,7 @@
 package com.wf.data.dto;
 
+import com.wf.core.utils.excel.ExcelField;
+
 import java.io.Serializable;
 
 /**
@@ -20,7 +22,9 @@ public class MonthlyDataDto implements Serializable {
 	private Double costRate;
 	private Long sumNewUsers;
 	private Long avgNewUsers;
+	private Long parentId;
 
+	@ExcelField(title = "日期", type = 0, align = 1, sort = 10)
 	public String getMonth() {
 		return month;
 	}
@@ -29,6 +33,16 @@ public class MonthlyDataDto implements Serializable {
 		this.month = month;
 	}
 
+	@ExcelField(title = "渠道", type = 0, align = 1, sort = 20)
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+	@ExcelField(title = "当月累计充值", type = 0, align = 1, sort = 30)
 	public Double getSumRecharge() {
 		return sumRecharge;
 	}
@@ -45,6 +59,7 @@ public class MonthlyDataDto implements Serializable {
 		this.sumDau = sumDau;
 	}
 
+	@ExcelField(title = "当月累计DAU日均值", type = 0, align = 1, sort = 40)
 	public Long getAvgDau() {
 		return avgDau;
 	}
@@ -53,6 +68,7 @@ public class MonthlyDataDto implements Serializable {
 		this.avgDau = avgDau;
 	}
 
+	@ExcelField(title = "当月累计DARPU日均值", type = 0, align = 1, sort = 60)
 	public Double getAvgDarpu() {
 		return avgDarpu;
 	}
@@ -69,6 +85,7 @@ public class MonthlyDataDto implements Serializable {
 		this.days = days;
 	}
 
+	@ExcelField(title = "当月累计成本", type = 0, align = 1, sort = 70)
 	public Double getSumCost() {
 		return sumCost;
 	}
@@ -77,6 +94,7 @@ public class MonthlyDataDto implements Serializable {
 		this.sumCost = sumCost;
 	}
 
+	@ExcelField(title = "当月累计成本占比", type = 0, align = 1, sort = 80)
 	public Double getCostRate() {
 		return costRate;
 	}
@@ -85,6 +103,7 @@ public class MonthlyDataDto implements Serializable {
 		this.costRate = costRate;
 	}
 
+	@ExcelField(title = "当月累计新增用户日均值", type = 0, align = 1, sort = 50)
 	public Long getAvgNewUsers() {
 		return avgNewUsers;
 	}

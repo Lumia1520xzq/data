@@ -57,7 +57,7 @@ Ext.define('WF.view.thirdChannel.channelGameDataMain', {
                 name: 'parentId',
                 value: me.parameters
             }, {
-                name: 'parentId',
+                name: 'channelId',
                 fieldLabel: '渠道',
                 xtype: 'combo',
                 emptyText: "--请选择--",

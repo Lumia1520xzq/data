@@ -31,7 +31,7 @@ public interface DatawareBettingLogDayDao extends CrudDao<DatawareBettingLogDay>
 
     Long getBettingCountByUser(Map<String, Object> baseParam);
 
-    TcardDto  getBettingByUserIdAndGameType(Map<String, Object> params);
+    TcardDto getBettingByUserIdAndGameType(Map<String, Object> params);
 
     DatawareBettingLogDay getByUserIdAndGameType(Map<String,Object> params);
 

@@ -128,31 +128,63 @@
     </update>
 
     <select id="getBaseUserInfoLimit" resultType="DatawareUserInfo">
-		SELECT
-			id,
-			user_id,
-            parent_id,
-			channel_id,
-			registered_time,
-			user_group,
-			registered_date
-		FROM
-			dataware_user_info
-			WHERE 1=1
+        SELECT
+        id,
+        user_id,
+        parent_id,
+        channel_id,
+        registered_time,
+        user_group,
+        registered_date
+        FROM
+        dataware_user_info
+        WHERE 1=1
         AND delete_flag = 0
         <if test="endDate != null and endDate != ''">
             AND registered_date &lt;= #{endDate}
         </if>
-		ORDER BY
-			user_id ASC
-		LIMIT #{minIndex},#{maxIndex}
-	</select>
+        ORDER BY
+        user_id ASC
+        LIMIT #{minIndex},#{maxIndex}
+    </select>
 
     <select id="getByUserId" resultType="DatawareUserInfo">
         SELECT
         <include refid="datawareUserInfoColumns"/>
         FROM dataware_user_info t
         WHERE t.user_id = #{userId} AND t.delete_flag = 0
+    </select>
+
+
+    <select id="getNonRechargeUserId" resultType="Long">
+        SELECT DISTINCT t.user_id
+        FROM dataware_user_info t
+        WHERE 1=1 AND t.delete_flag = 0
+        AND t.user_group =2
+        AND t.channel_id IS NOT NULL
+        AND t.user_id NOT IN (
+        SELECT user_id FROM dataware_convert_day
+        WHERE 1=1
+        <if test="businessDate != null and businessDate != ''">
+            AND convert_date &lt;= #{businessDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id = #{parentId}
+        </if>
+        GROUP BY user_id
+        )
+        <if test="businessDate != null and businessDate != ''">
+            AND t.registered_date &lt;= #{businessDate}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.parent_id = #{parentId}
+        </if>
     </select>
 </mapper>
 

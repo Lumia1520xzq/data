@@ -67,10 +67,10 @@
 
     <select id="getBettingByDate" resultType="com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll">
         SELECT
-        COUNT(DISTINCT t.user_id) userCount,
-        SUM(t.betting_amount) bettingAmount,
-        SUM(t.betting_count) bettingCount,
-        SUM(t.result_amount) resultAmount
+        IFNULL(COUNT(DISTINCT t.user_id),0) userCount,
+        IFNULL(SUM(t.betting_amount),0) bettingAmount,
+        IFNULL(SUM(t.betting_count),0) bettingCount,
+        IFNULL( SUM(t.result_amount),0) resultAmount
         FROM `dataware_betting_log_day` t
         WHERE 1=1
         AND t.user_group=2
@@ -84,6 +84,12 @@
         </if>
         <if test="parentId != null and parentId != ''">
             AND t.parent_id = #{parentId}
+        </if>
+        <if test="userList != null and  userList.size() != 0">
+            AND t.user_id in
+            <foreach collection="userList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test="parentChannelList != null and  parentChannelList.size() != 0">
             AND t.parent_id not in
@@ -221,5 +227,7 @@
         </if>
         ORDER BY betting_date ASC limit 1
     </select>
+
+
 </mapper>
 

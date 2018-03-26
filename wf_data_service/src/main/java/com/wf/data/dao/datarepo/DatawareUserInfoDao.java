@@ -25,4 +25,11 @@ public interface DatawareUserInfoDao extends CrudDao<DatawareUserInfo> {
     List<DatawareUserInfo> getBaseUserInfoLimit(Map<String, Object> params);
 
     DatawareUserInfo getByUserId(Long userId);
+
+    /**
+     * 获取未充值的老用户
+     * @param params
+     * @return
+     */
+    List<Long> getNonRechargeUserId(Map<String, Object> params);
 }
