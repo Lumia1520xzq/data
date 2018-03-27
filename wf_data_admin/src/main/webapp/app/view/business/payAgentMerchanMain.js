@@ -1,7 +1,7 @@
 Ext.define('WF.view.business.payAgentMerchanMain', {
     extend: 'Ext.panel.Panel',
     title: '商户充值汇总查询',
-    xtype: 'convertMain',
+    xtype: 'payAgentMerchanMain',
     closable: true,
     layout: {
         type: 'vbox',
