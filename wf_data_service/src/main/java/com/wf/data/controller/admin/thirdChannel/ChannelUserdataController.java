@@ -30,10 +30,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/data/admin/channel/userdata")
 public class ChannelUserdataController extends ExtJsController {
-
-    @Autowired
-    private DatawareFinalChannelInfoHourService channelInfoHourService;
-
     @Autowired
     private DatawareConvertHourService convertHourService;
 
