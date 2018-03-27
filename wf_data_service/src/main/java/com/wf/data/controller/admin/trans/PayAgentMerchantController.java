@@ -41,9 +41,9 @@ public class PayAgentMerchantController extends ExtJsController {
             endTime = data.getString("endTime");
         }
 
-        //设置默认搜索时间为一个月
+        //设置默认搜索时间为当天
         if (StringUtils.isBlank(startTime) || StringUtils.isBlank(endTime)) {
-            startTime = DateUtils.getDate();
+            startTime = DateUtils.getDate(DateUtils.DATE_PATTERN);
             endTime = DateUtils.getDate(DateUtils.DATE_PATTERN);
         }
 
