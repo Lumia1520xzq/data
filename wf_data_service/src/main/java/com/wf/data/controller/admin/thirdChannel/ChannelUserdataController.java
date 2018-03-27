@@ -11,7 +11,6 @@ import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
-import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
 import com.wf.data.dto.UserDataOverviewDto;
 import com.wf.data.service.data.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -126,7 +125,7 @@ public class ChannelUserdataController extends ExtJsController {
             //用户类型为新增用户
             if (userType != null && userType == 1) {
                 //获取新用户list
-                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId,1);
+                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
                 if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
                     params.put("userIds", userIds);
                 } else {
@@ -236,10 +235,10 @@ public class ChannelUserdataController extends ExtJsController {
             params.put("convertDate", dateStr);
             if (userType != null && userType == 1) {
                 //获取新用户list
-                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId,1);
+                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
                 if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
                     params.put("userIds", userIds);
-                }else {
+                } else {
                     overviewDtos.add(dto);
                     continue;
                 }
@@ -336,10 +335,10 @@ public class ChannelUserdataController extends ExtJsController {
             params.put("businessDate", dateStr);
 
             if (userType != null && userType == 1) {//用户类型：新用户
-                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId,1);
+                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
                 if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
                     params.put("userIds", userIds);
-                }else{
+                } else {
                     overviewDtos.add(dto);
                     continue;
                 }
@@ -447,8 +446,8 @@ public class ChannelUserdataController extends ExtJsController {
 
             //DAU
             Long dau = 0L;
-            List<Long> newUserIds = getNewUserIds(dateStr,parentId,channelId,1);
-            if (CollectionUtils.isNotEmpty(newUserIds)){
+            List<Long> newUserIds = getNewUserIds(dateStr, parentId, channelId, 1);
+            if (CollectionUtils.isNotEmpty(newUserIds)) {
                 params.put("userIds", newUserIds);
                 Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
                 if (newUserDau != null) {
@@ -456,7 +455,7 @@ public class ChannelUserdataController extends ExtJsController {
                 }
             }
             //新增用户数
-            List<Long> newUserCount = getNewUserIds(dateStr,parentId,channelId,0);
+            List<Long> newUserCount = getNewUserIds(dateStr, parentId, channelId, 0);
             dto.setDau(dau);
             dto.setNewUsersNum(Long.parseLong(String.valueOf(newUserCount.size())));
             overviewDtos.add(dto);
@@ -469,7 +468,7 @@ public class ChannelUserdataController extends ExtJsController {
         Map<String, Object> userParams = new HashMap<>();
         userParams.put("businessDate", dateStr);
         userParams.put("parentId", parentId);
-        if (channelType != 1){
+        if (channelType != 1) {
             userParams.put("channelId", channelId);
         }
         return userInfoService.getNewUserByDate(userParams);
