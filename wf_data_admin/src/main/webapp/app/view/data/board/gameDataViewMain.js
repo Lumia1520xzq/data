@@ -3,7 +3,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
     title: '游戏数据图形分析',
     xtype: 'gameDataViewMain',
     closable: true,
-    autoScroll: false,
+    autoScroll: true,
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -33,20 +33,25 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
 
         me.add({
             xtype: 'tabpanel',
-            id: 'mainTab',
+            layout:'column',
+            align : 'stretch',
+            bodyStyle:'border-width:0',
             items: [{
                 title: '全量用户数据',
                 itemId: 'home',
-                autoScroll: true,
-                closable: false,
-                items: [{
-                    id:'gameBoard',align:'stretch',height:500,width:"99%",xtype:"panel",bodyStyle:'border-color:black',forceFit:true
-                }],
+                width:"16.5%",
+                height:"100%",
+                xtype:"panel",
+                forceFit:true,
+                bodyStyle:'border-color:black',
+                layout:'column',
+                items: getHtml("name", 3),
                 listeners: {
                     'activate': function (tab) {
-                        console.dir(tab.items.items.id)
-                        me.echarts = echarts.init(Ext.get("gameBoard").dom);
-                        me.echarts.setOption(option);
+                        for (var i = 0; i < tab.items.items.length; i++) {
+                            me.echarts = echarts.init(Ext.get(tab.items.items[i].id).dom);
+                            me.echarts.setOption(option);
+                        }
                     }
                 }
             }, {
@@ -93,11 +98,27 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             }]
         });
 
-
+        function getHtml(name, len) {
+            var items = [];
+            for (var i = 0; i < len; i++) {
+                items.push({
+                    xtype:"panel",
+                    layout:'hbox',
+                    title: name + i,
+                    id: name + i,
+                    width:300,
+                    height:300,
+                    forceFit:true,
+                    bodyStyle:'border-width:0'
+                });
+            }
+            return items;
+        }
     }
 
 
 });
+
 
 var option = {
     tooltip: {
