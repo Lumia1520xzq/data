@@ -39,7 +39,16 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 itemId: 'home',
                 autoScroll: true,
                 closable: false,
-                items: [Ext.create("WF.view.data.board.monthlyDataViewMain", {height: 850})],
+                items: [{
+                    id:'gameBoard',align:'stretch',height:500,width:"99%",xtype:"panel",bodyStyle:'border-color:black',forceFit:true
+                }],
+                listeners: {
+                    'activate': function (tab) {
+                        console.dir(tab.items.items.id)
+                        me.echarts = echarts.init(Ext.get("gameBoard").dom);
+                        me.echarts.setOption(option);
+                    }
+                }
             }, {
                 title: '新增用户数据',
                 html: 'Users',
