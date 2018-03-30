@@ -46,52 +46,53 @@ public class ChannelCostController extends ExtJsController {
     @RequestMapping("list")
     public Object listData() {
         JSONObject json = getRequestJson();
-        Long parentId = null;
+        Long channelId = null;
         Long userId = null;
         Integer activityType = null;
         String beginDate = null;
         String endDate = null;
-        Integer receiveStatus = null;
         Long start = null;
         Long length = null;
+        Long phyAwardsId = null;
 
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
-            parentId = data.getLong("parentId");
+            channelId = data.getLong("channelId");
             userId = data.getLong("userId");
             activityType = data.getInteger("activityType");
+            phyAwardsId = data.getLong("phyAwardsId");
             beginDate = data.getString("beginDate");
             endDate = data.getString("endDate");
-            receiveStatus = data.getInteger("receiveStatus");
             start = json.getLongValue("start");
             length = json.getLongValue("limit");
         }
 
         //设置默认搜索时间为昨天
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
-            beginDate = DateUtils.getYesterdayDate();
-            endDate = DateUtils.getYesterdayDate();
+            beginDate = DateUtils.getYesterdayDate() + " 00:00:00";
+            endDate = DateUtils.getYesterdayDate() + " 23:59:59";
         }
 
         InventoryPhyAwardsSendlog awardsSendLog = new InventoryPhyAwardsSendlog();
-        awardsSendLog.setParentId(parentId);
+        awardsSendLog.setChannelId(channelId);
         awardsSendLog.setUserId(userId);
         awardsSendLog.setActivityType(activityType);
         awardsSendLog.setBeginDate(beginDate);
         awardsSendLog.setEndDate(endDate);
         awardsSendLog.setReceiveStatus(3);
+        awardsSendLog.setPhyAwardsId(phyAwardsId);
 
         //根据活动类别和活动渠道找到活动的id
-        /*Integer activityType = awardsSendLog.getActivityType();*/
-        Long channelId = awardsSendLog.getParentId();
+        Page<InventoryPhyAwardsSendlog> awardsSendLogPage = new Page<>(awardsSendLog, start, length);
+
+        /*Long channelId = awardsSendLog.getParentId();
         List<Long> activityIds = activityInfoService.getListByActivityTypeAndChannelId(activityType, channelId);
-        Page<InventoryPhyAwardsSendlog> awardsSendLogPage = new Page<InventoryPhyAwardsSendlog>(awardsSendLog, start, length);
         if (CollectionUtils.isEmpty(activityIds)) {
             awardsSendLogPage.setCount(0);
-            awardsSendLogPage.setData(new ArrayList<InventoryPhyAwardsSendlog>());
+            awardsSendLogPage.setData(new ArrayList<>());
             return dataGrid(awardsSendLogPage);
         }
-        awardsSendLog.setActivityIds(activityIds);
+        awardsSendLog.setActivityIds(activityIds);*/
         awardsSendLogPage = inventoryPhyAwardsSendlogService.findPage(awardsSendLogPage);
         List<InventoryPhyAwardsSendlog> sendlogList = awardsSendLogPage.getData();
         for (InventoryPhyAwardsSendlog temp : sendlogList) {
@@ -124,7 +125,7 @@ public class ChannelCostController extends ExtJsController {
         if (CollectionUtils.isEmpty(activityIds)) {
             return 0D;
         }
-        awardsSendLog.setActivityIds(activityIds);
+        /*awardsSendLog.setActivityIds(activityIds);*/
         List<InventoryPhyAwardsSendlog> sendlogList = inventoryPhyAwardsSendlogService.findList(awardsSendLog, 99999999);
         for (InventoryPhyAwardsSendlog temp : sendlogList) {
             if (temp.getPhyAwardsId() != null) {
@@ -169,10 +170,8 @@ public class ChannelCostController extends ExtJsController {
             Integer activityTypeIn = awardsSendLog.getActivityType();
             Long channelId = awardsSendLog.getParentId();
             List<Long> activityIds = activityInfoService.getListByActivityTypeAndChannelId(activityTypeIn, channelId);
-            List<InventoryPhyAwardsSendlog> sendlogList = new ArrayList<>();
-            awardsSendLog.setActivityIds(activityIds);
-
-            sendlogList = inventoryPhyAwardsSendlogService.findList(awardsSendLog, 99999999);
+            List<InventoryPhyAwardsSendlog> sendlogList = inventoryPhyAwardsSendlogService.findList(awardsSendLog, 99999999);
+            /*awardsSendLog.setActivityIds(activityIds);*/
             for (InventoryPhyAwardsSendlog temp : sendlogList) {
                 AwardsSendLogInOut out = new AwardsSendLogInOut();
                 if (temp.getUserId() != null) {

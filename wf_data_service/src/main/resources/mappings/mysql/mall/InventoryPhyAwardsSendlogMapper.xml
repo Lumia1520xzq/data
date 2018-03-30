@@ -41,11 +41,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="p.userId != null">
 			AND t.user_id = #{p.userId}
 		</if>
-		
-		<!-- <if test="p.activityId != null">
-			AND t.activity_id = #{p.activityId}
-		</if> -->
-		
+		<if test="p.activityType != null">
+			AND t.activity_id = #{p.activityType}
+		</if>
+		<if test="p.channelId != null">
+			AND t.channel_id = #{p.channelId}
+		</if>
+		<if test="p.phyAwardsId != null">
+			AND t.phy_awards_id = #{p.phyAwardsId}
+		</if>
   		<if test="p.activityIds != null and p.activityIds.size() !=0">
 		AND t.activity_id in
 		<foreach collection="p.activityIds" index="index" item="item" open="(" separator="," close=")">
