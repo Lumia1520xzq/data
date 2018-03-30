@@ -259,7 +259,11 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         List<Long> newUserDauList = (List<Long>) interColl;
         if (CollectionUtils.isEmpty(newUserDauList)) {
-            tagAnalysis.setDayRetention(0.00);
+            if (day == 1) {
+                tagAnalysis.setDayRetention(0.00);
+            } else {
+                tagAnalysis.setWeekRetention(0.00);
+            }
         } else {
             if (CollectionUtils.isNotEmpty(registerdDauList)) {
                 if (day == 1) {
@@ -285,7 +289,11 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             //标签用户且活跃的用户
             List<Long> userDauList = (List<Long>) userInterColl;
             if (CollectionUtils.isEmpty(userDauList)) {
-                tagDto.setDayRetention(0.00);
+                if (day == 1) {
+                    tagDto.setDayRetention(0.00);
+                } else {
+                    tagDto.setWeekRetention(0.00);
+                }
             } else {
                 if (CollectionUtils.isNotEmpty(oldDauList)) {
                     if (day == 1) {
@@ -788,7 +796,11 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         List<Long> newUserDauList = (List<Long>) interColl;
         if (CollectionUtils.isEmpty(newUserDauList)) {
-            tagAnalysis.setDayRetention(0.00);
+            if (day == 1) {
+                tagAnalysis.setDayRetention(0.00);
+            } else {
+                tagAnalysis.setWeekRetention(0.00);
+            }
         } else {
             if (CollectionUtils.isNotEmpty(registerdDauList)) {
                 if (day == 1) {
@@ -813,7 +825,11 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             //标签用户且活跃的用户
             List<Long> userDauList = (List<Long>) userInterColl;
             if (CollectionUtils.isEmpty(userDauList)) {
-                tagDto.setDayRetention(0.00);
+                if (day == 1) {
+                    tagDto.setDayRetention(0.00);
+                } else {
+                    tagDto.setWeekRetention(0.00);
+                }
             } else {
                 if (CollectionUtils.isNotEmpty(oldDauList)) {
                     if (day == 1) {
