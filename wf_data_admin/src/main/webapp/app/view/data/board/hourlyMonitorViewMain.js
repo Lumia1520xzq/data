@@ -32,6 +32,10 @@ Ext.define('WF.view.data.board.hourlyMonitorViewMain', {
             columns: 2,
             buildField: "Manual",
             forceFit: true,
+            export: function () {
+                window.location.href = '/data/hour/view/export.do?parentId=' + me.down(("[name='parentId']")).value +
+                    '&businessDate=' + me.down(("[name='businessDate']")).value;
+            },
             items: [{
                 name: 'parentId',
                 fieldLabel: '主渠道',
