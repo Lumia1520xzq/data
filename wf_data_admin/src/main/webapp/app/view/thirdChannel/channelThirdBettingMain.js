@@ -13,7 +13,7 @@ Ext.define('WF.view.thirdChannel.channelThirdBettingMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/platform/record/getList.do',
-            fields: ['businessDate', 'channelName', 'gameType', 'userCount',
+            fields: ['businessDate', 'channelName', 'gameType','dau', 'userCount',
                 'bettingCount', 'bettingAmount', 'bettingArpu', 'bettingAsp', 'resultAmount', 'resultRate'],
             baseParams: {
                 channelId: me.parameters
@@ -132,6 +132,19 @@ Ext.define('WF.view.thirdChannel.channelThirdBettingMain', {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
                     } else {
+                        return 0.00;
+                    }
+                }
+            }, {
+                text: 'dau',
+                dataIndex: 'dau',
+                width: 100,
+                menuDisabled: true,
+                sortable: false,
+                renderer:function (value) {
+                    if(value != null){
+                        return Ext.util.Format.number(value, "0,000");
+                    }else {
                         return 0.00;
                     }
                 }
