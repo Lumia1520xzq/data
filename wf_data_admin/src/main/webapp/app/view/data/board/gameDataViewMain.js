@@ -11,43 +11,96 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
     initComponent: function () {
         this.callParent(arguments);
         var me = this;
+        var store = Ext.create('DCIS.Store', {
+            url: 'data/game/view/getList.do',
+            autoload: false,
+            fields: ["todData", "yesData", "historyData"]
+        });
+        var parentChannelStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getParentChannels.do',
+            autoLoad: true,
+            fields: ['id', 'name']
+        });
+        var gameTypeStore = Ext.create('DCIS.Store', {
+            autoLoad: true,
+            url: 'data/admin/dict/getListByType.do',
+            fields: ['value', 'label'],
+            baseParams: {
+                type: 'game_type'
+            }
+        });
         me.add({
             border: false,
-            store: {},
+            store: store,
             xtype: 'searchpanel',
             title: '查询',
             collapsible: true,
             collapsed: false,
             columns: 2,
             buildField: "Manual",
-            forceFit: true,
+            forceFit: false,
             items: [{
-                name: 'searchDate',
-                fieldLabel: '日期',
-                xtype: 'datefield',
-                format: 'Y-m-d',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
-            }
-            ]
+                name: 'parentId',
+                fieldLabel: '主渠道',
+                xtype: 'combo',
+                emptyText: "--请选择--",
+                displayField: 'name',
+                valueField: "id",
+                editable: true,
+                queryMode: "local",
+                store: parentChannelStore
+            },
+                {
+                    name: 'gameType',
+                    fieldLabel: '游戏',
+                    xtype: 'combobox',
+                    store: gameTypeStore,
+                    emptyText: "--请选择--",
+                    displayField: 'label',
+                    valueField: "value",
+                    editable: false
+                },
+                {
+                    name: 'tabId',
+                    xtype: 'hiddenfield',
+                    value: '',
+                },
+                {
+                    name: 'startTime',
+                    id: "viewStart",
+                    fieldLabel: '开始时间',
+                    xtype: 'datefield',
+                    format: 'Y-m-d',
+                    value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -14), "Y-m-d")
+                }, {
+                    name: 'endTime',
+                    id: "viewEnd",
+                    fieldLabel: '结束时间',
+                    xtype: 'datefield',
+                    format: 'Y-m-d',
+                    value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
+                }]
         });
-
         me.add({
+            name:'myTabs',
             xtype: 'tabpanel',
-            layout:'column',
-            align : 'stretch',
-            bodyStyle:'border-width:0',
+            layout: 'column',
+            align: 'stretch',
+            bodyStyle: 'border-width:0',
             items: [{
                 title: '全量用户数据',
                 itemId: 'home',
-                width:"16.5%",
-                height:"100%",
-                xtype:"panel",
-                forceFit:true,
-                bodyStyle:'border-color:black',
-                layout:'column',
+                width: "16.5%",
+                height: "100%",
+                xtype: "panel",
+                forceFit: true,
+                bodyStyle: 'border-color:black',
+                layout: 'column',
                 items: getHtml("name", 3),
                 listeners: {
                     'activate': function (tab) {
+                        me.down(("[name='tabId']")).setValue(tab.itemId);
+                        // doSearch();
                         for (var i = 0; i < tab.items.items.length; i++) {
                             me.echarts = echarts.init(Ext.get(tab.items.items[i].id).dom);
                             me.echarts.setOption(option);
@@ -62,9 +115,11 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 closable: false,
                 items: [],
                 listeners: {
-                    'show': function (tab) {
-                        tab.removeAll();
-                        tab.items.add(Ext.create("WF.view.data.board.monthlyDataViewMain", {height: 850}));
+                    'activate': function (tab) {
+                        me.down(("[name='tabId']")).setValue(tab.itemId);
+                        // doSearch();
+                        /*tab.removeAll();
+                        tab.items.add(Ext.create("WF.view.data.board.monthlyDataViewMain", {height: 850}));*/
                     }
                 }
 
@@ -76,9 +131,13 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 closable: false,
                 items: [],
                 listeners: {
-                    'show': function (tab) {
+                    'activate': function (tab) {
                         tab.removeAll();
-                        this.items.add(Ext.create("WF.view.data.board.filterDataViewMain", {height: 850}));
+                        console.dir(tab.itemId);
+                        me.down(("[name='tabId']")).setValue(tab.itemId);
+                        doSearch();
+                       /* tab.removeAll();
+                        this.items.add(Ext.create("WF.view.data.board.filterDataViewMain", {height: 850}));*/
                     }
                 }
             }, {
@@ -89,10 +148,12 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 closable: false,
                 items: [],
                 listeners: {
-                    'show': function (tab) {
-                        console.dir(tab.itemId)
+                    'activate': function (tab) {
                         tab.removeAll();
-                        this.items.add(Ext.create("WF.view.data.board.GameMonitorViewMain", {height: 850}));
+                        me.down(("[name='tabId']")).setValue(tab.itemId);
+                        doSearch();
+                        /*tab.removeAll();
+                        this.items.add(Ext.create("WF.view.data.board.GameMonitorViewMain", {height: 850}));*/
                     }
                 }
             }]
@@ -102,19 +163,41 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             var items = [];
             for (var i = 0; i < len; i++) {
                 items.push({
-                    xtype:"panel",
-                    layout:'hbox',
-                    title: name + i,
+                    xtype: "panel",
+                    layout: 'hbox',
+                    name: name + i,
                     id: name + i,
-                    width:300,
-                    height:300,
-                    forceFit:true,
-                    bodyStyle:'border-width:0'
+                    width: 550,
+                    height: 300,
+                    forceFit: true,
+                    bodyStyle: 'border-width:0'
                 });
             }
             return items;
+        };
+
+        function doSearch() {
+            var value = {
+                parentId:me.down("[name='parentId']").value,
+                gameType:me.down("[name='gameType']").value,
+                tabId:me.down("[name='tabId']").value,
+                startTime:Ext.util.Format.date(me.down("[name='startTime']").value, "Y-m-d"),
+                endTime:Ext.util.Format.date(me.down("[name='endTime']").value, "Y-m-d"),
+            }
+            console.dir(value)
+            store.load({
+                params: value,
+                callback:function(){
+                    console.dir(store)
+                    for(var i=0;i<store.getCount();i++){
+                        var re=store.getAt(i);
+                        console.dir(re.data.historyData)
+                    }
+                }
+            });
         }
     }
+
 
 
 });
