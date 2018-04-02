@@ -8,11 +8,15 @@ import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.constants.DataConstants;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
+import com.wf.data.dao.mall.entity.InventoryPhyAwardsInfo;
 import com.wf.data.dao.mycatuic.entity.UicUser;
+import com.wf.data.dao.trans.entity.PayAgentMerchant;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.DataDictService;
 import com.wf.data.service.UicUserService;
+import com.wf.data.service.mall.InventoryPhyAwardsInfoService;
+import com.wf.data.service.trans.PayAgentMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,7 +44,10 @@ public class CommonDataController extends ExtJsController {
     private DataConfigService dataConfigService;
     @Autowired
     private DataDictService dataDictService;
-
+    @Autowired
+    private PayAgentMerchantService payAgentMerchantService;
+    @Autowired
+    private InventoryPhyAwardsInfoService inventoryPhyAwardsInfoService;
 
     /**
      * 获取所有的渠道
@@ -105,7 +112,6 @@ public class CommonDataController extends ExtJsController {
         }
         return list;
     }
-
 
     /**
      * 获取子渠道
@@ -178,7 +184,6 @@ public class CommonDataController extends ExtJsController {
         Page<UicUser> page = uicUserService.findPage(new Page<UicUser>(user));
         return page;
     }
-
 
     /**
      * 获取用户列表
@@ -287,8 +292,8 @@ public class CommonDataController extends ExtJsController {
     }
 
     @RequestMapping("/getUserType")
-    public Object getUserType(HttpServletRequest request){
-        List<DataDict>  dictList = new ArrayList<>();
+    public Object getUserType(HttpServletRequest request) {
+        List<DataDict> dictList = new ArrayList<>();
         String type = request.getParameter("type");
         JSONObject json = getRequestJson();
         Integer signal = null;
@@ -296,13 +301,53 @@ public class CommonDataController extends ExtJsController {
         if (data != null && data.size() > 0) {
             signal = data.getInteger("signal");
         }
-        if(signal != null && signal > 0){
-            DataDict dict =  dataDictService.getDictByValue(type,0);
+        if (signal != null && signal > 0) {
+            DataDict dict = dataDictService.getDictByValue(type, 0);
             dictList.add(dict);
             return dictList;
         }
         dictList = dataDictService.findListByType(type);
         return dictList;
+    }
+
+    @RequestMapping("/getPayAgentMerchants")
+    public Object getPayAgentMerchants() {
+        PayAgentMerchant payAgentMerchant = new PayAgentMerchant();
+        JSONObject json = getRequestJson();
+
+        String keyword = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null && data.size() > 0) {
+            keyword = data.getString("data");
+        }
+
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = keyword.trim();
+            payAgentMerchant.setMerchantCode(keyword);
+        }
+        return payAgentMerchantService.findPage(new Page<>(payAgentMerchant));
+    }
+
+    @RequestMapping("/awardsInfoList")
+    public Object awardsInfoList() {
+        InventoryPhyAwardsInfo inventoryPhyAwardsInfo = new InventoryPhyAwardsInfo();
+        JSONObject json = getRequestJson();
+
+        String keyword = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null && data.size() > 0) {
+            keyword = data.getString("data");
+        }
+
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = keyword.trim();
+            if (NumberUtils.isDigits(keyword)) {
+                inventoryPhyAwardsInfo.setId(NumberUtils.toLong(keyword));
+            } else {
+                inventoryPhyAwardsInfo.setName(keyword);
+            }
+        }
+        return inventoryPhyAwardsInfoService.findPage(new Page<>(inventoryPhyAwardsInfo));
     }
 
 }

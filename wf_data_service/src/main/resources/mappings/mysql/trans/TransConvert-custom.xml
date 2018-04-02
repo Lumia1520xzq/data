@@ -195,6 +195,9 @@
         <if test="parentId != null ">
             AND channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
+        <if test="merchantCode != null and merchantCode != ''">
+            AND merchant_code = #{merchantCode}
+        </if>
     </select>
 
 
@@ -222,6 +225,29 @@
         <if test="parentId != null ">
             AND t.channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
+    </select>
+
+    <select id="getByPayAgentMerchant" resultType="TransConvert">
+        SELECT
+        SUM(t.third_amount) thirdAmount,
+        t.merchant_code,
+        COUNT(t.id) rechargeCount
+        FROM
+        trans_convert t
+        WHERE
+        t.`status` = 8
+        AND t.delete_flag = 0
+        <if test="startTime != null and startTime != ''">
+            AND t.success_time >= CONCAT(#{startTime} , ' 00:00:00')
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND t.success_time &lt;= CONCAT(#{endTime} , ' 23:59:59')
+        </if>
+        <if test="merchantCode != null and merchantCode != ''">
+            AND t.merchant_code = #{merchantCode}
+        </if>
+        GROUP BY
+        t.merchant_code
     </select>
 
 </mapper>

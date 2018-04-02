@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 
 <mapper namespace="com.wf.data.dao.mall.InventoryPhyAwardsInfoDao">
-	
-	<sql id="inventoryPhyAwardsInfoColumns">
+
+    <sql id="inventoryPhyAwardsInfoColumns">
 		t.id,
 		t.name,
 		t.type,
@@ -19,32 +19,43 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.update_time,
 		t.delete_flag
 	</sql>
-	
-	<sql id="inventoryPhyAwardsInfoWhere">
-		t.delete_flag = #{DEL_FLAG_NORMAL}
-		<if test="p.type != null">
-			AND t.type = #{p.type}
-		</if>
-		<if test="p.name != null and p.name !=''">
-			AND t.name = #{p.name}
-		</if>
-	</sql>
-	
-	<sql id="inventoryPhyAwardsInfoJoins">
-	</sql>
-	
-	<select id="get" resultType="InventoryPhyAwardsInfo">
-		SELECT <include refid="inventoryPhyAwardsInfoColumns"/> FROM inventory_phy_awards_info t WHERE id = #{id}
-	</select>
-	<select id="findList" resultType="InventoryPhyAwardsInfo">
-		SELECT <include refid="inventoryPhyAwardsInfoColumns"/> FROM inventory_phy_awards_info t <include refid="inventoryPhyAwardsInfoJoins"/>
-		WHERE <include refid="inventoryPhyAwardsInfoWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
-	</select>
-	<select id="count" resultType="long">
-		SELECT COUNT(*) FROM inventory_phy_awards_info t WHERE <include refid="inventoryPhyAwardsInfoWhere" />
-	</select>
-	
-	<insert id="insert">
+
+    <sql id="inventoryPhyAwardsInfoWhere">
+        t.delete_flag = #{DEL_FLAG_NORMAL}
+        <if test="p.type != null">
+            AND t.type = #{p.type}
+        </if>
+        <if test="p.name != null and p.name !=''">
+            AND t.name like CONCAT('%', #{p.name}, '%')
+        </if>
+        <if test="p.id != null">
+            AND t.id like CONCAT('%', #{p.id}, '%')
+        </if>
+    </sql>
+
+    <sql id="inventoryPhyAwardsInfoJoins">
+    </sql>
+
+    <select id="get" resultType="InventoryPhyAwardsInfo">
+        SELECT
+        <include refid="inventoryPhyAwardsInfoColumns"/>
+        FROM inventory_phy_awards_info t WHERE id = #{id}
+    </select>
+    <select id="findList" resultType="InventoryPhyAwardsInfo">
+        SELECT
+        <include refid="inventoryPhyAwardsInfoColumns"/>
+        FROM inventory_phy_awards_info t
+        <include refid="inventoryPhyAwardsInfoJoins"/>
+        WHERE
+        <include refid="inventoryPhyAwardsInfoWhere"/>
+        ORDER BY id desc LIMIT #{start}, #{length}
+    </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM inventory_phy_awards_info t WHERE
+        <include refid="inventoryPhyAwardsInfoWhere"/>
+    </select>
+
+    <insert id="insert">
 		INSERT INTO inventory_phy_awards_info (
 			id, 
 			name, 
@@ -69,8 +80,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			#{deleteFlag} 
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE inventory_phy_awards_info SET
 			name = #{name}, 
 			type = #{type}, 
@@ -83,7 +94,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		WHERE id = #{id}
 	</update>
 
-	<delete id="delete">
+    <delete id="delete">
 		UPDATE inventory_phy_awards_info SET delete_flag = 1 WHERE ID = #{id} 
 	</delete>
 </mapper>

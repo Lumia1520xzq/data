@@ -46,4 +46,6 @@ public interface TransConvertDao extends CrudDao<TransConvert> {
 	Double sumDataByConds(Map<String, Object> dataParam);
 
 	Long getCreateOrderUserId(Map<String, Object> dataParam);
+
+    List<TransConvert> getByPayAgentMerchant(TransConvert transConvert);
 }

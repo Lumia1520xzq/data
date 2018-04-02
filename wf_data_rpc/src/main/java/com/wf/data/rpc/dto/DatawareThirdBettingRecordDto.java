@@ -20,10 +20,20 @@ public class DatawareThirdBettingRecordDto implements Serializable {
     private Long channelId;
     private String businessDate;
 
+    private Long dau;
+
     private Date createTime;    // 创建日期
     private Date updateTime;    // 更新日期
     private int deleteFlag;    // 删除标记（0：正常；1：删除；2：审核）
 
+
+    public Long getDau() {
+        return dau;
+    }
+
+    public void setDau(Long dau) {
+        this.dau = dau;
+    }
 
     public Long getUserCount() {
         return userCount;
