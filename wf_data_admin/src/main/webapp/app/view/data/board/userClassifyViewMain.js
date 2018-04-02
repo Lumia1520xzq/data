@@ -48,7 +48,6 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
             },
             {
                 name: 'startTime',
-                id:"viewStart",
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
                 format: 'Y-m-d',
@@ -56,7 +55,6 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
             },
             {
                 name: 'endTime',
-                id:"viewEnd",
                 fieldLabel: '结束时间',
                 xtype: 'datefield',
                 format: 'Y-m-d',
