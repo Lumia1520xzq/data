@@ -47,6 +47,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="p.channelId != null">
 			AND t.channel_id = #{p.channelId}
 		</if>
+		<if test="p.parentId != null">
+			AND t.channel_id = #{p.parentId}
+		</if>
 		<if test="p.phyAwardsId != null">
 			AND t.phy_awards_id = #{p.phyAwardsId}
 		</if>

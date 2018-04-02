@@ -47,6 +47,7 @@ public class ChannelCostController extends ExtJsController {
     public Object listData() {
         JSONObject json = getRequestJson();
         Long channelId = null;
+        Long parentId = null;
         Long userId = null;
         Integer activityType = null;
         String beginDate = null;
@@ -58,6 +59,7 @@ public class ChannelCostController extends ExtJsController {
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             channelId = data.getLong("channelId");
+            parentId = data.getLong("parentId");
             userId = data.getLong("userId");
             activityType = data.getInteger("activityType");
             phyAwardsId = data.getLong("phyAwardsId");
@@ -75,6 +77,7 @@ public class ChannelCostController extends ExtJsController {
 
         InventoryPhyAwardsSendlog awardsSendLog = new InventoryPhyAwardsSendlog();
         awardsSendLog.setChannelId(channelId);
+        awardsSendLog.setParentId(parentId);
         awardsSendLog.setUserId(userId);
         awardsSendLog.setActivityType(activityType);
         awardsSendLog.setBeginDate(beginDate);
