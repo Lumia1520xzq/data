@@ -153,6 +153,7 @@ public interface DataConstants {
     String DATA_FISH_BEGIN_DAY = "data_fish_begin_day";
 
     String DATA_FINAL_HOUR_OPEN = "data_final_hour_open";
+    String SEND_THIRDID_OPEN = "send_thirdId_open";
 
     /**
      * 用户维度清洗的游戏信息游戏数
