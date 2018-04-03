@@ -42,15 +42,26 @@ public class SendThirdIdToJddJob {
 
 
 
-        logger.info("推送奖多多回流、付费率用户彩票ID开始。。。。。。。。");
+        logger.info("推送奖多多回流用户彩票ID开始。。。。。。。。");
         try {
             if ("true".equals(openFlag[1])) {
                 sendThirdIdToJddService.pushBackFlowUser();
             }
         } catch (Exception e) {
-            logger.error("sendThirdId发送失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+            logger.error("pushBackFlowUser发送失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
-        logger.info("推送奖多多回流、付费率用户彩票ID结束。。。。。。。。");
+        logger.info("推送奖多多回流用户彩票ID结束。。。。。。。。");
+
+
+        logger.info("推送奖多多未付费老用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[2])) {
+                sendThirdIdToJddService.pushUnpayUser();
+            }
+        } catch (Exception e) {
+            logger.error("pushUnpayUser发送失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("推送奖多多未付费老用户彩票ID结束。。。。。。。。");
 
     }
 

@@ -9,17 +9,11 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.common.constants.ChannelConstants;
 import com.wf.data.common.constants.JddTagIdConstants;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.datarepo.entity.DatawareUserInfo;
-import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dto.JddUserTagDto;
-import com.wf.data.service.BehaviorRecordService;
 import com.wf.data.service.BuryingPointService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicUserService;
-import com.wf.data.service.data.DatawareBuryingPointDayService;
-import com.wf.data.service.data.DatawareUserInfoService;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +105,6 @@ public class SendThirdIdToJddService {
             }
 
         }
-
     }
 
     /**
@@ -157,10 +150,17 @@ public class SendThirdIdToJddService {
         List<Long> requiredUser2 = (List<Long>) CollectionUtils.subtract(CollectionUtils.intersection(payedUserList2, oldestUser2), activeUsers);
         List<Long> resultList = (List<Long>) CollectionUtils.subtract(CollectionUtils.union(requiredUser1, requiredUser2), CollectionUtils.intersection(requiredUser1, requiredUser2));
         getThirdIdByUserIdList(resultList, JddTagIdConstants.BACK_FLOW_USER);
+    }
 
-        logger.info("回流用户彩票ID推送完成。。。。。。。。");
+    /**
+     * 未付费老用户（拉付费率）奖多多渠道（100001）, 非2日内新用户，且未有过付费行为。
+     */
+    public void pushUnpayUser() {
+        //获取付费用户
+        Map<String, Object> convertParams = new HashMap<>();
+        convertParams.put("parentId", ChannelConstants.JS_CHANNEL);
+        List<Long> payedUserList = transConvertService.getRechargeUserIdsByDay(convertParams);
 
-       /*未付费老用户（拉付费率）奖多多渠道（100001）, 非2日内新用户，且未有过付费行为。*/
         //获取非两日内新用户
         Map<String, Object> newUserParam = new HashMap<>();
         newUserParam.put("limit", limit);
@@ -171,7 +171,36 @@ public class SendThirdIdToJddService {
         List<Long> resultUserId2 = (List<Long>) CollectionUtils.subtract(newUserInTwoDays, payedUserList);
 
         getThirdIdByUserIdList(resultUserId2, JddTagIdConstants.UNPAY_OLD_USER);
+    }
 
+    /**
+     * 根据userIdList获取三方ID
+     *
+     * @param resultList
+     * @param lableId
+     */
+    private void getThirdIdByUserIdList(List<Long> resultList, String lableId) {
+        String uuid = APIUtils.getUUID();
+        Map<String, Object> params = new HashMap<>();
+        params.put("ids", resultList);
+        params.put("userSource", 2);
+        params.put("start", 0);
+        params.put("length", 100000000);
+        List<String> thirdIdList = uicUserService.getThirdIdList(params);
+        long totalPage = getTotalPage(thirdIdList.size());
+        if (CollectionUtils.isNotEmpty(thirdIdList)) {
+            for (long i = 0; i < totalPage; i++) {
+                long startIndex = i * pageSize;
+                long endIndex = (i + 1) * pageSize;
+                String batchEndFlag = "0";
+                if (i + 1 == totalPage) {
+                    batchEndFlag = "1";
+                    endIndex = startIndex + thirdIdList.size() % pageSize;
+                }
+                List<String> splitThirdId = thirdIdList.subList((int) startIndex, (int) endIndex);
+                sendThirdId(splitThirdId, uuid, batchEndFlag, lableId);
+            }
+        }
     }
 
     public void sendThirdId(List<String> thirdIdList, String uuid, String batchEndFlag, String tagId) {
@@ -183,6 +212,7 @@ public class SendThirdIdToJddService {
         dto.setBatchEndFlag(batchEndFlag);
         dto.setFrom("game");
         dto.setTagId(tagId);
+        logger.info("奖多多推送接口参数：batchId:" + uuid + ";");
         request(baseUrl + url, dto);
     }
 
@@ -241,36 +271,6 @@ public class SendThirdIdToJddService {
             totalPage = totalRecord / pageSize + 1;
         }
         return totalPage;
-    }
-
-    /**
-     * 根据userIdList获取三方ID
-     *
-     * @param resultList
-     * @param lableId
-     */
-    private void getThirdIdByUserIdList(List<Long> resultList, String lableId) {
-        long count = resultList.size();
-        //总页数
-        long totalPage = getTotalPage(count);
-        Map<String, Object> params = new HashMap<>();
-        params.put("ids", resultList);
-        String uuid = APIUtils.getUUID();
-        for (long i = 0; i < totalPage; i++) {
-            long startIndex = getStartIndex(i);
-            params.put("start", startIndex);
-            params.put("length", pageSize);
-            params.put("userSource", 2);
-            List<String> thirdIdList = uicUserService.getThirdIdList(params);
-
-            if (CollectionUtils.isNotEmpty(thirdIdList)) {
-                String batchEndFlag = "0";
-                if (i + 1 == totalPage) {
-                    batchEndFlag = "1";
-                }
-                sendThirdId(thirdIdList, uuid, batchEndFlag, lableId);
-            }
-        }
     }
 
 }
