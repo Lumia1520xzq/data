@@ -158,6 +158,8 @@ public class SendThirdIdToJddService {
         List<Long> resultList = (List<Long>) CollectionUtils.subtract(CollectionUtils.union(requiredUser1, requiredUser2), CollectionUtils.intersection(requiredUser1, requiredUser2));
         getThirdIdByUserIdList(resultList, JddTagIdConstants.BACK_FLOW_USER);
 
+        logger.info("回流用户彩票ID推送完成。。。。。。。。");
+
        /*未付费老用户（拉付费率）奖多多渠道（100001）, 非2日内新用户，且未有过付费行为。*/
         //获取非两日内新用户
         Map<String, Object> newUserParam = new HashMap<>();
