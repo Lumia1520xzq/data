@@ -47,6 +47,11 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                 store: parentChannelStore
             },
             {
+                name: 'tabId',
+                xtype: 'hiddenfield',
+                value: ''
+            },
+            {
                 name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
@@ -63,146 +68,257 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         });
 
         me.add({
-            xtype:'panel',
-            layout:'vbox',
+            name:'myTabs',
+            xtype:'tabpanel',
+            layout:'column',
             align : 'stretch',
-            bodyStyle:'border-width:0 0 0 0;',
+            bodyStyle: 'border-width:0',
             items: [
                 {
-                title:'活跃数据',collapsible:true,align:'stretch',height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                items:[
-                    {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                        {id:'userClassify0',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                        {id:'userClassify1',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                        {width:"33.33%",height:400,xtype:"panel",forceFit:true,bodyStyle:'border-width:0;'}
-                    ]
+                    title: '活跃数据',
+                    itemId: 'classifyActive',
+                    width: "16.5%",
+                    height: "100%",
+                    xtype: "panel",
+                    forceFit: true,
+                    bodyStyle: 'border-color:black',
+                    layout: 'vbox',
+                    items: [
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyActive0',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyActive1',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {width:"33.33%",height:400,xtype:"panel",forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        },
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyActive2',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyActive3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyActive4',width:"33.33%",height:400,xtype:"panel",forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        }
+                    ],
+                    listeners: {
+                            'activate': function (tab) {
+                            me.down(("[name='tabId']")).setValue(tab.itemId);
+                            doSearch();
+                        }
                     }
-                  ]
                 },
                 {
-                    height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify2',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify4',width:"33.33%",height:400,xtype:"panel",forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
+                    title: '投注数据',
+                    itemId: 'classifyBetting',
+                    width: "16.5%",
+                    height: "100%",
+                    xtype: "panel",
+                    forceFit: true,
+                    bodyStyle: 'border-color:black',
+                    layout: 'vbox',
+                    items: [
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyBetting0',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyBetting1',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyBetting2',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        },
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyBetting3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyBetting4',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyBetting5',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        },
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyBetting6',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyBetting7',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyBetting8',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
                         }
-                    ]
+                    ],
+                    listeners: {
+                        'activate': function (tab) {
+                            me.down(("[name='tabId']")).setValue(tab.itemId);
+                            doSearch();
+                        }
+                    }
                 },
                 {
-                    title:'投注数据',collapsible:true,align:'stretch',height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify5',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify6',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify7',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
+                    title:'付费数据',
+                    itemId:'classifyPay',
+                    width:"16.5%",
+                    height:"100%",
+                    xtype:"panel",
+                    forceFit: true,
+                    bodyStyle: 'border-color:black',
+                    layout: 'vbox',
+                    items: [
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyPay0',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyPay1',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyPay2',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        },
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyPay3',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyPay4',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyPay5',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        },
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyPay6',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyPay7',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
+                        },
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyPay8',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyPay9',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
                         }
-                    ]
+                    ],
+                    listeners: {
+                        'activate': function (tab) {
+                            me.down(("[name='tabId']")).setValue(tab.itemId);
+                            doSearch();
+                        }
+                    }
                 },
                 {
-                    height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify8',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify9',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify10',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
+                    title:'留存数据',
+                    itemId:'classifyRemain',
+                    width:"16.5%",
+                    height:"100%",
+                    xtype:"panel",
+                    forceFit: true,
+                    bodyStyle: 'border-color:black',
+                    layout: 'vbox',
+                    items: [
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyRemain0',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {id:'userClassifyRemain1',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
                         }
-                    ]
+                    ],
+                    listeners: {
+                        'activate': function (tab) {
+                            me.down(("[name='tabId']")).setValue(tab.itemId);
+                            doSearch();
+                        }
+                    }
                 },
                 {
-                    height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify11',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify12',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify13',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
+                    title:'流失数据',
+                    itemId:'classifyLost',
+                    width:"16.5%",
+                    height:"100%",
+                    xtype:"panel",
+                    forceFit:true,
+                    bodyStyle:'border-color:black',
+                    layout: 'vbox',
+                    items: [
+                        {
+                            height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
+                            items:[
+                                {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
+                                    {id:'userClassifyLost0',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
+                                    {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
+                                ]
+                                }
+                            ]
                         }
-                    ]
-                },
-                {
-                    title:'付费数据',collapsible:true,align:'stretch',height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify14',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify15',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify16',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
+                    ],
+                    listeners: {
+                        'activate': function (tab) {
+                            me.down(("[name='tabId']")).setValue(tab.itemId);
+                            doSearch();
                         }
-                    ]
-                },
-                {
-                    height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify17',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify18',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify19',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
-                        }
-                    ]
-                },
-                {
-                    height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify20',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify21',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
-                        }
-                    ]
-                },
-                {
-                    height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify22',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify23',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
-                        }
-                    ]
-                },
-                {
-                    title:'留存数据',collapsible:true,align:'stretch',height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify24',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {id:'userClassify25',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
-                        }
-                    ]
-                },
-                {
-                    title:'流失数据',collapsible:true,align:'stretch',height:400,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0;',
-                    items:[
-                        {width:"100%",height:400,xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0',items:[
-                            {id:'userClassify26',width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'},
-                            {width:"33.33%",height:400,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0;'}
-                        ]
-                        }
-                    ]
+                    }
                 }
             ]
         });
 
         store.addListener('datachanged',function(){
-                fun1();
-            }
+            var value = {
+                tabId:me.down("[name='tabId']").value
+            };
+            fun1(value.tabId);
+          }
         );
+
         store.load ({
             callback:function(){
-                fun1();
+                fun1("classifyActive");
             }
         });
 
-        function fun1(){
+        function doSearch() {
+            var value = {
+                parentId:me.down("[name='parentId']").value,
+                tabId:me.down("[name='tabId']").value,
+                startTime:Ext.util.Format.date(me.down("[name='startTime']").value, "Y-m-d"),
+                endTime:Ext.util.Format.date(me.down("[name='endTime']").value, "Y-m-d")
+            };
+            store.load({
+                params: value,
+                callback:function(){
+                fun1(value.tabId);
+                }
+            });
+        }
+
+        function fun1(tabId){
+        var legArr =  ['新注册','累充0','累充1-100','累充100-1000','累充1000-10000','累充10000-100000','累充10万以上'];
         var dateList = store.getAt(0).get("dateList");
         var newUserList = store.getAt(0).get("0");
         var rechargeOneList = store.getAt(0).get("1");
@@ -211,9 +327,9 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFourList = store.getAt(0).get("4");
         var rechargeFiveList = store.getAt(0).get("5");
         var rechargeSixList = store.getAt(0).get("6");
-
         var size = newUserList.length;
 
+        if (tabId == 'classifyActive'){
         //1、DAU
         var newUserDauList = [];
         var rechargeOneDauList = [];
@@ -222,7 +338,6 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFourDauList = [];
         var rechargeFiveDauList = [];
         var rechargeSixDauList = [];
-
         //2、日活占比
         var newUserDauRateList = [];
         var rechargeOneDauRateList = [];
@@ -231,7 +346,6 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFourDauRateList = [];
         var rechargeFiveDauRateList = [];
         var rechargeSixDauRateList = [];
-
         //3、累计用户数
         var newUserTotalCountList = [];
         var rechargeOneTotalCountList = [];
@@ -240,7 +354,6 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFourTotalCountList = [];
         var rechargeFiveTotalCountList = [];
         var rechargeSixTotalCountList = [];
-
         //4、活跃率
         var newUserTotalRateList = [];
         var rechargeOneTotalRateList = [];
@@ -249,7 +362,6 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFourTotalRateList = [];
         var rechargeFiveTotalRateList = [];
         var rechargeSixTotalRateList = [];
-
         //5、人均登陆次数
         var newUserLoginCountList = [];
         var rechargeOneLoginCountList = [];
@@ -259,6 +371,104 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFiveLoginCountList = [];
         var rechargeSixLoginCountList = [];
 
+
+        for (var i=0;i<size;i++) {
+            newUserDauList[i] = newUserList[i].dau;
+            rechargeOneDauList[i] = rechargeOneList[i].dau;
+            rechargeTwoDauList[i] = rechargeTwoList[i].dau;
+            rechargeThreeDauList[i] = rechargeThreeList[i].dau;
+            rechargeFourDauList[i] = rechargeFourList[i].dau;
+            rechargeFiveDauList[i] = rechargeFiveList[i].dau;
+            rechargeSixDauList[i] = rechargeSixList[i].dau;
+
+            newUserDauRateList[i] = newUserList[i].dauRate;
+            rechargeOneDauRateList[i] = rechargeOneList[i].dauRate;
+            rechargeTwoDauRateList[i] = rechargeTwoList[i].dauRate;
+            rechargeThreeDauRateList[i] = rechargeThreeList[i].dauRate;
+            rechargeFourDauRateList[i] = rechargeFourList[i].dauRate;
+            rechargeFiveDauRateList[i] = rechargeFiveList[i].dauRate;
+            rechargeSixDauRateList[i] = rechargeSixList[i].dauRate;
+
+            newUserTotalCountList[i] = newUserList[i].totalUserCount;
+            rechargeOneTotalCountList[i] = rechargeOneList[i].totalUserCount;
+            rechargeTwoTotalCountList[i] = rechargeTwoList[i].totalUserCount;
+            rechargeThreeTotalCountList[i] = rechargeThreeList[i].totalUserCount;
+            rechargeFourTotalCountList[i] = rechargeFourList[i].totalUserCount;
+            rechargeFiveTotalCountList[i] = rechargeFiveList[i].totalUserCount;
+            rechargeSixTotalCountList[i] = rechargeSixList[i].totalUserCount;
+
+            newUserTotalRateList[i] = newUserList[i].totalUserRate;
+            rechargeOneTotalRateList[i] = rechargeOneList[i].totalUserRate;
+            rechargeTwoTotalRateList[i] = rechargeTwoList[i].totalUserRate;
+            rechargeThreeTotalRateList[i] = rechargeThreeList[i].totalUserRate;
+            rechargeFourTotalRateList[i] = rechargeFourList[i].totalUserRate;
+            rechargeFiveTotalRateList[i] = rechargeFiveList[i].totalUserRate;
+            rechargeSixTotalRateList[i] = rechargeSixList[i].totalUserRate;
+
+            newUserLoginCountList[i] = newUserList[i].loginCount;
+            rechargeOneLoginCountList[i] = rechargeOneList[i].loginCount;
+            rechargeTwoLoginCountList[i] = rechargeTwoList[i].loginCount;
+            rechargeThreeLoginCountList[i] = rechargeThreeList[i].loginCount;
+            rechargeFourLoginCountList[i] = rechargeFourList[i].loginCount;
+            rechargeFiveLoginCountList[i] = rechargeFiveList[i].loginCount;
+            rechargeSixLoginCountList[i] = rechargeSixList[i].loginCount;
+        }
+
+            var dauOption = template("DAU",dateList,legArr);
+            dauOption.series.push(areaStyleSeries(legArr[0],newUserDauList));
+            dauOption.series.push(areaStyleSeries(legArr[1],rechargeOneDauList));
+            dauOption.series.push(areaStyleSeries(legArr[2],rechargeTwoDauList));
+            dauOption.series.push(areaStyleSeries(legArr[3],rechargeThreeDauList));
+            dauOption.series.push(areaStyleSeries(legArr[4],rechargeFourDauList));
+            dauOption.series.push(areaStyleSeries(legArr[5],rechargeFiveDauList));
+            dauOption.series.push(areaStyleSeries(legArr[6],rechargeSixDauList));
+
+            var dauRateOption = template("日活占比",dateList,legArr);
+            dauRateOption.series.push(stackBarStyleSeries(legArr[0],newUserDauRateList));
+            dauRateOption.series.push(stackBarStyleSeries(legArr[1],rechargeOneDauRateList));
+            dauRateOption.series.push(stackBarStyleSeries(legArr[2],rechargeTwoDauRateList));
+            dauRateOption.series.push(stackBarStyleSeries(legArr[3],rechargeThreeDauRateList));
+            dauRateOption.series.push(stackBarStyleSeries(legArr[4],rechargeFourDauRateList));
+            dauRateOption.series.push(stackBarStyleSeries(legArr[5],rechargeFiveDauRateList));
+            dauRateOption.series.push(stackBarStyleSeries(legArr[6],rechargeSixDauRateList));
+
+            var totalCountOption = template("累计用户数",dateList,legArr);
+            totalCountOption.series.push(areaStyleSeries(legArr[0],newUserTotalCountList));
+            totalCountOption.series.push(areaStyleSeries(legArr[1],rechargeOneTotalCountList));
+            totalCountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoTotalCountList));
+            totalCountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeTotalCountList));
+            totalCountOption.series.push(areaStyleSeries(legArr[4],rechargeFourTotalCountList));
+            totalCountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveTotalCountList));
+            totalCountOption.series.push(areaStyleSeries(legArr[6],rechargeSixTotalCountList));
+
+            var totalRateOption = template("活跃率",dateList,legArr);
+            totalRateOption.series.push(lineStyleSeries(legArr[0],newUserTotalRateList));
+            totalRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneTotalRateList));
+            totalRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoTotalRateList));
+            totalRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeTotalRateList));
+            totalRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourTotalRateList));
+            totalRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveTotalRateList));
+            totalRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixTotalRateList));
+
+            var loginCountOption = template("人均登录次数",dateList,legArr);
+            loginCountOption.series.push(lineStyleSeries(legArr[0],newUserLoginCountList));
+            loginCountOption.series.push(lineStyleSeries(legArr[1],rechargeOneLoginCountList));
+            loginCountOption.series.push(lineStyleSeries(legArr[2],rechargeTwoLoginCountList));
+            loginCountOption.series.push(lineStyleSeries(legArr[3],rechargeThreeLoginCountList));
+            loginCountOption.series.push(lineStyleSeries(legArr[4],rechargeFourLoginCountList));
+            loginCountOption.series.push(lineStyleSeries(legArr[5],rechargeFiveLoginCountList));
+            loginCountOption.series.push(lineStyleSeries(legArr[6],rechargeSixLoginCountList));
+
+            //活跃数据
+            var activeOption = [dauOption,dauRateOption,totalCountOption,totalRateOption,loginCountOption];
+
+                for (var j=0;j<activeOption.length;j++) {
+                    me.echarts = echarts.init(Ext.get("userClassifyActive"+j).dom);
+                    me.echarts.setOption(activeOption[j]);
+                }
+            }
+
+        if (tabId == 'classifyBetting') {
         //6、投注流水
         var newUserBettingAmountList = [];
         var rechargeOneBettingAmountList = [];
@@ -340,6 +550,173 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFiveAvgBettingAspList = [];
         var rechargeSixAvgBettingAspList = [];
 
+        for (var i=0;i<size;i++) {
+            newUserBettingAmountList[i] = newUserList[i].bettingAmount;
+            rechargeOneBettingAmountList[i] = rechargeOneList[i].bettingAmount;
+            rechargeTwoBettingAmountList[i] = rechargeTwoList[i].bettingAmount;
+            rechargeThreeBettingAmountList[i] = rechargeThreeList[i].bettingAmount;
+            rechargeFourBettingAmountList[i] = rechargeFourList[i].bettingAmount;
+            rechargeFiveBettingAmountList[i] = rechargeFiveList[i].bettingAmount;
+            rechargeSixBettingAmountList[i] = rechargeSixList[i].bettingAmount;
+
+            newUserDiffAmountList[i] = newUserList[i].diffAmount;
+            rechargeOneDiffAmountList[i] = rechargeOneList[i].diffAmount;
+            rechargeTwoDiffAmountList[i] = rechargeTwoList[i].diffAmount;
+            rechargeThreeDiffAmountList[i] = rechargeThreeList[i].diffAmount;
+            rechargeFourDiffAmountList[i] = rechargeFourList[i].diffAmount;
+            rechargeFiveDiffAmountList[i] = rechargeFiveList[i].diffAmount;
+            rechargeSixDiffAmountList[i] = rechargeSixList[i].diffAmount;
+
+            newUserResultRateList[i] = newUserList[i].resultRate;
+            rechargeOneResultRateList[i] = rechargeOneList[i].resultRate;
+            rechargeTwoResultRateList[i] = rechargeTwoList[i].resultRate;
+            rechargeThreeResultRateList[i] = rechargeThreeList[i].resultRate;
+            rechargeFourResultRateList[i] = rechargeFourList[i].resultRate;
+            rechargeFiveResultRateList[i] = rechargeFiveList[i].resultRate;
+            rechargeSixResultRateList[i] = rechargeSixList[i].resultRate;
+
+            newUserBettingRateList[i] = newUserList[i].bettingRate;
+            rechargeOneBettingRateList[i] = rechargeOneList[i].bettingRate;
+            rechargeTwoBettingRateList[i] = rechargeTwoList[i].bettingRate;
+            rechargeThreeBettingRateList[i] = rechargeThreeList[i].bettingRate;
+            rechargeFourBettingRateList[i] = rechargeFourList[i].bettingRate;
+            rechargeFiveBettingRateList[i] = rechargeFiveList[i].bettingRate;
+            rechargeSixBettingRateList[i] = rechargeSixList[i].bettingRate;
+
+            newUserBettingUserCountList[i] = newUserList[i].bettingUserCount;
+            rechargeOneBettingUserCountList[i] = rechargeOneList[i].bettingUserCount;
+            rechargeTwoBettingUserCountList[i] = rechargeTwoList[i].bettingUserCount;
+            rechargeThreeBettingUserCountList[i] = rechargeThreeList[i].bettingUserCount;
+            rechargeFourBettingUserCountList[i] = rechargeFourList[i].bettingUserCount;
+            rechargeFiveBettingUserCountList[i] = rechargeFiveList[i].bettingUserCount;
+            rechargeSixBettingUserCountList[i] = rechargeSixList[i].bettingUserCount;
+
+            newUserBettingArpuList[i] = newUserList[i].bettingArpu;
+            rechargeOneBettingArpuList[i] = rechargeOneList[i].bettingArpu;
+            rechargeTwoBettingArpuList[i] = rechargeTwoList[i].bettingArpu;
+            rechargeThreeBettingArpuList[i] = rechargeThreeList[i].bettingArpu;
+            rechargeFourBettingArpuList[i] = rechargeFourList[i].bettingArpu;
+            rechargeFiveBettingArpuList[i] = rechargeFiveList[i].bettingArpu;
+            rechargeSixBettingArpuList[i] = rechargeSixList[i].bettingArpu;
+
+            newUserBettingCountList[i] = newUserList[i].bettingCount;
+            rechargeOneBettingCountList[i] = rechargeOneList[i].bettingCount;
+            rechargeTwoBettingCountList[i] = rechargeTwoList[i].bettingCount;
+            rechargeThreeBettingCountList[i] = rechargeThreeList[i].bettingCount;
+            rechargeFourBettingCountList[i] = rechargeFourList[i].bettingCount;
+            rechargeFiveBettingCountList[i] = rechargeFiveList[i].bettingCount;
+            rechargeSixBettingCountList[i] = rechargeSixList[i].bettingCount;
+
+            newUserAvgBettingCountList[i] = newUserList[i].averageBettingCount;
+            rechargeOneAvgBettingCountList[i] = rechargeOneList[i].averageBettingCount;
+            rechargeTwoAvgBettingCountList[i] = rechargeTwoList[i].averageBettingCount;
+            rechargeThreeAvgBettingCountList[i] = rechargeThreeList[i].averageBettingCount;
+            rechargeFourAvgBettingCountList[i] = rechargeFourList[i].averageBettingCount;
+            rechargeFiveAvgBettingCountList[i] = rechargeFiveList[i].averageBettingCount;
+            rechargeSixAvgBettingCountList[i] = rechargeSixList[i].averageBettingCount;
+
+            newUserAvgBettingAspList[i] = newUserList[i].averageBettingAsp;
+            rechargeOneAvgBettingAspList[i] = rechargeOneList[i].averageBettingAsp;
+            rechargeTwoAvgBettingAspList[i] = rechargeTwoList[i].averageBettingAsp;
+            rechargeThreeAvgBettingAspList[i] = rechargeThreeList[i].averageBettingAsp;
+            rechargeFourAvgBettingAspList[i] = rechargeFourList[i].averageBettingAsp;
+            rechargeFiveAvgBettingAspList[i] = rechargeFiveList[i].averageBettingAsp;
+            rechargeSixAvgBettingAspList[i] = rechargeSixList[i].averageBettingAsp;
+        }
+
+            var bettingAmountOption = template("投注流水",dateList,legArr);
+            bettingAmountOption.series.push(areaStyleSeries(legArr[0],newUserBettingAmountList));
+            bettingAmountOption.series.push(areaStyleSeries(legArr[1],rechargeOneBettingAmountList));
+            bettingAmountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoBettingAmountList));
+            bettingAmountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeBettingAmountList));
+            bettingAmountOption.series.push(areaStyleSeries(legArr[4],rechargeFourBettingAmountList));
+            bettingAmountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveBettingAmountList));
+            bettingAmountOption.series.push(areaStyleSeries(legArr[6],rechargeSixBettingAmountList));
+
+            var diffAmountOption = template("流水差",dateList,legArr);
+            diffAmountOption.series.push(areaStyleSeries(legArr[0],newUserDiffAmountList));
+            diffAmountOption.series.push(areaStyleSeries(legArr[1],rechargeOneDiffAmountList));
+            diffAmountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoDiffAmountList));
+            diffAmountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeDiffAmountList));
+            diffAmountOption.series.push(areaStyleSeries(legArr[4],rechargeFourDiffAmountList));
+            diffAmountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveDiffAmountList));
+            diffAmountOption.series.push(areaStyleSeries(legArr[6],rechargeSixDiffAmountList));
+
+            var resultRateOption = template("返奖率",dateList,legArr);
+            resultRateOption.series.push(lineStyleSeries(legArr[0],newUserResultRateList));
+            resultRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneResultRateList));
+            resultRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoResultRateList));
+            resultRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeResultRateList));
+            resultRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourResultRateList));
+            resultRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveResultRateList));
+            resultRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixResultRateList));
+
+            var bettingRateOption = template("投注转化率",dateList,legArr);
+            bettingRateOption.series.push(lineStyleSeries(legArr[0],newUserBettingRateList));
+            bettingRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneBettingRateList));
+            bettingRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoBettingRateList));
+            bettingRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeBettingRateList));
+            bettingRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourBettingRateList));
+            bettingRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveBettingRateList));
+            bettingRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixBettingRateList));
+
+            var bettingUserCountOption = template("投注人数",dateList,legArr);
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[0],newUserBettingUserCountList));
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[1],rechargeOneBettingUserCountList));
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoBettingUserCountList));
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeBettingUserCountList));
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[4],rechargeFourBettingUserCountList));
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveBettingUserCountList));
+            bettingUserCountOption.series.push(areaStyleSeries(legArr[6],rechargeSixBettingUserCountList));
+
+            var bettingArpuOption = template("投注ARPU",dateList,legArr);
+            bettingArpuOption.series.push(lineStyleSeries(legArr[0],newUserBettingArpuList));
+            bettingArpuOption.series.push(lineStyleSeries(legArr[1],rechargeOneBettingArpuList));
+            bettingArpuOption.series.push(lineStyleSeries(legArr[2],rechargeTwoBettingArpuList));
+            bettingArpuOption.series.push(lineStyleSeries(legArr[3],rechargeThreeBettingArpuList));
+            bettingArpuOption.series.push(lineStyleSeries(legArr[4],rechargeFourBettingArpuList));
+            bettingArpuOption.series.push(lineStyleSeries(legArr[5],rechargeFiveBettingArpuList));
+            bettingArpuOption.series.push(lineStyleSeries(legArr[6],rechargeSixBettingArpuList));
+
+            var bettingCountOption = template("总投注笔数",dateList,legArr);
+            bettingCountOption.series.push(areaStyleSeries(legArr[0],newUserBettingCountList));
+            bettingCountOption.series.push(areaStyleSeries(legArr[1],rechargeOneBettingCountList));
+            bettingCountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoBettingCountList));
+            bettingCountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeBettingCountList));
+            bettingCountOption.series.push(areaStyleSeries(legArr[4],rechargeFourBettingCountList));
+            bettingCountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveBettingCountList));
+            bettingCountOption.series.push(areaStyleSeries(legArr[6],rechargeSixBettingCountList));
+
+            var avgBettingCountOption = template("人均投注笔数",dateList,legArr);
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[0],newUserAvgBettingCountList));
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[1],rechargeOneAvgBettingCountList));
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[2],rechargeTwoAvgBettingCountList));
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[3],rechargeThreeAvgBettingCountList));
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[4],rechargeFourAvgBettingCountList));
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[5],rechargeFiveAvgBettingCountList));
+            avgBettingCountOption.series.push(lineStyleSeries(legArr[6],rechargeSixAvgBettingCountList));
+
+            var avgBettingAspOption = template("人均投注ASP",dateList,legArr);
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[0],newUserAvgBettingAspList));
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[1],rechargeOneAvgBettingAspList));
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[2],rechargeTwoAvgBettingAspList));
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[3],rechargeThreeAvgBettingAspList));
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[4],rechargeFourAvgBettingAspList));
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[5],rechargeFiveAvgBettingAspList));
+            avgBettingAspOption.series.push(lineStyleSeries(legArr[6],rechargeSixAvgBettingAspList));
+
+            //投注数据
+            var bettingOption = [bettingAmountOption, diffAmountOption, resultRateOption,
+                bettingRateOption, bettingUserCountOption, bettingArpuOption,
+                bettingCountOption, avgBettingCountOption, avgBettingAspOption];
+
+                for (var k = 0; k < bettingOption.length; k++) {
+                    me.echarts = echarts.init(Ext.get("userClassifyBetting"+ k).dom);
+                    me.echarts.setOption(bettingOption[k]);
+                }
+            }
+
+        if (tabId == 'classifyPay') {
         //15、充值金额
         var newUserThirdAmountList = [];
         var rechargeOneThirdAmountList = [];
@@ -430,147 +807,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var rechargeFiveAvgPayAmountList = [];
         var rechargeSixAvgPayAmountList = [];
 
-        //25、次日留存
-        var newUserDayRetentionList = [];
-        var rechargeOneDayRetentionList = [];
-        var rechargeTwoDayRetentionList = [];
-        var rechargeThreeDayRetentionList = [];
-        var rechargeFourDayRetentionList = [];
-        var rechargeFiveDayRetentionList = [];
-        var rechargeSixDayRetentionList = [];
-
-        //26、七日留存
-        var newUserWeekRetentionList = [];
-        var rechargeOneWeekRetentionList = [];
-        var rechargeTwoWeekRetentionList = [];
-        var rechargeThreeWeekRetentionList = [];
-        var rechargeFourWeekRetentionList = [];
-        var rechargeFiveWeekRetentionList = [];
-        var rechargeSixWeekRetentionList = [];
-
-        //27、七日流失率
-        var newUserWeekLostRateList = [];
-        var rechargeOneWeekLostRateList = [];
-        var rechargeTwoWeekLostRateList = [];
-        var rechargeThreeWeekLostRateList = [];
-        var rechargeFourWeekLostRateList = [];
-        var rechargeFiveWeekLostRateList = [];
-        var rechargeSixWeekLostRateList = [];
-
-
-            for (var i=0;i<size;i++){
-            newUserDauList[i] = newUserList[i].dau;
-            rechargeOneDauList[i] = rechargeOneList[i].dau;
-            rechargeTwoDauList[i] = rechargeTwoList[i].dau;
-            rechargeThreeDauList[i] = rechargeThreeList[i].dau;
-            rechargeFourDauList[i] = rechargeFourList[i].dau;
-            rechargeFiveDauList[i] = rechargeFiveList[i].dau;
-            rechargeSixDauList[i] = rechargeSixList[i].dau;
-
-            newUserDauRateList[i] = newUserList[i].dauRate;
-            rechargeOneDauRateList[i] = rechargeOneList[i].dauRate;
-            rechargeTwoDauRateList[i] = rechargeTwoList[i].dauRate;
-            rechargeThreeDauRateList[i] = rechargeThreeList[i].dauRate;
-            rechargeFourDauRateList[i] = rechargeFourList[i].dauRate;
-            rechargeFiveDauRateList[i] = rechargeFiveList[i].dauRate;
-            rechargeSixDauRateList[i] = rechargeSixList[i].dauRate;
-
-            newUserTotalCountList[i] = newUserList[i].totalUserCount;
-            rechargeOneTotalCountList[i] = rechargeOneList[i].totalUserCount;
-            rechargeTwoTotalCountList[i] = rechargeTwoList[i].totalUserCount;
-            rechargeThreeTotalCountList[i] = rechargeThreeList[i].totalUserCount;
-            rechargeFourTotalCountList[i] = rechargeFourList[i].totalUserCount;
-            rechargeFiveTotalCountList[i] = rechargeFiveList[i].totalUserCount;
-            rechargeSixTotalCountList[i] = rechargeSixList[i].totalUserCount;
-
-            newUserTotalRateList[i] = newUserList[i].totalUserRate;
-            rechargeOneTotalRateList[i] = rechargeOneList[i].totalUserRate;
-            rechargeTwoTotalRateList[i] = rechargeTwoList[i].totalUserRate;
-            rechargeThreeTotalRateList[i] = rechargeThreeList[i].totalUserRate;
-            rechargeFourTotalRateList[i] = rechargeFourList[i].totalUserRate;
-            rechargeFiveTotalRateList[i] = rechargeFiveList[i].totalUserRate;
-            rechargeSixTotalRateList[i] = rechargeSixList[i].totalUserRate;
-
-            newUserLoginCountList[i] = newUserList[i].loginCount;
-            rechargeOneLoginCountList[i] = rechargeOneList[i].loginCount;
-            rechargeTwoLoginCountList[i] = rechargeTwoList[i].loginCount;
-            rechargeThreeLoginCountList[i] = rechargeThreeList[i].loginCount;
-            rechargeFourLoginCountList[i] = rechargeFourList[i].loginCount;
-            rechargeFiveLoginCountList[i] = rechargeFiveList[i].loginCount;
-            rechargeSixLoginCountList[i] = rechargeSixList[i].loginCount;
-
-            newUserBettingAmountList[i] = newUserList[i].bettingAmount;
-            rechargeOneBettingAmountList[i] = rechargeOneList[i].bettingAmount;
-            rechargeTwoBettingAmountList[i] = rechargeTwoList[i].bettingAmount;
-            rechargeThreeBettingAmountList[i] = rechargeThreeList[i].bettingAmount;
-            rechargeFourBettingAmountList[i] = rechargeFourList[i].bettingAmount;
-            rechargeFiveBettingAmountList[i] = rechargeFiveList[i].bettingAmount;
-            rechargeSixBettingAmountList[i] = rechargeSixList[i].bettingAmount;
-
-            newUserDiffAmountList[i] = newUserList[i].diffAmount;
-            rechargeOneDiffAmountList[i] = rechargeOneList[i].diffAmount;
-            rechargeTwoDiffAmountList[i] = rechargeTwoList[i].diffAmount;
-            rechargeThreeDiffAmountList[i] = rechargeThreeList[i].diffAmount;
-            rechargeFourDiffAmountList[i] = rechargeFourList[i].diffAmount;
-            rechargeFiveDiffAmountList[i] = rechargeFiveList[i].diffAmount;
-            rechargeSixDiffAmountList[i] = rechargeSixList[i].diffAmount;
-
-            newUserResultRateList[i] = newUserList[i].resultRate;
-            rechargeOneResultRateList[i] = rechargeOneList[i].resultRate;
-            rechargeTwoResultRateList[i] = rechargeTwoList[i].resultRate;
-            rechargeThreeResultRateList[i] = rechargeThreeList[i].resultRate;
-            rechargeFourResultRateList[i] = rechargeFourList[i].resultRate;
-            rechargeFiveResultRateList[i] = rechargeFiveList[i].resultRate;
-            rechargeSixResultRateList[i] = rechargeSixList[i].resultRate;
-
-            newUserBettingRateList[i] = newUserList[i].bettingRate;
-            rechargeOneBettingRateList[i] = rechargeOneList[i].bettingRate;
-            rechargeTwoBettingRateList[i] = rechargeTwoList[i].bettingRate;
-            rechargeThreeBettingRateList[i] = rechargeThreeList[i].bettingRate;
-            rechargeFourBettingRateList[i] = rechargeFourList[i].bettingRate;
-            rechargeFiveBettingRateList[i] = rechargeFiveList[i].bettingRate;
-            rechargeSixBettingRateList[i] = rechargeSixList[i].bettingRate;
-
-            newUserBettingUserCountList[i] = newUserList[i].bettingUserCount;
-            rechargeOneBettingUserCountList[i] = rechargeOneList[i].bettingUserCount;
-            rechargeTwoBettingUserCountList[i] = rechargeTwoList[i].bettingUserCount;
-            rechargeThreeBettingUserCountList[i] = rechargeThreeList[i].bettingUserCount;
-            rechargeFourBettingUserCountList[i] = rechargeFourList[i].bettingUserCount;
-            rechargeFiveBettingUserCountList[i] = rechargeFiveList[i].bettingUserCount;
-            rechargeSixBettingUserCountList[i] = rechargeSixList[i].bettingUserCount;
-
-            newUserBettingArpuList[i] = newUserList[i].bettingArpu;
-            rechargeOneBettingArpuList[i] = rechargeOneList[i].bettingArpu;
-            rechargeTwoBettingArpuList[i] = rechargeTwoList[i].bettingArpu;
-            rechargeThreeBettingArpuList[i] = rechargeThreeList[i].bettingArpu;
-            rechargeFourBettingArpuList[i] = rechargeFourList[i].bettingArpu;
-            rechargeFiveBettingArpuList[i] = rechargeFiveList[i].bettingArpu;
-            rechargeSixBettingArpuList[i] = rechargeSixList[i].bettingArpu;
-
-            newUserBettingCountList[i] = newUserList[i].bettingCount;
-            rechargeOneBettingCountList[i] = rechargeOneList[i].bettingCount;
-            rechargeTwoBettingCountList[i] = rechargeTwoList[i].bettingCount;
-            rechargeThreeBettingCountList[i] = rechargeThreeList[i].bettingCount;
-            rechargeFourBettingCountList[i] = rechargeFourList[i].bettingCount;
-            rechargeFiveBettingCountList[i] = rechargeFiveList[i].bettingCount;
-            rechargeSixBettingCountList[i] = rechargeSixList[i].bettingCount;
-
-            newUserAvgBettingCountList[i] = newUserList[i].averageBettingCount;
-            rechargeOneAvgBettingCountList[i] = rechargeOneList[i].averageBettingCount;
-            rechargeTwoAvgBettingCountList[i] = rechargeTwoList[i].averageBettingCount;
-            rechargeThreeAvgBettingCountList[i] = rechargeThreeList[i].averageBettingCount;
-            rechargeFourAvgBettingCountList[i] = rechargeFourList[i].averageBettingCount;
-            rechargeFiveAvgBettingCountList[i] = rechargeFiveList[i].averageBettingCount;
-            rechargeSixAvgBettingCountList[i] = rechargeSixList[i].averageBettingCount;
-
-            newUserAvgBettingAspList[i] = newUserList[i].averageBettingAsp;
-            rechargeOneAvgBettingAspList[i] = rechargeOneList[i].averageBettingAsp;
-            rechargeTwoAvgBettingAspList[i] = rechargeTwoList[i].averageBettingAsp;
-            rechargeThreeAvgBettingAspList[i] = rechargeThreeList[i].averageBettingAsp;
-            rechargeFourAvgBettingAspList[i] = rechargeFourList[i].averageBettingAsp;
-            rechargeFiveAvgBettingAspList[i] = rechargeFiveList[i].averageBettingAsp;
-            rechargeSixAvgBettingAspList[i] = rechargeSixList[i].averageBettingAsp;
-
+        for (var i=0;i<size;i++) {
             newUserThirdAmountList[i] = newUserList[i].thirdAmount;
             rechargeOneThirdAmountList[i] = rechargeOneList[i].thirdAmount;
             rechargeTwoThirdAmountList[i] = rechargeTwoList[i].thirdAmount;
@@ -650,158 +887,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
             rechargeFourAvgPayAmountList[i] = rechargeFourList[i].averagePayAmount;
             rechargeFiveAvgPayAmountList[i] = rechargeFiveList[i].averagePayAmount;
             rechargeSixAvgPayAmountList[i] = rechargeSixList[i].averagePayAmount;
-
-            newUserDayRetentionList[i] = newUserList[i].dayRetention;
-            rechargeOneDayRetentionList[i] = rechargeOneList[i].dayRetention;
-            rechargeTwoDayRetentionList[i] = rechargeTwoList[i].dayRetention;
-            rechargeThreeDayRetentionList[i] = rechargeThreeList[i].dayRetention;
-            rechargeFourDayRetentionList[i] = rechargeFourList[i].dayRetention;
-            rechargeFiveDayRetentionList[i] = rechargeFiveList[i].dayRetention;
-            rechargeSixDayRetentionList[i] = rechargeSixList[i].dayRetention;
-
-            newUserWeekRetentionList[i] = newUserList[i].weekRetention;
-            rechargeOneWeekRetentionList[i] = rechargeOneList[i].weekRetention;
-            rechargeTwoWeekRetentionList[i] = rechargeTwoList[i].weekRetention;
-            rechargeThreeWeekRetentionList[i] = rechargeThreeList[i].weekRetention;
-            rechargeFourWeekRetentionList[i] = rechargeFourList[i].weekRetention;
-            rechargeFiveWeekRetentionList[i] = rechargeFiveList[i].weekRetention;
-            rechargeSixWeekRetentionList[i] = rechargeSixList[i].weekRetention;
-
-            newUserWeekLostRateList[i] = newUserList[i].weekLostRate;
-            rechargeOneWeekLostRateList[i] = rechargeOneList[i].weekLostRate;
-            rechargeTwoWeekLostRateList[i] = rechargeTwoList[i].weekLostRate;
-            rechargeThreeWeekLostRateList[i] = rechargeThreeList[i].weekLostRate;
-            rechargeFourWeekLostRateList[i] = rechargeFourList[i].weekLostRate;
-            rechargeFiveWeekLostRateList[i] = rechargeFiveList[i].weekLostRate;
-            rechargeSixWeekLostRateList[i] = rechargeSixList[i].weekLostRate;
         }
-            var legArr =  ['新注册','累充0','累充1-100','累充100-1000','累充1000-10000','累充10000-100000','累充10万以上'];
-
-            var dauOption = template("DAU",dateList,legArr);
-            dauOption.series.push(areaStyleSeries(legArr[0],newUserDauList));
-            dauOption.series.push(areaStyleSeries(legArr[1],rechargeOneDauList));
-            dauOption.series.push(areaStyleSeries(legArr[2],rechargeTwoDauList));
-            dauOption.series.push(areaStyleSeries(legArr[3],rechargeThreeDauList));
-            dauOption.series.push(areaStyleSeries(legArr[4],rechargeFourDauList));
-            dauOption.series.push(areaStyleSeries(legArr[5],rechargeFiveDauList));
-            dauOption.series.push(areaStyleSeries(legArr[6],rechargeSixDauList));
-
-            var dauRateOption = template("日活占比",dateList,legArr);
-            dauRateOption.series.push(stackBarStyleSeries(legArr[0],newUserDauRateList));
-            dauRateOption.series.push(stackBarStyleSeries(legArr[1],rechargeOneDauRateList));
-            dauRateOption.series.push(stackBarStyleSeries(legArr[2],rechargeTwoDauRateList));
-            dauRateOption.series.push(stackBarStyleSeries(legArr[3],rechargeThreeDauRateList));
-            dauRateOption.series.push(stackBarStyleSeries(legArr[4],rechargeFourDauRateList));
-            dauRateOption.series.push(stackBarStyleSeries(legArr[5],rechargeFiveDauRateList));
-            dauRateOption.series.push(stackBarStyleSeries(legArr[6],rechargeSixDauRateList));
-
-            var totalCountOption = template("累计用户数",dateList,legArr);
-            totalCountOption.series.push(areaStyleSeries(legArr[0],newUserTotalCountList));
-            totalCountOption.series.push(areaStyleSeries(legArr[1],rechargeOneTotalCountList));
-            totalCountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoTotalCountList));
-            totalCountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeTotalCountList));
-            totalCountOption.series.push(areaStyleSeries(legArr[4],rechargeFourTotalCountList));
-            totalCountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveTotalCountList));
-            totalCountOption.series.push(areaStyleSeries(legArr[6],rechargeSixTotalCountList));
-
-            var totalRateOption = template("活跃率",dateList,legArr);
-            totalRateOption.series.push(lineStyleSeries(legArr[0],newUserTotalRateList));
-            totalRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneTotalRateList));
-            totalRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoTotalRateList));
-            totalRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeTotalRateList));
-            totalRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourTotalRateList));
-            totalRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveTotalRateList));
-            totalRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixTotalRateList));
-
-            var loginCountOption = template("人均登录次数",dateList,legArr);
-            loginCountOption.series.push(lineStyleSeries(legArr[0],newUserLoginCountList));
-            loginCountOption.series.push(lineStyleSeries(legArr[1],rechargeOneLoginCountList));
-            loginCountOption.series.push(lineStyleSeries(legArr[2],rechargeTwoLoginCountList));
-            loginCountOption.series.push(lineStyleSeries(legArr[3],rechargeThreeLoginCountList));
-            loginCountOption.series.push(lineStyleSeries(legArr[4],rechargeFourLoginCountList));
-            loginCountOption.series.push(lineStyleSeries(legArr[5],rechargeFiveLoginCountList));
-            loginCountOption.series.push(lineStyleSeries(legArr[6],rechargeSixLoginCountList));
-
-            var bettingAmountOption = template("投注流水",dateList,legArr);
-            bettingAmountOption.series.push(areaStyleSeries(legArr[0],newUserBettingAmountList));
-            bettingAmountOption.series.push(areaStyleSeries(legArr[1],rechargeOneBettingAmountList));
-            bettingAmountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoBettingAmountList));
-            bettingAmountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeBettingAmountList));
-            bettingAmountOption.series.push(areaStyleSeries(legArr[4],rechargeFourBettingAmountList));
-            bettingAmountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveBettingAmountList));
-            bettingAmountOption.series.push(areaStyleSeries(legArr[6],rechargeSixBettingAmountList));
-
-            var diffAmountOption = template("流水差",dateList,legArr);
-            diffAmountOption.series.push(areaStyleSeries(legArr[0],newUserDiffAmountList));
-            diffAmountOption.series.push(areaStyleSeries(legArr[1],rechargeOneDiffAmountList));
-            diffAmountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoDiffAmountList));
-            diffAmountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeDiffAmountList));
-            diffAmountOption.series.push(areaStyleSeries(legArr[4],rechargeFourDiffAmountList));
-            diffAmountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveDiffAmountList));
-            diffAmountOption.series.push(areaStyleSeries(legArr[6],rechargeSixDiffAmountList));
-
-            var resultRateOption = template("返奖率",dateList,legArr);
-            resultRateOption.series.push(lineStyleSeries(legArr[0],newUserResultRateList));
-            resultRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneResultRateList));
-            resultRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoResultRateList));
-            resultRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeResultRateList));
-            resultRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourResultRateList));
-            resultRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveResultRateList));
-            resultRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixResultRateList));
-
-            var bettingRateOption = template("投注转化率",dateList,legArr);
-            bettingRateOption.series.push(lineStyleSeries(legArr[0],newUserBettingRateList));
-            bettingRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneBettingRateList));
-            bettingRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoBettingRateList));
-            bettingRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeBettingRateList));
-            bettingRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourBettingRateList));
-            bettingRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveBettingRateList));
-            bettingRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixBettingRateList));
-
-            var bettingUserCountOption = template("投注人数",dateList,legArr);
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[0],newUserBettingUserCountList));
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[1],rechargeOneBettingUserCountList));
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoBettingUserCountList));
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeBettingUserCountList));
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[4],rechargeFourBettingUserCountList));
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveBettingUserCountList));
-            bettingUserCountOption.series.push(areaStyleSeries(legArr[6],rechargeSixBettingUserCountList));
-
-            var bettingArpuOption = template("投注ARPU",dateList,legArr);
-            bettingArpuOption.series.push(lineStyleSeries(legArr[0],newUserBettingArpuList));
-            bettingArpuOption.series.push(lineStyleSeries(legArr[1],rechargeOneBettingArpuList));
-            bettingArpuOption.series.push(lineStyleSeries(legArr[2],rechargeTwoBettingArpuList));
-            bettingArpuOption.series.push(lineStyleSeries(legArr[3],rechargeThreeBettingArpuList));
-            bettingArpuOption.series.push(lineStyleSeries(legArr[4],rechargeFourBettingArpuList));
-            bettingArpuOption.series.push(lineStyleSeries(legArr[5],rechargeFiveBettingArpuList));
-            bettingArpuOption.series.push(lineStyleSeries(legArr[6],rechargeSixBettingArpuList));
-
-            var bettingCountOption = template("总投注笔数",dateList,legArr);
-            bettingCountOption.series.push(areaStyleSeries(legArr[0],newUserBettingCountList));
-            bettingCountOption.series.push(areaStyleSeries(legArr[1],rechargeOneBettingCountList));
-            bettingCountOption.series.push(areaStyleSeries(legArr[2],rechargeTwoBettingCountList));
-            bettingCountOption.series.push(areaStyleSeries(legArr[3],rechargeThreeBettingCountList));
-            bettingCountOption.series.push(areaStyleSeries(legArr[4],rechargeFourBettingCountList));
-            bettingCountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveBettingCountList));
-            bettingCountOption.series.push(areaStyleSeries(legArr[6],rechargeSixBettingCountList));
-
-            var avgBettingCountOption = template("人均投注笔数",dateList,legArr);
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[0],newUserAvgBettingCountList));
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[1],rechargeOneAvgBettingCountList));
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[2],rechargeTwoAvgBettingCountList));
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[3],rechargeThreeAvgBettingCountList));
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[4],rechargeFourAvgBettingCountList));
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[5],rechargeFiveAvgBettingCountList));
-            avgBettingCountOption.series.push(lineStyleSeries(legArr[6],rechargeSixAvgBettingCountList));
-
-            var avgBettingAspOption = template("人均投注ASP",dateList,legArr);
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[0],newUserAvgBettingAspList));
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[1],rechargeOneAvgBettingAspList));
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[2],rechargeTwoAvgBettingAspList));
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[3],rechargeThreeAvgBettingAspList));
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[4],rechargeFourAvgBettingAspList));
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[5],rechargeFiveAvgBettingAspList));
-            avgBettingAspOption.series.push(lineStyleSeries(legArr[6],rechargeSixAvgBettingAspList));
 
             var thirdAmountOption = template("充值金额",dateList,legArr);
             thirdAmountOption.series.push(areaStyleSeries(legArr[0],newUserThirdAmountList));
@@ -893,50 +979,117 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
             avgPayAmountOption.series.push(lineStyleSeries(legArr[5],rechargeFiveAvgPayAmountList));
             avgPayAmountOption.series.push(lineStyleSeries(legArr[6],rechargeSixAvgPayAmountList));
 
-            var dayRetentionOption = template("次日留存",dateList,legArr);
-            dayRetentionOption.series.push(lineStyleSeries(legArr[0],newUserDayRetentionList));
-            dayRetentionOption.series.push(lineStyleSeries(legArr[1],rechargeOneDayRetentionList));
-            dayRetentionOption.series.push(lineStyleSeries(legArr[2],rechargeTwoDayRetentionList));
-            dayRetentionOption.series.push(lineStyleSeries(legArr[3],rechargeThreeDayRetentionList));
-            dayRetentionOption.series.push(lineStyleSeries(legArr[4],rechargeFourDayRetentionList));
-            dayRetentionOption.series.push(lineStyleSeries(legArr[5],rechargeFiveDayRetentionList));
-            dayRetentionOption.series.push(lineStyleSeries(legArr[6],rechargeSixDayRetentionList));
+            //付费数据
+            var payOption = [thirdAmountOption,rechargeRateOption,rechargeUserCountOption,
+                dauRechargeRateOption,bettingRechargeRateOption,darppuRateOption,
+                pointPayRateOption,paySuccessRateOption,
+                avgPayCountOption,avgPayAmountOption];
+                for (var l = 0; l < payOption.length; l++) {
+                    me.echarts = echarts.init(Ext.get("userClassifyPay"+ l).dom);
+                    me.echarts.setOption(payOption[l]);
+                }
+            }
 
-            var weekRetentionOption = template("7日留存",dateList,legArr);
-            weekRetentionOption.series.push(lineStyleSeries(legArr[0],newUserWeekRetentionList));
-            weekRetentionOption.series.push(lineStyleSeries(legArr[1],rechargeOneWeekRetentionList));
-            weekRetentionOption.series.push(lineStyleSeries(legArr[2],rechargeTwoWeekRetentionList));
-            weekRetentionOption.series.push(lineStyleSeries(legArr[3],rechargeThreeWeekRetentionList));
-            weekRetentionOption.series.push(lineStyleSeries(legArr[4],rechargeFourWeekRetentionList));
-            weekRetentionOption.series.push(lineStyleSeries(legArr[5],rechargeFiveWeekRetentionList));
-            weekRetentionOption.series.push(lineStyleSeries(legArr[6],rechargeSixWeekRetentionList));
+        if (tabId == 'classifyRemain') {
+        //25、次日留存
+        var newUserDayRetentionList = [];
+        var rechargeOneDayRetentionList = [];
+        var rechargeTwoDayRetentionList = [];
+        var rechargeThreeDayRetentionList = [];
+        var rechargeFourDayRetentionList = [];
+        var rechargeFiveDayRetentionList = [];
+        var rechargeSixDayRetentionList = [];
 
-            var weekLostRateOption = template("7日流失率",dateList,legArr);
-            weekLostRateOption.series.push(lineStyleSeries(legArr[0],newUserWeekLostRateList));
-            weekLostRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneWeekLostRateList));
-            weekLostRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoWeekLostRateList));
-            weekLostRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeWeekLostRateList));
-            weekLostRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourWeekLostRateList));
-            weekLostRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveWeekLostRateList));
-            weekLostRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixWeekLostRateList));
-            // 核心代码
-            var option = [dauOption,dauRateOption,
-                          totalCountOption,totalRateOption,loginCountOption,
-                          bettingAmountOption,diffAmountOption,resultRateOption,
-                          bettingRateOption,bettingUserCountOption,bettingArpuOption,
-                          bettingCountOption,avgBettingCountOption,avgBettingAspOption,
-                          thirdAmountOption,rechargeRateOption,rechargeUserCountOption,
-                          dauRechargeRateOption,bettingRechargeRateOption,darppuRateOption,
-                          pointPayRateOption,paySuccessRateOption,
-                          avgPayCountOption,avgPayAmountOption,
-                          dayRetentionOption,weekRetentionOption,
-                          weekLostRateOption
-                         ];
-            for (var j=0;j<option.length;j++) {
-                me.echarts = echarts.init(Ext.get("userClassify"+j).dom);
-                me.echarts.setOption(option[j]);
+        //26、七日留存
+        var newUserWeekRetentionList = [];
+        var rechargeOneWeekRetentionList = [];
+        var rechargeTwoWeekRetentionList = [];
+        var rechargeThreeWeekRetentionList = [];
+        var rechargeFourWeekRetentionList = [];
+        var rechargeFiveWeekRetentionList = [];
+        var rechargeSixWeekRetentionList = [];
+
+        for (var i=0;i<size;i++) {
+            newUserDayRetentionList[i] = newUserList[i].dayRetention;
+            rechargeOneDayRetentionList[i] = rechargeOneList[i].dayRetention;
+            rechargeTwoDayRetentionList[i] = rechargeTwoList[i].dayRetention;
+            rechargeThreeDayRetentionList[i] = rechargeThreeList[i].dayRetention;
+            rechargeFourDayRetentionList[i] = rechargeFourList[i].dayRetention;
+            rechargeFiveDayRetentionList[i] = rechargeFiveList[i].dayRetention;
+            rechargeSixDayRetentionList[i] = rechargeSixList[i].dayRetention;
+
+            newUserWeekRetentionList[i] = newUserList[i].weekRetention;
+            rechargeOneWeekRetentionList[i] = rechargeOneList[i].weekRetention;
+            rechargeTwoWeekRetentionList[i] = rechargeTwoList[i].weekRetention;
+            rechargeThreeWeekRetentionList[i] = rechargeThreeList[i].weekRetention;
+            rechargeFourWeekRetentionList[i] = rechargeFourList[i].weekRetention;
+            rechargeFiveWeekRetentionList[i] = rechargeFiveList[i].weekRetention;
+            rechargeSixWeekRetentionList[i] = rechargeSixList[i].weekRetention;
+        }
+
+        var dayRetentionOption = template("次日留存",dateList,legArr);
+        dayRetentionOption.series.push(lineStyleSeries(legArr[0],newUserDayRetentionList));
+        dayRetentionOption.series.push(lineStyleSeries(legArr[1],rechargeOneDayRetentionList));
+        dayRetentionOption.series.push(lineStyleSeries(legArr[2],rechargeTwoDayRetentionList));
+        dayRetentionOption.series.push(lineStyleSeries(legArr[3],rechargeThreeDayRetentionList));
+        dayRetentionOption.series.push(lineStyleSeries(legArr[4],rechargeFourDayRetentionList));
+        dayRetentionOption.series.push(lineStyleSeries(legArr[5],rechargeFiveDayRetentionList));
+        dayRetentionOption.series.push(lineStyleSeries(legArr[6],rechargeSixDayRetentionList));
+
+        var weekRetentionOption = template("7日留存",dateList,legArr);
+        weekRetentionOption.series.push(lineStyleSeries(legArr[0],newUserWeekRetentionList));
+        weekRetentionOption.series.push(lineStyleSeries(legArr[1],rechargeOneWeekRetentionList));
+        weekRetentionOption.series.push(lineStyleSeries(legArr[2],rechargeTwoWeekRetentionList));
+        weekRetentionOption.series.push(lineStyleSeries(legArr[3],rechargeThreeWeekRetentionList));
+        weekRetentionOption.series.push(lineStyleSeries(legArr[4],rechargeFourWeekRetentionList));
+        weekRetentionOption.series.push(lineStyleSeries(legArr[5],rechargeFiveWeekRetentionList));
+        weekRetentionOption.series.push(lineStyleSeries(legArr[6],rechargeSixWeekRetentionList));
+        //留存数据
+        var remainOption = [dayRetentionOption,weekRetentionOption];
+            for (var m = 0; m < remainOption.length; m++) {
+                me.echarts = echarts.init(Ext.get("userClassifyRemain"+ m).dom);
+                me.echarts.setOption(remainOption[m]);
             }
         }
+
+        if (tabId == 'classifyLost') {
+        //27、七日流失率
+        var newUserWeekLostRateList = [];
+        var rechargeOneWeekLostRateList = [];
+        var rechargeTwoWeekLostRateList = [];
+        var rechargeThreeWeekLostRateList = [];
+        var rechargeFourWeekLostRateList = [];
+        var rechargeFiveWeekLostRateList = [];
+        var rechargeSixWeekLostRateList = [];
+
+        for (var i=0;i<size;i++) {
+            newUserWeekLostRateList[i] = newUserList[i].weekLostRate;
+            rechargeOneWeekLostRateList[i] = rechargeOneList[i].weekLostRate;
+            rechargeTwoWeekLostRateList[i] = rechargeTwoList[i].weekLostRate;
+            rechargeThreeWeekLostRateList[i] = rechargeThreeList[i].weekLostRate;
+            rechargeFourWeekLostRateList[i] = rechargeFourList[i].weekLostRate;
+            rechargeFiveWeekLostRateList[i] = rechargeFiveList[i].weekLostRate;
+            rechargeSixWeekLostRateList[i] = rechargeSixList[i].weekLostRate;
+        }
+
+        var weekLostRateOption = template("7日流失率",dateList,legArr);
+        weekLostRateOption.series.push(lineStyleSeries(legArr[0],newUserWeekLostRateList));
+        weekLostRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneWeekLostRateList));
+        weekLostRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoWeekLostRateList));
+        weekLostRateOption.series.push(lineStyleSeries(legArr[3],rechargeThreeWeekLostRateList));
+        weekLostRateOption.series.push(lineStyleSeries(legArr[4],rechargeFourWeekLostRateList));
+        weekLostRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveWeekLostRateList));
+        weekLostRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixWeekLostRateList));
+
+        //流失数据
+        var lostOption = [weekLostRateOption];
+            for (var n = 0; n < lostOption.length; n++) {
+                me.echarts = echarts.init(Ext.get("userClassifyLost"+ n).dom);
+                me.echarts.setOption(lostOption[n]);
+            }
+        }
+
+    }
 
         function template(title,dateList,legArr) {
             var option =
