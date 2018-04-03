@@ -64,4 +64,8 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public List<Long> getActiveUsersInFifteenDay(Map<String, Object> activeUserParam) {
         return dao.getActiveUsersInFifteenDay(activeUserParam);
     }
+
+    public String getMinActiveDate(Map<String,Object> params){
+        return dao.getMinActiveDate(params);
+    }
 }
