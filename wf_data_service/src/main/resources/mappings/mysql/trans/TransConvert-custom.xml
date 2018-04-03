@@ -117,6 +117,12 @@
         <if test="parentId != null and parentId != ''">
             AND channel_id LIKE CONCAT('%', #{parentId}, '%')
         </if>
+        <if test="sumConvertAmount != null">
+            GROUP BY
+            user_id
+            HAVING
+            SUM(third_amount) > #{sumConvertAmount}
+        </if>
     </select>
 
     <select id="getMaxRechargeMoney" resultType="Double">
