@@ -597,6 +597,13 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         return dao.getTagAnalysisDate(map);
     }
 
+    public List<DatawareFinalRechargeTagAnalysis> getListByTagAndDate(Map<String,Object> map){
+        return dao.getListByTagAndDate(map);
+    }
+
+    public List<String> getDateList(Map<String,Object> map){
+        return dao.getDateList(map);
+    }
 
     @Async
     public void historyEntranceAnalysis(String startTime, String endTime) {

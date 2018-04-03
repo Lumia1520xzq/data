@@ -94,5 +94,7 @@ public class DatawareUserInfoExtendGameService extends CrudService<DatawareUserI
         batchSave(list);
     }
 
+
+
 }
 
