@@ -92,7 +92,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             bodyStyle: 'border-width:0',
             items: [{
                 title: '全量用户数据',
-                itemId: 'home',
+                itemId: 'allUsers',
                 width: "16.5%",
                 height: "100%",
                 xtype: "panel",
@@ -103,56 +103,47 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
-                        console.dir("activate")
                         doSearch(tab.items.items);
 
                     }
                 }
             }, {
                 title: '新增用户数据',
-                html: 'Users',
-                itemId: 'users',
+                itemId: 'newUsers',
                 autoScroll: true,
                 closable: false,
                 items: [],
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
-                        // doSearch();
-                        /*tab.removeAll();
-                        tab.items.add(Ext.create("WF.view.data.board.monthlyDataViewMain", {height: 850}));*/
+                        doSearch(tab.items.items);
                     }
                 }
 
             }, {
                 title: '留存数据',
-                html: 'Tickets',
-                itemId: 'tickets',
+                itemId: 'retention',
                 autoScroll: true,
                 closable: false,
                 items: [],
                 listeners: {
                     'activate': function (tab) {
-                        tab.removeAll();
                         me.down(("[name='tabId']")).setValue(tab.itemId);
-
-                        doSearch();
+                        doSearch(tab.items.items);
                         /* tab.removeAll();
                          this.items.add(Ext.create("WF.view.data.board.filterDataViewMain", {height: 850}));*/
                     }
                 }
             }, {
                 title: '其它数据',
-                html: 'aa',
-                itemId: 'aa',
+                itemId: 'other',
                 autoScroll: true,
                 closable: false,
                 items: [],
                 listeners: {
                     'activate': function (tab) {
-                        tab.removeAll();
                         me.down(("[name='tabId']")).setValue(tab.itemId);
-                        doSearch();
+                        doSearch(tab.items.items);
                         /*tab.removeAll();
                         this.items.add(Ext.create("WF.view.data.board.GameMonitorViewMain", {height: 850}));*/
                     }
@@ -188,7 +179,6 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             store.load({
                 params: value,
                 callback: function () {
-                    console.dir(store)
                     for (var i = 0; i < store.getCount(); i++) {
                         var re = store.getAt(i);
                         toDoCreateCharts(items, re.data)
