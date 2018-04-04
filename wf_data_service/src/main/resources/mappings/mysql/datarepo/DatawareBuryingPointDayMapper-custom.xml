@@ -257,5 +257,21 @@
         </if>
     </select>
 
+
+    <select id="getMinActiveDate" resultType="java.lang.String">
+        SELECT
+        MIN(burying_date)
+        FROM
+        `dataware_burying_point_day` t
+        WHERE 1=1
+        AND t.delete_flag = 0
+        <if test="userId != null">
+            AND t.user_id = #{userId}
+        </if>
+        <if test="gameType != null">
+            AND t.game_type = #{gameType}
+        </if>
+    </select>
+
 </mapper>
 

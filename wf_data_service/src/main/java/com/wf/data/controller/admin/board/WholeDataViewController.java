@@ -179,11 +179,9 @@ public class WholeDataViewController extends ExtJsController {
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate), 1));
                     params.put("date", beforeDate);
                     DatawareFinalChannelRetention lastRetention = datawareFinalChannelRetentionService.findByDate(params);
-                    DatawareFinalChannelInfoAll lastInfoAllOne = datawareFinalChannelInfoAllService.findByDate(params);
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate), 2));
                     params.put("date", beforeDate);
                     DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
-                    DatawareFinalChannelInfoAll lastButOneInfoAllOne = datawareFinalChannelInfoAllService.findByDate(params);
                     if (null != lastButOneRetention) {
                         String dayUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(), lastButOneRetention.getUsersDayRetention());
                         String dayDayRetentionRate = cal(lastRetention.getDayRetention(), lastButOneRetention.getDayRetention());
@@ -297,11 +295,9 @@ public class WholeDataViewController extends ExtJsController {
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate), 1));
                     params.put("date", beforeDate);
                     DatawareFinalChannelRetention lastRetention = datawareFinalChannelRetentionService.findByDate(params);
-                    DatawareFinalChannelInfoAll lastInfoAllThree = datawareFinalChannelInfoAllService.findByDate(params);
                     beforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate), 8));
                     params.put("date", beforeDate);
                     DatawareFinalChannelRetention lastButOneRetention = datawareFinalChannelRetentionService.findByDate(params);
-                    DatawareFinalChannelInfoAll lastButOneInfoAllThree = datawareFinalChannelInfoAllService.findByDate(params);
                     if (null != lastButOneRetention) {
                         String weekUsersDayRetentionRate = cal(lastRetention.getUsersDayRetention(), lastButOneRetention.getUsersDayRetention());
                         String weekDayRetentionRate = cal(lastRetention.getDayRetention(), lastButOneRetention.getDayRetention());
@@ -418,7 +414,7 @@ public class WholeDataViewController extends ExtJsController {
                 if (!judgeParamIsBank(parentId)) {
                     parentIdParam = Long.parseLong(parentId);
                 }
-                if (judgeParamIsBank(startTime) && judgeParamIsBank(endTime)) {//开始/结束日期为空
+                if (judgeParamIsBank(startTime) && judgeParamIsBank(endTime)) {
                     beginDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -14));
                     endDateParam = DateUtils.getYesterdayDate();
                 } else if (judgeParamIsBank(startTime) && !judgeParamIsBank(endTime)) {
@@ -529,8 +525,6 @@ public class WholeDataViewController extends ExtJsController {
     /**
      * 格式化GMT时间
      *
-     * @param date
-     * @return
      */
     public String formatGTMDate(String date) {
         DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd");

@@ -88,7 +88,9 @@ public class UserInfoExtendGameService {
                                     newRecord.setUserId(userInfo.getUserId());
                                     newRecord.setGameType(Integer.parseInt(game));
                                     newRecord.setNewUserFlag(1);
-                                    newRecord.setFirstActiveTime(bettingLogDay.getBettingDate());
+                                    //统计首次活跃时间
+                                    String firstActiveTime = buryingPointDayService.getMinActiveDate(map);
+                                    newRecord.setFirstActiveTime(firstActiveTime);
                                     map.put("beginDate",null);
                                     map.put("endDate",yesterday);
                                     TcardDto dto = bettingLogDayService.getBettingByUserIdAndGameType(map);
