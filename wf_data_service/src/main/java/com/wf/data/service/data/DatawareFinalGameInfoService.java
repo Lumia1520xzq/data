@@ -17,4 +17,9 @@ public class DatawareFinalGameInfoService extends CrudService<DatawareFinalGameI
     public List<DatawareFinalGameInfo> findInfoByDate(Map<String, Object> map) {
         return dao.findInfoByDate(map);
     }
+
+
+    public List<String> findDateList(Map<String, Object> map) {
+        return dao.findDateList(map);
+    }
 }

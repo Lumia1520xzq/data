@@ -12,4 +12,6 @@ import java.util.Map;
 public interface DatawareFinalGameInfoDao extends CrudDao<DatawareFinalGameInfo> {
 
     List<DatawareFinalGameInfo> findInfoByDate(Map<String, Object> map);
+
+    List<String> findDateList(Map<String, Object> map);
 }

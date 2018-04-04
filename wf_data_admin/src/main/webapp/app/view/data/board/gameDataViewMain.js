@@ -12,9 +12,9 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
         this.callParent(arguments);
         var me = this;
         var store = Ext.create('DCIS.Store', {
-            url: '/game/data/getList.do',
+            url: 'data/game/data/getList.do',
             autoload: false,
-            fields: ["todData", "yesData", "historyData"]
+            fields: ["titles", "dateList", "chartsData"]
         });
         var parentChannelStore = Ext.create('DCIS.Store', {
             url: 'data/admin/common/data/getParentChannels.do',
@@ -179,10 +179,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             store.load({
                 params: value,
                 callback: function () {
-                    for (var i = 0; i < store.getCount(); i++) {
-                        var re = store.getAt(i);
-                        toDoCreateCharts(items, re.data)
-                    }
+                    toDoCreateCharts(items,store.getProxy().getReader().jsonData)
                 }
             });
         }
@@ -191,10 +188,39 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             for (var i = 0; i < items.length; i++) {
                 me.echarts = echarts.init(Ext.get(items[i].id).dom);
                 var myOption = option;
-                myOption.legend.data = ['邮件营销', '联盟广告']
+                myOption.legend.data = data.chartsData.legends;
+                myOption.title.text = data.titles[i];
+                myOption.xAxis = [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: data.dateList
+                    }
+                ];
+
+                myOption.series = getSeries(data.chartsData);
+
+
                 me.echarts.setOption(myOption);
             }
 
+        }
+
+        function getSeries(data) {
+            var series = [];
+
+            for(var p=0; p < data.series.length;p++){
+
+                var temp = {
+                    name:data.legends[p],
+                    type:'line',
+                    data:data.series[p][0]
+                }
+                series.push(temp)
+                console.dir(data.series[p][0])
+                console.dir(temp)
+            }
+            return series;
         }
     }
 
@@ -206,13 +232,6 @@ var option = {
     },
     tooltip: {
         trigger: 'axis',
-        formatter: function (params) {
-            var str='';
-            for(var i = 0; i < params.length; i++){
-                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
-            }
-            return str;
-        }
     },
     legend: {
         data: []
@@ -221,10 +240,6 @@ var option = {
         show: true,
         feature: {
             mark: {show: true},
-            dataView: {show: true, readOnly: false},
-            // magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-            // restore: {show: true},
-            // saveAsImage: {show: true}
         }
     },
     calculable: true,
