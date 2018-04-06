@@ -23,5 +23,5 @@ public interface UicUserDao extends CrudDao<UicUser> {
 
     long getCountByDate(Map<String, Object> map);
 
-
+    List<Long> getUserByDate(Map<String, Object> commonParam);
 }
