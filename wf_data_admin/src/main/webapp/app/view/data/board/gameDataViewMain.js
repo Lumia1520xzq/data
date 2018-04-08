@@ -99,7 +99,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 forceFit: true,
                 bodyStyle: 'border-color:black',
                 layout: 'column',
-                items: getHtml("name", 3),
+                items: getHtml(["DAU", "投注人数", "投注转化率", "投注流水", "流水差", "返奖率", "投注笔数", "投注ARPU", "投注ASP"]),
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
@@ -112,7 +112,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 itemId: 'newUsers',
                 autoScroll: true,
                 closable: false,
-                items: [],
+                items: getHtml(["新增用户数","新增投注用户数","新增投注转化率","投注流水","流水差","返奖率","投注笔数","投注ARPU","投注ASP"]),
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
@@ -125,13 +125,11 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 itemId: 'retention',
                 autoScroll: true,
                 closable: false,
-                items: [],
+                items: getHtml(["新增次留","新增三留","新增七留","全量次留","全量三留","全量七留"]),
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
                         doSearch(tab.items.items);
-                        /* tab.removeAll();
-                         this.items.add(Ext.create("WF.view.data.board.filterDataViewMain", {height: 850}));*/
                     }
                 }
             }, {
@@ -139,26 +137,24 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 itemId: 'other',
                 autoScroll: true,
                 closable: false,
-                items: [],
+                items: getHtml(["导入率","累计用户数"]),
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
                         doSearch(tab.items.items);
-                        /*tab.removeAll();
-                        this.items.add(Ext.create("WF.view.data.board.GameMonitorViewMain", {height: 850}));*/
                     }
                 }
             }]
         });
 
-        function getHtml(name, len) {
+        function getHtml(names) {
             var items = [];
-            for (var i = 0; i < len; i++) {
+            for (var i = 0; i < names.length; i++) {
                 items.push({
                     xtype: "panel",
                     layout: 'hbox',
-                    name: name + i,
-                    id: name + i,
+                    name: names[i],
+                    id: names[i],
                     width: 550,
                     height: 300,
                     forceFit: true,
@@ -179,7 +175,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             store.load({
                 params: value,
                 callback: function () {
-                    toDoCreateCharts(items,store.getProxy().getReader().jsonData)
+                    toDoCreateCharts(items, store.getProxy().getReader().jsonData)
                 }
             });
         }
@@ -198,7 +194,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                     }
                 ];
 
-                myOption.series = getSeries(data.chartsData);
+                myOption.series = getSeries(data, items[i].id);
 
 
                 me.echarts.setOption(myOption);
@@ -206,20 +202,24 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
 
         }
 
-        function getSeries(data) {
+        function getSeries(data, item) {
             var series = [];
-
-            for(var p=0; p < data.series.length;p++){
-
-                var temp = {
-                    name:data.legends[p],
-                    type:'line',
-                    data:data.series[p][0]
+            var seriesData = [];
+            seriesData = data.chartsData.series;
+            for (var key in seriesData) {
+                if (key == item) {
+                    for (var i = 0; i < seriesData[key].length; i++) {
+                        var temp = {
+                            name: data.chartsData.legends[i],
+                            type: 'line',
+                            data: seriesData[key][i]
+                        }
+                        series.push(temp)
+                    }
                 }
-                series.push(temp)
-                console.dir(data.series[p][0])
-                console.dir(temp)
+
             }
+
             return series;
         }
     }

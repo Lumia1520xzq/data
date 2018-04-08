@@ -138,38 +138,13 @@ public class GameDataController extends ExtJsController {
 
     private Map<String, Object> getChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
         Map<String, Object> resultMap = new HashMap<>();
-        List<String> legends = Lists.newArrayList();
-        List<Object> series = Lists.newArrayList();
-        for (Long parentId : parentIds) {
-            for (Integer gameType : gameTypes) {
-                map.put("gameType", gameType);
-                map.put("parentId", parentId);
-                DataDict dictDto = dataDictService.getDictByValue("game_type", gameType);
+        Map<String, Object> seriesMap = new HashMap<>();
 
-                ChannelInfo channelDto = channelInfoService.get(parentId);
-                if(null == channelDto){
-                    channelDto = new ChannelInfo();
-                    channelDto.setName("全部");
-                }
-                legends.add(channelDto.getName() + "-" + dictDto.getLabel());
-                List<DatawareFinalGameInfo> list = datawareFinalGameInfoService.findInfoByDate(map);
-                series.add(getLinesData(list, tabId));
 
-            }
-
-        }
-        resultMap.put("legends", legends);
-        resultMap.put("series", series);
-        return resultMap;
-    }
-
-    private List<Object> getLinesData(List<DatawareFinalGameInfo> list, String tabId) {
-        List<Object> resultList = Lists.newArrayList();
         List<Object> dauList = Lists.newArrayList();
-        /*List<Object> userCountList = Lists.newArrayList();
+        List<Object> userCountList = Lists.newArrayList();
         List<Object> conversionList = Lists.newArrayList();
         List<Object> bettingAmountList = Lists.newArrayList();
-        List<Object> returnAmountList = Lists.newArrayList();
         List<Object> diffAmountList = Lists.newArrayList();
         List<Object> returnRateList = Lists.newArrayList();
         List<Object> bettingCountList = Lists.newArrayList();
@@ -181,7 +156,6 @@ public class GameDataController extends ExtJsController {
         List<Object> newUserCountList = Lists.newArrayList();
         List<Object> newUserBettingUserCountList = Lists.newArrayList();
         List<Object> newUserBettingConversionList = Lists.newArrayList();
-        List<Object> newUserReturnAmountList = Lists.newArrayList();
         List<Object> newUserBettingAmountList = Lists.newArrayList();
         List<Object> newUserDiffAmountList = Lists.newArrayList();
         List<Object> newUserReturnRateList = Lists.newArrayList();
@@ -191,17 +165,167 @@ public class GameDataController extends ExtJsController {
         List<Object> newUserOneDayRetentionList = Lists.newArrayList();
         List<Object> newUserThreeDayRetentionList = Lists.newArrayList();
         List<Object> newUserSevenDayRetentionList = Lists.newArrayList();
-        List<Object> importRate = Lists.newArrayList();*/
+        List<Object> importRateList = Lists.newArrayList();
+        List<Object> totalUserCountList = Lists.newArrayList();
+
+
+        List<String> legends = Lists.newArrayList();
+        for (Long parentId : parentIds) {
+            for (Integer gameType : gameTypes) {
+                map.put("gameType", gameType);
+                map.put("parentId", parentId);
+                DataDict dictDto = dataDictService.getDictByValue("game_type", gameType);
+
+                ChannelInfo channelDto = channelInfoService.get(parentId);
+                if (null == channelDto) {
+                    channelDto = new ChannelInfo();
+                    channelDto.setName("全部");
+                }
+                legends.add(channelDto.getName() + "-" + dictDto.getLabel());
+                List<DatawareFinalGameInfo> list = datawareFinalGameInfoService.findInfoByDate(map);
+                if ("allUsers".equals(tabId)) {
+                    dauList.add(getLinesData(list, tabId, "DAU"));
+                    userCountList.add(getLinesData(list, tabId, "投注人数"));
+                    conversionList.add(getLinesData(list, tabId, "投注转化率"));
+                    bettingAmountList.add(getLinesData(list, tabId, "投注流水"));
+                    diffAmountList.add(getLinesData(list, tabId, "流水差"));
+                    returnRateList.add(getLinesData(list, tabId, "返奖率"));
+                    bettingCountList.add(getLinesData(list, tabId, "投注笔数"));
+                    bettingArpuList.add(getLinesData(list, tabId, "投注ARPU"));
+                    bettingAspList.add(getLinesData(list, tabId, "投注ASP"));
+                } else if ("newUsers".equals(tabId)) {
+                    newUserCountList.add(getLinesData(list, tabId, "新增用户数"));
+                    newUserBettingUserCountList.add(getLinesData(list, tabId, "新增投注用户数"));
+                    newUserBettingConversionList.add(getLinesData(list, tabId, "新增投注转化率"));
+                    newUserBettingAmountList.add(getLinesData(list, tabId, "投注流水"));
+                    newUserDiffAmountList.add(getLinesData(list, tabId, "流水差"));
+                    newUserReturnRateList.add(getLinesData(list, tabId, "返奖率"));
+                    newUserBettingCountList.add(getLinesData(list, tabId, "投注笔数"));
+                    newUserBettingArpuList.add(getLinesData(list, tabId, "投注ARPU"));
+                    newUserBettingAspList.add(getLinesData(list, tabId, "投注ASP"));
+                } else if ("retention".equals(tabId)) {
+                    oneDayRetentionList.add(getLinesData(list, tabId, "全量次留"));
+                    threeDayRetentionList.add(getLinesData(list, tabId, "全量三留"));
+                    sevenDayRetentionList.add(getLinesData(list, tabId, "全量七留"));
+                    newUserOneDayRetentionList.add(getLinesData(list, tabId, "新增次留"));
+                    newUserThreeDayRetentionList.add(getLinesData(list, tabId, "新增三留"));
+                    newUserSevenDayRetentionList.add(getLinesData(list, tabId, "新增七留"));
+                } else if ("other".equals(tabId)) {
+                    importRateList.add(getLinesData(list, tabId, "导入率"));
+                    totalUserCountList.add(getLinesData(list, tabId, "累计用户数"));
+                }
+
+            }
+
+        }
+
+        if ("allUsers".equals(tabId)) {
+            seriesMap.put("DAU", dauList);
+            seriesMap.put("投注人数", userCountList);
+            seriesMap.put("投注转化率", conversionList);
+            seriesMap.put("投注流水", bettingAmountList);
+            seriesMap.put("流水差", diffAmountList);
+            seriesMap.put("返奖率", returnRateList);
+            seriesMap.put("投注笔数", bettingCountList);
+            seriesMap.put("投注ARPU", bettingArpuList);
+            seriesMap.put("投注ASP", bettingAspList);
+        } else if ("newUsers".equals(tabId)) {
+            seriesMap.put("新增用户数", newUserCountList);
+            seriesMap.put("新增投注用户数", newUserBettingUserCountList);
+            seriesMap.put("新增投注转化率", newUserBettingConversionList);
+            seriesMap.put("投注流水", newUserBettingAmountList);
+            seriesMap.put("流水差", newUserDiffAmountList);
+            seriesMap.put("返奖率", newUserReturnRateList);
+            seriesMap.put("投注笔数", newUserBettingCountList);
+            seriesMap.put("投注ARPU", newUserBettingArpuList);
+            seriesMap.put("投注ASP", newUserBettingAspList);
+
+        } else if ("retention".equals(tabId)) {
+            seriesMap.put("全量次留", oneDayRetentionList);
+            seriesMap.put("全量三留", threeDayRetentionList);
+            seriesMap.put("全量七留", sevenDayRetentionList);
+            seriesMap.put("新增次留", newUserOneDayRetentionList);
+            seriesMap.put("新增三留", newUserThreeDayRetentionList);
+            seriesMap.put("新增七留", newUserSevenDayRetentionList);
+        } else if ("other".equals(tabId)) {
+            seriesMap.put("导入率", importRateList);
+            seriesMap.put("累计用户数", totalUserCountList);
+        }
+
+        resultMap.put("legends", legends);
+        resultMap.put("series", seriesMap);
+        return resultMap;
+    }
+
+    private List<Object> getLinesData(List<DatawareFinalGameInfo> list, String tabId, String parameter) {
+        List<Object> resultList = Lists.newArrayList();
 
         for (DatawareFinalGameInfo info : list) {
             if ("allUsers".equals(tabId)) {
-                dauList.add(info.getDau());
+                if ("DAU".equals(parameter)) {
+                    resultList.add(info.getDau());
+                } else if ("投注人数".equals(parameter)) {
+                    resultList.add(info.getBettingUserCount());
+                } else if ("投注转化率".equals(parameter)) {
+                    resultList.add(info.getBettingConversion());
+                } else if ("投注流水".equals(parameter)) {
+                    resultList.add(info.getBettingAmount());
+                } else if ("流水差".equals(parameter)) {
+                    resultList.add(info.getDiffAmount());
+                } else if ("返奖率".equals(parameter)) {
+                    resultList.add(info.getReturnRate());
+                } else if ("投注笔数".equals(parameter)) {
+                    resultList.add(info.getBettingCount());
+                } else if ("投注ARPU".equals(parameter)) {
+                    resultList.add(info.getBettingArpu());
+                } else if ("投注ASP".equals(parameter)) {
+                    resultList.add(info.getBettingAsp());
+                }
+
             } else if ("newUsers".equals(tabId)) {
+                if ("新增用户数".equals(parameter)) {
+                    resultList.add(info.getNewUserCount());
+                } else if ("新增投注用户数".equals(parameter)) {
+                    resultList.add(info.getNewUserBettingUserCount());
+                } else if ("新增投注转化率".equals(parameter)) {
+                    resultList.add(info.getNewUserBettingConversion());
+                } else if ("投注流水".equals(parameter)) {
+                    resultList.add(info.getNewUserBettingAmount());
+                } else if ("流水差".equals(parameter)) {
+                    resultList.add(info.getNewUserDiffAmount());
+                } else if ("返奖率".equals(parameter)) {
+                    resultList.add(info.getNewUserReturnRate());
+                } else if ("投注笔数".equals(parameter)) {
+                    resultList.add(info.getNewUserBettingCount());
+                } else if ("投注ARPU".equals(parameter)) {
+                    resultList.add(info.getNewUserBettingArpu());
+                } else if ("投注ASP".equals(parameter)) {
+                    resultList.add(info.getNewUserBettingAsp());
+                }
+
+
             } else if ("retention".equals(tabId)) {
+                if ("全量次留".equals(parameter)) {
+                    resultList.add(info.getOneDayRetention());
+                } else if ("全量三留".equals(parameter)) {
+                    resultList.add(info.getThreeDayRetention());
+                } else if ("全量七留".equals(parameter)) {
+                    resultList.add(info.getSevenDayRetention());
+                } else if ("新增次留".equals(parameter)) {
+                    resultList.add(info.getNewUserOneDayRetention());
+                } else if ("新增三留".equals(parameter)) {
+                    resultList.add(info.getNewUserThreeDayRetention());
+                } else if ("新增七留".equals(parameter)) {
+                    resultList.add(info.getNewUserSevenDayRetention());
+                }
             } else if ("other".equals(tabId)) {
+                if ("导入率".equals(parameter)) {
+                    resultList.add(info.getImportRate());
+                } else if ("累计用户数".equals(parameter)) {
+                    resultList.add(info.getTotalUserCount());
+                }
             }
         }
-        resultList.add(dauList);
         return resultList;
     }
 
