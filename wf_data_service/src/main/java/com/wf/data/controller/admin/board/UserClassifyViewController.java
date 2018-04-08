@@ -86,7 +86,12 @@ public class UserClassifyViewController extends ExtJsController {
         params.put("endDate",endTime);
         //获取日期list
         List<String> dateList =  rechargeTagAnalysisService.getDateList(params);
-        map.put("dateList",dateList);
+        List<String> simpleDateList = new ArrayList<>();
+        for(String date:dateList){
+            int index = date.indexOf("-");
+            simpleDateList.add(date.substring(index + 1));
+        }
+        map.put("dateList",simpleDateList);
         // 循环取每个userTag对应的list0
         for (int index=0;index<=6;index++){
             params.put("userTag",index);

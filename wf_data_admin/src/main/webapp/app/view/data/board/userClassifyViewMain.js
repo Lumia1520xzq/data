@@ -423,7 +423,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                 dauOption.series.push(areaStyleSeries(legArr[5],rechargeFiveDauList));
                 dauOption.series.push(areaStyleSeries(legArr[6],rechargeSixDauList));
 
-                var dauRateOption = rateTemplate("日活占比",dateList,legArr);
+                var dauRateOption = barTemplate("日活占比",dateList,legArr);
                 dauRateOption.series.push(stackBarStyleSeries(legArr[0],newUserDauRateList));
                 dauRateOption.series.push(stackBarStyleSeries(legArr[1],rechargeOneDauRateList));
                 dauRateOption.series.push(stackBarStyleSeries(legArr[2],rechargeTwoDauRateList));
@@ -898,7 +898,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                 thirdAmountOption.series.push(areaStyleSeries(legArr[5],rechargeFiveThirdAmountList));
                 thirdAmountOption.series.push(areaStyleSeries(legArr[6],rechargeSixThirdAmountList));
 
-                var rechargeRateOption = rateTemplate("充值金额占比",dateList,legArr);
+                var rechargeRateOption = barTemplate("充值金额占比",dateList,legArr);
                 rechargeRateOption.series.push(stackBarStyleSeries(legArr[0],newUserRechargeRateList));
                 rechargeRateOption.series.push(stackBarStyleSeries(legArr[1],rechargeOneRechargeRateList));
                 rechargeRateOption.series.push(stackBarStyleSeries(legArr[2],rechargeTwoRechargeRateList));
@@ -1226,6 +1226,55 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                     xAxis: {
                         type : 'category',
                         boundaryGap : false,
+                        data: dateList
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }},
+                    series: []
+                };
+            return option;
+        }
+
+        function barTemplate(title,dateList,legArr){
+            var option =
+                {
+                    title: {text:title,left:'center',
+                        textStyle:{//标题内容的样式
+                            fontStyle:'normal',//主标题文字字体风格，默认normal，有italic(斜体),oblique(斜体)
+                            fontWeight:"bold",//可选normal(正常)，bold(加粗)，bolder(加粗)，lighter(变细)，100|200|300|400|500...
+                            fontFamily:"san-serif",//主题文字字体，默认微软雅黑
+                            fontSize:22//主题文字字体大小，默认为18px
+                        }},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name +"\t"+ params[i].seriesName +':' + params[i].value+"%<br/>";
+                            }
+                            return str;
+                        }
+                    },
+                    legend: {
+                        data:legArr,
+                        top:'10%'
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'25%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        // boundaryGap : false,
                         data: dateList
                     },
                     yAxis: {
