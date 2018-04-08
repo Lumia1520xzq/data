@@ -259,8 +259,22 @@ public class GameDataController extends ExtJsController {
 
     private List<Object> getLinesData(List<DatawareFinalGameInfo> list, String tabId, String parameter) {
         List<Object> resultList = Lists.newArrayList();
-
+        Map<String, Object> dayRateMap = new HashMap<>();
+        Map<String, Object> weekRateMap = new HashMap<>();
         for (DatawareFinalGameInfo info : list) {
+
+            String yesterDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(info.getBusinessDate()), -1));
+            String weekDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(info.getBusinessDate()), -7));
+            dayRateMap.put("businessDate", yesterDay);
+            dayRateMap.put("parentId", info.getParentId());
+            dayRateMap.put("gameType", info.getGameType());
+
+            weekRateMap.put("businessDate", weekDay);
+            weekRateMap.put("parentId", info.getParentId());
+            weekRateMap.put("gameType", info.getGameType());
+            List<DatawareFinalGameInfo> yesList = datawareFinalGameInfoService.findInfoByDate(dayRateMap);
+            List<DatawareFinalGameInfo> weekList = datawareFinalGameInfoService.findInfoByDate(weekRateMap);
+
             if ("allUsers".equals(tabId)) {
                 if ("DAU".equals(parameter)) {
                     resultList.add(info.getDau());
