@@ -34,7 +34,6 @@ public class DayFinalJob {
     private final DatawareFinalRechargeTagAnalysisService tagAnalysisService = SpringContextHolder.getBean(DatawareFinalRechargeTagAnalysisService.class);
     private final GameOverViewService gameOverViewService = SpringContextHolder.getBean(GameOverViewService.class);
 
-
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
         try {
@@ -58,7 +57,6 @@ public class DayFinalJob {
             logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
-
         String openStr = dataConfigService.getStringValueByName(DataConstants.DATA_FINAL_HOUR_OPEN);
 
         String[] openFlag = openStr.split(",");
@@ -79,7 +77,6 @@ public class DayFinalJob {
             logger.error("registeredArpuService调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
-
         try {
             if ("true".equals(openFlag[4])) {
                 tagAnalysisService.toDoAnalysis();
@@ -98,16 +95,22 @@ public class DayFinalJob {
         }
 
         //游戏数据总览数据总结
+        String flagstr = dataConfigService.getStringValueByName(DataConstants.DATA_FINAL_GAME_OPEN);
+
+        String[] flag = flagstr.split(",");
         try {
-            if ("true".equals(openFlag[6])) {
-                gameOverViewService.toDoEntranceAnalysis();
+            if ("true".equals(flag[0])) {
+                logger.info("toDoGameOverViewAnalysis任务开始");
+
+                gameOverViewService.toDoGameOverViewAnalysis();
+
+                logger.info("toDoGameOverViewAnalysis任务结束");
             }
         } catch (Exception e) {
-            logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+            logger.error("toDoGameOverViewAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
         logger.info("每日任务调度总job结束:traceId={}", TraceIdUtils.getTraceId());
     }
-
 
 }

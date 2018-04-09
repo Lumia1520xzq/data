@@ -51,7 +51,7 @@ public class GameOverViewService {
     @Autowired
     private DatawareUserInfoService userInfoService;
 
-    public void toDoEntranceAnalysis() {
+    public void toDoGameOverViewAnalysis() {
         logger.info("每天游戏总览数据汇总开始:traceId={}", TraceIdUtils.getTraceId());
 
         //获取昨天日期
@@ -238,23 +238,23 @@ public class GameOverViewService {
             param.put("searchDate", DateUtils.getPrevDate(searchDate, 1));
             //更新(T-1日)次日留存
             DatawareFinalGameInfo oneDayBeforeFinalGameInfo = finalGameInfoService.getInfoByDateAndGameType(param);
-            oneDayBeforeFinalGameInfo.setOneDayRetention(oneDayRelation);
-            oneDayBeforeFinalGameInfo.setNewUserOneDayRetention(newUserOneDayRelation);
+            oneDayBeforeFinalGameInfo.setOneDayRetention(BigDecimalUtil.mul(oneDayRelation, 100));
+            oneDayBeforeFinalGameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserOneDayRelation, 100));
             finalGameInfoService.save(oneDayBeforeFinalGameInfo);
             //更新(T-3日)三日留存
             param.put("searchDate", DateUtils.getPrevDate(searchDate, 3));
             DatawareFinalGameInfo threeDayBeforeFinalGameInfo = finalGameInfoService.getInfoByDateAndGameType(param);
-            threeDayBeforeFinalGameInfo.setThreeDayRetention(threeDayRelation);
-            threeDayBeforeFinalGameInfo.setNewUserThreeDayRetention(newUserThreeDayRelation);
+            threeDayBeforeFinalGameInfo.setThreeDayRetention(BigDecimalUtil.mul(threeDayRelation, 100));
+            threeDayBeforeFinalGameInfo.setNewUserThreeDayRetention(BigDecimalUtil.mul(newUserThreeDayRelation, 100));
             finalGameInfoService.save(threeDayBeforeFinalGameInfo);
             //更新(T-7日)七日留存
             param.put("searchDate", DateUtils.getPrevDate(searchDate, 7));
             DatawareFinalGameInfo sevenDayBeforeFinalGameInfo = finalGameInfoService.getInfoByDateAndGameType(param);
-            sevenDayBeforeFinalGameInfo.setSevenDayRetention(sevenDayRelation);
-            sevenDayBeforeFinalGameInfo.setNewUserSevenDayRetention(newUserSevenDayRelation);
+            sevenDayBeforeFinalGameInfo.setSevenDayRetention(BigDecimalUtil.mul(sevenDayRelation, 100));
+            sevenDayBeforeFinalGameInfo.setNewUserSevenDayRetention(BigDecimalUtil.mul(newUserSevenDayRelation, 100));
             finalGameInfoService.save(sevenDayBeforeFinalGameInfo);
         } catch (Exception e) {
-            logger.error("更新dataware_final_game_info的次，三，七日留存失败");
+            logger.error("更新dataware_final_game_info的次，三，七日留存失败.Date:" + DateUtils.getPrevDate(searchDate, 1) + ";parentId:" + parentId + ";gameType:" + gameType);
         }
 
         gameInfo.setParentId(parentId);
@@ -267,10 +267,10 @@ public class GameOverViewService {
         gameInfo.setBettingCount(Long.parseLong(bettingLogDayInfo.getBettingCount().toString()));
         gameInfo.setReturnAmount(bettingLogDayInfo.getResultAmount());
         gameInfo.setDiffAmount(BigDecimalUtil.sub(gameInfo.getBettingAmount(), gameInfo.getReturnAmount()));
-        gameInfo.setReturnRate(division(gameInfo.getReturnAmount(), gameInfo.getBettingAmount()));
+        gameInfo.setReturnRate(BigDecimalUtil.mul(division(gameInfo.getReturnAmount(), gameInfo.getBettingAmount()), 100));
         gameInfo.setBettingArpu(division(gameInfo.getBettingAmount(), gameInfo.getBettingUserCount()));
         gameInfo.setBettingAsp(division(gameInfo.getBettingAmount(), gameInfo.getBettingCount()));
-        gameInfo.setBettingConversion(division(gameInfo.getBettingUserCount(), dau));
+        gameInfo.setBettingConversion(BigDecimalUtil.mul(division(gameInfo.getBettingUserCount(), dau), 100));
         gameInfo.setOneDayRetention(0.00);
         gameInfo.setThreeDayRetention(0.00);
         gameInfo.setSevenDayRetention(0.00);
@@ -280,14 +280,14 @@ public class GameOverViewService {
         gameInfo.setNewUserBettingCount(Long.parseLong(newUserBettingLogDayInfo.getBettingCount().toString()));
         gameInfo.setNewUserReturnAmount(newUserBettingLogDayInfo.getResultAmount());
         gameInfo.setNewUserDiffAmount(BigDecimalUtil.sub(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserReturnAmount()));
-        gameInfo.setNewUserReturnRate(division(gameInfo.getNewUserReturnAmount(), gameInfo.getNewUserBettingAmount()));
+        gameInfo.setNewUserReturnRate(BigDecimalUtil.mul(division(gameInfo.getNewUserReturnAmount(), gameInfo.getNewUserBettingAmount()), 100));
         gameInfo.setNewUserBettingArpu(division(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserBettingUserCount()));
         gameInfo.setNewUserBettingAsp(division(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserBettingCount()));
-        gameInfo.setNewUserBettingConversion(division(gameInfo.getNewUserBettingUserCount(), Long.parseLong(String.valueOf(newUserIds.size()))));
+        gameInfo.setNewUserBettingConversion(BigDecimalUtil.mul(division(gameInfo.getNewUserBettingUserCount(), Long.parseLong(String.valueOf(newUserIds.size()))), 100));
         gameInfo.setNewUserOneDayRetention(0.00);
         gameInfo.setNewUserThreeDayRetention(0.00);
         gameInfo.setNewUserSevenDayRetention(0.00);
-        gameInfo.setImportRate(importRate);
+        gameInfo.setImportRate(BigDecimalUtil.mul(importRate, 100));
         gameInfo.setTotalUserCount(Long.parseLong(totalUserCount.toString()));
 
         //手动更新时，判断是否要更改次，三，七日留存
@@ -312,8 +312,8 @@ public class GameOverViewService {
                 //新增用户次日留存
                 List<Long> newUserOnDayAfterActive = (List<Long>) CollectionUtils.intersection(oneDayAfterNewUserIds, newAndActiveList);
                 Double newUserOneDayAfterRelation = division(newUserOnDayAfterActive.size(), newAndActiveList.size());
-                gameInfo.setOneDayRetention(oneDayafterRelation);
-                gameInfo.setNewUserOneDayRetention(newUserOneDayAfterRelation);
+                gameInfo.setOneDayRetention(BigDecimalUtil.mul(oneDayafterRelation, 100));
+                gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserOneDayAfterRelation, 100));
             }
             if (differDays >= 3) {//更新当前日期的三日留存
                 //(T+3日)活跃用户
@@ -328,8 +328,8 @@ public class GameOverViewService {
                 //新增用户T+3日留存
                 List<Long> newUserThreeDayAfterActive = (List<Long>) CollectionUtils.intersection(threeDayAfterNewUserIds, newAndActiveList);
                 Double newUserThreeDayAfterRelation = division(newUserThreeDayAfterActive.size(), newAndActiveList.size());
-                gameInfo.setOneDayRetention(threeDayafterRelation);
-                gameInfo.setNewUserOneDayRetention(newUserThreeDayAfterRelation);
+                gameInfo.setOneDayRetention(BigDecimalUtil.mul(threeDayafterRelation, 100));
+                gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserThreeDayAfterRelation, 100));
             }
             if (differDays >= 7) {//更新当前日期的七日留存
                 //(T+3日)活跃用户
@@ -344,8 +344,8 @@ public class GameOverViewService {
                 //新增用户T+3日留存
                 List<Long> newUserSevenDayAfterActive = (List<Long>) CollectionUtils.intersection(sevenDayAfterNewUserIds, newAndActiveList);
                 Double newUserSevenDayAfterRelation = division(newUserSevenDayAfterActive.size(), newAndActiveList.size());
-                gameInfo.setOneDayRetention(sevenDayafterRelation);
-                gameInfo.setNewUserOneDayRetention(newUserSevenDayAfterRelation);
+                gameInfo.setOneDayRetention(BigDecimalUtil.mul(sevenDayafterRelation, 100));
+                gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserSevenDayAfterRelation, 100));
             }
 
         }
