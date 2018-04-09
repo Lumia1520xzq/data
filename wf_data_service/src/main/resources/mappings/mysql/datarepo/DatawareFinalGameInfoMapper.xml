@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalGameInfoDao">
+
+    <sql id="datawareFinalGameInfoColumns">
+		t.id,
+		t.parent_id,
+		t.channel_id,
+		t.game_type,
+		t.dau,
+		t.betting_user_count,
+		t.betting_conversion,
+		t.betting_amount,
+		t.return_amount,
+		t.diff_amount,
+		t.return_rate,
+		t.betting_count,
+		t.betting_arpu,
+		t.betting_asp,
+		t.one_day_retention,
+		t.three_day_retention,
+		t.seven_day_retention,
+		t.new_user_count,
+		t.new_user_betting_user_count,
+		t.new_user_betting_conversion,
+		t.new_user_return_amount,
+		t.new_user_betting_amount,
+		t.new_user_diff_amount,
+		t.new_user_return_rate,
+		t.new_user_betting_count,
+		t.new_user_betting_arpu,
+		t.new_user_betting_asp,
+		t.new_user_one_day_retention,
+		t.new_user_three_day_retention,
+		t.new_user_seven_day_retention,
+		t.import_rate,
+		t.total_user_count,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+
+    <sql id="datawareFinalGameInfoWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+    <sql id="datawareFinalGameInfoJoins">
+    </sql>
+
+    <select id="get" resultType="DatawareFinalGameInfo">
+        SELECT
+        <include refid="datawareFinalGameInfoColumns"/>
+        FROM dataware_final_game_info t WHERE id = #{id}
+    </select>
+    <select id="findList" resultType="DatawareFinalGameInfo">
+        SELECT
+        <include refid="datawareFinalGameInfoColumns"/>
+        FROM dataware_final_game_info t
+        <include refid="datawareFinalGameInfoJoins"/>
+        WHERE
+        <include refid="datawareFinalGameInfoWhere"/>
+        ORDER BY id desc LIMIT #{start}, #{length}
+    </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM dataware_final_game_info t WHERE
+        <include refid="datawareFinalGameInfoWhere"/>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO dataware_final_game_info (
+			id, 
+			parent_id, 
+			channel_id, 
+			game_type, 
+			dau, 
+			betting_user_count, 
+			betting_conversion, 
+			betting_amount, 
+			return_amount, 
+			diff_amount, 
+			return_rate, 
+			betting_count, 
+			betting_arpu, 
+			betting_asp, 
+			one_day_retention, 
+			three_day_retention, 
+			seven_day_retention, 
+			new_user_count, 
+			new_user_betting_user_count, 
+			new_user_betting_conversion, 
+			new_user_return_amount, 
+			new_user_betting_amount, 
+			new_user_diff_amount, 
+			new_user_return_rate, 
+			new_user_betting_count, 
+			new_user_betting_arpu, 
+			new_user_betting_asp, 
+			new_user_one_day_retention, 
+			new_user_three_day_retention, 
+			new_user_seven_day_retention, 
+			import_rate, 
+			total_user_count, 
+			business_date, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{parentId}, 
+			#{channelId}, 
+			#{gameType}, 
+			#{dau}, 
+			#{bettingUserCount}, 
+			#{bettingConversion}, 
+			#{bettingAmount}, 
+			#{returnAmount}, 
+			#{diffAmount}, 
+			#{returnRate}, 
+			#{bettingCount}, 
+			#{bettingArpu}, 
+			#{bettingAsp}, 
+			#{oneDayRetention}, 
+			#{threeDayRetention}, 
+			#{sevenDayRetention}, 
+			#{newUserCount}, 
+			#{newUserBettingUserCount}, 
+			#{newUserBettingConversion}, 
+			#{newUserReturnAmount}, 
+			#{newUserBettingAmount}, 
+			#{newUserDiffAmount}, 
+			#{newUserReturnRate}, 
+			#{newUserBettingCount}, 
+			#{newUserBettingArpu}, 
+			#{newUserBettingAsp}, 
+			#{newUserOneDayRetention}, 
+			#{newUserThreeDayRetention}, 
+			#{newUserSevenDayRetention}, 
+			#{importRate}, 
+			#{totalUserCount}, 
+			#{businessDate}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE dataware_final_game_info SET
+			parent_id = #{parentId}, 
+			channel_id = #{channelId}, 
+			game_type = #{gameType}, 
+			dau = #{dau}, 
+			betting_user_count = #{bettingUserCount}, 
+			betting_conversion = #{bettingConversion}, 
+			betting_amount = #{bettingAmount}, 
+			return_amount = #{returnAmount}, 
+			diff_amount = #{diffAmount}, 
+			return_rate = #{returnRate}, 
+			betting_count = #{bettingCount}, 
+			betting_arpu = #{bettingArpu}, 
+			betting_asp = #{bettingAsp}, 
+			one_day_retention = #{oneDayRetention}, 
+			three_day_retention = #{threeDayRetention}, 
+			seven_day_retention = #{sevenDayRetention}, 
+			new_user_count = #{newUserCount}, 
+			new_user_betting_user_count = #{newUserBettingUserCount}, 
+			new_user_betting_conversion = #{newUserBettingConversion}, 
+			new_user_return_amount = #{newUserReturnAmount}, 
+			new_user_betting_amount = #{newUserBettingAmount}, 
+			new_user_diff_amount = #{newUserDiffAmount}, 
+			new_user_return_rate = #{newUserReturnRate}, 
+			new_user_betting_count = #{newUserBettingCount}, 
+			new_user_betting_arpu = #{newUserBettingArpu}, 
+			new_user_betting_asp = #{newUserBettingAsp}, 
+			new_user_one_day_retention = #{newUserOneDayRetention}, 
+			new_user_three_day_retention = #{newUserThreeDayRetention}, 
+			new_user_seven_day_retention = #{newUserSevenDayRetention}, 
+			import_rate = #{importRate}, 
+			total_user_count = #{totalUserCount}, 
+			business_date = #{businessDate}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+    <delete id="delete">
+		UPDATE dataware_final_game_info SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

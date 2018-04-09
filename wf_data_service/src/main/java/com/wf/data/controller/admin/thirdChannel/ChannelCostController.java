@@ -192,7 +192,7 @@ public class ChannelCostController extends ExtJsController {
                     out.setGoldAmount(awardsInfo.getGoldAmount());
 
                 }
-                out.setUpdateTime(temp.getUpdateTime());
+                out.setUpdateTime(temp.getSendTime());
                 out.setUserId(temp.getUserId());
 
                 list.add(out);

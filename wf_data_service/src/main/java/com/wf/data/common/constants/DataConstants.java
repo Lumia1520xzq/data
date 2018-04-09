@@ -164,4 +164,6 @@ public interface DataConstants {
      * 用户维度清洗任务开关
      */
     String DATA_DATAWARE_DIMENSION_CLEAN_FLAG = "data_dataware_dimension_clean_flag";
+    //游戏数据总览
+    String DATA_FINAL_GAME_OPEN = "data_final_game_open";
 }

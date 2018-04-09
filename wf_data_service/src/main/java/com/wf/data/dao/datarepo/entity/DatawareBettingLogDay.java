@@ -1,99 +1,106 @@
 package com.wf.data.dao.datarepo.entity;
 
-
 import com.wf.core.persistence.DataEntity;
 
 public class DatawareBettingLogDay extends DataEntity {
-	private static final long serialVersionUID = -1;
-	private Long userId;
-	private Integer gameType;
-	private String gameName;
-	private Integer bettingCount;
-	private Double bettingAmount;
-	private Double resultAmount;
-	private Integer userGroup;
-	private Long channelId;
-	private String bettingDate;
-	private Long parentId;
+    private static final long serialVersionUID = -1;
+    private Long userId;
+    private Integer gameType;
+    private String gameName;
+    private Integer bettingCount;
+    private Double bettingAmount;
+    private Double resultAmount;
+    private Integer userGroup;
+    private Long channelId;
+    private String bettingDate;
+    private Long parentId;
+    private Long userCount;
 
+    public Long getParentId() {
+        return parentId;
+    }
 
-	public Long getParentId() {
-		return parentId;
-	}
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public Long getUserId() {
-		return userId;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public Integer getGameType() {
+        return gameType;
+    }
 
-	public Integer getGameType() {
-		return gameType;
-	}
+    public void setGameType(Integer gameType) {
+        this.gameType = gameType;
+    }
 
-	public void setGameType(Integer gameType) {
-		this.gameType = gameType;
-	}
+    public String getGameName() {
+        return gameName;
+    }
 
-	public String getGameName() {
-		return gameName;
-	}
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
 
-	public void setGameName(String gameName) {
-		this.gameName = gameName;
-	}
+    public Integer getBettingCount() {
+        return bettingCount;
+    }
 
-	public Integer getBettingCount() {
-		return bettingCount;
-	}
+    public void setBettingCount(Integer bettingCount) {
+        this.bettingCount = bettingCount;
+    }
 
-	public void setBettingCount(Integer bettingCount) {
-		this.bettingCount = bettingCount;
-	}
+    public Double getBettingAmount() {
+        return bettingAmount;
+    }
 
-	public Double getBettingAmount() {
-		return bettingAmount;
-	}
+    public void setBettingAmount(Double bettingAmount) {
+        this.bettingAmount = bettingAmount;
+    }
 
-	public void setBettingAmount(Double bettingAmount) {
-		this.bettingAmount = bettingAmount;
-	}
+    public Double getResultAmount() {
+        return resultAmount;
+    }
 
-	public Double getResultAmount() {
-		return resultAmount;
-	}
+    public void setResultAmount(Double resultAmount) {
+        this.resultAmount = resultAmount;
+    }
 
-	public void setResultAmount(Double resultAmount) {
-		this.resultAmount = resultAmount;
-	}
+    public Integer getUserGroup() {
+        return userGroup;
+    }
 
-	public Integer getUserGroup() {
-		return userGroup;
-	}
+    public void setUserGroup(Integer userGroup) {
+        this.userGroup = userGroup;
+    }
 
-	public void setUserGroup(Integer userGroup) {
-		this.userGroup = userGroup;
-	}
+    public Long getChannelId() {
+        return channelId;
+    }
 
-	public Long getChannelId() {
-		return channelId;
-	}
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
 
-	public void setChannelId(Long channelId) {
-		this.channelId = channelId;
-	}
+    public String getBettingDate() {
+        return bettingDate;
+    }
 
-	public String getBettingDate() {
-		return bettingDate;
-	}
+    public void setBettingDate(String bettingDate) {
+        this.bettingDate = bettingDate;
+    }
 
-	public void setBettingDate(String bettingDate) {
-		this.bettingDate = bettingDate;
-	}
+    public Long getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Long userCount) {
+        this.userCount = userCount;
+    }
 }
