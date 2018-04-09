@@ -92,4 +92,13 @@ public class BuryingPointService extends CrudService<BuryingPointDao, BuryingPoi
 	public List<DatawareBuryingPointHour> findBuryingHourList(Map<String,Object> map){
 		return dao.findBuryingHourList(map);
 	}
+
+	/**
+	 * 获取30天内活跃用户ID
+	 * @param behaviorParams
+	 * @return
+	 */
+    public List<Long> getActiveUserWhinMonth(Map<String, Object> behaviorParams) {
+		return dao.getActiveUserWhinMonth(behaviorParams);
+    }
 }

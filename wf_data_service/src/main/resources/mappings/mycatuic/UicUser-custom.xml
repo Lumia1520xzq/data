@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
-"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 
 <mapper namespace="com.wf.data.dao.mycatuic.UicUserDao">
-
 
 
     <select id="findUserInfoByTime" resultType="com.wf.data.dao.datarepo.entity.DatawareUserInfo">
@@ -19,10 +18,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         FROM `uic_user`
         WHERE 1=1
         <if test="beginDate != null and beginDate != ''">
-            AND create_time &gt;=  #{beginDate}
+            AND create_time &gt;= #{beginDate}
         </if>
         <if test="endDate != null and endDate != ''">
-            AND create_time &lt;=  #{endDate}
+            AND create_time &lt;= #{endDate}
         </if>
         AND delete_flag = 0
         LIMIT 10000000;
@@ -42,6 +41,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="endDate != null and endDate != ''">
             AND t.create_time &lt;= #{endDate}
         </if>
+        <if test="ids != null and ids.size() != 0">
+            AND t.id in
+            <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
         ORDER BY from_base64(t.third_id) ASC LIMIT #{start}, #{length}
     </select>
 
@@ -58,6 +64,24 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="endDate != null and endDate != ''">
             AND t.create_time &lt;= #{endDate}
         </if>
+    </select>
+
+    <select id="getUserByDate" resultType="java.lang.Long">
+        SELECT
+        t.id
+        FROM
+        uic_user t
+        WHERE 1=1
+        <if test="channelId != null and channelId != ''">
+            AND t.reg_channel_id = #{channelId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND t.create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+          AND t.create_time &lt;= #{endDate}
+        </if>
+        LIMIT #{limit};
     </select>
 </mapper>
 

@@ -15,4 +15,14 @@ public interface JddTagIdConstants {
      * 昨日新增用户彩票ID
      */
     String YESTERDAY_NEW_GAME_USER = "303";
+
+    /**
+     * 回流用户彩票ID
+     */
+    String BACK_FLOW_USER = "370";
+
+    /**
+     * 未付费老用户彩票ID
+     */
+    String UNPAY_OLD_USER = "371";
 }
