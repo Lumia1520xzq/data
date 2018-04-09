@@ -296,7 +296,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getDau() - yesList.get(0).getDau()) * 100, yesList.get(0).getDau(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getDau() - yesList.get(0).getDau()) * 100, yesList.get(0).getDau(), 2));
                                 str += "%; ";
                             }
                         }
@@ -311,7 +311,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getDau() - weekList.get(0).getDau()) * 100, weekList.get(0).getDau(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getDau() - weekList.get(0).getDau()) * 100, weekList.get(0).getDau(), 2));
                                 str += "%; ";
                             }
                         }
@@ -331,7 +331,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getBettingUserCount() - yesList.get(0).getBettingUserCount()) * 100, yesList.get(0).getBettingUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingUserCount() - yesList.get(0).getBettingUserCount()) * 100, yesList.get(0).getBettingUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -346,7 +346,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getBettingUserCount() - weekList.get(0).getBettingUserCount()) * 100, weekList.get(0).getBettingUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingUserCount() - weekList.get(0).getBettingUserCount()) * 100, weekList.get(0).getBettingUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -366,7 +366,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getBettingConversion() - yesList.get(0).getBettingConversion()) * 100, yesList.get(0).getBettingConversion(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingConversion() - yesList.get(0).getBettingConversion()) * 100, yesList.get(0).getBettingConversion(), 2));
                                 str += "%; ";
                             }
                         }
@@ -381,7 +381,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getBettingConversion() - weekList.get(0).getBettingConversion()) * 100, weekList.get(0).getBettingConversion(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingConversion() - weekList.get(0).getBettingConversion()) * 100, weekList.get(0).getBettingConversion(), 2));
                                 str += "%; ";
                             }
                         }
@@ -401,7 +401,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getBettingAmount() - yesList.get(0).getBettingAmount()) * 100, yesList.get(0).getBettingAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAmount() - yesList.get(0).getBettingAmount()) * 100, yesList.get(0).getBettingAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -416,7 +416,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getBettingAmount() - weekList.get(0).getBettingAmount()) * 100, weekList.get(0).getBettingAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAmount() - weekList.get(0).getBettingAmount()) * 100, weekList.get(0).getBettingAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -436,7 +436,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getDiffAmount() - yesList.get(0).getDiffAmount()) * 100, yesList.get(0).getDiffAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getDiffAmount() - yesList.get(0).getDiffAmount()) * 100, yesList.get(0).getDiffAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -451,7 +451,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getDiffAmount() - weekList.get(0).getDiffAmount()) * 100, weekList.get(0).getDiffAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getDiffAmount() - weekList.get(0).getDiffAmount()) * 100, weekList.get(0).getDiffAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -471,7 +471,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getReturnRate() - yesList.get(0).getReturnRate()) * 100, yesList.get(0).getReturnRate(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getReturnRate() - yesList.get(0).getReturnRate()) * 100, yesList.get(0).getReturnRate(), 2));
                                 str += "%; ";
                             }
                         }
@@ -486,7 +486,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getReturnRate() - weekList.get(0).getReturnRate()) * 100, weekList.get(0).getReturnRate(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getReturnRate() - weekList.get(0).getReturnRate()) * 100, weekList.get(0).getReturnRate(), 2));
                                 str += "%; ";
                             }
                         }
@@ -506,7 +506,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getBettingCount() - yesList.get(0).getBettingCount()) * 100, yesList.get(0).getBettingCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingCount() - yesList.get(0).getBettingCount()) * 100, yesList.get(0).getBettingCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -521,7 +521,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getBettingCount() - weekList.get(0).getBettingCount()) * 100, weekList.get(0).getBettingCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingCount() - weekList.get(0).getBettingCount()) * 100, weekList.get(0).getBettingCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -541,7 +541,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getBettingArpu() - yesList.get(0).getBettingArpu()) * 100, yesList.get(0).getBettingArpu(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingArpu() - yesList.get(0).getBettingArpu()) * 100, yesList.get(0).getBettingArpu(), 2));
                                 str += "%; ";
                             }
                         }
@@ -556,7 +556,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getBettingArpu() - weekList.get(0).getBettingArpu()) * 100, weekList.get(0).getBettingArpu(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingArpu() - weekList.get(0).getBettingArpu()) * 100, weekList.get(0).getBettingArpu(), 2));
                                 str += "%; ";
                             }
                         }
@@ -576,7 +576,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getBettingAsp() - yesList.get(0).getBettingAsp()) * 100, yesList.get(0).getBettingAsp(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAsp() - yesList.get(0).getBettingAsp()) * 100, yesList.get(0).getBettingAsp(), 2));
                                 str += "%; ";
                             }
                         }
@@ -591,7 +591,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getBettingAsp() - weekList.get(0).getBettingAsp()) * 100, weekList.get(0).getBettingAsp(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAsp() - weekList.get(0).getBettingAsp()) * 100, weekList.get(0).getBettingAsp(), 2));
                                 str += "%; ";
                             }
                         }
@@ -614,7 +614,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserCount() - yesList.get(0).getNewUserCount()) * 100, yesList.get(0).getNewUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserCount() - yesList.get(0).getNewUserCount()) * 100, yesList.get(0).getNewUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -629,7 +629,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserCount() - weekList.get(0).getNewUserCount()) * 100, weekList.get(0).getNewUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserCount() - weekList.get(0).getNewUserCount()) * 100, weekList.get(0).getNewUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -649,7 +649,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingUserCount() - yesList.get(0).getNewUserBettingUserCount()) * 100, yesList.get(0).getNewUserBettingUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingUserCount() - yesList.get(0).getNewUserBettingUserCount()) * 100, yesList.get(0).getNewUserBettingUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -664,7 +664,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingUserCount() - weekList.get(0).getNewUserBettingUserCount()) * 100, weekList.get(0).getNewUserBettingUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingUserCount() - weekList.get(0).getNewUserBettingUserCount()) * 100, weekList.get(0).getNewUserBettingUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -684,7 +684,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingConversion() - yesList.get(0).getNewUserBettingConversion()) * 100, yesList.get(0).getNewUserBettingConversion(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingConversion() - yesList.get(0).getNewUserBettingConversion()) * 100, yesList.get(0).getNewUserBettingConversion(), 2));
                                 str += "%; ";
                             }
                         }
@@ -699,7 +699,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingConversion() - weekList.get(0).getNewUserBettingConversion()) * 100, weekList.get(0).getNewUserBettingConversion(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingConversion() - weekList.get(0).getNewUserBettingConversion()) * 100, weekList.get(0).getNewUserBettingConversion(), 2));
                                 str += "%; ";
                             }
                         }
@@ -719,7 +719,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingAmount() - yesList.get(0).getNewUserBettingAmount()) * 100, yesList.get(0).getNewUserBettingAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAmount() - yesList.get(0).getNewUserBettingAmount()) * 100, yesList.get(0).getNewUserBettingAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -734,7 +734,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingAmount() - weekList.get(0).getNewUserBettingAmount()) * 100, weekList.get(0).getNewUserBettingAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAmount() - weekList.get(0).getNewUserBettingAmount()) * 100, weekList.get(0).getNewUserBettingAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -754,7 +754,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserDiffAmount() - yesList.get(0).getNewUserDiffAmount()) * 100, yesList.get(0).getNewUserDiffAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserDiffAmount() - yesList.get(0).getNewUserDiffAmount()) * 100, yesList.get(0).getNewUserDiffAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -769,7 +769,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserDiffAmount() - weekList.get(0).getNewUserDiffAmount()) * 100, weekList.get(0).getNewUserDiffAmount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserDiffAmount() - weekList.get(0).getNewUserDiffAmount()) * 100, weekList.get(0).getNewUserDiffAmount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -789,7 +789,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserReturnRate() - yesList.get(0).getNewUserReturnRate()) * 100, yesList.get(0).getNewUserReturnRate(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserReturnRate() - yesList.get(0).getNewUserReturnRate()) * 100, yesList.get(0).getNewUserReturnRate(), 2));
                                 str += "%; ";
                             }
                         }
@@ -804,7 +804,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserReturnRate() - weekList.get(0).getNewUserReturnRate()) * 100, weekList.get(0).getNewUserReturnRate(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserReturnRate() - weekList.get(0).getNewUserReturnRate()) * 100, weekList.get(0).getNewUserReturnRate(), 2));
                                 str += "%; ";
                             }
                         }
@@ -824,7 +824,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingCount() - yesList.get(0).getNewUserBettingCount()) * 100, yesList.get(0).getNewUserBettingCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingCount() - yesList.get(0).getNewUserBettingCount()) * 100, yesList.get(0).getNewUserBettingCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -839,7 +839,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingCount() - weekList.get(0).getNewUserBettingCount()) * 100, weekList.get(0).getNewUserBettingCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingCount() - weekList.get(0).getNewUserBettingCount()) * 100, weekList.get(0).getNewUserBettingCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -859,7 +859,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingArpu() - yesList.get(0).getNewUserBettingArpu()) * 100, yesList.get(0).getNewUserBettingArpu(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingArpu() - yesList.get(0).getNewUserBettingArpu()) * 100, yesList.get(0).getNewUserBettingArpu(), 2));
                                 str += "%; ";
                             }
                         }
@@ -874,7 +874,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingArpu() - weekList.get(0).getNewUserBettingArpu()) * 100, weekList.get(0).getNewUserBettingArpu(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingArpu() - weekList.get(0).getNewUserBettingArpu()) * 100, weekList.get(0).getNewUserBettingArpu(), 2));
                                 str += "%; ";
                             }
                         }
@@ -894,7 +894,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingAsp() - yesList.get(0).getNewUserBettingAsp()) * 100, yesList.get(0).getNewUserBettingAsp(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAsp() - yesList.get(0).getNewUserBettingAsp()) * 100, yesList.get(0).getNewUserBettingAsp(), 2));
                                 str += "%; ";
                             }
                         }
@@ -909,7 +909,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserBettingAsp() - weekList.get(0).getNewUserBettingAsp()) * 100, weekList.get(0).getNewUserBettingAsp(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAsp() - weekList.get(0).getNewUserBettingAsp()) * 100, weekList.get(0).getNewUserBettingAsp(), 2));
                                 str += "%; ";
                             }
                         }
@@ -933,7 +933,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getOneDayRetention() - yesList.get(0).getOneDayRetention()) * 100, yesList.get(0).getOneDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getOneDayRetention() - yesList.get(0).getOneDayRetention()) * 100, yesList.get(0).getOneDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -948,7 +948,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getOneDayRetention() - weekList.get(0).getOneDayRetention()) * 100, weekList.get(0).getOneDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getOneDayRetention() - weekList.get(0).getOneDayRetention()) * 100, weekList.get(0).getOneDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -968,7 +968,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getThreeDayRetention() - yesList.get(0).getThreeDayRetention()) * 100, yesList.get(0).getThreeDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getThreeDayRetention() - yesList.get(0).getThreeDayRetention()) * 100, yesList.get(0).getThreeDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -983,7 +983,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getThreeDayRetention() - weekList.get(0).getThreeDayRetention()) * 100, weekList.get(0).getThreeDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getThreeDayRetention() - weekList.get(0).getThreeDayRetention()) * 100, weekList.get(0).getThreeDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1003,7 +1003,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getSevenDayRetention() - yesList.get(0).getSevenDayRetention()) * 100, yesList.get(0).getSevenDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getSevenDayRetention() - yesList.get(0).getSevenDayRetention()) * 100, yesList.get(0).getSevenDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1018,7 +1018,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getSevenDayRetention() - weekList.get(0).getSevenDayRetention()) * 100, weekList.get(0).getSevenDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getSevenDayRetention() - weekList.get(0).getSevenDayRetention()) * 100, weekList.get(0).getSevenDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1038,7 +1038,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserOneDayRetention() - yesList.get(0).getNewUserOneDayRetention()) * 100, yesList.get(0).getNewUserOneDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserOneDayRetention() - yesList.get(0).getNewUserOneDayRetention()) * 100, yesList.get(0).getNewUserOneDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1053,7 +1053,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserOneDayRetention() - weekList.get(0).getNewUserOneDayRetention()) * 100, weekList.get(0).getNewUserOneDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserOneDayRetention() - weekList.get(0).getNewUserOneDayRetention()) * 100, weekList.get(0).getNewUserOneDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1073,7 +1073,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserThreeDayRetention() - yesList.get(0).getNewUserThreeDayRetention()) * 100, yesList.get(0).getNewUserThreeDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserThreeDayRetention() - yesList.get(0).getNewUserThreeDayRetention()) * 100, yesList.get(0).getNewUserThreeDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1088,7 +1088,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserThreeDayRetention() - weekList.get(0).getNewUserThreeDayRetention()) * 100, weekList.get(0).getNewUserThreeDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserThreeDayRetention() - weekList.get(0).getNewUserThreeDayRetention()) * 100, weekList.get(0).getNewUserThreeDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1108,7 +1108,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getNewUserSevenDayRetention() - yesList.get(0).getNewUserSevenDayRetention()) * 100, yesList.get(0).getNewUserSevenDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserSevenDayRetention() - yesList.get(0).getNewUserSevenDayRetention()) * 100, yesList.get(0).getNewUserSevenDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1123,7 +1123,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getNewUserSevenDayRetention() - weekList.get(0).getNewUserSevenDayRetention()) * 100, weekList.get(0).getNewUserSevenDayRetention(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserSevenDayRetention() - weekList.get(0).getNewUserSevenDayRetention()) * 100, weekList.get(0).getNewUserSevenDayRetention(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1145,7 +1145,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getImportRate() - yesList.get(0).getImportRate()) * 100, yesList.get(0).getImportRate(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getImportRate() - yesList.get(0).getImportRate()) * 100, yesList.get(0).getImportRate(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1160,7 +1160,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getImportRate() - weekList.get(0).getImportRate()) * 100, weekList.get(0).getImportRate(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getImportRate() - weekList.get(0).getImportRate()) * 100, weekList.get(0).getImportRate(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1180,7 +1180,7 @@ public class GameDataController extends ExtJsController {
                                 str += "日环比：0%;";
                             } else {
                                 str += "日环比: ";
-                                str += BigDecimalUtil.div((info.getTotalUserCount() - yesList.get(0).getTotalUserCount()) * 100, yesList.get(0).getTotalUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getTotalUserCount() - yesList.get(0).getTotalUserCount()) * 100, yesList.get(0).getTotalUserCount(), 2));
                                 str += "%; ";
                             }
                         }
@@ -1195,7 +1195,7 @@ public class GameDataController extends ExtJsController {
                                 str += "周同比：0%;";
                             } else {
                                 str += "周同比: ";
-                                str += BigDecimalUtil.div((info.getTotalUserCount() - weekList.get(0).getTotalUserCount()) * 100, weekList.get(0).getTotalUserCount(), 2);
+                                str += String.valueOf(BigDecimalUtil.div((info.getTotalUserCount() - weekList.get(0).getTotalUserCount()) * 100, weekList.get(0).getTotalUserCount(), 2));
                                 str += "%; ";
                             }
                         }
