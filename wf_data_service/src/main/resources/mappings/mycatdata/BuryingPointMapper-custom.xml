@@ -3,7 +3,7 @@
 
 <mapper namespace="com.wf.data.dao.mycatdata.BuryingPointDao">
 
-	<select id="getUserLastPlayGame" resultType="BuryingPoint">
+    <select id="getUserLastPlayGame" resultType="BuryingPoint">
 		SELECT max(create_time) create_time,game_type FROM uic_burying_point
 		WHERE game_type IS NOT NULL AND game_type !=3
 		AND user_id = #{userId} AND burying_type = 7
@@ -12,48 +12,71 @@
 		GROUP BY game_type
 		ORDER BY create_time DESC LIMIT #{gameNum}
 	</select>
-	
-	<select id="getByGameTypeAndBuryingType" resultType="BuryingPoint">
-		SELECT  <include refid="buryingPointColumns" />
-		FROM uic_burying_point t
-		WHERE t.delete_flag = 0 and t.burying_type = #{buryingType} and t.game_type = #{gameType} and t.user_id = #{userId}
-		ORDER BY t.id DESC
-		limit 1
-	</select>
-	
-	<select id="getLastLoginWealTime" resultType="java.util.Date">
+
+    <select id="getByGameTypeAndBuryingType" resultType="BuryingPoint">
+        SELECT
+        <include refid="buryingPointColumns"/>
+        FROM uic_burying_point t
+        WHERE t.delete_flag = 0 and t.burying_type = #{buryingType} and t.game_type = #{gameType} and t.user_id =
+        #{userId}
+        ORDER BY t.id DESC
+        limit 1
+    </select>
+
+    <select id="getLastLoginWealTime" resultType="java.util.Date">
 		select create_time from uic_burying_point
 		where burying_type=#{buryingType} and user_id=#{userId}
 		order by create_time DESC limit 0,1
 	</select>
-	
-	<select id="findLastGameLoading" resultType="BuryingPoint">
-		SELECT <include refid="buryingPointColumns" />
-		FROM uic_burying_point t
-		where t.delete_flag = 0 and t.user_id  = #{userId} and t.burying_type = 8 AND t.game_type = #{gameType}
-		order by t.create_time DESC limit 1
-	</select>
+
+    <select id="findLastGameLoading" resultType="BuryingPoint">
+        SELECT
+        <include refid="buryingPointColumns"/>
+        FROM uic_burying_point t
+        where t.delete_flag = 0 and t.user_id = #{userId} and t.burying_type = 8 AND t.game_type = #{gameType}
+        order by t.create_time DESC limit 1
+    </select>
 
 
-	<select id="findBuryingHourList" resultType="com.wf.data.dao.datarepo.entity.DatawareBuryingPointHour">
-		SELECT
-		user_id userId,
-		game_type gameType,
-		channel_id channelId,
-		count(1) pointCount,
-		DATE_FORMAT(create_time,"%H") buryingHour,
-		DATE_FORMAT(create_time,"%Y-%m-%d") buryingDate
-		FROM `uic_burying_point`
-		WHERE 1=1 AND delete_flag = 0
-		<if test="beginDate != null and beginDate != ''">
-			AND create_time &gt;=  #{beginDate}
-		</if>
-		<if test="endDate != null and endDate != ''">
-			AND create_time &lt;=  #{endDate}
-		</if>
-		AND user_id !=0
-		AND burying_type=8 GROUP BY user_id,game_type,channel_id,DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
-		ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H") LIMIT 10000000
-	</select>
+    <select id="findBuryingHourList" resultType="com.wf.data.dao.datarepo.entity.DatawareBuryingPointHour">
+        SELECT
+        user_id userId,
+        game_type gameType,
+        channel_id channelId,
+        count(1) pointCount,
+        DATE_FORMAT(create_time,"%H") buryingHour,
+        DATE_FORMAT(create_time,"%Y-%m-%d") buryingDate
+        FROM `uic_burying_point`
+        WHERE 1=1 AND delete_flag = 0
+        <if test="beginDate != null and beginDate != ''">
+            AND create_time &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND create_time &lt;= #{endDate}
+        </if>
+        AND user_id !=0
+        AND burying_type=8 GROUP BY
+        user_id,game_type,channel_id,DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H")
+        ORDER BY DATE_FORMAT(create_time,"%Y-%m-%d"),DATE_FORMAT(create_time,"%H") LIMIT 10000000
+    </select>
+
+    <select id="getActiveUserWhinMonth" resultType="java.lang.Long">
+        SELECT
+        DISTINCT t.user_id
+        FROM
+        uic_burying_point t
+        WHERE
+        t.burying_type=8
+        <if test="channelId != null and channelId != ''">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND t.create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.create_time &lt; #{endDate}
+        </if>
+        LIMIT #{limit};
+    </select>
 </mapper>
 

@@ -47,4 +47,8 @@ public class UicUserService extends CrudService<UicUserDao, UicUser> {
     public long getCountByDate(Map<String, Object> map) {
         return dao.getCountByDate(map);
     }
+
+    public List<Long> getUserByDate(Map<String, Object> commonParam) {
+        return dao.getUserByDate(commonParam);
+    }
 }
