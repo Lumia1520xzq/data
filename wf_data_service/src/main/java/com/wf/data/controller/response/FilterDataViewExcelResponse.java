@@ -30,6 +30,9 @@ public class FilterDataViewExcelResponse extends DataEntity {
     private Long bettingOlder;
     private Long rechargeOlder;
 
+    private Long channelId;
+    private String channelName;
+
     @ExcelField(title = "日期", type = 0, align = 1, sort = 10)
     public String getBusinessDate() {
         return businessDate;
@@ -39,7 +42,25 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.businessDate = businessDate;
     }
 
-    @ExcelField(title = "dau(全量用户)", type = 0, align = 1, sort = 20)
+    @ExcelField(title = "渠道", type = 0, align = 1, sort = 20)
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
+
+    @ExcelField(title = "渠道名称", type = 0, align = 1, sort = 30)
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    @ExcelField(title = "dau(全量用户)", type = 0, align = 1, sort = 40)
     public Long getDauCount() {
         return dauCount;
     }
@@ -48,7 +69,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.dauCount = dauCount;
     }
 
-    @ExcelField(title = "进入游戏(全量用户)", type = 0, align = 1, sort = 30)
+    @ExcelField(title = "进入游戏(全量用户)", type = 0, align = 1, sort = 50)
     public Long getGamedauCount() {
         return gamedauCount;
     }
@@ -57,7 +78,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.gamedauCount = gamedauCount;
     }
 
-    @ExcelField(title = "投注(全量用户)", type = 0, align = 1, sort = 40)
+    @ExcelField(title = "投注(全量用户)", type = 0, align = 1, sort = 60)
     public Long getBettingCount() {
         return bettingCount;
     }
@@ -66,7 +87,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.bettingCount = bettingCount;
     }
 
-    @ExcelField(title = "充值(全量用户)", type = 0, align = 1, sort = 50)
+    @ExcelField(title = "充值(全量用户)", type = 0, align = 1, sort = 70)
     public Long getRechargeCount() {
         return rechargeCount;
     }
@@ -75,7 +96,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.rechargeCount = rechargeCount;
     }
 
-    @ExcelField(title = "注册(新用户)", type = 0, align = 1, sort = 60)
+    @ExcelField(title = "注册(新用户)", type = 0, align = 1, sort = 80)
     public Long getRegisteredCount() {
         return registeredCount;
     }
@@ -84,7 +105,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.registeredCount = registeredCount;
     }
 
-    @ExcelField(title = "dau(新用户)", type = 0, align = 1, sort = 70)
+    @ExcelField(title = "dau(新用户)", type = 0, align = 1, sort = 90)
     public Long getDauRegistered() {
         return dauRegistered;
     }
@@ -93,7 +114,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.dauRegistered = dauRegistered;
     }
 
-    @ExcelField(title = "进入游戏(新用户)", type = 0, align = 1, sort = 80)
+    @ExcelField(title = "进入游戏(新用户)", type = 0, align = 1, sort = 100)
     public Long getGamedauRegistered() {
         return gamedauRegistered;
     }
@@ -102,7 +123,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.gamedauRegistered = gamedauRegistered;
     }
 
-    @ExcelField(title = "投注(新用户)", type = 0, align = 1, sort = 90)
+    @ExcelField(title = "投注(新用户)", type = 0, align = 1, sort = 110)
     public Long getBettingRegistered() {
         return bettingRegistered;
     }
@@ -111,7 +132,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.bettingRegistered = bettingRegistered;
     }
 
-    @ExcelField(title = "充值(新用户)", type = 0, align = 1, sort = 100)
+    @ExcelField(title = "充值(新用户)", type = 0, align = 1, sort = 120)
     public Long getRechargeRegistered() {
         return rechargeRegistered;
     }
@@ -120,7 +141,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.rechargeRegistered = rechargeRegistered;
     }
 
-    @ExcelField(title = "dau(老用户)", type = 0, align = 1, sort = 110)
+    @ExcelField(title = "dau(老用户)", type = 0, align = 1, sort = 130)
     public Long getDauOlder() {
         return dauOlder;
     }
@@ -129,7 +150,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.dauOlder = dauOlder;
     }
 
-    @ExcelField(title = "进入游戏(老用户)", type = 0, align = 1, sort = 120)
+    @ExcelField(title = "进入游戏(老用户)", type = 0, align = 1, sort = 140)
     public Long getGamedauOlder() {
         return gamedauOlder;
     }
@@ -138,7 +159,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.gamedauOlder = gamedauOlder;
     }
 
-    @ExcelField(title = "投注(老用户)", type = 0, align = 1, sort = 130)
+    @ExcelField(title = "投注(老用户)", type = 0, align = 1, sort = 150)
     public Long getBettingOlder() {
         return bettingOlder;
     }
@@ -147,7 +168,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.bettingOlder = bettingOlder;
     }
 
-    @ExcelField(title = "充值(老用户)", type = 0, align = 1, sort = 140)
+    @ExcelField(title = "充值(老用户)", type = 0, align = 1, sort = 160)
     public Long getRechargeOlder() {
         return rechargeOlder;
     }

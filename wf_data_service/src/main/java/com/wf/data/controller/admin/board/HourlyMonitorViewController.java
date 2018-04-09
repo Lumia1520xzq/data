@@ -40,6 +40,7 @@ public class HourlyMonitorViewController extends ExtJsController {
     @Autowired
     private DatawareFinalChannelInfoHourService datawareFinalChannelInfoHourService;
 
+
     /**
      * 实时预警
      */
@@ -208,7 +209,7 @@ public class HourlyMonitorViewController extends ExtJsController {
 
         /*获取数据*/
         List<DatawareFinalChannelInfoHour> todData = datawareFinalChannelInfoHourService.getByDateAndHour(params);
-        List<HourlyMonitorExprotResponse>responses = new ArrayList<>();
+        List<HourlyMonitorExprotResponse> responses = new ArrayList<>();
 
         //获取搜索日期最后一条记录
         if (CollectionUtils.isNotEmpty(todData)) {
@@ -216,7 +217,15 @@ public class HourlyMonitorViewController extends ExtJsController {
                 HourlyMonitorExprotResponse exprotResponse = new HourlyMonitorExprotResponse();
                 exprotResponse.setBusinessDate(finalChannelInfoHour.getBusinessDate());
                 exprotResponse.setBusinessHour(finalChannelInfoHour.getBusinessHour());
-                exprotResponse.setParentId(finalChannelInfoHour.getParentId());
+                Long parentIde = finalChannelInfoHour.getParentId();
+                exprotResponse.setParentId(parentIde);
+                //根据parentId获取渠道名称
+                if (new Long(1L).equals(parentIde)){
+                exprotResponse.setChannelName("全部");
+                }else{
+                    ChannelInfo channel = channelInfoService.get(parentIde);
+                    exprotResponse.setChannelName(channel.getName());
+                }
                 exprotResponse.setHourDau(finalChannelInfoHour.getHourDau());
                 exprotResponse.setHourUserBettingCount(finalChannelInfoHour.getHourBettingCount());
                 exprotResponse.setHourRechargeCount(finalChannelInfoHour.getHourRechargeCount());
@@ -266,7 +275,6 @@ public class HourlyMonitorViewController extends ExtJsController {
         return NumberUtils.format(BigDecimalUtil.div(last - notlast, notlast), "#.##%");
     }
 
-    //判断导出参数是否为空
     private boolean judgeParamIsBank(String param) {
         if (param.equals("undefined") || param.equals("null") || StringUtils.isBlank(param)) {
             return true;
@@ -276,9 +284,6 @@ public class HourlyMonitorViewController extends ExtJsController {
 
     /**
      * 格式化GMT时间
-     *
-     * @param date
-     * @return
      */
     public String formatGTMDate(String date) {
         DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd");

@@ -276,16 +276,22 @@ public class GameMonitorViewController extends ExtJsController {
                 GameMonitorExprotResponse exprotResponse = new GameMonitorExprotResponse();
                 exprotResponse.setBusinessDate(gameBettingInfoHour.getBusinessDate());
                 exprotResponse.setBusinessHour(gameBettingInfoHour.getBusinessHour());
-                exprotResponse.setParentId(gameBettingInfoHour.getParentId());
+                Long parentIde = gameBettingInfoHour.getParentId();
+                exprotResponse.setParentId(parentIde);
+                //根据parentId获取渠道名称
+                if (new Long(1L).equals(parentIde)){
+                    exprotResponse.setChannelName("全部");
+                }else{
+                    ChannelInfo channel = channelInfoService.get(parentIde);
+                    exprotResponse.setChannelName(channel.getName());
+                }
                 exprotResponse.setGameType(getGameType(gameBettingInfoHour.getGameType()));
-
                 exprotResponse.setHourDau(gameBettingInfoHour.getHourDau());
                 exprotResponse.setHourUserBettingCount(gameBettingInfoHour.getHourBettingUserCount());
                 exprotResponse.setHourBettingCount(gameBettingInfoHour.getHourBettingCount());
                 exprotResponse.setHourBettingAmount(gameBettingInfoHour.getHourBettingAmount());
                 exprotResponse.setHourDiffAmount(BigDecimalUtil.sub(gameBettingInfoHour.getHourBettingAmount(), gameBettingInfoHour.getHourReturnAmount()));
                 exprotResponse.setHourReturnRate(String.valueOf(calRate(gameBettingInfoHour.getHourReturnAmount(), gameBettingInfoHour.getHourBettingAmount())) + "%");
-
                 exprotResponse.setDau(gameBettingInfoHour.getDau());
                 exprotResponse.setUserBettingCount(gameBettingInfoHour.getBettingUserCount());
                 exprotResponse.setBettingCount(gameBettingInfoHour.getBettingCount());
