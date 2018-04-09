@@ -131,7 +131,6 @@ public class WholeDataViewController extends ExtJsController {
             }
             //流水差
             info.setMoneyGap(info.getBettingAmount() - info.getResultAmount());
-            System.out.println("首日付费率:" + info.getFirstRechargeRate());
         }
         if (CollectionUtils.isNotEmpty(allList)) {
             //获取最后一条记录

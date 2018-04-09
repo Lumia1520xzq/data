@@ -15,7 +15,8 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         var store= Ext.create('DCIS.Store', {
             url:'data/user/classify/getList.do',
             autoload:false,
-            fields: ["0","1","2","3","4","5","6","dateList"]
+            fields: ["0","1","2","3","4","5","6",
+                "dateList","dayRetentionDateList","weekRetentionDateList","weekLostDateList"]
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -320,6 +321,12 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
         function fun1(tabId){
             var legArr =  ['新注册','累充0','累充1-100','累充100-1000','累充1000-10000','累充10000-100000','累充10万以上'];
             var dateList = store.getAt(0).get("dateList");
+            var dayRetentionDateList = store.getAt(0).get("dayRetentionDateList");
+            var weekRetentionDateList = store.getAt(0).get("weekRetentionDateList");
+            var weekLostDateList = store.getAt(0).get("weekLostDateList");
+            console.log(dayRetentionDateList);
+            console.log(weekRetentionDateList);
+            console.log(weekLostDateList);
             var newUserList = store.getAt(0).get("0");
             var rechargeOneList = store.getAt(0).get("1");
             var rechargeTwoList = store.getAt(0).get("2");
@@ -1027,7 +1034,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                     rechargeSixWeekRetentionList[i] = rechargeSixList[i].weekRetention;
                 }
 
-                var dayRetentionOption = template("次日留存",dateList,legArr);
+                var dayRetentionOption = rateTemplate("次日留存",dayRetentionDateList,legArr);
                 dayRetentionOption.series.push(lineStyleSeries(legArr[0],newUserDayRetentionList));
                 dayRetentionOption.series.push(lineStyleSeries(legArr[1],rechargeOneDayRetentionList));
                 dayRetentionOption.series.push(lineStyleSeries(legArr[2],rechargeTwoDayRetentionList));
@@ -1036,7 +1043,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                 dayRetentionOption.series.push(lineStyleSeries(legArr[5],rechargeFiveDayRetentionList));
                 dayRetentionOption.series.push(lineStyleSeries(legArr[6],rechargeSixDayRetentionList));
 
-                var weekRetentionOption = template("7日留存",dateList,legArr);
+                var weekRetentionOption = rateTemplate("7日留存",weekRetentionDateList,legArr);
                 weekRetentionOption.series.push(lineStyleSeries(legArr[0],newUserWeekRetentionList));
                 weekRetentionOption.series.push(lineStyleSeries(legArr[1],rechargeOneWeekRetentionList));
                 weekRetentionOption.series.push(lineStyleSeries(legArr[2],rechargeTwoWeekRetentionList));
@@ -1072,7 +1079,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                     rechargeSixWeekLostRateList[i] = rechargeSixList[i].weekLostRate;
                 }
 
-                var weekLostRateOption = template("7日流失率",dateList,legArr);
+                var weekLostRateOption = rateTemplate("7日流失率",weekLostDateList,legArr);
                 weekLostRateOption.series.push(lineStyleSeries(legArr[0],newUserWeekLostRateList));
                 weekLostRateOption.series.push(lineStyleSeries(legArr[1],rechargeOneWeekLostRateList));
                 weekLostRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoWeekLostRateList));

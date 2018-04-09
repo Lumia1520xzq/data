@@ -14,6 +14,7 @@ import com.wf.data.dao.datarepo.entity.DatawareFinalRechargeTagAnalysis;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelConversionService;
 import com.wf.data.service.data.DatawareFinalRechargeTagAnalysisService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,6 +93,40 @@ public class UserClassifyViewController extends ExtJsController {
             simpleDateList.add(date.substring(index + 1));
         }
         map.put("dateList",simpleDateList);
+        //获取dateList最后一天的日期
+        String lastDate = DateUtils.getYesterdayDate();
+        if(CollectionUtils.isNotEmpty(dateList)){
+            lastDate = dateList.get(dateList.size()-1);
+        }
+        //截取次日留存的日期
+        List<String> dayRetentionDateList = dateList;
+        if(!DateUtils.parseDate(lastDate).before(DateUtils.getYesterday()) && CollectionUtils.isNotEmpty(dateList)){
+            dayRetentionDateList = dateList.subList(0,dateList.size()-1);
+        }
+        map.put("dayRetentionDateList",dayRetentionDateList);
+
+        //截取七日留存的日期
+        List<String> weekRetentionDateList = dateList;
+        if(!DateUtils.parseDate(lastDate).before(DateUtils.parseDate(DateUtils.getPrevDate(DateUtils.getYesterdayDate(),6))) && CollectionUtils.isNotEmpty(dateList)){
+            if(dateList.size() >= 6){
+                weekRetentionDateList = dateList.subList(0,dateList.size()-6);
+            }else{
+                weekRetentionDateList = new ArrayList<>();
+            }
+        }
+        map.put("weekRetentionDateList",weekRetentionDateList);
+
+        //七日流失的日期
+        List<String> weekLostDateList = dateList;
+        if(!DateUtils.parseDate(lastDate).before(DateUtils.parseDate(DateUtils.getPrevDate(DateUtils.getYesterdayDate(),7))) && CollectionUtils.isNotEmpty(dateList)){
+            if(dateList.size() >= 7){
+                weekLostDateList = dateList.subList(0,dateList.size()-7);
+            }else{
+                weekLostDateList = new ArrayList<>();
+            }
+        }
+        map.put("weekLostDateList",weekLostDateList);
+
         // 循环取每个userTag对应的list0
         for (int index=0;index<=6;index++){
             params.put("userTag",index);
@@ -102,5 +137,7 @@ public class UserClassifyViewController extends ExtJsController {
         list.add(map);
         return list;
     }
+
+
 
 }
