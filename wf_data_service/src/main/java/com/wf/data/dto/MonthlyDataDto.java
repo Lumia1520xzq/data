@@ -104,7 +104,7 @@ public class MonthlyDataDto implements Serializable {
 		this.sumCost = sumCost;
 	}
 
-	@ExcelField(title = "当月累计成本占比", type = 0, align = 1, sort = 90)
+	@ExcelField(title = "当月累计成本占比(单位:%)", type = 0, align = 1, sort = 90)
 	public Double getCostRate() {
 		return costRate;
 	}
