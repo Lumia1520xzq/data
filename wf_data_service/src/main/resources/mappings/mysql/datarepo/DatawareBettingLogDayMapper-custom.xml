@@ -173,7 +173,7 @@
 
     <select id="getBettingCountByUser" resultType="java.lang.Long">
         SELECT
-          COUNT(*)
+          COUNT(betting_count)
         FROM
           `dataware_betting_log_day`
         WHERE
@@ -226,6 +226,33 @@
             AND t.game_type = #{gameType}
         </if>
         ORDER BY betting_date ASC limit 1
+    </select>
+
+    <select id="getBettingInfoByDate" resultType="DatawareBettingLogDay">
+        SELECT
+        IFNULL(COUNT(DISTINCT user_id),0) userCount,
+        IFNULL(SUM(betting_amount),0) bettingAmount,
+        IFNULL(SUM(betting_count),0) bettingCount,
+        IFNULL(SUM(result_amount),0) resultAmount
+        FROM dataware_betting_log_day
+        WHERE 1=1
+        AND channel_id IS NOT NULL
+        <if test="gameType != null and gameType != ''">
+            AND game_type= #{gameType}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="bettingDate != null and bettingDate != ''">
+            AND betting_date =#{bettingDate}
+        </if>
+        <if test="newUserIds != null and  newUserIds.size() != 0">
+            AND user_id in
+            <foreach collection="newUserIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND delete_flag=0
     </select>
 
 

@@ -8,6 +8,7 @@ import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.business.*;
+import com.wf.data.service.data.DatawareFinalGameInfoService;
 import com.wf.data.service.data.DatawareFinalRechargeTagAnalysisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class DayFinalJob {
     private final RegisteredRetentionService registeredRetentionService = SpringContextHolder.getBean(RegisteredRetentionService.class);
     private final EntranceAnalysisService entranceAnalysisService = SpringContextHolder.getBean(EntranceAnalysisService.class);
     private final DatawareFinalRechargeTagAnalysisService tagAnalysisService = SpringContextHolder.getBean(DatawareFinalRechargeTagAnalysisService.class);
+    private final GameOverViewService gameOverViewService = SpringContextHolder.getBean(GameOverViewService.class);
 
 
     public void execute() {
@@ -90,6 +92,15 @@ public class DayFinalJob {
         try {
             if ("true".equals(openFlag[5])) {
                 entranceAnalysisService.toDoEntranceAnalysis();
+            }
+        } catch (Exception e) {
+            logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+
+        //游戏数据总览数据总结
+        try {
+            if ("true".equals(openFlag[6])) {
+                gameOverViewService.toDoEntranceAnalysis();
             }
         } catch (Exception e) {
             logger.error("toDoConversionAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
