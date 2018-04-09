@@ -208,11 +208,19 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             seriesData = data.chartsData.series;
             for (var key in seriesData) {
                 if (key == item) {
+
                     for (var i = 0; i < seriesData[key].length; i++) {
+                        var aa =[];
+                        for (var j = 0; j < seriesData[key][i].length; j++) {
+                            var str = [];
+                            str = seriesData[key][i][j].split(";");
+                            aa.push({value : str[0], name : key+":"+seriesData[key][i][j]})
+                        }
                         var temp = {
                             name: data.chartsData.legends[i],
                             type: 'line',
-                            data: seriesData[key][i]
+                            // data: seriesData[key][i]
+                            data: aa
                         }
                         series.push(temp)
                     }
@@ -232,6 +240,15 @@ var option = {
     },
     tooltip: {
         trigger: 'axis',
+        formatter: function (datas) {
+            var str='';
+            str +='时间 :'+datas[0].name+'<br/>';
+            for(var i = 0; i < datas.length; i++){
+                if(datas[i].data != undefined && datas[i].data.name != 0)
+                    str += datas[i].seriesName +'<br/>'+datas[i].data.name+'<br/>';
+            }
+            return str;
+        }
     },
     legend: {
         orient: 'horizontal',      // 布局方式，默认为水平布局，可选为：
