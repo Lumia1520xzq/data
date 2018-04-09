@@ -42,6 +42,12 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             todoReload: function () {
                 doSearch(me.down(("[name='myTabs']")).activeTab.items.items)
             },
+            export: function () {
+                window.location.href = 'data/game/data/export.do?parentIds=' + me.down("[name='parentId']").getValue() +
+                    '&gameTypes=' + me.down("[name='gameType']").getValue()+
+                    '&startTime=' + Ext.util.Format.date(me.down("[name='startTime']").value, "Y-m-d")+
+                    '&endTime=' + Ext.util.Format.date(me.down("[name='endTime']").value, "Y-m-d");
+            },
             items: [{
                 name: 'parentId',
                 fieldLabel: '主渠道',

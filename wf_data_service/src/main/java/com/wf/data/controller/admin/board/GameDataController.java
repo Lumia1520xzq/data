@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
+import com.wf.core.utils.GfJsonUtil;
+import com.wf.core.utils.TraceIdUtils;
+import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
@@ -17,8 +20,11 @@ import jodd.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1199,6 +1205,50 @@ public class GameDataController extends ExtJsController {
             }
         }
         return resultList;
+    }
+
+
+    @RequestMapping("/export")
+    public void export(@RequestParam List<Long> parentIds, @RequestParam List<Long> gameTypes, @RequestParam String startTime, @RequestParam String endTime, HttpServletResponse response) {
+
+        if (StringUtil.isBlank(startTime)) {
+            startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+        }
+        if (StringUtil.isBlank(endTime)) {
+            endTime = DateUtils.getYesterdayDate();
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("beginDate", startTime);
+        map.put("endDate", endTime);
+        map.put("parentIds", parentIds);
+        map.put("gameTypes", gameTypes);
+        List<DatawareFinalGameInfo> exportList = datawareFinalGameInfoService.findListByDate(map);
+        for (DatawareFinalGameInfo info : exportList) {
+            if (info.getParentId() != null) {
+                if (1 == info.getParentId()) {
+                    info.setParentIdName("全部(1)");
+                } else {
+                    ChannelInfo channelInfo = channelInfoService.get(info.getParentId());
+                    if (channelInfo == null) {
+                        channelInfo = new ChannelInfo();
+                    }
+                    info.setParentIdName(channelInfo.getName() + "(" + info.getParentId() + ")");
+                }
+            }
+            if (null != info.getGameType()){
+                DataDict dict = dataDictService.getDictByValue("game_type", info.getGameType());
+                if (null ==dict){
+                    dict = new DataDict();
+                }
+                info.setGameName(dict.getLabel() + "(" + info.getGameType() + ")");
+            }
+        }
+        try {
+            String fileName = "游戏数据总览" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            new ExportExcel("游戏数据总览", DatawareFinalGameInfo.class).setDataList(exportList).write(response, fileName).dispose();
+        } catch (Exception e) {
+            logger.error("导出游戏数据总览失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(map.toString()));
+        }
     }
 }
 

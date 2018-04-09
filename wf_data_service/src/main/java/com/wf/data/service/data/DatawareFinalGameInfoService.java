@@ -18,6 +18,10 @@ public class DatawareFinalGameInfoService extends CrudService<DatawareFinalGameI
         return dao.findInfoByDate(map);
     }
 
+    public List<DatawareFinalGameInfo> findListByDate(Map<String, Object> map) {
+        return dao.findListByDate(map);
+    }
+
 
     public List<String> findDateList(Map<String, Object> map) {
         return dao.findDateList(map);

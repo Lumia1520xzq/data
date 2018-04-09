@@ -56,5 +56,30 @@
         </if>
     </select>
 
+    <select id="findListByDate" resultType="DatawareFinalGameInfo">
+        SELECT
+        <include refid="datawareFinalGameInfoColumns"/>
+        FROM dataware_final_game_info t
+        WHERE 1=1
+        <if test="gameTypes != null and  gameTypes.size() != 0">
+            AND t.game_type IN
+            <foreach collection="gameTypes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="parentIds != null and  parentIds.size() != 0">
+            AND t.parent_id IN
+            <foreach collection="parentIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND t.business_date &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.business_date &lt;= #{endDate}
+        </if>
+    </select>
+
 </mapper>
 
