@@ -116,8 +116,12 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             }, {
                 title: '新增用户数据',
                 itemId: 'newUsers',
-                autoScroll: true,
-                closable: false,
+                width: "16.5%",
+                height: "100%",
+                xtype: "panel",
+                forceFit: true,
+                bodyStyle: 'border-color:black',
+                layout: 'column',
                 items: getHtml(["新增用户数","新增投注用户数","新增投注转化率","投注流水","流水差","返奖率","投注笔数","投注ARPU","投注ASP"]),
                 listeners: {
                     'activate': function (tab) {
@@ -129,8 +133,12 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             }, {
                 title: '留存数据',
                 itemId: 'retention',
-                autoScroll: true,
-                closable: false,
+                width: "16.5%",
+                height: "100%",
+                xtype: "panel",
+                forceFit: true,
+                bodyStyle: 'border-color:black',
+                layout: 'column',
                 items: getHtml(["新增次留","新增三留","新增七留","全量次留","全量三留","全量七留"]),
                 listeners: {
                     'activate': function (tab) {
@@ -141,8 +149,12 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             }, {
                 title: '其它数据',
                 itemId: 'other',
-                autoScroll: true,
-                closable: false,
+                width: "16.5%",
+                height: "100%",
+                xtype: "panel",
+                forceFit: true,
+                bodyStyle: 'border-color:black',
+                layout: 'column',
                 items: getHtml(["导入率","累计用户数"]),
                 listeners: {
                     'activate': function (tab) {
