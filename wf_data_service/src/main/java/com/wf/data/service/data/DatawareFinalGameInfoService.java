@@ -27,7 +27,7 @@ public class DatawareFinalGameInfoService extends CrudService<DatawareFinalGameI
     public List<String> findDateList(Map<String, Object> map) {
         return dao.findDateList(map);
     }
-}
+
     public int getCountByDate(Map<String, Object> param) {
         return dao.getCountByDate(param);
     }
