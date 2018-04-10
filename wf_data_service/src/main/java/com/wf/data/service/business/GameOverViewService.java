@@ -18,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class GameOverViewService {
         dataCollect(searchDate, 0);//自动更新
     }
 
+    @Async
     public void historyGameOverViewAnalysis(String startTime, String endTime) {
         logger.info("游戏数据总览老数据清洗开始:traceId={}", TraceIdUtils.getTraceId());
         try {

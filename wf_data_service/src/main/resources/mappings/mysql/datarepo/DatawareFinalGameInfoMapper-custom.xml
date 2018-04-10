@@ -51,6 +51,18 @@
         <if test="endDate != null and endDate != ''">
             AND t.business_date &lt;= #{endDate}
         </if>
+        <if test="gameTypes != null and  gameTypes.size() != 0">
+            AND t.game_type IN
+            <foreach collection="gameTypes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="parentIds != null and  parentIds.size() != 0">
+            AND t.parent_id IN
+            <foreach collection="parentIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <if test="gameType != null">
             AND t.game_type = #{gameType}
         </if>
