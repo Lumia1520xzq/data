@@ -63,7 +63,8 @@ public class HistoryDataCleanController extends ExtJsController {
     private UserInfoExtendGameService userInfoExtendGameService;
     @Autowired
     private DatawareFinalRechargeTagAnalysisService tagAnalysisService;
-
+    @Autowired
+    private GameOverViewService gameOverViewService;
 
     /**
      * 清洗channelInfoHour表
@@ -588,6 +589,26 @@ public class HistoryDataCleanController extends ExtJsController {
             return error("开始时间大于结束时间");
         }
         tagAnalysisService.historyEntranceAnalysis(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    @ResponseBody
+    @RequestMapping("/gameOverView")
+    public Object gameOverView(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+        gameOverViewService.historyGameOverViewAnalysis(startTime, endTime);
         return success("清洗开始执行");
     }
 }

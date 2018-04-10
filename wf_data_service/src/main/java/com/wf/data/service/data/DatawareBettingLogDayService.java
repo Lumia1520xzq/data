@@ -60,4 +60,7 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
         return dao.getByUserIdAndGameType(params);
     }
 
+    public DatawareBettingLogDay getBettingInfoByDate(Map<String, Object> bettingParam) {
+        return dao.getBettingInfoByDate(bettingParam);
+    }
 }
