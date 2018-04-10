@@ -11,6 +11,12 @@ import java.util.Map;
 @MyBatisDao(tableName = "dataware_final_game_info")
 public interface DatawareFinalGameInfoDao extends CrudDao<DatawareFinalGameInfo> {
 
+    int getCountByDate(Map<String, Object> paramMap);
+
+    void deleteByDate(Map<String, Object> param);
+
+    DatawareFinalGameInfo getInfoByDateAndGameType(Map<String, Object> param);
+
     List<DatawareFinalGameInfo> findInfoByDate(Map<String, Object> map);
 
     List<DatawareFinalGameInfo> findListByDate(Map<String, Object> map);

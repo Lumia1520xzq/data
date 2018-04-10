@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author lcs
+ * @author shihui
+ * @date 2018/4/4
  */
 @Service
 public class DatawareFinalGameInfoService extends CrudService<DatawareFinalGameInfoDao, DatawareFinalGameInfo> {
@@ -25,5 +26,17 @@ public class DatawareFinalGameInfoService extends CrudService<DatawareFinalGameI
 
     public List<String> findDateList(Map<String, Object> map) {
         return dao.findDateList(map);
+    }
+}
+    public int getCountByDate(Map<String, Object> param) {
+        return dao.getCountByDate(param);
+    }
+
+    public void deleteByDate(Map<String, Object> param) {
+        dao.deleteByDate(param);
+    }
+
+    public DatawareFinalGameInfo getInfoByDateAndGameType(Map<String, Object> param) {
+        return dao.getInfoByDateAndGameType(param);
     }
 }
