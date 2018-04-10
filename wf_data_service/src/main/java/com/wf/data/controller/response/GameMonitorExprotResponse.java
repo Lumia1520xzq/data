@@ -13,6 +13,7 @@ public class GameMonitorExprotResponse extends DataEntity {
     private String businessDate;
     private String businessHour;
     private Long parentId;
+    private String channelName;
     private String gameType;
 
     private Long hourDau;
@@ -56,7 +57,16 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.parentId = parentId;
     }
 
-    @ExcelField(title = "游戏类型", type = 0, align = 1, sort = 40)
+    @ExcelField(title = "渠道名称", type = 0, align = 1, sort = 40)
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    @ExcelField(title = "游戏类型", type = 0, align = 1, sort = 50)
     public String getGameType() {
         return gameType;
     }
@@ -65,7 +75,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.gameType = gameType;
     }
 
-    @ExcelField(title = "DAU", type = 0, align = 1, sort = 50)
+    @ExcelField(title = "DAU", type = 0, align = 1, sort = 60)
     public Long getHourDau() {
         return hourDau;
     }
@@ -74,7 +84,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourDau = hourDau;
     }
 
-    @ExcelField(title = "投注人数", type = 0, align = 1, sort = 60)
+    @ExcelField(title = "投注人数", type = 0, align = 1, sort = 70)
     public Long getHourUserBettingCount() {
         return hourUserBettingCount;
     }
@@ -83,7 +93,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourUserBettingCount = hourUserBettingCount;
     }
 
-    @ExcelField(title = "投注笔数", type = 0, align = 1, sort = 70)
+    @ExcelField(title = "投注笔数", type = 0, align = 1, sort = 80)
     public Long getHourBettingCount() {
         return hourBettingCount;
     }
@@ -92,7 +102,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourBettingCount = hourBettingCount;
     }
 
-    @ExcelField(title = "投注流水", type = 0, align = 1, sort = 80)
+    @ExcelField(title = "投注流水", type = 0, align = 1, sort = 90)
     public Double getHourBettingAmount() {
         return hourBettingAmount;
     }
@@ -101,7 +111,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourBettingAmount = hourBettingAmount;
     }
 
-    @ExcelField(title = "流水差", type = 0, align = 1, sort = 90)
+    @ExcelField(title = "流水差", type = 0, align = 1, sort = 100)
     public Double getHourDiffAmount() {
         return hourDiffAmount;
     }
@@ -110,7 +120,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourDiffAmount = hourDiffAmount;
     }
 
-    @ExcelField(title = "返奖率", type = 0, align = 1, sort = 100)
+    @ExcelField(title = "返奖率", type = 0, align = 1, sort = 110)
     public String getHourReturnRate() {
         return hourReturnRate;
     }
@@ -119,7 +129,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourReturnRate = hourReturnRate;
     }
 
-    @ExcelField(title = "累计DAU", type = 0, align = 1, sort = 110)
+    @ExcelField(title = "累计DAU", type = 0, align = 1, sort = 120)
     public Long getDau() {
         return dau;
     }
@@ -128,7 +138,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.dau = dau;
     }
 
-    @ExcelField(title = "累计投注人数", type = 0, align = 1, sort = 120)
+    @ExcelField(title = "累计投注人数", type = 0, align = 1, sort = 130)
     public Long getUserBettingCount() {
         return userBettingCount;
     }
@@ -137,7 +147,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.userBettingCount = userBettingCount;
     }
 
-    @ExcelField(title = "累计投注笔数", type = 0, align = 1, sort = 130)
+    @ExcelField(title = "累计投注笔数", type = 0, align = 1, sort = 140)
     public Long getBettingCount() {
         return bettingCount;
     }
@@ -146,7 +156,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.bettingCount = bettingCount;
     }
 
-    @ExcelField(title = "累计投注流水", type = 0, align = 1, sort = 140)
+    @ExcelField(title = "累计投注流水", type = 0, align = 1, sort = 150)
     public Double getBettingAmount() {
         return bettingAmount;
     }
@@ -155,7 +165,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.bettingAmount = bettingAmount;
     }
 
-    @ExcelField(title = "累计流水差", type = 0, align = 1, sort = 150)
+    @ExcelField(title = "累计流水差", type = 0, align = 1, sort = 160)
     public Double getDiffAmount() {
         return diffAmount;
     }
@@ -164,7 +174,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.diffAmount = diffAmount;
     }
 
-    @ExcelField(title = "累计返奖率", type = 0, align = 1, sort = 160)
+    @ExcelField(title = "累计返奖率", type = 0, align = 1, sort = 170)
     public String getReturnRate() {
         return returnRate;
     }
