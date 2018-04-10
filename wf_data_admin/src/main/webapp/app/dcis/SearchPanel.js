@@ -128,6 +128,50 @@ Ext.define("DCIS.SearchPanel", {
             });
             return buttonPanel;
         }
+
+        if(config.todoReload){
+
+            buttonPanel.items.push({
+                xtype: "button",
+                text: "查询",
+                iconCls: 'icon-search',
+                width: 60,
+                handler: config.todoReload,
+                scope: me
+            });
+            if (config.export) {
+                buttonPanel.items.push({
+                    xtype: "panel",
+                    width: 50,
+                    border: false,
+                    height: "auto"
+                });
+                buttonPanel.items.push({
+                    xtype: "button",
+                    text: "导出",
+                    iconCls: 'icon-print',
+                    width: 100,
+                    handler: config.export,
+                    scope: me
+                });
+            }
+            buttonPanel.items.push({
+                xtype: "panel",
+                width: 60,
+                border: false,
+                height: "auto"
+            });
+            buttonPanel.items.push({
+                xtype: "button",
+                text: "重置",
+                iconCls: 'icon-undo',
+                width: 60,
+                handler: me.searchCancel,
+                scope: me
+            });
+            return buttonPanel;
+        }
+
         buttonPanel.items.push({
             xtype: "button",
             text: "查询",

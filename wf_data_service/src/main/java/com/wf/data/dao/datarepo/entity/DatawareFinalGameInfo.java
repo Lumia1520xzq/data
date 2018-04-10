@@ -1,6 +1,8 @@
 package com.wf.data.dao.datarepo.entity;
 
+
 import com.wf.core.persistence.DataEntity;
+import com.wf.core.utils.excel.ExcelField;
 
 public class DatawareFinalGameInfo extends DataEntity {
     private static final long serialVersionUID = -1;
@@ -37,6 +39,27 @@ public class DatawareFinalGameInfo extends DataEntity {
     private Long totalUserCount;
     private String businessDate;
 
+    private String parentIdName;
+    private String gameName;
+
+    @ExcelField(title = "渠道名称", type = 1, align = 2, sort = 2)
+    public String getParentIdName() {
+        return parentIdName;
+    }
+
+    public void setParentIdName(String parentIdName) {
+        this.parentIdName = parentIdName;
+    }
+
+    @ExcelField(title = "游戏名称", type = 1, align = 2, sort = 3)
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
     public Long getParentId() {
         return parentId;
     }
@@ -61,6 +84,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.gameType = gameType;
     }
 
+    @ExcelField(title = "DAU", type = 1, align = 2, sort = 4)
     public Long getDau() {
         return dau;
     }
@@ -69,6 +93,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.dau = dau;
     }
 
+    @ExcelField(title = "投注人数", type = 1, align = 2, sort = 5)
     public Long getBettingUserCount() {
         return bettingUserCount;
     }
@@ -77,6 +102,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.bettingUserCount = bettingUserCount;
     }
 
+    @ExcelField(title = "投注转化率", type = 1, align = 2, sort = 6)
     public Double getBettingConversion() {
         return bettingConversion;
     }
@@ -85,6 +111,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.bettingConversion = bettingConversion;
     }
 
+    @ExcelField(title = "投注流水", type = 1, align = 2, sort = 11)
     public Double getBettingAmount() {
         return bettingAmount;
     }
@@ -101,6 +128,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.returnAmount = returnAmount;
     }
 
+    @ExcelField(title = "流水差", type = 1, align = 2, sort = 12)
     public Double getDiffAmount() {
         return diffAmount;
     }
@@ -109,6 +137,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.diffAmount = diffAmount;
     }
 
+    @ExcelField(title = "返奖率", type = 1, align = 2, sort = 13)
     public Double getReturnRate() {
         return returnRate;
     }
@@ -117,6 +146,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.returnRate = returnRate;
     }
 
+    @ExcelField(title = "投注笔数", type = 1, align = 2, sort = 14)
     public Long getBettingCount() {
         return bettingCount;
     }
@@ -125,6 +155,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.bettingCount = bettingCount;
     }
 
+    @ExcelField(title = "投注ARPU", type = 1, align = 2, sort = 15)
     public Double getBettingArpu() {
         return bettingArpu;
     }
@@ -133,6 +164,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.bettingArpu = bettingArpu;
     }
 
+    @ExcelField(title = "投注ASP", type = 1, align = 2, sort = 16)
     public Double getBettingAsp() {
         return bettingAsp;
     }
@@ -165,6 +197,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.sevenDayRetention = sevenDayRetention;
     }
 
+    @ExcelField(title = "新增用户数", type = 1, align = 2, sort = 7)
     public Long getNewUserCount() {
         return newUserCount;
     }
@@ -173,6 +206,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.newUserCount = newUserCount;
     }
 
+    @ExcelField(title = "新增用户投注人数", type = 1, align = 2, sort = 8)
     public Long getNewUserBettingUserCount() {
         return newUserBettingUserCount;
     }
@@ -181,6 +215,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.newUserBettingUserCount = newUserBettingUserCount;
     }
 
+    @ExcelField(title = "新增用户投注转化率", type = 1, align = 2, sort = 9)
     public Double getNewUserBettingConversion() {
         return newUserBettingConversion;
     }
@@ -245,6 +280,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.newUserBettingAsp = newUserBettingAsp;
     }
 
+    @ExcelField(title = "新增次留", type = 1, align = 2, sort = 10)
     public Double getNewUserOneDayRetention() {
         return newUserOneDayRetention;
     }
@@ -269,6 +305,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.newUserSevenDayRetention = newUserSevenDayRetention;
     }
 
+    @ExcelField(title = "导入率", type = 1, align = 2, sort = 17)
     public Double getImportRate() {
         return importRate;
     }
@@ -277,6 +314,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.importRate = importRate;
     }
 
+    @ExcelField(title = "累计用户数", type = 1, align = 2, sort = 18)
     public Long getTotalUserCount() {
         return totalUserCount;
     }
@@ -285,6 +323,7 @@ public class DatawareFinalGameInfo extends DataEntity {
         this.totalUserCount = totalUserCount;
     }
 
+    @ExcelField(title = "日期", type = 1, align = 2, sort = 1)
     public String getBusinessDate() {
         return businessDate;
     }
