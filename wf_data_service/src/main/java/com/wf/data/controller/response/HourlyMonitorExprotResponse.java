@@ -47,7 +47,7 @@ public class HourlyMonitorExprotResponse extends DataEntity {
         this.businessHour = businessHour;
     }
 
-    @ExcelField(title = "渠道", type = 0, align = 1, sort = 30)
+    @ExcelField(title = "渠道ID", type = 0, align = 1, sort = 30)
     public Long getParentId() {
         return parentId;
     }

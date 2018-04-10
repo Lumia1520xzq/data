@@ -136,10 +136,10 @@ public class FilterDataViewController extends ExtJsController {
 
                     //根据channelId获取渠道名称
                     if (new Long(1L).equals(channelIde)){
-                        excelResponse.setChannelName("全部");
+                        excelResponse.setChannelName("全部(1)");
                     }else{
                         ChannelInfo channel = channelInfoService.get(channelIde);
-                        excelResponse.setChannelName(channel.getName());
+                        excelResponse.setChannelName(channel.getName()+"("+channelIde+")");
                     }
 
                     excelResponse.setDauCount(channelConversion.getDauCount());

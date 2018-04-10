@@ -48,7 +48,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.businessHour = businessHour;
     }
 
-    @ExcelField(title = "渠道", type = 0, align = 1, sort = 30)
+    @ExcelField(title = "渠道ID", type = 0, align = 1, sort = 30)
     public Long getParentId() {
         return parentId;
     }
@@ -120,7 +120,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.hourDiffAmount = hourDiffAmount;
     }
 
-    @ExcelField(title = "返奖率", type = 0, align = 1, sort = 110)
+    @ExcelField(title = "返奖率(%)", type = 0, align = 1, sort = 110)
     public String getHourReturnRate() {
         return hourReturnRate;
     }
@@ -174,7 +174,7 @@ public class GameMonitorExprotResponse extends DataEntity {
         this.diffAmount = diffAmount;
     }
 
-    @ExcelField(title = "累计返奖率", type = 0, align = 1, sort = 170)
+    @ExcelField(title = "累计返奖率(%)", type = 0, align = 1, sort = 170)
     public String getReturnRate() {
         return returnRate;
     }
