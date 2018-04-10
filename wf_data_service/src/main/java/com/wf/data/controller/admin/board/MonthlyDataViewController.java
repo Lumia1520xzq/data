@@ -199,8 +199,17 @@ public class MonthlyDataViewController extends ExtJsController {
                 long sumNewUsers = info.getSumNewUsers();
                 long avgNewUsers = days == 0 ? 0L : sumNewUsers / days;
 
+                Long parentIde = info.getParentId();
+                //根据parentId获取渠道名称
+                if (new Long(1L).equals(parentIde)){
+                    dto.setChannelName("全部");
+                }else{
+                    ChannelInfo channel = channelInfoService.get(parentIde);
+                    dto.setChannelName(channel.getName());
+                }
+
                 dto.setMonth(month);
-                dto.setParentId(info.getParentId());
+                dto.setParentId(parentIde);
                 dto.setSumRecharge(sumRecharge);
                 dto.setAvgDau(avgDau);
                 dto.setAvgDarpu(avgDarpu);

@@ -387,6 +387,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
 
+
+
     /**
      * @param args
      * @throws java.text.ParseException
@@ -495,11 +497,16 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 取当前日期的前一天
-     *
-     * @return
      */
     public static String getYesterdayDate() {
         return formatDate(getNextDate(new Date(), -1));
+    }
+
+    /**
+     * 取当前日期的前一天(Date格式)
+     */
+    public static Date getYesterday() {
+        return parseDate(getYesterdayDate());
     }
 
     /**

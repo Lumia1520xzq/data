@@ -131,7 +131,6 @@ public class WholeDataViewController extends ExtJsController {
             }
             //流水差
             info.setMoneyGap(info.getBettingAmount() - info.getResultAmount());
-            System.out.println("首日付费率:" + info.getFirstRechargeRate());
         }
         if (CollectionUtils.isNotEmpty(allList)) {
             //获取最后一条记录
@@ -453,7 +452,18 @@ public class WholeDataViewController extends ExtJsController {
 
                 DataViewExcelResponse excelResponse = new DataViewExcelResponse();
                 excelResponse.setBusinessDate(info.getBusinessDate());
-                excelResponse.setChannelId(info.getChannelId());
+
+                Long channelIde = info.getChannelId();
+                excelResponse.setChannelId(channelIde);
+
+                //根据parentId获取渠道名称
+                if (new Long(1L).equals(channelIde)){
+                    excelResponse.setChannelName("全部");
+                }else{
+                    ChannelInfo channel = channelInfoService.get(channelIde);
+                    excelResponse.setChannelName(channel.getName());
+                }
+
                 excelResponse.setDau(info.getDau());
                 excelResponse.setRechargeAmount(info.getRechargeAmount());
                 excelResponse.setBettingRate(info.getBettingRate());

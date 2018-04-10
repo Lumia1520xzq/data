@@ -13,6 +13,7 @@ import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelConversion;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.DatawareFinalChannelConversionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,14 +91,17 @@ public class FilterDataViewController extends ExtJsController {
             /* 整理参数*/
             Long parentIdParam = null;
             String beginDateParam = null;
+            String endDateParam = null;
             try {
                 if (!judgeParamIsBank(parentId)) {
                     parentIdParam = Long.parseLong(parentId);
                 }
-                if (judgeParamIsBank(searchDate)) {//开始/结束日期为空
-                    beginDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
+                if (judgeParamIsBank(searchDate)) {
+                    beginDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -14));
+                    endDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
                 } else {
-                    beginDateParam = formatGTMDate(searchDate);
+                    endDateParam = formatGTMDate(searchDate);
+                    beginDateParam = DateUtils.getPrevDate(endDateParam,13);
                 }
             } catch (Exception e) {
                 logger.error("导出核心指标总览数据时查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId());
@@ -118,15 +122,26 @@ public class FilterDataViewController extends ExtJsController {
                 params.put("parentId", parentIdParam);
             }
             params.put("beginDate", beginDateParam);
-            params.put("endDate", beginDateParam);
+            params.put("endDate", endDateParam);
 
             /*获取数据*/
             List<DatawareFinalChannelConversion> finalChannelConversions = conversionService.getByChannelAndDate(params);
-            if (finalChannelConversions.size() == 1) {//数据唯一，否则数据不正确
-                DatawareFinalChannelConversion channelConversion = finalChannelConversions.get(0);
-                if (null != channelConversion) {
+            if(CollectionUtils.isNotEmpty(finalChannelConversions)) {
+                for(DatawareFinalChannelConversion channelConversion:finalChannelConversions){
                     FilterDataViewExcelResponse excelResponse = new FilterDataViewExcelResponse();
                     excelResponse.setBusinessDate(channelConversion.getBusinessDate());
+
+                    Long channelIde = channelConversion.getChannelId();
+                    excelResponse.setChannelId(channelIde);
+
+                    //根据channelId获取渠道名称
+                    if (new Long(1L).equals(channelIde)){
+                        excelResponse.setChannelName("全部");
+                    }else{
+                        ChannelInfo channel = channelInfoService.get(channelIde);
+                        excelResponse.setChannelName(channel.getName());
+                    }
+
                     excelResponse.setDauCount(channelConversion.getDauCount());
                     excelResponse.setGamedauCount(channelConversion.getGamedauCount());
                     excelResponse.setBettingCount(channelConversion.getBettingCount());
@@ -141,13 +156,8 @@ public class FilterDataViewController extends ExtJsController {
                     excelResponse.setBettingOlder(channelConversion.getBettingOlder());
                     excelResponse.setRechargeOlder(channelConversion.getRechargeOlder());
                     responses.add(excelResponse);
-                } else {
-                    logger.error("导出转化漏斗分析数据-未获取到DatawareFinalChannelConversion数据: traceId={}, data={}", TraceIdUtils.getTraceId());
                 }
-            } else {
-                logger.error("导出转化漏斗分析数据-取到DatawareFinalChannelConversion数据不止一条: traceId={}, data={}", TraceIdUtils.getTraceId());
             }
-
             String fileName = "转化漏斗分析" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
             new ExportExcel("转化漏斗分析", FilterDataViewExcelResponse.class).setDataList(responses).write(response, fileName).dispose();
         } catch (Exception e) {
