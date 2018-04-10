@@ -94,7 +94,13 @@ public class GameDataController extends ExtJsController {
         Map<String, Object> map = new HashMap<>();
         map.put("beginDate", startTime);
         map.put("endDate", endTime);
-        List<String> datelist = DateUtils.getDateList(startTime, endTime);
+
+        Map<String, Object> dateMap = new HashMap<>();
+        dateMap.put("beginDate", startTime);
+        dateMap.put("endDate", endTime);
+        dateMap.put("parentIds", parentIds);
+        dateMap.put("gameTypes", gameTypes);
+        List<String> datelist = datawareFinalGameInfoService.findDateList(dateMap);
 
 
         List<String> titles = Lists.newArrayList();
