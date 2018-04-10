@@ -238,21 +238,27 @@ public class GameOverViewService {
             param.put("searchDate", DateUtils.getPrevDate(searchDate, 1));
             //更新(T-1日)次日留存
             DatawareFinalGameInfo oneDayBeforeFinalGameInfo = finalGameInfoService.getInfoByDateAndGameType(param);
-            oneDayBeforeFinalGameInfo.setOneDayRetention(BigDecimalUtil.mul(oneDayRelation, 100));
-            oneDayBeforeFinalGameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserOneDayRelation, 100));
-            finalGameInfoService.save(oneDayBeforeFinalGameInfo);
+            if (oneDayBeforeFinalGameInfo != null) {
+                oneDayBeforeFinalGameInfo.setOneDayRetention(BigDecimalUtil.mul(oneDayRelation, 100));
+                oneDayBeforeFinalGameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserOneDayRelation, 100));
+                finalGameInfoService.save(oneDayBeforeFinalGameInfo);
+            }
             //更新(T-3日)三日留存
             param.put("searchDate", DateUtils.getPrevDate(searchDate, 3));
             DatawareFinalGameInfo threeDayBeforeFinalGameInfo = finalGameInfoService.getInfoByDateAndGameType(param);
-            threeDayBeforeFinalGameInfo.setThreeDayRetention(BigDecimalUtil.mul(threeDayRelation, 100));
-            threeDayBeforeFinalGameInfo.setNewUserThreeDayRetention(BigDecimalUtil.mul(newUserThreeDayRelation, 100));
-            finalGameInfoService.save(threeDayBeforeFinalGameInfo);
+            if (threeDayBeforeFinalGameInfo != null) {
+                threeDayBeforeFinalGameInfo.setThreeDayRetention(BigDecimalUtil.mul(threeDayRelation, 100));
+                threeDayBeforeFinalGameInfo.setNewUserThreeDayRetention(BigDecimalUtil.mul(newUserThreeDayRelation, 100));
+                finalGameInfoService.save(threeDayBeforeFinalGameInfo);
+            }
             //更新(T-7日)七日留存
             param.put("searchDate", DateUtils.getPrevDate(searchDate, 7));
             DatawareFinalGameInfo sevenDayBeforeFinalGameInfo = finalGameInfoService.getInfoByDateAndGameType(param);
-            sevenDayBeforeFinalGameInfo.setSevenDayRetention(BigDecimalUtil.mul(sevenDayRelation, 100));
-            sevenDayBeforeFinalGameInfo.setNewUserSevenDayRetention(BigDecimalUtil.mul(newUserSevenDayRelation, 100));
-            finalGameInfoService.save(sevenDayBeforeFinalGameInfo);
+            if (sevenDayBeforeFinalGameInfo != null) {
+                sevenDayBeforeFinalGameInfo.setSevenDayRetention(BigDecimalUtil.mul(sevenDayRelation, 100));
+                sevenDayBeforeFinalGameInfo.setNewUserSevenDayRetention(BigDecimalUtil.mul(newUserSevenDayRelation, 100));
+                finalGameInfoService.save(sevenDayBeforeFinalGameInfo);
+            }
         } catch (Exception e) {
             logger.error("更新dataware_final_game_info的次，三，七日留存失败.Date:" + DateUtils.getPrevDate(searchDate, 1) + ";parentId:" + parentId + ";gameType:" + gameType);
         }
