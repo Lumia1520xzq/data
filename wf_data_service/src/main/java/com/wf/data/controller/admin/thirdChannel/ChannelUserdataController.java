@@ -9,9 +9,12 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
+import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
 import com.wf.data.dto.UserDataOverviewDto;
+import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.data.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,12 @@ public class ChannelUserdataController extends ExtJsController {
 
     @Autowired
     private DatawareUserInfoService userInfoService;
+
+    @Autowired
+    private ChannelInfoService channelInfoService;
+
+    @Autowired
+    private DatawareFinalChannelInfoHourService channelInfoHourService;
 
     /**
      * 投注数据
@@ -103,6 +112,9 @@ public class ChannelUserdataController extends ExtJsController {
         Double diffAmount = 0D;
         //返奖金额
         Double rateAmount = 0D;
+        Double bettingArpu;
+        Double bASP;
+        String returnRate;
 
         //循环时间段，根据时间获取数据
         for (int i = datelist.size() - 1; i >= 0; i--) {
@@ -118,39 +130,87 @@ public class ChannelUserdataController extends ExtJsController {
             params.put("bettingDate", dateStr);
             params.put("buryingDate", dateStr);
 
-            //用户类型为新增用户
-            if (userType != null && userType == 1) {
-                //获取新用户list
-                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
-                if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
-                    params.put("userIds", userIds);
-                } else {
-                    overviewDtos.add(dto);
-                    continue;
+            //若是主渠道，从DatawareFinalChannelInfoHour中取数据。
+            //若是子渠道，则从DatawareBettingLogHour中取数据。
+
+            //判断是否是子渠道
+            List<Long> parentIds = channelInfoService.findMainChannelIds();
+            if (parentId != null && channelId != null && !parentIds.contains(channelId)) {//子渠道
+                if (userType != null && userType == 1) {//用户类型为新增用户
+                    //新用户list
+                    List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
+                    if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
+                        params.put("userIds", userIds);
+                    } else {
+                        overviewDtos.add(dto);
+                        continue;
+                    }
+                }
+                //获取投注清洗表数据
+                DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
+                if (bettingLogHour != null) {
+                    Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
+                    if (newUserDau != null) {
+                        dau = newUserDau.longValue();
+                    }
+                    bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
+                    bCount = bettingLogHour.getBettingCount() == null ? 0L : bettingLogHour.getBettingCount().longValue();
+                    bAmount = bettingLogHour.getBettingAmount() == null ? 0L : bettingLogHour.getBettingAmount();
+                    rateAmount = bettingLogHour.getResultAmount() == null ? 0L : bettingLogHour.getResultAmount();
+                    diffAmount = bAmount - rateAmount;
+                }
+            } else {//主渠道
+                if (userType != null && userType == 1) {//用户类型为新增用户
+                    List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);//获取新用户list
+                    if (userIds != null && userIds.size() != 0) {
+                        params.put("userIds", userIds);
+                        params.put("bettingDate", dateStr);
+                        params.put("buryingDate", dateStr);
+                        //获取投注清洗表数据
+                        DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
+                        if (bettingLogHour != null) {
+                            Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
+                            if (newUserDau != null) {
+                                dau = newUserDau.longValue();
+                            }
+                            bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
+                            bCount = bettingLogHour.getBettingCount() == null ? 0L : bettingLogHour.getBettingCount().longValue();
+                            bAmount = bettingLogHour.getBettingAmount() == null ? 0L : bettingLogHour.getBettingAmount();
+                            rateAmount = bettingLogHour.getResultAmount() == null ? 0L : bettingLogHour.getResultAmount();
+                            diffAmount = bAmount - rateAmount;
+                        }
+                    }
+                } else {//用户类型为全量用户
+                    String currentDay = LocalDate.now().toString();//当前日期
+                    String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+                    if (currentHour.length() == 1) {
+                        currentHour = "0" + currentHour;
+                    }
+                    params.put("businessDate", dateStr);
+                    if (dateStr.equals(currentDay)) {
+                        params.put("businessOur", currentHour);
+                    } else {
+                        params.put("businessOur", "23");
+                    }
+
+                    //从DatawareFinalChannelInfoHour表中获取DAU，投注人数，投注笔数，投注金额，流水差
+                    DatawareFinalChannelInfoHour channelInfoHour = channelInfoHourService.findDataForPandect(params);
+                    if (channelInfoHour != null) {
+                        dau = channelInfoHour.getDau();
+                        bUserCount = channelInfoHour.getUserCount();
+                        bCount = channelInfoHour.getBettingCount();
+                        bAmount = channelInfoHour.getBettingAmount();
+                        diffAmount = channelInfoHour.getDiffAmount();
+                        rateAmount = channelInfoHour.getResultAmount();
+                    }
                 }
             }
-
-            /*获取投注清洗表数据*/
-            DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
-            if (bettingLogHour != null) {
-                Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
-                if (newUserDau != null) {
-                    dau = newUserDau.longValue();
-                }
-                bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
-                bCount = bettingLogHour.getBettingCount() == null ? 0L : bettingLogHour.getBettingCount().longValue();
-                bAmount = bettingLogHour.getBettingAmount() == null ? 0L : bettingLogHour.getBettingAmount();
-                rateAmount = bettingLogHour.getResultAmount() == null ? 0L : bettingLogHour.getResultAmount();
-                diffAmount = bAmount - rateAmount;
-            }
-
             //投注ARPU=投注金额/投注人数
-            Double bettingArpu = bUserCount == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(bAmount, bUserCount), 1);
+            bettingArpu = bUserCount == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(bAmount, bUserCount), 1);
             //投注ASP=投注金额/投注笔数
-            Double bASP = bCount == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(bAmount, bCount), 1);
+            bASP = bCount == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(bAmount, bCount), 1);
             //返奖率
-            String returnRate = rateAmount == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(rateAmount, bAmount), "#.##%");
-
+            returnRate = rateAmount == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(rateAmount, bAmount), "#.##%");
             dto.setDau(dau);
             dto.setBettingUserCount(bUserCount);
             dto.setBettingCount(bCount);
@@ -222,36 +282,85 @@ public class ChannelUserdataController extends ExtJsController {
             Double rechargeAmount = 0D;
 
             String dateStr = datelist.get(i);
-            dto.setBusinessDate(dateStr);
-
             Map<String, Object> params = new HashMap<>();
             params.put("parentId", parentId);
             params.put("channelId", channelId);
             params.put("buryingDate", dateStr);
             params.put("convertDate", dateStr);
-            if (userType != null && userType == 1) {
-                //获取新用户list
-                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
-                if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
-                    params.put("userIds", userIds);
-                } else {
-                    overviewDtos.add(dto);
-                    continue;
+            dto.setBusinessDate(dateStr);
+
+            //判断是否是子渠道
+            List<Long> parentIds = channelInfoService.findMainChannelIds();
+            if (parentId != null && channelId != null && !parentIds.contains(channelId)) {//子渠道
+                if (userType != null && userType == 1) {
+                    //获取新用户list
+                    List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
+                    if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
+                        params.put("userIds", userIds);
+                    } else {
+                        overviewDtos.add(dto);
+                        continue;
+                    }
                 }
+                //获取充值清洗表数据
+                DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
+                if (convertHour != null) {
+                    dau = Long.parseLong(buryingPointHourService.getDauByDateAndHour(params).toString());
+                    recharUserCount = convertHour.getRechargeUserCount() == null ? 0L : convertHour.getRechargeUserCount();
+                    rechargeAmount = convertHour.getThirdAmount() == null ? 0D : convertHour.getThirdAmount();
+                    recharCount = convertHour.getRechargeCount() == null ? 0L : convertHour.getRechargeCount().longValue();
+                }
+            } else {//主渠道
+                if (userType != null && userType == 1) {
+                    //获取新用户list
+                    List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
+                    if (userIds != null && userIds.size() != 0) {
+                        params.put("userIds", userIds);
+                        params.put("buryingDate", dateStr);
+                        params.put("convertDate", dateStr);
+
+                        //获取充值清洗表数据
+                        DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
+                        if (convertHour != null) {
+                            Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
+                            if (newUserDau != null) {
+                                dau = newUserDau.longValue();
+                            }
+                            recharUserCount = convertHour.getRechargeUserCount() == null ? 0L : convertHour.getRechargeUserCount();
+                            rechargeAmount = convertHour.getThirdAmount() == null ? 0D : convertHour.getThirdAmount();
+                            recharCount = convertHour.getRechargeCount() == null ? 0L : convertHour.getRechargeCount().longValue();
+                        }
+                    }
+                } else {
+                    String currentDay = LocalDate.now().toString();//当前日期
+                    String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+                    if (currentHour.length() == 1) {
+                        currentHour = "0" + currentHour;
+                    }
+                    params.put("businessDate", dateStr);
+                    if (dateStr.equals(currentDay)) {
+                        params.put("businessOur", currentHour);
+                    } else {
+                        params.put("businessOur", "23");
+                    }
+
+                    //从清洗表中获取DAU,充值人数，充值金额
+                    DatawareFinalChannelInfoHour channelInfoHour = channelInfoHourService.findDataForPandect(params);
+                    if (channelInfoHour != null) {
+                        dau = channelInfoHour.getDau();
+                        recharUserCount = channelInfoHour.getRechargeCount() == null ? 0L : channelInfoHour.getRechargeCount();
+                        rechargeAmount = channelInfoHour.getRechargeAmount() == null ? 0L : channelInfoHour.getRechargeAmount();
+                    }
+                    //从充值清洗表中获取充值人数
+                    recharCount = convertHourService.findrechargeCountByDate(params);
+                }
+
             }
-            //获取充值清洗表数据
-            DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
-            if (convertHour != null) {
-                dau = Long.parseLong(buryingPointHourService.getDauByDateAndHour(params).toString());
-                recharUserCount = convertHour.getRechargeUserCount() == null ? 0L : convertHour.getRechargeUserCount();
-                rechargeAmount = convertHour.getThirdAmount() == null ? 0D : convertHour.getThirdAmount();
-                recharCount = convertHour.getRechargeCount() == null ? 0L : convertHour.getRechargeCount().longValue();
-            }
+
             //充值ARPU=充值金额/DAU
             Double rechargeArpu = dau == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(rechargeAmount, dau), 1);
             //充值ARPPU=充值金额/充值人数
             Double rechargeArppu = recharUserCount == 0 ? 0 : BigDecimalUtil.round(BigDecimalUtil.div(rechargeAmount, recharUserCount), 1);
-
             dto.setDau(dau);
             dto.setRecharUserCount(recharUserCount);
             dto.setRechargeAmount(rechargeAmount);
@@ -317,6 +426,8 @@ public class ChannelUserdataController extends ExtJsController {
             Long bUserCount = 0L;
             //充值人数
             Long recharUserCount = 0L;
+            //签到人数
+            Long signedUserNum;
             //参数Map
             Map<String, Object> params = new HashMap<>();
 
@@ -330,35 +441,85 @@ public class ChannelUserdataController extends ExtJsController {
             params.put("convertDate", dateStr);
             params.put("businessDate", dateStr);
 
-            if (userType != null && userType == 1) {//用户类型：新用户
-                List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
-                if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
-                    params.put("userIds", userIds);
-                } else {
-                    overviewDtos.add(dto);
-                    continue;
+            //判断是否是子渠道
+            List<Long> parentIds = channelInfoService.findMainChannelIds();
+            if (parentId != null && channelId != null && !parentIds.contains(channelId)) {//子渠道
+                if (userType != null && userType == 1) {//用户类型：新用户
+                    List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
+                    if (userIds != null && CollectionUtils.isNotEmpty(userIds)) {
+                        params.put("userIds", userIds);
+                    } else {
+                        overviewDtos.add(dto);
+                        continue;
+                    }
                 }
-            }
-            //DAU
-            Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
-            if (newUserDau != null) {
-                dau = newUserDau.longValue();
-            }
-            //获取投注清洗表数据
-            DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
-            if (null != bettingLogHour) {
-                bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
-            }
-            //获取充值清洗表数据
-            DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
-            if (null != convertHour) {
-                recharUserCount = convertHour.getRechargeUserCount();
+                //DAU
+                Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
+                if (newUserDau != null) {
+                    dau = newUserDau.longValue();
+                }
+                //获取投注清洗表数据
+                DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
+                if (null != bettingLogHour) {
+                    bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
+                }
+                //获取充值清洗表数据
+                DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
+                if (null != convertHour) {
+                    recharUserCount = convertHour.getRechargeUserCount();
+                }
+            } else {//主渠道
+                if (userType != null && userType == 1) {//用户类型：新用户
+                    List<Long> userIds = getNewUserIds(dateStr, parentId, channelId, 1);
+                    if (userIds != null && userIds.size() != 0) {
+                        params.put("userIds", userIds);
+                        params.put("bettingDate", dateStr);
+                        params.put("buryingDate", dateStr);
+                        params.put("convertDate", dateStr);
+                        //DAU
+                        Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
+                        if (newUserDau != null) {
+                            dau = newUserDau.longValue();
+                        }
+                        //获取投注清洗表数据
+                        DatawareBettingLogHour bettingLogHour = bettingLogHourService.getNewUserBettingInfoByDate(params);
+                        if (null != bettingLogHour) {
+                            bUserCount = bettingLogHour.getBettingUserCount() == null ? 0L : bettingLogHour.getBettingUserCount().longValue();
+                        }
+                        //获取充值清洗表数据
+                        DatawareConvertHour convertHour = convertHourService.getNewUserConverInfo(params);
+                        if (null != convertHour) {
+                            recharUserCount = convertHour.getRechargeUserCount();
+                        }
+                    }
+                } else {//用户类型：所有用户
+                    String currentDay = LocalDate.now().toString();//当前日期
+                    String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
+                    if (currentHour.length() == 1) {
+                        currentHour = "0" + currentHour;
+                    }
+                    params.put("businessDate", dateStr);
+                    if (dateStr.equals(currentDay)) {
+                        params.put("businessOur", currentHour);
+                    } else {
+                        params.put("businessOur", "23");
+                    }
+                    //从DatawareFinalChannelInfoHour表中获取DAU,充值人数，充值金额
+                    DatawareFinalChannelInfoHour channelInfoHour = channelInfoHourService.findDataForPandect(params);
+                    if (channelInfoHour != null) {
+                        dau = channelInfoHour.getDau();
+                        bUserCount = channelInfoHour.getUserCount();
+                        recharUserCount = channelInfoHour.getRechargeCount();
+                    }
+                }
+
             }
             //签到人数
-            Long signedUserNum = userSignDayService.getSignedCountByTime(params);
+            signedUserNum = userSignDayService.getSignedCountByTime(params);
             if (signedUserNum == null) {
                 signedUserNum = 0L;
             }
+
             //签到转化率=签到人数/DAU
             String signedConversionRate = dau == 0 ? "0%" : NumberUtils.format(BigDecimalUtil.div(signedUserNum, dau), "#.##%");
             //投注转化率=投注人数/DAU
@@ -442,18 +603,40 @@ public class ChannelUserdataController extends ExtJsController {
 
             //DAU
             Long dau = 0L;
-            List<Long> newUserIds = getNewUserIds(dateStr, parentId, channelId, 1);
-            if (CollectionUtils.isNotEmpty(newUserIds)) {
-                params.put("userIds", newUserIds);
-                Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
-                if (newUserDau != null) {
-                    dau = newUserDau.longValue();
+            //新增用户数
+            Long newUserCount = 0L;
+
+            //判断是否是子渠道
+            List<Long> parentIds = channelInfoService.findMainChannelIds();
+            if (parentId != null && channelId != null && !parentIds.contains(channelId)) {//子渠道
+                List<Long> newUserIds = getNewUserIds(dateStr, parentId, channelId, 1);
+                if (CollectionUtils.isNotEmpty(newUserIds)) {
+                    params.put("userIds", newUserIds);
+                    Integer newUserDau = buryingPointHourService.getDauByDateAndHour(params);
+                    if (newUserDau != null) {
+                        dau = newUserDau.longValue();
+                    }
+                }
+                newUserCount = Long.parseLong(String.valueOf(getNewUserIds(dateStr, parentId, channelId, 0).size()));
+            } else {//主渠道
+                params.put("businessDate", dateStr);
+                if (dateStr.equals(currentDay)) {
+                    params.put("businessOur", currentHour);
+                } else {
+                    params.put("businessOur", "23");
+                }
+                //从清洗表中获取DAU,新增用户数
+                DatawareFinalChannelInfoHour channelInfoHour = channelInfoHourService.findDataForPandect(params);
+                if (channelInfoHour != null) {
+                    //DAU
+                    dau = channelInfoHour.getDau();
+                    //新增用户数
+                    newUserCount = channelInfoHour.getNewUsers();
                 }
             }
-            //新增用户数
-            List<Long> newUserCount = getNewUserIds(dateStr, parentId, channelId, 0);
+
             dto.setDau(dau);
-            dto.setNewUsersNum(Long.parseLong(String.valueOf(newUserCount.size())));
+            dto.setNewUsersNum(Long.parseLong(String.valueOf(newUserCount)));
             overviewDtos.add(dto);
         }
         return overviewDtos;
