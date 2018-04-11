@@ -202,10 +202,10 @@ public class MonthlyDataViewController extends ExtJsController {
                 Long parentIde = info.getParentId();
                 //根据parentId获取渠道名称
                 if (new Long(1L).equals(parentIde)){
-                    dto.setChannelName("全部");
+                    dto.setChannelName("全部(1)");
                 }else{
                     ChannelInfo channel = channelInfoService.get(parentIde);
-                    dto.setChannelName(channel.getName());
+                    dto.setChannelName(channel.getName()+"("+parentIde+")");
                 }
 
                 dto.setMonth(month);

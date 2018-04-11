@@ -280,10 +280,10 @@ public class GameMonitorViewController extends ExtJsController {
                 exprotResponse.setParentId(parentIde);
                 //根据parentId获取渠道名称
                 if (new Long(1L).equals(parentIde)){
-                    exprotResponse.setChannelName("全部");
+                    exprotResponse.setChannelName("全部(1)");
                 }else{
                     ChannelInfo channel = channelInfoService.get(parentIde);
-                    exprotResponse.setChannelName(channel.getName());
+                    exprotResponse.setChannelName(channel.getName()+"("+parentIde+")");
                 }
                 exprotResponse.setGameType(getGameType(gameBettingInfoHour.getGameType()));
                 exprotResponse.setHourDau(gameBettingInfoHour.getHourDau());

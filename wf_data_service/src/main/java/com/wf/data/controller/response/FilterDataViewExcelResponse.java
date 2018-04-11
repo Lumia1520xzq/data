@@ -42,7 +42,7 @@ public class FilterDataViewExcelResponse extends DataEntity {
         this.businessDate = businessDate;
     }
 
-    @ExcelField(title = "渠道", type = 0, align = 1, sort = 20)
+    @ExcelField(title = "渠道ID", type = 0, align = 1, sort = 20)
     public Long getChannelId() {
         return channelId;
     }

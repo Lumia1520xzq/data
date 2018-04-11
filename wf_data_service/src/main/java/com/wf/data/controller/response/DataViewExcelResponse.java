@@ -45,7 +45,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.businessDate = businessDate;
     }
 
-    @ExcelField(title = "渠道", type = 0, align = 1, sort = 20)
+    @ExcelField(title = "渠道ID", type = 0, align = 1, sort = 20)
     public Long getChannelId() {
         return channelId;
     }
@@ -81,7 +81,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.rechargeAmount = rechargeAmount;
     }
 
-    @ExcelField(title = "投注转化率(单位:%)", type = 0, align = 1, sort = 60)
+    @ExcelField(title = "投注转化率(%)", type = 0, align = 1, sort = 60)
     public Double getBettingRate() {
         return bettingRate;
     }
@@ -90,7 +90,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.bettingRate = bettingRate;
     }
 
-    @ExcelField(title = "DAU付费转化率(单位:%)", type = 0, align = 1, sort = 70)
+    @ExcelField(title = "DAU付费转化率(%)", type = 0, align = 1, sort = 70)
     public Double getDauPayRate() {
         return dauPayRate;
     }
@@ -99,7 +99,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.dauPayRate = dauPayRate;
     }
 
-    @ExcelField(title = "投注付费转化率(单位:%)", type = 0, align = 1, sort = 80)
+    @ExcelField(title = "投注付费转化率(%)", type = 0, align = 1, sort = 80)
     public Double getBettingPayRate() {
         return bettingPayRate;
     }
@@ -117,7 +117,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.newUsers = newUsers;
     }
 
-    @ExcelField(title = "新用户占比(单位:%)", type = 0, align = 1, sort = 100)
+    @ExcelField(title = "新用户占比(%)", type = 0, align = 1, sort = 100)
     public Double getUsersRate() {
         return usersRate;
     }
@@ -126,7 +126,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.usersRate = usersRate;
     }
 
-    @ExcelField(title = "新用户投注转化率(单位:%)", type = 0, align = 1, sort = 110)
+    @ExcelField(title = "新用户投注转化率(%)", type = 0, align = 1, sort = 110)
     public Double getUserBettingRate() {
         return userBettingRate;
     }
@@ -135,7 +135,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.userBettingRate = userBettingRate;
     }
 
-    @ExcelField(title = "首日付费率(单位:%)", type = 0, align = 1, sort = 120)
+    @ExcelField(title = "首日付费率(%)", type = 0, align = 1, sort = 120)
     public Double getFirstRechargeRate() {
         return firstRechargeRate;
     }
@@ -144,7 +144,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.firstRechargeRate = firstRechargeRate;
     }
 
-    @ExcelField(title = "7日付费率(单位:%)", type = 0, align = 1, sort = 130)
+    @ExcelField(title = "7日付费率(%)", type = 0, align = 1, sort = 130)
     public Double getWeekRechargeRate() {
         return weekRechargeRate;
     }
@@ -153,7 +153,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.weekRechargeRate = weekRechargeRate;
     }
 
-    @ExcelField(title = "新用户次留(单位:%)", type = 0, align = 1, sort = 140)
+    @ExcelField(title = "新用户次留(%)", type = 0, align = 1, sort = 140)
     public Double getUsersDayRetention() {
         return usersDayRetention;
     }
@@ -162,7 +162,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.usersDayRetention = usersDayRetention;
     }
 
-    @ExcelField(title = "新用户7留(单位:%)", type = 0, align = 1, sort = 150)
+    @ExcelField(title = "新用户7留(%)", type = 0, align = 1, sort = 150)
     public Double getSevenRetention() {
         return sevenRetention;
     }
@@ -171,7 +171,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.sevenRetention = sevenRetention;
     }
 
-    @ExcelField(title = "全量用户次留(单位:%)", type = 0, align = 1, sort = 160)
+    @ExcelField(title = "全量用户次留(%)", type = 0, align = 1, sort = 160)
     public Double getDayRetention() {
         return dayRetention;
     }
@@ -216,7 +216,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.totalCost = totalCost;
     }
 
-    @ExcelField(title = "成本占比(单位:%)", type = 0, align = 1, sort = 210)
+    @ExcelField(title = "成本占比(%)", type = 0, align = 1, sort = 210)
     public Double getCostRate() {
         return costRate;
     }
@@ -243,7 +243,7 @@ public class DataViewExcelResponse extends DataEntity {
         this.bettingAmount = bettingAmount;
     }
 
-    @ExcelField(title = "返奖率(单位:%)", type = 0, align = 1, sort = 240)
+    @ExcelField(title = "返奖率(%)", type = 0, align = 1, sort = 240)
     public Double getResultRate() {
         return resultRate;
     }
