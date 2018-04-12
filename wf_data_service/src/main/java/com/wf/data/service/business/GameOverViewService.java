@@ -314,11 +314,8 @@ public class GameOverViewService {
                 //全量用户次日留存
                 List<Long> onDayAfterActive = (List<Long>) CollectionUtils.intersection(activeUserIds, oneDayAfterActiveUserIds);
                 Double oneDayafterRelation = division(onDayAfterActive.size(), activeUserIds.size());
-                //(T+1日新用户)
-                newUserretentionParam.put("businessDate", DateUtils.getPrevDate(searchDate, -1));
-                List<Long> oneDayAfterNewUserIds = userInfoService.getNewUserByDate(newUserretentionParam);
-                //新增用户次日留存
-                List<Long> newUserOnDayAfterActive = (List<Long>) CollectionUtils.intersection(oneDayAfterNewUserIds, newAndActiveList);
+                //新增用户次日留存(当天新增且活跃用户且第二天活跃/当天新增且活跃用户)
+                List<Long> newUserOnDayAfterActive = (List<Long>) CollectionUtils.intersection(newAndActiveList, oneDayAfterActiveUserIds);
                 Double newUserOneDayAfterRelation = division(newUserOnDayAfterActive.size(), newAndActiveList.size());
                 gameInfo.setOneDayRetention(BigDecimalUtil.mul(oneDayafterRelation, 100));
                 gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserOneDayAfterRelation, 100));
@@ -330,11 +327,8 @@ public class GameOverViewService {
                 //全量用户次日留存
                 List<Long> threeDayAfterActive = (List<Long>) CollectionUtils.intersection(activeUserIds, threeDayAfterActiveUserIds);
                 Double threeDayafterRelation = division(threeDayAfterActive.size(), activeUserIds.size());
-                //(T+3日新用户)
-                newUserretentionParam.put("businessDate", DateUtils.getPrevDate(searchDate, -3));
-                List<Long> threeDayAfterNewUserIds = userInfoService.getNewUserByDate(newUserretentionParam);
                 //新增用户T+3日留存
-                List<Long> newUserThreeDayAfterActive = (List<Long>) CollectionUtils.intersection(threeDayAfterNewUserIds, newAndActiveList);
+                List<Long> newUserThreeDayAfterActive = (List<Long>) CollectionUtils.intersection(newAndActiveList, threeDayAfterActiveUserIds);
                 Double newUserThreeDayAfterRelation = division(newUserThreeDayAfterActive.size(), newAndActiveList.size());
                 gameInfo.setOneDayRetention(BigDecimalUtil.mul(threeDayafterRelation, 100));
                 gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserThreeDayAfterRelation, 100));
@@ -346,11 +340,8 @@ public class GameOverViewService {
                 //全量用户次日留存
                 List<Long> sevenDayAfterActive = (List<Long>) CollectionUtils.intersection(activeUserIds, sevenDayAfterActiveUserIds);
                 Double sevenDayafterRelation = division(sevenDayAfterActive.size(), activeUserIds.size());
-                //(T+7日新用户)
-                newUserretentionParam.put("businessDate", DateUtils.getPrevDate(searchDate, -7));
-                List<Long> sevenDayAfterNewUserIds = userInfoService.getNewUserByDate(newUserretentionParam);
                 //新增用户T+7日留存
-                List<Long> newUserSevenDayAfterActive = (List<Long>) CollectionUtils.intersection(sevenDayAfterNewUserIds, newAndActiveList);
+                List<Long> newUserSevenDayAfterActive = (List<Long>) CollectionUtils.intersection(newAndActiveList, sevenDayAfterActiveUserIds);
                 Double newUserSevenDayAfterRelation = division(newUserSevenDayAfterActive.size(), newAndActiveList.size());
                 gameInfo.setOneDayRetention(BigDecimalUtil.mul(sevenDayafterRelation, 100));
                 gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserSevenDayAfterRelation, 100));
