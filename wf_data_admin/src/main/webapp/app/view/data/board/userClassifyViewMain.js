@@ -950,7 +950,7 @@ Ext.define('WF.view.data.board.userClassifyViewMain', {
                 darppuRateOption.series.push(lineStyleSeries(legArr[5],rechargeFiveDarppuRateList));
                 darppuRateOption.series.push(lineStyleSeries(legArr[6],rechargeSixDarppuRateList));
 
-                var pointPayRateOption = rateTemplate("点击支持率",dateList,legArr);
+                var pointPayRateOption = rateTemplate("点击支付率",dateList,legArr);
                 pointPayRateOption.series.push(lineStyleSeries(legArr[0],newUserPointPayRateList));
                 pointPayRateOption.series.push(lineStyleSeries(legArr[1],rechargeOnePointPayRateList));
                 pointPayRateOption.series.push(lineStyleSeries(legArr[2],rechargeTwoPointPayRateList));
