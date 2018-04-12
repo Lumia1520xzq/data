@@ -52,4 +52,10 @@ public interface EmailContents {
      * 金山用户名单
      */
     String JS_USER_DATA_ALIAS = "wf_data_task_dailyExportUserListForJdd";
+
+
+    /**
+     * 每日平台数据报表分析汇总
+     */
+    String PLATFORM_DAILY_DATA = "wf_data_task_dailyPlatformData";
 }
