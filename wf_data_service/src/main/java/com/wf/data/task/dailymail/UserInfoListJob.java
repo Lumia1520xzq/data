@@ -6,7 +6,7 @@ import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
-import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.EmailContents;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.uic.entity.UicUser;
 import com.wf.data.dto.UicDto;
@@ -15,11 +15,12 @@ import com.wf.data.service.TransConvertService;
 import com.wf.data.service.elasticsearch.EsTransCommonService;
 import com.wf.data.service.elasticsearch.EsUicCommonService;
 import com.wf.data.service.elasticsearch.EsUicPlatformService;
+import com.wf.email.mq.SendEmailDto;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import javax.mail.MessagingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ public class UserInfoListJob {
     private final TransConvertService transConvertService = SpringContextHolder.getBean(TransConvertService.class);
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
+    private final RabbitTemplate rabbitTemplate = SpringContextHolder.getBean(RabbitTemplate.class);
 
     public void execute() {
         logger.info("用户信息列表分析开始。。。。。。。。");
@@ -55,21 +57,21 @@ public class UserInfoListJob {
     }
 
     private void buildOkoooUserInfo(Long channelId) {
-        sendEmail(getNewUsersByDay(channelId), String.format("澳客前1日新注册用户(%s)", DateUtils.getDate()));
-        sendEmail(getBettingUsers(channelId), String.format("澳客近7日内投注用户(%s)", DateUtils.getDate()));
-        sendEmail(getUnActiveUserIds(channelId), String.format("澳客近7日未活跃用户(%s)", DateUtils.getDate()));
-        sendEmail(getUnActiveByDays(channelId), String.format("澳客近14天未活跃(%s)", DateUtils.getDate()));
-        sendEmail(getActive(channelId), String.format("澳客近30天活跃(%s)", DateUtils.getDate()));
-        sendEmail(getUnRechargeUserIds(channelId), String.format("澳客近30天活跃且未充值用户(%s)", DateUtils.getDate()));
-        sendEmail(getRechargeList(channelId), String.format("澳客全量充值用户(%s)", DateUtils.getDate()));
+        sendEmail(getNewUsersByDay(channelId), String.format("澳客前1日新注册用户(%s)", DateUtils.getDate()),1);
+        sendEmail(getBettingUsers(channelId), String.format("澳客近7日内投注用户(%s)", DateUtils.getDate()),1);
+        sendEmail(getUnActiveUserIds(channelId), String.format("澳客近7日未活跃用户(%s)", DateUtils.getDate()),1);
+        sendEmail(getUnActiveByDays(channelId), String.format("澳客近14天未活跃(%s)", DateUtils.getDate()),1);
+        sendEmail(getActive(channelId), String.format("澳客近30天活跃(%s)", DateUtils.getDate()),1);
+        sendEmail(getUnRechargeUserIds(channelId), String.format("澳客近30天活跃且未充值用户(%s)", DateUtils.getDate()),1);
+        sendEmail(getRechargeList(channelId), String.format("澳客全量充值用户(%s)", DateUtils.getDate()),1);
     }
 
     private void buildJddUserInfo(Long channelId) {
-        sendEmail(getNewUsersByDay(channelId), String.format("金山前1日新注册用户(%s)", DateUtils.getDate()));
-        sendEmail(getBettingUsers(channelId), String.format("金山近7日内投注用户(%s)", DateUtils.getDate()));
-        sendEmail(getUnActiveUserIds(channelId), String.format("金山近7日未活跃用户(%s)", DateUtils.getDate()));
-        sendEmail(getUnActiveByDays(channelId), String.format("金山近14天未活跃(%s)", DateUtils.getDate()));
-        sendEmail(getUnRechargeUserIds(channelId), String.format("金山近30天活跃且未充值用户(%s)", DateUtils.getDate()));
+        sendEmail(getNewUsersByDay(channelId), String.format("金山前1日新注册用户(%s)", DateUtils.getDate()),2);
+        sendEmail(getBettingUsers(channelId), String.format("金山近7日内投注用户(%s)", DateUtils.getDate()),2);
+        sendEmail(getUnActiveUserIds(channelId), String.format("金山近7日未活跃用户(%s)", DateUtils.getDate()),2);
+        sendEmail(getUnActiveByDays(channelId), String.format("金山近14天未活跃(%s)", DateUtils.getDate()),2);
+        sendEmail(getUnRechargeUserIds(channelId), String.format("金山近30天活跃且未充值用户(%s)", DateUtils.getDate()),2);
 
     }
 
@@ -359,24 +361,18 @@ public class UserInfoListJob {
         }
     }
 
-    private void sendEmail(String template, String title) {
-
+    private void sendEmail(String template, String title, int channelType) {
         try {
-            // 获取收件人
-            String receivers = dataConfigService.findByName(DataConstants.USERINFO_DATA_RECEIVER).getValue();
-            if (StringUtils.isNotEmpty(receivers)) {
-                // 发送邮件
-                for (String to : receivers.split(",")) {
-                    try {
-
-                        emailHander.sendHtml(to, title, template);
-                    } catch (MessagingException e) {
-                        logger.error("收件人邮箱错误: traceId={}, 收件人={},ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(to), LogExceptionStackTrace.erroStackTrace(e));
-                    }
-                }
-            } else {
-                logger.error("接收人未设置: traceId={}, keys={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DataConstants.USERINFO_DATA_RECEIVER));
+            SendEmailDto sendEmailDto = new SendEmailDto();
+            sendEmailDto.setTitle(title);
+            sendEmailDto.setContent(template);
+            sendEmailDto.setType("html");
+            if (channelType == 1){
+                sendEmailDto.setAlias(EmailContents.AK_USER_DATA_ALIAS);
+            }else if (channelType == 2){
+                sendEmailDto.setAlias(EmailContents.JS_USER_DATA_ALIAS);
             }
+            rabbitTemplate.convertAndSend(EmailContents.EMAIL_RABBITMQ_NAME, sendEmailDto);
         } catch (Exception e) {
             logger.error("用户信息列表分析异常重新执行失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
