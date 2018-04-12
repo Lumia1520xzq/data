@@ -9,15 +9,17 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.EmailContents;
 import com.wf.data.common.constants.GameTypeContents;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareBettingLogHourService;
 import com.wf.data.service.data.DatawareBuryingPointHourService;
+import com.wf.email.mq.SendEmailDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import javax.mail.MessagingException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +30,8 @@ import java.util.Map;
  * 平台投注人数分析汇总
  * 定时发送邮件
  * 处理获取数据失败问题，重试5次
- * @author  jianjian on 2018/01/15
+ *
+ * @author jianjian on 2018/01/15
  */
 public class BettingAnalyseJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -36,7 +39,7 @@ public class BettingAnalyseJob {
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final DatawareBettingLogHourService hourBettingService = SpringContextHolder.getBean(DatawareBettingLogHourService.class);
     private final DatawareBuryingPointHourService hourBuryingPointService = SpringContextHolder.getBean(DatawareBuryingPointHourService.class);
-
+    private final RabbitTemplate rabbitTemplate = SpringContextHolder.getBean(RabbitTemplate.class);
 
     private final String EMAIL_STYLE = "<style>table{margin-top:10px;width:700px;" +
             "border-collapse:collapse;border-spacing:0;" +
@@ -69,40 +72,37 @@ public class BettingAnalyseJob {
         cal.add(Calendar.HOUR_OF_DAY, -1);
         while (count <= TIMES) {
             try {
-                String receivers = dataConfigService.findByName(DataConstants.GAME_BETTING_DATA_RECEIVER).getValue();
-                if (StringUtils.isNotEmpty(receivers)) {
-                    StringBuilder content = new StringBuilder();
-                    content.append(EMAIL_STYLE);
-                    //汇总数据
-                    content.append(buildBettingInfo(cal,null));
-                    //各游戏数据
-                    String gameStr = dataConfigService.findByName(DataConstants.BETTING_ANALYSIS_GAMES).getValue();
-                    if(StringUtils.isNotEmpty(gameStr)) {
-                        String[] games = gameStr.split(COMMA);
-                        for(String game:games){
-                            content.append(buildBettingInfo(cal,Integer.parseInt(game)));
-                        }
+                StringBuilder content = new StringBuilder();
+                content.append(EMAIL_STYLE);
+                //汇总数据
+                content.append(buildBettingInfo(cal, null));
+                //各游戏数据
+                String gameStr = dataConfigService.findByName(DataConstants.BETTING_ANALYSIS_GAMES).getValue();
+                if (StringUtils.isNotEmpty(gameStr)) {
+                    String[] games = gameStr.split(COMMA);
+                    for (String game : games) {
+                        content.append(buildBettingInfo(cal, Integer.parseInt(game)));
                     }
-                    content.insert(0, "截止" + DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN + " HH:00") + "<br/><br/>");
-                    for (String to : receivers.split(COMMA)) {
-                        try {
-                            emailHander.sendHtml(to, String.format("截至%s %s投注情况汇总",
-                                    DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN),
-                                    DateUtils.formatDate(currDate, DateUtils.MINUTE_PATTERN)),
-                                    content.toString());
-                        } catch (MessagingException e) {
-                            logger.error("每小时投注邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
-                        }
-                    }
-                } else {
-                    logger.error("每小时投注邮件未设置收件人，traceId={}", TraceIdUtils.getTraceId());
+                }
+                content.insert(0, "截止" + DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN + " HH:00") + "<br/><br/>");
+                try {
+                    SendEmailDto sendEmailDto = new SendEmailDto();
+                    sendEmailDto.setTitle(String.format("截至%s %s投注情况汇总",
+                            DateUtils.formatDate(currDate, DateUtils.DATE_PATTERN),
+                            DateUtils.formatDate(currDate, DateUtils.MINUTE_PATTERN)));
+                    sendEmailDto.setContent(content.toString());
+                    sendEmailDto.setType("html");
+                    sendEmailDto.setAlias(EmailContents.BETTING_INFO_ALIAS);
+                    rabbitTemplate.convertAndSend(EmailContents.EMAIL_RABBITMQ_NAME,sendEmailDto);
+                } catch (Exception e) {
+                    logger.error("每小时投注邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
                 logger.info("每小时投注邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception ex) {
                 count++;
                 if (count <= 5) {
-                    logger.error("每小时投注邮件发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
+                    logger.error("每小时投注邮件发送失败，重新发送{}，ex={}，traceId={}", count, LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 } else {
                     logger.error("每小时投注邮件发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(ex), TraceIdUtils.getTraceId());
                 }
@@ -110,12 +110,12 @@ public class BettingAnalyseJob {
         }
     }
 
-    private String buildBettingInfo(Calendar cal,Integer gameType) {
-        String temp = getTemp(cal,gameType);
+    private String buildBettingInfo(Calendar cal, Integer gameType) {
+        String temp = getTemp(cal, gameType);
         String gameName;
-        if (null == gameType){
+        if (null == gameType) {
             gameName = "各游戏汇总";
-        }else {
+        } else {
             switch (gameType) {
                 case GameTypeContents.GAME_TYPE_DART:
                     gameName = "梦想飞镖";
@@ -161,41 +161,40 @@ public class BettingAnalyseJob {
         return temp.replace("GAME_NAME", gameName);
     }
 
-
-    private Map<String, Object> bettingParams(Calendar cal,Integer gameType,boolean calHour) {
+    private Map<String, Object> bettingParams(Calendar cal, Integer gameType, boolean calHour) {
         Map<String, Object> params = new HashMap<>(3);
         // 1、bettingDate
-        String bettingDate = DateUtils.formatDate(cal.getTime(),DateUtils.DATE_PATTERN);
+        String bettingDate = DateUtils.formatDate(cal.getTime(), DateUtils.DATE_PATTERN);
         params.put("bettingDate", bettingDate);
         // 2、bettingHour
-        if (calHour){
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        String bettingHour = hour<10?"0"+hour:String.valueOf(hour);
-        params.put("bettingHour",bettingHour);
+        if (calHour) {
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            String bettingHour = hour < 10 ? "0" + hour : String.valueOf(hour);
+            params.put("bettingHour", bettingHour);
         }
         // 3、gameType
         params.put("gameType", gameType);
         return params;
     }
 
-    private Map<String, Object> buryingParams(Calendar cal,Integer gameType) {
+    private Map<String, Object> buryingParams(Calendar cal, Integer gameType) {
         Map<String, Object> params = new HashMap<>(2);
         // 1、buryingDate
-        String buryingDate = DateUtils.formatDate(cal.getTime(),DateUtils.DATE_PATTERN);
+        String buryingDate = DateUtils.formatDate(cal.getTime(), DateUtils.DATE_PATTERN);
         params.put("buryingDate", buryingDate);
         // 2、gameType
         params.put("gameType", gameType);
         return params;
     }
 
-    private String getTemp(Calendar cal,Integer gameType) {
+    private String getTemp(Calendar cal, Integer gameType) {
         int today = cal.get(Calendar.DATE);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int hourAfter = hour + 1;
         String timeSection = String.format("%s:00——%s:00", (hour < 10 ? "0" + hour : hour),
                 (hourAfter < 10 ? "0" + hourAfter : hourAfter));
         //今天所有的投注情况
-        DatawareBettingLogHour dayInfo = hourBettingService.getSumByDateAndHour(bettingParams(cal,gameType,false));
+        DatawareBettingLogHour dayInfo = hourBettingService.getSumByDateAndHour(bettingParams(cal, gameType, false));
         if (dayInfo == null) {
             dayInfo = new DatawareBettingLogHour();
             dayInfo.setBettingAmount(0.0);
@@ -204,7 +203,7 @@ public class BettingAnalyseJob {
             dayInfo.setBettingCount(0);
         }
         //过去一小时的投注情况
-        DatawareBettingLogHour hourInfo = hourBettingService.getSumByDateAndHour(bettingParams(cal,gameType,true));
+        DatawareBettingLogHour hourInfo = hourBettingService.getSumByDateAndHour(bettingParams(cal, gameType, true));
         if (hourInfo == null) {
             hourInfo = new DatawareBettingLogHour();
             hourInfo.setBettingAmount(0.0);
@@ -213,7 +212,7 @@ public class BettingAnalyseJob {
             hourInfo.setBettingCount(0);
         }
         //DAU
-        Integer dailyActive = hourBuryingPointService.getDauByDateAndHour(buryingParams(cal,gameType));
+        Integer dailyActive = hourBuryingPointService.getDauByDateAndHour(buryingParams(cal, gameType));
         return CONTENT_TEMP
                 .replace("TODAY", (today < 10 ? ("0" + today) : String.valueOf(today)))
                 .replace("DAILY_ACTIVE", format(dailyActive))
@@ -228,18 +227,16 @@ public class BettingAnalyseJob {
                 .replace("HOUR_AWARD_AMOUNT", format((hourInfo.getResultAmount())))
                 .replace("HOUR_BETTING_USER", format((hourInfo.getBettingUserCount())))
                 .replace("HOUR_BETTING_NUM", format((hourInfo.getBettingCount())))
-                .replace("HOUR_AWARD_RATE",hourInfo.getBettingAmount() == null || hourInfo.getBettingAmount() == 0 ? "0%" :
-                        NumberUtils.format(BigDecimalUtil.div(hourInfo.getResultAmount(),hourInfo.getBettingAmount(), 4), "#.##%"));
+                .replace("HOUR_AWARD_RATE", hourInfo.getBettingAmount() == null || hourInfo.getBettingAmount() == 0 ? "0%" :
+                        NumberUtils.format(BigDecimalUtil.div(hourInfo.getResultAmount(), hourInfo.getBettingAmount(), 4), "#.##%"));
     }
 
     private String format(Object obj) {
         DecimalFormat df = new DecimalFormat("#,###");
-        if(null == obj){
+        if (null == obj) {
             return "0";
         }
-        return  df.format(obj);
+        return df.format(obj);
     }
-
-
 
 }

@@ -7,18 +7,18 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
-import com.wf.core.utils.type.StringUtils;
-import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.EmailContents;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.data.entity.ReportGameInfo;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.ReportChangeNoteService;
 import com.wf.data.service.UicGroupService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
+import com.wf.email.mq.SendEmailDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ import java.util.Map;
  * 套圈数据报表
  *
  * @author jianjian.huang
- *         2017年8月23日
+ * 2017年8月23日
  */
 public class QuoitsDayReportJob {
 
@@ -37,6 +37,7 @@ public class QuoitsDayReportJob {
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
     private final UicGroupService uicGroupService = SpringContextHolder.getBean(UicGroupService.class);
+    private final RabbitTemplate rabbitTemplate = SpringContextHolder.getBean(RabbitTemplate.class);
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
             + "<tr style='font-weight:bold'><td rowspan='30' bgcolor='#DDDDDD' width='120'><span>gameName</span><br/><span>dateTime日</span></td><td colspan='8' bgcolor='#DDDDDD'>基础数据</td></tr>"
@@ -56,30 +57,36 @@ public class QuoitsDayReportJob {
         String date = DateUtils.getYesterdayDate();
         while (count <= 5) {
             try {
-                // 获取收件人
+                /*// 获取收件人
                 String receivers = dataConfigService.findByName(DataConstants.QUOITS_DATA_RECEIVER).getValue();
-                if (StringUtils.isNotEmpty(receivers)) {
-                    StringBuilder content = new StringBuilder();
-                    content.append(buildQuoitsGameInfo(date));
-                    content.insert(0, date + "数据如下" + "<br/><br/>");
-                    // 发送邮件
-                    for (String to : receivers.split(",")) {
-                        try {
-                            emailHander.sendHtml(to,
-                                    String.format("套圈数据报表分析汇总(%s)", DateUtils.getDate()), content.toString());
-                        } catch (MessagingException e) {
-                            logger.error("套圈数据日报表发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
-                        }
-                    }
+                if (StringUtils.isNotEmpty(receivers)) {*/
+                StringBuilder content = new StringBuilder();
+                content.append(buildQuoitsGameInfo(date));
+                content.insert(0, date + "数据如下" + "<br/><br/>");
+                // 发送邮件
+                   /* for (String to : receivers.split(",")) {*/
+                try {
+                            /*emailHander.sendHtml(to,
+                                    String.format("套圈数据报表分析汇总(%s)", DateUtils.getDate()), content.toString());*/
+                    SendEmailDto sendEmailDto = new SendEmailDto();
+                    sendEmailDto.setTitle(String.format("套圈数据报表分析汇总(%s)", DateUtils.getDate()));
+                    sendEmailDto.setContent(content.toString());
+                    sendEmailDto.setType("html");
+                    sendEmailDto.setAlias(EmailContents.LOOP_DATA_ALIAS);
+                    rabbitTemplate.convertAndSend(EmailContents.EMAIL_RABBITMQ_NAME, sendEmailDto);
+                } catch (Exception e) {
+                    logger.error("套圈数据日报表发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                }
+                    /*}
                 } else {
                     logger.error("套圈数据日报表未设置收件人，traceId={}", TraceIdUtils.getTraceId());
-                }
-                    logger.info("套圈数据日报表发送成功:traceId={}", TraceIdUtils.getTraceId());
+                }*/
+                logger.info("套圈数据日报表发送成功:traceId={}", TraceIdUtils.getTraceId());
                 break;
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error("套圈数据日报表分析异常,重新执行{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    logger.error("套圈数据日报表分析异常,重新执行{}，ex={}，traceId={}", count, LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
                     logger.error("套圈数据日报表分析异常，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
@@ -94,7 +101,6 @@ public class QuoitsDayReportJob {
         temp = temp.replace("dateTime", date);
         return temp;
     }
-
 
     //投注信息
     private ReportGameInfo getBettingInfo(Integer gameType, String date) {
@@ -138,7 +144,6 @@ public class QuoitsDayReportJob {
         sb.append(TABLE_END);
         return sb.toString();
     }
-
 
     /**
      * 基础+流水数据
