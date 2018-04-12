@@ -92,8 +92,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         List<Long> registerdList = datawareUserInfoService.getNewUserByDate(userParams);
         //计算新用户的活跃相关信息
         info = getDauInfo(info, registerdList, dauUserList, userParams);
-        info = getBettingInfo(info, registerdList, dauUserList, userParams);
-        info = getRechargeInfo(info, registerdList, dauUserList, infoAll.getRechargeAmount(), userParams);
+        info = getBettingInfo(info, registerdList, userParams);
+        info = getRechargeInfo(info, registerdList, infoAll.getRechargeAmount(), userParams);
         info.setUserTag(UserRechargeTypeConstants.NEW_USER_TYPE_0);
         save(info);
 
@@ -105,8 +105,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             DatawareFinalRechargeTagAnalysis userRechargeType = setChannelInfo(channelInfo, yesterdayDate);
             List<Long> oldUserList = userRechargeType(params, i);
             userRechargeType = getDauInfo(userRechargeType, oldUserList, dauUserList, userParams);
-            userRechargeType = getBettingInfo(userRechargeType, oldUserList, dauUserList, userParams);
-            userRechargeType = getRechargeInfo(userRechargeType, oldUserList, dauUserList, infoAll.getBettingAmount(), userParams);
+            userRechargeType = getBettingInfo(userRechargeType, oldUserList, userParams);
+            userRechargeType = getRechargeInfo(userRechargeType, oldUserList, infoAll.getBettingAmount(), userParams);
             userRechargeType.setUserTag(i);
             save(userRechargeType);
         }
@@ -317,7 +317,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
      * @param params
      * @return
      */
-    private DatawareFinalRechargeTagAnalysis getRechargeInfo(DatawareFinalRechargeTagAnalysis info, List<Long> tagUserList, List<Long> dauUserList, Double totalAmount, Map<String, Object> params) {
+    private DatawareFinalRechargeTagAnalysis getRechargeInfo(DatawareFinalRechargeTagAnalysis info, List<Long> tagUserList, Double totalAmount, Map<String, Object> params) {
         if (CollectionUtils.isEmpty(tagUserList)) {
             return info;
         }
@@ -326,14 +326,14 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         Long rechargeCount = 0L;
         Long createOrder = 0L;
         int i = 0;
-        Collection interColl = CollectionUtils.intersection(tagUserList, dauUserList);
+        /*Collection interColl = CollectionUtils.intersection(tagUserList, dauUserList);
         //标签用户且活跃的用户
-        List<Long> userDauList = (List<Long>) interColl;
-        while (i < userDauList.size()) {
+        List<Long> userDauList = (List<Long>) interColl;*/
+        while (i < tagUserList.size()) {
             int var10002 = i;
             i += 1000;
-            DatawareFinalChannelInfoAll channelInfo = doGetRechargeInfo(userDauList, params, var10002, i >= userDauList.size() ? userDauList.size() : i);
-            createOrder += doCreateOrderUserId(userDauList, params, var10002, i >= userDauList.size() ? userDauList.size() : i);
+            DatawareFinalChannelInfoAll channelInfo = doGetRechargeInfo(tagUserList, params, var10002, i >= tagUserList.size() ? tagUserList.size() : i);
+            createOrder += doCreateOrderUserId(tagUserList, params, var10002, i >= tagUserList.size() ? tagUserList.size() : i);
             rechargeAmount += channelInfo.getRechargeAmount();
             userCount += channelInfo.getUserCount();
             rechargeCount += channelInfo.getRechargeCount();
@@ -395,7 +395,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
      * @param tagUserList
      * @param params
      */
-    private DatawareFinalRechargeTagAnalysis getBettingInfo(DatawareFinalRechargeTagAnalysis info, List<Long> tagUserList, List<Long> dauUserList, Map<String, Object> params) {
+    private DatawareFinalRechargeTagAnalysis getBettingInfo(DatawareFinalRechargeTagAnalysis info, List<Long> tagUserList, Map<String, Object> params) {
 
         if (CollectionUtils.isEmpty(tagUserList)) {
             return info;
@@ -412,15 +412,15 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         Double bettingArpu = 0.00;
         Double averageBettingCount = 0.00;
         Double averageBettingAsp = 0.00;
-        Collection interColl = CollectionUtils.intersection(tagUserList, dauUserList);
+        /*Collection interColl = CollectionUtils.intersection(tagUserList, dauUserList);
         //标签用户且活跃的用户
-        List<Long> userDauList = (List<Long>) interColl;
+        List<Long> userDauList = (List<Long>) interColl;*/
 
 
-        while (i < userDauList.size()) {
+        while (i < tagUserList.size()) {
             int var10002 = i;
             i += 1000;
-            DatawareFinalChannelInfoAll infoAll = doGetBettingInfo(userDauList, params, var10002, i >= userDauList.size() ? userDauList.size() : i);
+            DatawareFinalChannelInfoAll infoAll = doGetBettingInfo(tagUserList, params, var10002, i >= tagUserList.size() ? tagUserList.size() : i);
 
             bettingAmount += infoAll.getBettingAmount();
             resultAmount += infoAll.getResultAmount();
@@ -438,8 +438,8 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         info.setResultRate(resultRate);
         info.setBettingUserCount(bettingUserCount);
         info.setBettingCount(bettingCount);
-        if (0 != userDauList.size()) {
-            bettingRate = BigDecimalUtil.div(info.getBettingUserCount() * 100, userDauList.size(), 2);
+        if (0 != tagUserList.size()) {
+            bettingRate = BigDecimalUtil.div(info.getBettingUserCount() * 100, tagUserList.size(), 2);
         }
         info.setBettingRate(bettingRate);
         if (0 != info.getBettingUserCount()) {
