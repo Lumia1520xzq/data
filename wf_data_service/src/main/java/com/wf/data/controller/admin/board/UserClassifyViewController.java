@@ -87,11 +87,14 @@ public class UserClassifyViewController extends ExtJsController {
         params.put("endDate",endTime);
         //获取日期list
         List<String> dateList =  rechargeTagAnalysisService.getDateList(params);
+
+
         List<String> simpleDateList = new ArrayList<>();
         for(String date:dateList){
             int index = date.indexOf("-");
             simpleDateList.add(date.substring(index + 1));
         }
+
         map.put("dateList",simpleDateList);
         //获取dateList最后一天的日期
         String lastDate = DateUtils.getYesterdayDate();
@@ -103,7 +106,14 @@ public class UserClassifyViewController extends ExtJsController {
         if(!DateUtils.parseDate(lastDate).before(DateUtils.getYesterday()) && CollectionUtils.isNotEmpty(dateList)){
             dayRetentionDateList = dateList.subList(0,dateList.size()-1);
         }
-        map.put("dayRetentionDateList",dayRetentionDateList);
+
+        List<String> simpleDayRetentionDateList = new ArrayList<>();
+        for(String date:dayRetentionDateList){
+            int index = date.indexOf("-");
+            simpleDayRetentionDateList.add(date.substring(index + 1));
+        }
+
+        map.put("dayRetentionDateList",simpleDayRetentionDateList);
 
         //截取七日留存的日期
         List<String> weekRetentionDateList = dateList;
@@ -114,7 +124,14 @@ public class UserClassifyViewController extends ExtJsController {
                 weekRetentionDateList = new ArrayList<>();
             }
         }
-        map.put("weekRetentionDateList",weekRetentionDateList);
+
+        List<String> simpleWeekRetentionDateList = new ArrayList<>();
+        for(String date:weekRetentionDateList){
+            int index = date.indexOf("-");
+            simpleWeekRetentionDateList.add(date.substring(index + 1));
+        }
+
+        map.put("weekRetentionDateList",simpleWeekRetentionDateList);
 
         //七日流失的日期
         List<String> weekLostDateList = dateList;
@@ -125,7 +142,15 @@ public class UserClassifyViewController extends ExtJsController {
                 weekLostDateList = new ArrayList<>();
             }
         }
-        map.put("weekLostDateList",weekLostDateList);
+
+        List<String> simpleWeekLostDateList = new ArrayList<>();
+        for(String date:weekLostDateList){
+            int index = date.indexOf("-");
+            simpleWeekLostDateList.add(date.substring(index + 1));
+        }
+
+
+        map.put("weekLostDateList",simpleWeekLostDateList);
 
         // 循环取每个userTag对应的list0
         for (int index=0;index<=6;index++){

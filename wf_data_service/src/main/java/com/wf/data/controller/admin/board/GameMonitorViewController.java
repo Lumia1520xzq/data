@@ -1,7 +1,6 @@
 package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.scenario.effect.impl.prism.ps.PPStoPSWDisplacementMapPeer;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
@@ -11,10 +10,8 @@ import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.controller.response.GameMonitorExprotResponse;
-import com.wf.data.controller.response.HourlyMonitorExprotResponse;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
-import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareGameBettingInfoHour;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataDictService;
@@ -268,7 +265,6 @@ public class GameMonitorViewController extends ExtJsController {
         params.put("gameType", gameTypeParam);
         params.put("businessDate", businessDateParam);
 
-        /*获取数据*/
         List<DatawareGameBettingInfoHour> todData = bettingInfoService.getByDateAndHour(params);
         List<GameMonitorExprotResponse> responses = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(todData)) {
@@ -291,13 +287,13 @@ public class GameMonitorViewController extends ExtJsController {
                 exprotResponse.setHourBettingCount(gameBettingInfoHour.getHourBettingCount());
                 exprotResponse.setHourBettingAmount(gameBettingInfoHour.getHourBettingAmount());
                 exprotResponse.setHourDiffAmount(BigDecimalUtil.sub(gameBettingInfoHour.getHourBettingAmount(), gameBettingInfoHour.getHourReturnAmount()));
-                exprotResponse.setHourReturnRate(String.valueOf(calRate(gameBettingInfoHour.getHourReturnAmount(), gameBettingInfoHour.getHourBettingAmount())) + "%");
+                exprotResponse.setHourReturnRate(String.valueOf(calRate(gameBettingInfoHour.getHourReturnAmount(), gameBettingInfoHour.getHourBettingAmount())));
                 exprotResponse.setDau(gameBettingInfoHour.getDau());
                 exprotResponse.setUserBettingCount(gameBettingInfoHour.getBettingUserCount());
                 exprotResponse.setBettingCount(gameBettingInfoHour.getBettingCount());
                 exprotResponse.setBettingAmount(gameBettingInfoHour.getBettingAmount());
                 exprotResponse.setDiffAmount(BigDecimalUtil.sub(gameBettingInfoHour.getBettingAmount(), gameBettingInfoHour.getReturnAmount()));
-                exprotResponse.setReturnRate(String.valueOf(calRate(gameBettingInfoHour.getReturnAmount(), gameBettingInfoHour.getBettingAmount())) + "%");
+                exprotResponse.setReturnRate(String.valueOf(calRate(gameBettingInfoHour.getReturnAmount(), gameBettingInfoHour.getBettingAmount())));
                 responses.add(exprotResponse);
 
             }
@@ -323,7 +319,6 @@ public class GameMonitorViewController extends ExtJsController {
         return gameName;
     }
 
-    //判断导出参数是否为空
     private boolean judgeParamIsBank(String param) {
         if (param.equals("undefined") || param.equals("null") || StringUtils.isBlank(param)) {
             return true;
