@@ -7,8 +7,6 @@ import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
-import com.wf.core.utils.type.StringUtils;
-import com.wf.data.common.constants.DataConstants;
 import com.wf.data.common.constants.EmailContents;
 import com.wf.data.common.constants.UserGroupContents;
 import com.wf.data.dao.data.entity.ReportGameInfo;
@@ -22,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
