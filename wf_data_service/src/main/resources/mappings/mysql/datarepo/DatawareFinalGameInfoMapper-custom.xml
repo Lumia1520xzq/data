@@ -38,6 +38,7 @@
         <if test="businessDate != null and businessDate != ''">
             AND t.business_date = #{businessDate}
         </if>
+        ORDER BY t.business_date ASC
     </select>
 
     <select id="findDateList" resultType="String">

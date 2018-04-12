@@ -221,8 +221,8 @@
             AND t.status = #{status}
         </if>
         <if test="businessDate!=null and businessDate!=''">
-            AND t.success_time &gt;= CONCAT(#{businessDate} , ' 00:00:00')
-            AND t.success_time &lt;= CONCAT(#{businessDate} , ' 23:59:59')
+            AND t.update_time &gt;= CONCAT(#{businessDate} , ' 00:00:00')
+            AND t.update_time &lt;= CONCAT(#{businessDate} , ' 23:59:59')
         </if>
 
         <if test="channelId != null">
