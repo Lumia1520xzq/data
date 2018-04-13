@@ -13,6 +13,9 @@
         dataware_final_game_info t
         WHERE
         t.delete_flag = 0
+        <if test="beginDate != null and beginDate != ''">
+            AND t.business_date = #{beginDate}
+        </if>
     </select>
 
     <select id="findInfoByDate" resultType="DatawareFinalGameInfo">
@@ -43,7 +46,7 @@
 
     <select id="findDateList" resultType="String">
         SELECT
-         DISTINCT t.business_date
+        DISTINCT t.business_date
         FROM dataware_final_game_info t
         WHERE 1=1
         <if test="beginDate != null and beginDate != ''">
@@ -80,16 +83,16 @@
     </select>
 
     <delete id="deleteByDate">
-        DELETE FROM dataware_final_game_info WHERE 1=1 AND business_date = #{businessDate}
+        DELETE FROM dataware_final_game_info WHERE 1=1 AND business_date = #{beginDate}
     </delete>
 
     <select id="getInfoByDateAndGameType" resultType="DatawareFinalGameInfo">
         SELECT
-            <include refid="datawareFinalGameInfoColumns"/>
+        <include refid="datawareFinalGameInfoColumns"/>
         FROM
-            dataware_final_game_info t
+        dataware_final_game_info t
         WHERE
-            t.delete_flag = 0
+        t.delete_flag = 0
         <if test="parentId != null">
             AND t.parent_id = #{parentId}
         </if>
