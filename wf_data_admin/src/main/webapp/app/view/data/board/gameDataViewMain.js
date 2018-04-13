@@ -268,6 +268,10 @@ var option = {
             return str;
         }
     },
+    grid:{
+        left:'20%',
+        y:'25%'
+    },
     legend: {
         orient: 'horizontal',      // 布局方式，默认为水平布局，可选为：
         x: 'center',               // 水平安放位置，默认为全图居中，可选为：
