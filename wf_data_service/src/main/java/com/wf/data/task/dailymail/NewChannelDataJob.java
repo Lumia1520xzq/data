@@ -49,12 +49,12 @@ public class NewChannelDataJob {
     public void execute() {
         logger.info("开始新版每日各渠道关键数据分析:traceId={}", TraceIdUtils.getTraceId());
         //所有渠道的数据
-        channelsData(DataConstants.NEW_CHANNEL_DATA_RECEIVER, DataConstants.NEW_DATA_DAILY_CHANNELS);
+        channelsData(EmailContents.CHANNEL_DATA_ALIAS, DataConstants.NEW_DATA_DAILY_CHANNELS);
         //奖多多单独渠道的数据
-        channelsData(DataConstants.NEW_CHANNEL_DATA_JDD_RECEIVER, DataConstants.NEW_DATA_JDD_DAILY_CHANNELS);
+        channelsData(EmailContents.JDD_CHANNEL_DATA_ALIAS, DataConstants.NEW_DATA_JDD_DAILY_CHANNELS);
     }
 
-    private void channelsData(String receiver_str, String channels_str) {
+    private void channelsData(String alias, String channels_str) {
         byte count = 0;
         // 昨天的开始时间
         String date = DateUtils.getYesterdayDate();
@@ -101,15 +101,15 @@ public class NewChannelDataJob {
                 content.append(tableEnd);
                 content.insert(0, date + "数据如下" + "<br/><br/>");
                 // 发送邮件
-                    /*for (String to : receivers.split(COMMA)) {*/
+                /*for (String to : receivers.split(COMMA)) {*/
                 try {
                     /*emailHander.sendHtml(to, String.format(title, DateUtils.getDate()), content.toString());*/
                     SendEmailDto sendEmailDto = new SendEmailDto();
                     sendEmailDto.setTitle(String.format(title, DateUtils.getDate()));
                     sendEmailDto.setContent(content.toString());
                     sendEmailDto.setType("html");
-                    sendEmailDto.setAlias(EmailContents.JDD_CHANNEL_DATA_ALIAS);
-                    rabbitTemplate.convertAndSend(EmailContents.EMAIL_RABBITMQ_NAME,sendEmailDto);
+                    sendEmailDto.setAlias(alias);
+                    rabbitTemplate.convertAndSend(EmailContents.EMAIL_RABBITMQ_NAME, sendEmailDto);
 
                 } catch (Exception e) {
                     logger.error("新版每日各渠道关键数据邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
@@ -118,7 +118,7 @@ public class NewChannelDataJob {
                 } else {
                     logger.error("新版每日各渠道关键数据分析接收人未设置，traceId={}", TraceIdUtils.getTraceId());
                 }*/
-                logger.info("新版每日各渠道关键数据邮件发送成功:traceId={}", TraceIdUtils.getTraceId());
+                logger.info("新版每日各渠道关键数据邮件发送成功:traceId={},data={}", TraceIdUtils.getTraceId(),alias);
                 break;
             } catch (Exception e) {
                 count++;
