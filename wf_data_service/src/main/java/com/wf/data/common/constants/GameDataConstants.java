@@ -50,9 +50,15 @@ public interface GameDataConstants {
     String GAME_TYPE = "game_type";
 
     String PARENTID = "parentId";
+
+    String BUSINESSDATE = "businessDate";
+
     String BEGINDATE = "beginDate";
+
     String ENDDATE = "endDate";
+
     String TITLES = "titles";
+
     String CHARTSDATA = "chartsData";
 
     String LEGENDS = "legends";
