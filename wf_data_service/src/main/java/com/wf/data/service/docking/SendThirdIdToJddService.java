@@ -187,7 +187,7 @@ public class SendThirdIdToJddService {
         List<Long> payedUserInLastSevenDayList = transConvertService.getRechargeUserIdsByDay(convertParams);
 
         List<Long> resultUserId = (List<Long>) CollectionUtils.subtract(payedUserList, payedUserInLastSevenDayList);
-        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.UNPAY_OLD_USER);
+        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.UNPAY_SEVEN_DAY);
     }
 
     /**
