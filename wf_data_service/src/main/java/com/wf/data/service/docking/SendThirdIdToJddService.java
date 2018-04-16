@@ -174,6 +174,23 @@ public class SendThirdIdToJddService {
     }
 
     /**
+     * 奖多多渠道付费用户，7日内没有付费行为的用户彩票ID
+     */
+    public void pushPayedUser() {
+        //获取付费用户
+        Map<String, Object> convertParams = new HashMap<>();
+        convertParams.put("parentId", ChannelConstants.JS_CHANNEL);
+        List<Long> payedUserList = transConvertService.getRechargeUserIdsByDay(convertParams);
+
+        //七日内有付费行为
+        convertParams.put("beginDate", DateUtils.getPrevDate(DateUtils.getYesterdayDate(),7));
+        List<Long> payedUserInLastSevenDayList = transConvertService.getRechargeUserIdsByDay(convertParams);
+
+        List<Long> resultUserId = (List<Long>) CollectionUtils.subtract(payedUserList, payedUserInLastSevenDayList);
+        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.UNPAY_SEVEN_DAY);
+    }
+
+    /**
      * 根据userIdList获取三方ID
      *
      * @param resultList
@@ -272,5 +289,4 @@ public class SendThirdIdToJddService {
         }
         return totalPage;
     }
-
 }
