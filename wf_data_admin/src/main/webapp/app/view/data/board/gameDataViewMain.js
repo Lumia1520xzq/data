@@ -231,7 +231,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                         var aa =[];
                         for (var j = 0; j < seriesData[key][i].length; j++) {
                             var str = [];
-                            str = seriesData[key][i][j].split(";");
+                            str = seriesData[key][i][0][0].split(";");
                             aa.push({value : str[0], name : key+":"+seriesData[key][i][j]})
                         }
                         var temp = {
