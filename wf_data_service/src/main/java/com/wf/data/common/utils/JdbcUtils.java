@@ -43,7 +43,9 @@ public class JdbcUtils {
             conn = createConnection(dbConfig, dbName);
         } catch (SQLException e) {
             try {
-                conn.close();
+                if (!(conn == null)){
+                    conn.close();
+                }
             } catch (Exception e1) {
                 logger.error("关闭连接失败,ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
             }
