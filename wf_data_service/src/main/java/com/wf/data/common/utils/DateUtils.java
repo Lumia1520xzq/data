@@ -552,14 +552,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             // 根据日历的规则，为给定的日历字段添加指定的时间量
             cal.add(Calendar.DAY_OF_MONTH, 1);
             // 此日期是否在指定日期之后
-            if ($endDate.after(cal.getTime())) {
+            if ($endDate != null && $endDate.after(cal.getTime())) {
                 String currDate = formatDate(cal.getTime(), pattern);
                 dateList.add(currDate);
             } else {
                 break;
             }
         }
-        if (!beginDate.equals(endDate)) {// 开始时间不等于结束时间
+        if (beginDate != null && !beginDate.equals(endDate)) {// 开始时间不等于结束时间
             dateList.add(endDate);// 把结束时间加入集合
         }
         return dateList;
@@ -575,6 +575,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
     public static int getDateInterval(String beginDate, String endDate) {
+        if (beginDate == null || endDate == null){
+            return 0;
+        }
         Date start = DateUtils.parseDate(beginDate);
         Date end = DateUtils.parseDate(endDate);
         return (int) ((end.getTime() - start.getTime()) / (1000 * 3600 * 24));

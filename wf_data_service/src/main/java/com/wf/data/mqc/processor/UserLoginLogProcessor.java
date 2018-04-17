@@ -52,9 +52,9 @@ public class UserLoginLogProcessor {
     public void process(final Map<String, Object> params) {
         logger.info("mqc对象: traceId={}, jsonObject={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(params.toString()));
         DataUserLog log = toObject(params);
-        if (null == log) {
+        /*if (null == log) {
             return;
-        }
+        }*/
         try {
             dataUserLogService.save(log);
         } catch (Exception e) {
