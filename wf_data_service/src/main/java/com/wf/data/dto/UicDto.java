@@ -14,7 +14,7 @@ public class UicDto implements Serializable{
 	private List<Long> userIds;     //内部用户id
 	private String beginDate;	//开始时间
 	private String endDate;	//结束时间
-	List<Integer> businessTypes;
+	private List<Integer> businessTypes;
 	
 	public Integer getGameType() {
 		return gameType;
