@@ -9,7 +9,6 @@ import java.io.Serializable;
  * @date 2014-7-5下午3:26:41
  */
 public class JsonResult<T> implements Serializable {
-	private static final long serialVersionUID = 1905122041950251207L;
 
 	/**
 	 * 请求处理是否成功
