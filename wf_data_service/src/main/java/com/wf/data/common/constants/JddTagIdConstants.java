@@ -25,4 +25,9 @@ public interface JddTagIdConstants {
      * 未付费老用户彩票ID
      */
     String UNPAY_OLD_USER = "371";
+
+    /**
+     * 付费用户，7日内没有付费用户彩票ID
+     */
+    String UNPAY_SEVEN_DAY = "385";
 }
