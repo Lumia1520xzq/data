@@ -424,6 +424,10 @@ public class DailyDataJob {
     //
     private List<Long> countUserIds(List<Long> activeUserIds, List<Long> rechargeUserIds) {
         List<Long> list = new ArrayList<Long>();
+        if (activeUserIds == null){
+            return new ArrayList<>();
+        }
+
         if (CollectionUtils.isNotEmpty(activeUserIds) && CollectionUtils.isNotEmpty(rechargeUserIds)) {
             for (Long activeUserId : activeUserIds) {
                 if (rechargeUserIds.contains(activeUserId)) {
@@ -432,9 +436,6 @@ public class DailyDataJob {
             }
         }
         activeUserIds.removeAll(list);
-        if (activeUserIds.size() == 0) {
-            return new ArrayList<>();
-        }
         return activeUserIds;
     }
 
@@ -452,6 +453,10 @@ public class DailyDataJob {
 
     private List<TransChangeNote> countRechargeSums(List<TransChangeNote> transList, List<Long> rechargeUserIds) {
         List<TransChangeNote> list = new ArrayList<TransChangeNote>();
+        if (transList == null){
+            return new ArrayList<>();
+        }
+
         if (CollectionUtils.isNotEmpty(transList)) {
             for (TransChangeNote trans : transList) {
                 if (rechargeUserIds.contains(trans.getUserId())) {
@@ -460,9 +465,6 @@ public class DailyDataJob {
             }
         }
         transList.removeAll(list);
-        if (transList.size() == 0) {
-            return new ArrayList<>();
-        }
         return transList;
     }
 
