@@ -153,7 +153,7 @@ public class ChannelRetentionService {
         } else {
             retention.setNewUsers(0L);
         }
-        if (newUserList.size() != 0 && dauUserList.size() != 0 && retention.getDau() > 0) {
+        if (newUserList != null && dauUserList != null && newUserList.size() != 0 && dauUserList.size() != 0 && retention.getDau() > 0) {
             retention.setUsersRate(BigDecimalUtil.div(newUserList.size() * 100, dauUserList.size(), 2));
         } else {
             retention.setUsersRate(0.00);

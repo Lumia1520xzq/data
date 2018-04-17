@@ -37,7 +37,6 @@ public class DailyDataJob {
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
 
-
     private final String CONTENT_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
 
             + "<tr><td colspan='4' bgcolor='#DDDDDD' width='1200' style='font-weight:bold'>充值金额/人数/ARPU</td></tr>"
@@ -100,7 +99,7 @@ public class DailyDataJob {
             } catch (Exception e) {
                 count++;
                 if (count <= 5) {
-                    logger.error("付费项数据分析邮件发送失败，重新发送{}，ex={}，traceId={}",count,LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
+                    logger.error("付费项数据分析邮件发送失败，重新发送{}，ex={}，traceId={}", count, LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 } else {
                     logger.error("付费项数据分析邮件发送失败，停止发送，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                 }
@@ -154,7 +153,6 @@ public class DailyDataJob {
         return temp;
     }
 
-
     /**
      * 替换table的内容 考虑其通用性
      *
@@ -189,7 +187,6 @@ public class DailyDataJob {
 
         return temp;
     }
-
 
     /**
      * 替换table的内容 考虑其通用性
@@ -227,7 +224,6 @@ public class DailyDataJob {
 
         return temp;
     }
-
 
     /**
      * 连接各字段的内容
@@ -413,10 +409,9 @@ public class DailyDataJob {
         return map;
     }
 
-
     private int countUser(List<Long> activeUserIds, List<Long> rechargeUserIds) {
         int count = 0;
-        if (CollectionUtils.isNotEmpty(activeUserIds)) {
+        if (CollectionUtils.isNotEmpty(activeUserIds) && CollectionUtils.isNotEmpty(rechargeUserIds)) {
             for (Long activeUserId : activeUserIds) {
                 if (rechargeUserIds.contains(activeUserId)) {
                     count++;
@@ -429,7 +424,7 @@ public class DailyDataJob {
     //
     private List<Long> countUserIds(List<Long> activeUserIds, List<Long> rechargeUserIds) {
         List<Long> list = new ArrayList<Long>();
-        if (CollectionUtils.isNotEmpty(activeUserIds)) {
+        if (CollectionUtils.isNotEmpty(activeUserIds) && CollectionUtils.isNotEmpty(rechargeUserIds)) {
             for (Long activeUserId : activeUserIds) {
                 if (rechargeUserIds.contains(activeUserId)) {
                     list.add(activeUserId);
@@ -437,12 +432,15 @@ public class DailyDataJob {
             }
         }
         activeUserIds.removeAll(list);
+        if (activeUserIds.size() == 0) {
+            return new ArrayList<>();
+        }
         return activeUserIds;
     }
 
     private double countRechargeSum(List<TransChangeNote> transList, List<Long> rechargeUserIds) {
         double sum = 0;
-        if (CollectionUtils.isNotEmpty(transList)) {
+        if (CollectionUtils.isNotEmpty(transList) && CollectionUtils.isNotEmpty(rechargeUserIds)) {
             for (TransChangeNote trans : transList) {
                 if (rechargeUserIds.contains(trans.getUserId())) {
                     sum += trans.getBusinessMoney();
@@ -462,6 +460,9 @@ public class DailyDataJob {
             }
         }
         transList.removeAll(list);
+        if (transList.size() == 0) {
+            return new ArrayList<>();
+        }
         return transList;
     }
 
