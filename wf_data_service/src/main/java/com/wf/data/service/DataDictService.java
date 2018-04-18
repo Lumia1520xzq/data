@@ -1,12 +1,9 @@
 package com.wf.data.service;
 
-import com.wf.core.cache.CacheHander;
 import com.wf.core.service.CrudService;
 import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.dao.data.DataDictDao;
 import com.wf.data.dao.data.entity.DataDict;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +11,7 @@ import java.util.List;
 
 @Service
 public class DataDictService extends CrudService<DataDictDao, DataDict> {
-    @Autowired
-    private CacheHander cacheHander;
+
     /**
      * 查询字典类型列表
      *
@@ -66,7 +62,7 @@ public class DataDictService extends CrudService<DataDictDao, DataDict> {
         cacheHander.delete(DataCacheKey.SYS_DICT_BY_VALUE.key(dict.getType(), dict.getValue()));
     }
 
-    public List<DataDict> findListByType(String type){
+    public List<DataDict> findListByType(String type) {
         return dao.findListByType(type);
     }
 }

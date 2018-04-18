@@ -106,7 +106,7 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             List<Long> oldUserList = userRechargeType(params, i);
             userRechargeType = getDauInfo(userRechargeType, oldUserList, dauUserList, userParams);
             userRechargeType = getBettingInfo(userRechargeType, oldUserList, userParams);
-            userRechargeType = getRechargeInfo(userRechargeType, oldUserList, infoAll.getBettingAmount(), userParams);
+            userRechargeType = getRechargeInfo(userRechargeType, oldUserList, infoAll.getRechargeAmount(), userParams);
             userRechargeType.setUserTag(i);
             save(userRechargeType);
         }
