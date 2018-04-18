@@ -73,9 +73,7 @@ public class EntranceAnalysisController extends ExtJsController{
             convertUserType = data.getString("convertUserType");
         }
         try {
-            if (StringUtils.isBlank(searchDate)) {
-                searchDate = DateUtils.getYesterdayDate();
-            } else if (DateUtils.parseDate(searchDate).after(DateUtils.parseDate(DateUtils.getYesterdayDate()))){
+            if (StringUtils.isBlank(searchDate) || DateUtils.parseDate(searchDate).after(DateUtils.parseDate(DateUtils.getYesterdayDate()))) {
                 searchDate = DateUtils.getYesterdayDate();
             }
         } catch (Exception e) {

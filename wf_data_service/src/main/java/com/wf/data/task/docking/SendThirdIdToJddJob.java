@@ -63,6 +63,17 @@ public class SendThirdIdToJddJob {
         }
         logger.info("推送奖多多未付费老用户彩票ID结束。。。。。。。。");
 
+
+        logger.info("奖多多渠道付费用户，7日内没有付费行为的用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[3])) {
+                sendThirdIdToJddService.pushPayedUser();
+            }
+        } catch (Exception e) {
+            logger.error("pushUnpayUser发送失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道付费用户，7日内没有付费行为的用户彩票ID结束。。。。。。。。");
+
     }
 
 }

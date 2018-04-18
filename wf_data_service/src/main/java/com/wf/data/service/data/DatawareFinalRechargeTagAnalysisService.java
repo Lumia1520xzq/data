@@ -97,7 +97,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         info.setUserTag(UserRechargeTypeConstants.NEW_USER_TYPE_0);
         save(info);
 
-
         //充值用户分层
         params.put("businessDate", twoDayBefore);
 
@@ -152,11 +151,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdByDates(userParams);
 
-
         retentionParams.put("businessDate", businessDate);
         //新注册用户
         List<Long> registerdList = datawareUserInfoService.getNewUserByDate(retentionParams);
-
 
         List<Long> tagDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(retentionParams);
 
@@ -202,7 +199,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             }
             save(tagDto);
         }
-
 
     }
 
@@ -307,7 +303,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         }
 
     }
-
 
     /**
      * 获取充值信息
@@ -416,7 +411,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         //标签用户且活跃的用户
         List<Long> userDauList = (List<Long>) interColl;*/
 
-
         while (i < tagUserList.size()) {
             int var10002 = i;
             i += 1000;
@@ -458,7 +452,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         return info;
     }
 
-
     private DatawareFinalChannelInfoAll doGetBettingInfo(List<Long> entitys, Map<String, Object> params, int startIndex, int endIndex) {
         params.remove("userList");
         List<Long> userList = entitys.subList(startIndex, endIndex);
@@ -466,7 +459,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         return datawareBettingLogDayService.getBettingByDate(params);
 
     }
-
 
     /**
      * 获取日活信息
@@ -489,7 +481,10 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
                 info.setDauRate(BigDecimalUtil.div(info.getDau() * 100, dauUserList.size(), 2));
                 info.setTotalUserCount(Long.valueOf(tagUserList.size()));
                 info.setTotalUserRate(BigDecimalUtil.div(info.getDau() * 100, info.getTotalUserCount(), 2));
-                Long totalLoginCount = loginCount(newUserDauList, params);
+                Long totalLoginCount = 0L;
+                if (CollectionUtils.isNotEmpty(newUserDauList)) {
+                    totalLoginCount = loginCount(newUserDauList, params);
+                }
                 if (totalLoginCount == null) totalLoginCount = 0L;
                 if (0 != info.getDau()) {
                     info.setLoginCount(BigDecimalUtil.div(Double.valueOf(totalLoginCount), info.getDau(), 2));
@@ -592,16 +587,15 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
     }
 
-
     public DatawareFinalRechargeTagAnalysis getTagAnalysisDate(Map<String, Object> map) {
         return dao.getTagAnalysisDate(map);
     }
 
-    public List<DatawareFinalRechargeTagAnalysis> getListByTagAndDate(Map<String,Object> map){
+    public List<DatawareFinalRechargeTagAnalysis> getListByTagAndDate(Map<String, Object> map) {
         return dao.getListByTagAndDate(map);
     }
 
-    public List<String> getDateList(Map<String,Object> map){
+    public List<String> getDateList(Map<String, Object> map) {
         return dao.getDateList(map);
     }
 
@@ -654,7 +648,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
         logger.info("用户分层分析老数据清洗结束:traceId={}", TraceIdUtils.getTraceId());
     }
 
-
     /**
      * 用户流失
      *
@@ -695,11 +688,9 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
 
         List<Long> dauUserList = datawareBuryingPointDayService.getUserIdByDates(userParams);
 
-
         retentionParams.put("businessDate", searchDate);
         //新注册用户
         List<Long> registerdList = datawareUserInfoService.getNewUserByDate(retentionParams);
-
 
         List<Long> tagDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(retentionParams);
 
@@ -745,7 +736,6 @@ public class DatawareFinalRechargeTagAnalysisService extends CrudService<Datawar
             }
             save(tagDto);
         }
-
 
     }
 

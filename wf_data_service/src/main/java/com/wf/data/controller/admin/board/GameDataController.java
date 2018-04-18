@@ -76,14 +76,19 @@ public class GameDataController extends ExtJsController {
         }
 
         if (CollectionUtils.isEmpty(parentIds)) {
+            if (parentIds == null) {
+                parentIds = Lists.newArrayList();
+            }
             //默认显示全渠道
             parentIds.add(1L);
         }
         if (CollectionUtils.isEmpty(gameTypes)) {
+            if (gameTypes == null) {
+                gameTypes = Lists.newArrayList();
+            }
             //默认显示捕鱼游戏
             gameTypes.add(10);
         }
-
 
         if (StringUtil.isBlank(startTime)) {
             return error("开始时间为空");
@@ -107,7 +112,6 @@ public class GameDataController extends ExtJsController {
         dateMap.put("parentIds", parentIds);
         dateMap.put("gameTypes", gameTypes);
         List<String> datelist = datawareFinalGameInfoService.findDateList(dateMap);
-
 
         List<String> titles = Lists.newArrayList();
         resultMap.put("dateList", datelist);
@@ -154,14 +158,12 @@ public class GameDataController extends ExtJsController {
             resultMap.put(GameDataConstants.CHARTSDATA, getOtherChartsData(parentIds, gameTypes, map, tabId));
         }
 
-
         return resultMap;
     }
 
     private Map<String, Object> getAllUsersChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> seriesMap = new HashMap<>();
-
 
         List<Object> dauList = Lists.newArrayList();
         List<Object> userCountList = Lists.newArrayList();
@@ -172,7 +174,6 @@ public class GameDataController extends ExtJsController {
         List<Object> bettingCountList = Lists.newArrayList();
         List<Object> bettingArpuList = Lists.newArrayList();
         List<Object> bettingAspList = Lists.newArrayList();
-
 
         List<String> legends = Lists.newArrayList();
         for (Long parentId : parentIds) {
@@ -217,7 +218,6 @@ public class GameDataController extends ExtJsController {
         return resultMap;
     }
 
-
     private Map<String, Object> getNewUsersChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tagId) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> seriesMap = new HashMap<>();
@@ -231,7 +231,6 @@ public class GameDataController extends ExtJsController {
         List<Object> newUserBettingCountList = Lists.newArrayList();
         List<Object> newUserBettingArpuList = Lists.newArrayList();
         List<Object> newUserBettingAspList = Lists.newArrayList();
-
 
         List<String> legends = Lists.newArrayList();
         for (Long parentId : parentIds) {
@@ -280,14 +279,12 @@ public class GameDataController extends ExtJsController {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> seriesMap = new HashMap<>();
 
-
         List<Object> oneDayRetentionList = Lists.newArrayList();
         List<Object> threeDayRetentionList = Lists.newArrayList();
         List<Object> sevenDayRetentionList = Lists.newArrayList();
         List<Object> newUserOneDayRetentionList = Lists.newArrayList();
         List<Object> newUserThreeDayRetentionList = Lists.newArrayList();
         List<Object> newUserSevenDayRetentionList = Lists.newArrayList();
-
 
         List<String> legends = Lists.newArrayList();
         for (Long parentId : parentIds) {
@@ -326,15 +323,12 @@ public class GameDataController extends ExtJsController {
         return resultMap;
     }
 
-
     private Map<String, Object> getOtherChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> seriesMap = new HashMap<>();
 
-
         List<Object> importRateList = Lists.newArrayList();
         List<Object> totalUserCountList = Lists.newArrayList();
-
 
         List<String> legends = Lists.newArrayList();
         for (Long parentId : parentIds) {
@@ -445,7 +439,6 @@ public class GameDataController extends ExtJsController {
         return resultList;
     }
 
-
     private List<Object> getRetentionData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
         List<Object> resultList = Lists.newArrayList();
 
@@ -496,7 +489,6 @@ public class GameDataController extends ExtJsController {
         }
         return resultList;
     }
-
 
     private List<Object> getNewUsersData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
         List<Object> resultList = Lists.newArrayList();
@@ -566,7 +558,6 @@ public class GameDataController extends ExtJsController {
         return resultList;
     }
 
-
     private StringBuffer getSeriesStr(Double paramter, Double yesParamter, Double weekParamter) {
         StringBuffer seriesStr = new StringBuffer();
         DecimalFormat df = new DecimalFormat("0.00");
@@ -587,7 +578,6 @@ public class GameDataController extends ExtJsController {
         }
         return seriesStr;
     }
-
 
     private List<Object> getAllUsersData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
         List<Object> resultList = Lists.newArrayList();
@@ -663,7 +653,6 @@ public class GameDataController extends ExtJsController {
         }
         return resultList;
     }
-
 
     @RequestMapping("/export")
     public void export(@RequestParam List<Long> parentIds, @RequestParam List<Long> gameTypes, @RequestParam String startTime, @RequestParam String endTime, HttpServletResponse response) {

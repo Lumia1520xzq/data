@@ -146,7 +146,7 @@ public class DataDictRpcServiceImpl implements DataDictRpcService {
                 String[] idArray = specValues.split(",");
                 List<String> idList = Arrays.asList(idArray);
                 for (DataDict tempDict : dictList) {
-                    if (idList.contains(tempDict.getValue())) {
+                    if (idList.contains(tempDict.getValue().toString())) {
                         returnList.add(BaseDictDto.toDto(tempDict));
                     }
                 }

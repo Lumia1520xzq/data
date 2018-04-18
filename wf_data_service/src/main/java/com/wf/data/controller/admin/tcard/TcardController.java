@@ -270,7 +270,7 @@ public class TcardController extends ExtJsController {
         if (0 == two || 0 == three) {
             return 0;
         }
-        BigDecimal b1 = new BigDecimal(one);
+        BigDecimal b1 = new BigDecimal(Double.toString(one));
         BigDecimal b2 = new BigDecimal(two*three);
         return b1.divide(b2, 1, BigDecimal.ROUND_HALF_UP).doubleValue();
     }

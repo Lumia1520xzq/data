@@ -63,5 +63,4 @@ public class JsonResult<T> implements Serializable {
     public void setHasSuccess(boolean hasSuccess) {
         this.hasSuccess = hasSuccess;
     }
-
 }
