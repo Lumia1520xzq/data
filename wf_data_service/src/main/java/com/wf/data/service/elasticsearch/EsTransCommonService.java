@@ -95,11 +95,12 @@ public class EsTransCommonService {
 		     inBizs=Arrays.asList(TransactionContents.BUSINESS_TYPE_FISH_FIRE_FISH);
 	    }
 		boolQuery.must(QueryBuilders.termsQuery("business_type",inBizs));
-		if(StringUtils.isNotEmpty(beginTime))
-		boolQuery.must(QueryBuilders.rangeQuery("create_time").gte(DateUtils.formatUTCDate(beginTime, DateUtils.DATE_TIME_PATTERN)));
-		if(StringUtils.isNotEmpty(endTime))
-		boolQuery.must(QueryBuilders.rangeQuery("create_time").lte(DateUtils.formatUTCDate(endTime,DateUtils.DATE_TIME_PATTERN)));
-		
+		if(StringUtils.isNotEmpty(beginTime)){
+			boolQuery.must(QueryBuilders.rangeQuery("create_time").gte(DateUtils.formatUTCDate(beginTime, DateUtils.DATE_TIME_PATTERN)));
+		}
+		if(StringUtils.isNotEmpty(endTime)){
+			boolQuery.must(QueryBuilders.rangeQuery("create_time").lte(DateUtils.formatUTCDate(endTime,DateUtils.DATE_TIME_PATTERN)));
+		}
 		if (channelId != null) {
 			boolQuery.must(QueryBuilders.termQuery("channel_id", channelId));
 		}		

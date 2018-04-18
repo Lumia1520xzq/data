@@ -9,6 +9,7 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.web.base.ExtJsController;
+import com.wf.data.common.constants.GameDataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,8 @@ public class GameDataController extends ExtJsController {
     @Autowired
     private ChannelInfoService channelInfoService;
 
+    private final DecimalFormat decimalFormat = new DecimalFormat("##0.00");
+
     /**
      * 查询列表
      */
@@ -51,8 +55,8 @@ public class GameDataController extends ExtJsController {
     public Object list() {
         JSONObject json = getRequestJson();
         String tabId = null;
-        List<Long> parentIds = null;
-        List<Integer> gameTypes = null;
+        List<Long> parentIds = Lists.newArrayList();
+        List<Integer> gameTypes = Lists.newArrayList();
         String startTime = null;
         String endTime = null;
         JSONObject data = json.getJSONObject("data");
@@ -60,11 +64,11 @@ public class GameDataController extends ExtJsController {
         if (data != null) {
             tabId = data.getString("tabId");
 
-            JSONArray arr = data.getJSONArray("gameType");
+            JSONArray arr = data.getJSONArray(GameDataConstants.GAMETYPE);
             String js = JSONObject.toJSONString(arr, SerializerFeature.WriteClassName);
             gameTypes = JSONObject.parseArray(js, Integer.class);
 
-            JSONArray parentIdArr = data.getJSONArray("parentId");
+            JSONArray parentIdArr = data.getJSONArray(GameDataConstants.PARENTID);
             String parentIdJs = JSONObject.toJSONString(parentIdArr, SerializerFeature.WriteClassName);
             parentIds = JSONObject.parseArray(parentIdJs, Long.class);
             startTime = data.getString("startTime");
@@ -72,13 +76,20 @@ public class GameDataController extends ExtJsController {
         }
 
         if (CollectionUtils.isEmpty(parentIds)) {
+            if (parentIds == null) {
+                parentIds = Lists.newArrayList();
+            }
             //默认显示全渠道
             parentIds.add(1L);
         }
         if (CollectionUtils.isEmpty(gameTypes)) {
+            if (gameTypes == null) {
+                gameTypes = Lists.newArrayList();
+            }
             //默认显示捕鱼游戏
             gameTypes.add(10);
         }
+
         if (StringUtil.isBlank(startTime)) {
             return error("开始时间为空");
         }
@@ -92,67 +103,67 @@ public class GameDataController extends ExtJsController {
         Map<String, Object> resultMap = new HashMap<>();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("beginDate", startTime);
-        map.put("endDate", endTime);
+        map.put(GameDataConstants.BEGINDATE, startTime);
+        map.put(GameDataConstants.ENDDATE, endTime);
 
         Map<String, Object> dateMap = new HashMap<>();
-        dateMap.put("beginDate", startTime);
-        dateMap.put("endDate", endTime);
+        dateMap.put(GameDataConstants.BEGINDATE, startTime);
+        dateMap.put(GameDataConstants.ENDDATE, endTime);
         dateMap.put("parentIds", parentIds);
         dateMap.put("gameTypes", gameTypes);
         List<String> datelist = datawareFinalGameInfoService.findDateList(dateMap);
 
-
         List<String> titles = Lists.newArrayList();
         resultMap.put("dateList", datelist);
-        if ("allUsers".equals(tabId)) {
-            titles.add("DAU");
-            titles.add("投注人数");
-            titles.add("投注转化率");
-            titles.add("投注流水");
-            titles.add("流水差");
-            titles.add("返奖率");
-            titles.add("投注笔数");
-            titles.add("投注ARPU");
-            titles.add("投注ASP");
-            resultMap.put("titles", titles);
-            resultMap.put("chartsData", getChartsData(parentIds, gameTypes, map, tabId));
-        } else if ("newUsers".equals(tabId)) {
-            titles.add("新增用户数");
-            titles.add("新增投注用户数");
-            titles.add("新增投注转化率");
-            titles.add("投注流水");
-            titles.add("流水差");
-            titles.add("返奖率");
-            titles.add("投注笔数");
-            titles.add("投注ARPU");
-            titles.add("投注ASP");
-            resultMap.put("titles", titles);
-            resultMap.put("chartsData", getChartsData(parentIds, gameTypes, map, tabId));
-        } else if ("retention".equals(tabId)) {
-            titles.add("新增次留");
-            titles.add("新增三留");
-            titles.add("新增七留");
-            titles.add("全量次留");
-            titles.add("全量三留");
-            titles.add("全量七留");
-            resultMap.put("titles", titles);
-            resultMap.put("chartsData", getChartsData(parentIds, gameTypes, map, tabId));
-        } else if ("other".equals(tabId)) {
-            titles.add("导入率");
-            titles.add("累计用户数");
-            resultMap.put("titles", titles);
-            resultMap.put("chartsData", getChartsData(parentIds, gameTypes, map, tabId));
+        if (GameDataConstants.ALLUSERS.equals(tabId)) {
+            titles.add(GameDataConstants.DAU);
+            titles.add(GameDataConstants.USER_COUNT);
+            titles.add(GameDataConstants.CONVERSION);
+            titles.add(GameDataConstants.BETTING_AMOUNT);
+            titles.add(GameDataConstants.DIFF_AMOUNT);
+            titles.add(GameDataConstants.RETURN_RATE);
+            titles.add(GameDataConstants.BETTING_COUNT);
+            titles.add(GameDataConstants.BETTING_ARPU);
+            titles.add(GameDataConstants.BETTING_ASP);
+            resultMap.put(GameDataConstants.TITLES, titles);
+            resultMap.put(GameDataConstants.CHARTSDATA, getAllUsersChartsData(parentIds, gameTypes, map, tabId));
         }
-
+        if (GameDataConstants.NEWUSERS.equals(tabId)) {
+            titles.add(GameDataConstants.NEW_USER_COUNT);
+            titles.add(GameDataConstants.NEW_USER_BETTING_USER_COUNT);
+            titles.add(GameDataConstants.NEW_USER_BETTING_CONVERSION);
+            titles.add(GameDataConstants.NEW_USER_BETTING_AMOUNT);
+            titles.add(GameDataConstants.NEW_USER_DIFF_AMOUNT);
+            titles.add(GameDataConstants.NEW_USER_RETURN_RATE);
+            titles.add(GameDataConstants.NEW_USER_BETTING_COUNT);
+            titles.add(GameDataConstants.NEW_USER_BETTING_ARPU);
+            titles.add(GameDataConstants.NEW_USER_BETTING_ASP);
+            resultMap.put(GameDataConstants.TITLES, titles);
+            resultMap.put(GameDataConstants.CHARTSDATA, getNewUsersChartsData(parentIds, gameTypes, map, tabId));
+        }
+        if (GameDataConstants.RETENTION.equals(tabId)) {
+            titles.add(GameDataConstants.NEW_USER_ONE_DAY_RETENTION);
+            titles.add(GameDataConstants.NEW_USER_THREE_DAY_RETENTION);
+            titles.add(GameDataConstants.NEW_USER_SEVEN_DAY_RETENTION);
+            titles.add(GameDataConstants.ONE_DAY_RETENTION);
+            titles.add(GameDataConstants.THREE_DAY_RETENTION);
+            titles.add(GameDataConstants.SEVEN_DAY_RETENTION);
+            resultMap.put(GameDataConstants.TITLES, titles);
+            resultMap.put(GameDataConstants.CHARTSDATA, getRetentionChartsData(parentIds, gameTypes, map, tabId));
+        }
+        if (GameDataConstants.OTHER.equals(tabId)) {
+            titles.add(GameDataConstants.IMPORT_RATE);
+            titles.add(GameDataConstants.TOTAL_USER_COUNT);
+            resultMap.put(GameDataConstants.TITLES, titles);
+            resultMap.put(GameDataConstants.CHARTSDATA, getOtherChartsData(parentIds, gameTypes, map, tabId));
+        }
 
         return resultMap;
     }
 
-    private Map<String, Object> getChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
+    private Map<String, Object> getAllUsersChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> seriesMap = new HashMap<>();
-
 
         List<Object> dauList = Lists.newArrayList();
         List<Object> userCountList = Lists.newArrayList();
@@ -163,9 +174,54 @@ public class GameDataController extends ExtJsController {
         List<Object> bettingCountList = Lists.newArrayList();
         List<Object> bettingArpuList = Lists.newArrayList();
         List<Object> bettingAspList = Lists.newArrayList();
-        List<Object> oneDayRetentionList = Lists.newArrayList();
-        List<Object> threeDayRetentionList = Lists.newArrayList();
-        List<Object> sevenDayRetentionList = Lists.newArrayList();
+
+        List<String> legends = Lists.newArrayList();
+        for (Long parentId : parentIds) {
+            for (Integer gameType : gameTypes) {
+                map.put(GameDataConstants.GAMETYPE, gameType);
+                map.put(GameDataConstants.PARENTID, parentId);
+                DataDict dictDto = dataDictService.getDictByValue(GameDataConstants.GAME_TYPE, gameType);
+
+                ChannelInfo channelDto = channelInfoService.get(parentId);
+                if (null == channelDto) {
+                    channelDto = new ChannelInfo();
+                    channelDto.setName("全部");
+                }
+                legends.add(channelDto.getName() + "-" + dictDto.getLabel());
+                List<DatawareFinalGameInfo> list = datawareFinalGameInfoService.findInfoByDate(map);
+                dauList.add(getLinesData(list, tabId, GameDataConstants.DAU));
+                userCountList.add(getLinesData(list, tabId, GameDataConstants.USER_COUNT));
+                conversionList.add(getLinesData(list, tabId, GameDataConstants.CONVERSION));
+                bettingAmountList.add(getLinesData(list, tabId, GameDataConstants.BETTING_AMOUNT));
+                diffAmountList.add(getLinesData(list, tabId, GameDataConstants.DIFF_AMOUNT));
+                returnRateList.add(getLinesData(list, tabId, GameDataConstants.RETURN_RATE));
+                bettingCountList.add(getLinesData(list, tabId, GameDataConstants.BETTING_COUNT));
+                bettingArpuList.add(getLinesData(list, tabId, GameDataConstants.BETTING_ARPU));
+                bettingAspList.add(getLinesData(list, tabId, GameDataConstants.BETTING_ASP));
+
+            }
+
+        }
+
+        seriesMap.put(GameDataConstants.DAU, dauList);
+        seriesMap.put(GameDataConstants.USER_COUNT, userCountList);
+        seriesMap.put(GameDataConstants.CONVERSION, conversionList);
+        seriesMap.put(GameDataConstants.BETTING_AMOUNT, bettingAmountList);
+        seriesMap.put(GameDataConstants.DIFF_AMOUNT, diffAmountList);
+        seriesMap.put(GameDataConstants.RETURN_RATE, returnRateList);
+        seriesMap.put(GameDataConstants.BETTING_COUNT, bettingCountList);
+        seriesMap.put(GameDataConstants.BETTING_ARPU, bettingArpuList);
+        seriesMap.put(GameDataConstants.BETTING_ASP, bettingAspList);
+
+        resultMap.put(GameDataConstants.LEGENDS, legends);
+        resultMap.put(GameDataConstants.SERIES, seriesMap);
+        return resultMap;
+    }
+
+    private Map<String, Object> getNewUsersChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tagId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> seriesMap = new HashMap<>();
+
         List<Object> newUserCountList = Lists.newArrayList();
         List<Object> newUserBettingUserCountList = Lists.newArrayList();
         List<Object> newUserBettingConversionList = Lists.newArrayList();
@@ -175,19 +231,13 @@ public class GameDataController extends ExtJsController {
         List<Object> newUserBettingCountList = Lists.newArrayList();
         List<Object> newUserBettingArpuList = Lists.newArrayList();
         List<Object> newUserBettingAspList = Lists.newArrayList();
-        List<Object> newUserOneDayRetentionList = Lists.newArrayList();
-        List<Object> newUserThreeDayRetentionList = Lists.newArrayList();
-        List<Object> newUserSevenDayRetentionList = Lists.newArrayList();
-        List<Object> importRateList = Lists.newArrayList();
-        List<Object> totalUserCountList = Lists.newArrayList();
-
 
         List<String> legends = Lists.newArrayList();
         for (Long parentId : parentIds) {
             for (Integer gameType : gameTypes) {
-                map.put("gameType", gameType);
-                map.put("parentId", parentId);
-                DataDict dictDto = dataDictService.getDictByValue("game_type", gameType);
+                map.put(GameDataConstants.GAMETYPE, gameType);
+                map.put(GameDataConstants.PARENTID, parentId);
+                DataDict dictDto = dataDictService.getDictByValue(GameDataConstants.GAME_TYPE, gameType);
 
                 ChannelInfo channelDto = channelInfoService.get(parentId);
                 if (null == channelDto) {
@@ -196,77 +246,116 @@ public class GameDataController extends ExtJsController {
                 }
                 legends.add(channelDto.getName() + "-" + dictDto.getLabel());
                 List<DatawareFinalGameInfo> list = datawareFinalGameInfoService.findInfoByDate(map);
-                if ("allUsers".equals(tabId)) {
-                    dauList.add(getLinesData(list, tabId, "DAU"));
-                    userCountList.add(getLinesData(list, tabId, "投注人数"));
-                    conversionList.add(getLinesData(list, tabId, "投注转化率"));
-                    bettingAmountList.add(getLinesData(list, tabId, "投注流水"));
-                    diffAmountList.add(getLinesData(list, tabId, "流水差"));
-                    returnRateList.add(getLinesData(list, tabId, "返奖率"));
-                    bettingCountList.add(getLinesData(list, tabId, "投注笔数"));
-                    bettingArpuList.add(getLinesData(list, tabId, "投注ARPU"));
-                    bettingAspList.add(getLinesData(list, tabId, "投注ASP"));
-                } else if ("newUsers".equals(tabId)) {
-                    newUserCountList.add(getLinesData(list, tabId, "新增用户数"));
-                    newUserBettingUserCountList.add(getLinesData(list, tabId, "新增投注用户数"));
-                    newUserBettingConversionList.add(getLinesData(list, tabId, "新增投注转化率"));
-                    newUserBettingAmountList.add(getLinesData(list, tabId, "投注流水"));
-                    newUserDiffAmountList.add(getLinesData(list, tabId, "流水差"));
-                    newUserReturnRateList.add(getLinesData(list, tabId, "返奖率"));
-                    newUserBettingCountList.add(getLinesData(list, tabId, "投注笔数"));
-                    newUserBettingArpuList.add(getLinesData(list, tabId, "投注ARPU"));
-                    newUserBettingAspList.add(getLinesData(list, tabId, "投注ASP"));
-                } else if ("retention".equals(tabId)) {
-                    oneDayRetentionList.add(getLinesData(list, tabId, "全量次留"));
-                    threeDayRetentionList.add(getLinesData(list, tabId, "全量三留"));
-                    sevenDayRetentionList.add(getLinesData(list, tabId, "全量七留"));
-                    newUserOneDayRetentionList.add(getLinesData(list, tabId, "新增次留"));
-                    newUserThreeDayRetentionList.add(getLinesData(list, tabId, "新增三留"));
-                    newUserSevenDayRetentionList.add(getLinesData(list, tabId, "新增七留"));
-                } else if ("other".equals(tabId)) {
-                    importRateList.add(getLinesData(list, tabId, "导入率"));
-                    totalUserCountList.add(getLinesData(list, tabId, "累计用户数"));
-                }
+                newUserCountList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_COUNT));
+                newUserBettingUserCountList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_BETTING_USER_COUNT));
+                newUserBettingConversionList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_BETTING_CONVERSION));
+                newUserBettingAmountList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_BETTING_AMOUNT));
+                newUserDiffAmountList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_DIFF_AMOUNT));
+                newUserReturnRateList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_RETURN_RATE));
+                newUserBettingCountList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_BETTING_COUNT));
+                newUserBettingArpuList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_BETTING_ARPU));
+                newUserBettingAspList.add(getLinesData(list, tagId, GameDataConstants.NEW_USER_BETTING_ASP));
 
             }
 
         }
 
-        if ("allUsers".equals(tabId)) {
-            seriesMap.put("DAU", dauList);
-            seriesMap.put("投注人数", userCountList);
-            seriesMap.put("投注转化率", conversionList);
-            seriesMap.put("投注流水", bettingAmountList);
-            seriesMap.put("流水差", diffAmountList);
-            seriesMap.put("返奖率", returnRateList);
-            seriesMap.put("投注笔数", bettingCountList);
-            seriesMap.put("投注ARPU", bettingArpuList);
-            seriesMap.put("投注ASP", bettingAspList);
-        } else if ("newUsers".equals(tabId)) {
-            seriesMap.put("新增用户数", newUserCountList);
-            seriesMap.put("新增投注用户数", newUserBettingUserCountList);
-            seriesMap.put("新增投注转化率", newUserBettingConversionList);
-            seriesMap.put("投注流水", newUserBettingAmountList);
-            seriesMap.put("流水差", newUserDiffAmountList);
-            seriesMap.put("返奖率", newUserReturnRateList);
-            seriesMap.put("投注笔数", newUserBettingCountList);
-            seriesMap.put("投注ARPU", newUserBettingArpuList);
-            seriesMap.put("投注ASP", newUserBettingAspList);
+        seriesMap.put(GameDataConstants.NEW_USER_COUNT, newUserCountList);
+        seriesMap.put(GameDataConstants.NEW_USER_BETTING_USER_COUNT, newUserBettingUserCountList);
+        seriesMap.put(GameDataConstants.NEW_USER_BETTING_CONVERSION, newUserBettingConversionList);
+        seriesMap.put(GameDataConstants.NEW_USER_BETTING_AMOUNT, newUserBettingAmountList);
+        seriesMap.put(GameDataConstants.NEW_USER_DIFF_AMOUNT, newUserDiffAmountList);
+        seriesMap.put(GameDataConstants.NEW_USER_RETURN_RATE, newUserReturnRateList);
+        seriesMap.put(GameDataConstants.NEW_USER_BETTING_COUNT, newUserBettingCountList);
+        seriesMap.put(GameDataConstants.NEW_USER_BETTING_ARPU, newUserBettingArpuList);
+        seriesMap.put(GameDataConstants.NEW_USER_BETTING_ASP, newUserBettingAspList);
 
-        } else if ("retention".equals(tabId)) {
-            seriesMap.put("全量次留", oneDayRetentionList);
-            seriesMap.put("全量三留", threeDayRetentionList);
-            seriesMap.put("全量七留", sevenDayRetentionList);
-            seriesMap.put("新增次留", newUserOneDayRetentionList);
-            seriesMap.put("新增三留", newUserThreeDayRetentionList);
-            seriesMap.put("新增七留", newUserSevenDayRetentionList);
-        } else if ("other".equals(tabId)) {
-            seriesMap.put("导入率", importRateList);
-            seriesMap.put("累计用户数", totalUserCountList);
+        resultMap.put(GameDataConstants.LEGENDS, legends);
+        resultMap.put(GameDataConstants.SERIES, seriesMap);
+        return resultMap;
+    }
+
+    private Map<String, Object> getRetentionChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> seriesMap = new HashMap<>();
+
+        List<Object> oneDayRetentionList = Lists.newArrayList();
+        List<Object> threeDayRetentionList = Lists.newArrayList();
+        List<Object> sevenDayRetentionList = Lists.newArrayList();
+        List<Object> newUserOneDayRetentionList = Lists.newArrayList();
+        List<Object> newUserThreeDayRetentionList = Lists.newArrayList();
+        List<Object> newUserSevenDayRetentionList = Lists.newArrayList();
+
+        List<String> legends = Lists.newArrayList();
+        for (Long parentId : parentIds) {
+            for (Integer gameType : gameTypes) {
+                map.put(GameDataConstants.GAMETYPE, gameType);
+                map.put(GameDataConstants.PARENTID, parentId);
+                DataDict dictDto = dataDictService.getDictByValue(GameDataConstants.GAME_TYPE, gameType);
+
+                ChannelInfo channelDto = channelInfoService.get(parentId);
+                if (null == channelDto) {
+                    channelDto = new ChannelInfo();
+                    channelDto.setName("全部");
+                }
+                legends.add(channelDto.getName() + "-" + dictDto.getLabel());
+                List<DatawareFinalGameInfo> list = datawareFinalGameInfoService.findInfoByDate(map);
+                oneDayRetentionList.add(getLinesData(list, tabId, GameDataConstants.ONE_DAY_RETENTION));
+                threeDayRetentionList.add(getLinesData(list, tabId, GameDataConstants.THREE_DAY_RETENTION));
+                sevenDayRetentionList.add(getLinesData(list, tabId, GameDataConstants.SEVEN_DAY_RETENTION));
+                newUserOneDayRetentionList.add(getLinesData(list, tabId, GameDataConstants.NEW_USER_ONE_DAY_RETENTION));
+                newUserThreeDayRetentionList.add(getLinesData(list, tabId, GameDataConstants.NEW_USER_THREE_DAY_RETENTION));
+                newUserSevenDayRetentionList.add(getLinesData(list, tabId, GameDataConstants.NEW_USER_SEVEN_DAY_RETENTION));
+
+            }
+
         }
 
-        resultMap.put("legends", legends);
-        resultMap.put("series", seriesMap);
+        seriesMap.put(GameDataConstants.ONE_DAY_RETENTION, oneDayRetentionList);
+        seriesMap.put(GameDataConstants.THREE_DAY_RETENTION, threeDayRetentionList);
+        seriesMap.put(GameDataConstants.SEVEN_DAY_RETENTION, sevenDayRetentionList);
+        seriesMap.put(GameDataConstants.NEW_USER_ONE_DAY_RETENTION, newUserOneDayRetentionList);
+        seriesMap.put(GameDataConstants.NEW_USER_THREE_DAY_RETENTION, newUserThreeDayRetentionList);
+        seriesMap.put(GameDataConstants.NEW_USER_SEVEN_DAY_RETENTION, newUserSevenDayRetentionList);
+
+        resultMap.put(GameDataConstants.LEGENDS, legends);
+        resultMap.put(GameDataConstants.SERIES, seriesMap);
+        return resultMap;
+    }
+
+    private Map<String, Object> getOtherChartsData(List<Long> parentIds, List<Integer> gameTypes, Map<String, Object> map, String tabId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> seriesMap = new HashMap<>();
+
+        List<Object> importRateList = Lists.newArrayList();
+        List<Object> totalUserCountList = Lists.newArrayList();
+
+        List<String> legends = Lists.newArrayList();
+        for (Long parentId : parentIds) {
+            for (Integer gameType : gameTypes) {
+                map.put(GameDataConstants.GAMETYPE, gameType);
+                map.put(GameDataConstants.PARENTID, parentId);
+                DataDict dictDto = dataDictService.getDictByValue(GameDataConstants.GAME_TYPE, gameType);
+
+                ChannelInfo channelDto = channelInfoService.get(parentId);
+                if (null == channelDto) {
+                    channelDto = new ChannelInfo();
+                    channelDto.setName("全部");
+                }
+                legends.add(channelDto.getName() + "-" + dictDto.getLabel());
+                List<DatawareFinalGameInfo> list = datawareFinalGameInfoService.findInfoByDate(map);
+                importRateList.add(getLinesData(list, tabId, GameDataConstants.IMPORT_RATE));
+                totalUserCountList.add(getLinesData(list, tabId, GameDataConstants.TOTAL_USER_COUNT));
+
+            }
+
+        }
+
+        seriesMap.put(GameDataConstants.IMPORT_RATE, importRateList);
+        seriesMap.put(GameDataConstants.TOTAL_USER_COUNT, totalUserCountList);
+
+        resultMap.put(GameDataConstants.LEGENDS, legends);
+        resultMap.put(GameDataConstants.SERIES, seriesMap);
         return resultMap;
     }
 
@@ -278,941 +367,292 @@ public class GameDataController extends ExtJsController {
             String yesterDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(info.getBusinessDate()), -1));
             String weekDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(info.getBusinessDate()), -7));
             dayRateMap.put("businessDate", yesterDay);
-            dayRateMap.put("parentId", info.getParentId());
-            dayRateMap.put("gameType", info.getGameType());
+            dayRateMap.put(GameDataConstants.PARENTID, info.getParentId());
+            dayRateMap.put(GameDataConstants.GAMETYPE, info.getGameType());
 
             weekRateMap.put("businessDate", weekDay);
-            weekRateMap.put("parentId", info.getParentId());
-            weekRateMap.put("gameType", info.getGameType());
+            weekRateMap.put(GameDataConstants.PARENTID, info.getParentId());
+            weekRateMap.put(GameDataConstants.GAMETYPE, info.getGameType());
             List<DatawareFinalGameInfo> yesList = datawareFinalGameInfoService.findInfoByDate(dayRateMap);
             List<DatawareFinalGameInfo> weekList = datawareFinalGameInfoService.findInfoByDate(weekRateMap);
+            if (CollectionUtils.isEmpty(yesList)) {
+                yesList = Lists.newArrayList();
+                yesList.add(new DatawareFinalGameInfo().init());
+            }
+            if (CollectionUtils.isEmpty(weekList)) {
+                weekList = Lists.newArrayList();
+                weekList.add(new DatawareFinalGameInfo().init());
+            }
+            if (tabId.equals(GameDataConstants.ALLUSERS)) {
+                resultList.add(getAllUsersData(info, parameter, yesList, weekList));
+            }
+            if (tabId.equals(GameDataConstants.NEWUSERS)) {
 
-            if ("allUsers".equals(tabId)) {
-                if ("DAU".equals(parameter)) {
-                    String str = "";
-                    str += info.getDau();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getDau() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getDau() - yesList.get(0).getDau()) * 100, yesList.get(0).getDau(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getDau() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getDau() - weekList.get(0).getDau()) * 100, weekList.get(0).getDau(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注人数".equals(parameter)) {
-                    String str = "";
-                    str += info.getBettingUserCount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getBettingUserCount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingUserCount() - yesList.get(0).getBettingUserCount()) * 100, yesList.get(0).getBettingUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getBettingUserCount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingUserCount() - weekList.get(0).getBettingUserCount()) * 100, weekList.get(0).getBettingUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注转化率".equals(parameter)) {
-                    String str = "";
-                    str += info.getBettingConversion();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getBettingConversion() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingConversion() - yesList.get(0).getBettingConversion()) * 100, yesList.get(0).getBettingConversion(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getBettingConversion() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingConversion() - weekList.get(0).getBettingConversion()) * 100, weekList.get(0).getBettingConversion(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注流水".equals(parameter)) {
-                    String str = "";
-                    str += info.getBettingAmount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getBettingAmount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAmount() - yesList.get(0).getBettingAmount()) * 100, yesList.get(0).getBettingAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getBettingAmount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAmount() - weekList.get(0).getBettingAmount()) * 100, weekList.get(0).getBettingAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("流水差".equals(parameter)) {
-                    String str = "";
-                    str += info.getDiffAmount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getDiffAmount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getDiffAmount() - yesList.get(0).getDiffAmount()) * 100, yesList.get(0).getDiffAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getDiffAmount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getDiffAmount() - weekList.get(0).getDiffAmount()) * 100, weekList.get(0).getDiffAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("返奖率".equals(parameter)) {
-                    String str = "";
-                    str += info.getReturnRate();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getReturnRate() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getReturnRate() - yesList.get(0).getReturnRate()) * 100, yesList.get(0).getReturnRate(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getReturnRate() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getReturnRate() - weekList.get(0).getReturnRate()) * 100, weekList.get(0).getReturnRate(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注笔数".equals(parameter)) {
-                    String str = "";
-                    str += info.getBettingCount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getBettingCount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingCount() - yesList.get(0).getBettingCount()) * 100, yesList.get(0).getBettingCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getBettingCount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingCount() - weekList.get(0).getBettingCount()) * 100, weekList.get(0).getBettingCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注ARPU".equals(parameter)) {
-                    String str = "";
-                    str += info.getBettingArpu();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getBettingArpu() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingArpu() - yesList.get(0).getBettingArpu()) * 100, yesList.get(0).getBettingArpu(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getBettingArpu() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingArpu() - weekList.get(0).getBettingArpu()) * 100, weekList.get(0).getBettingArpu(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注ASP".equals(parameter)) {
-                    String str = "";
-                    str += info.getBettingAsp();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getBettingAsp() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAsp() - yesList.get(0).getBettingAsp()) * 100, yesList.get(0).getBettingAsp(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getBettingAsp() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getBettingAsp() - weekList.get(0).getBettingAsp()) * 100, weekList.get(0).getBettingAsp(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                }
+                resultList.add(getNewUsersData(info, parameter, yesList, weekList));
+            }
+            if (tabId.equals(GameDataConstants.RETENTION)) {
 
-            } else if ("newUsers".equals(tabId)) {
-                if ("新增用户数".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserCount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserCount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserCount() - yesList.get(0).getNewUserCount()) * 100, yesList.get(0).getNewUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserCount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserCount() - weekList.get(0).getNewUserCount()) * 100, weekList.get(0).getNewUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("新增投注用户数".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserBettingUserCount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserBettingUserCount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingUserCount() - yesList.get(0).getNewUserBettingUserCount()) * 100, yesList.get(0).getNewUserBettingUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserBettingUserCount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingUserCount() - weekList.get(0).getNewUserBettingUserCount()) * 100, weekList.get(0).getNewUserBettingUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("新增投注转化率".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserBettingConversion();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserBettingConversion() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingConversion() - yesList.get(0).getNewUserBettingConversion()) * 100, yesList.get(0).getNewUserBettingConversion(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserBettingConversion() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingConversion() - weekList.get(0).getNewUserBettingConversion()) * 100, weekList.get(0).getNewUserBettingConversion(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注流水".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserBettingAmount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserBettingAmount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAmount() - yesList.get(0).getNewUserBettingAmount()) * 100, yesList.get(0).getNewUserBettingAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserBettingAmount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAmount() - weekList.get(0).getNewUserBettingAmount()) * 100, weekList.get(0).getNewUserBettingAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("流水差".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserDiffAmount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserDiffAmount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserDiffAmount() - yesList.get(0).getNewUserDiffAmount()) * 100, yesList.get(0).getNewUserDiffAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserDiffAmount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserDiffAmount() - weekList.get(0).getNewUserDiffAmount()) * 100, weekList.get(0).getNewUserDiffAmount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("返奖率".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserReturnRate();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserReturnRate() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserReturnRate() - yesList.get(0).getNewUserReturnRate()) * 100, yesList.get(0).getNewUserReturnRate(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserReturnRate() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserReturnRate() - weekList.get(0).getNewUserReturnRate()) * 100, weekList.get(0).getNewUserReturnRate(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注笔数".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserBettingCount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserBettingCount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingCount() - yesList.get(0).getNewUserBettingCount()) * 100, yesList.get(0).getNewUserBettingCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserBettingCount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingCount() - weekList.get(0).getNewUserBettingCount()) * 100, weekList.get(0).getNewUserBettingCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注ARPU".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserBettingArpu();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserBettingArpu() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingArpu() - yesList.get(0).getNewUserBettingArpu()) * 100, yesList.get(0).getNewUserBettingArpu(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserBettingArpu() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingArpu() - weekList.get(0).getNewUserBettingArpu()) * 100, weekList.get(0).getNewUserBettingArpu(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("投注ASP".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserBettingAsp();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserBettingAsp() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAsp() - yesList.get(0).getNewUserBettingAsp()) * 100, yesList.get(0).getNewUserBettingAsp(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserBettingAsp() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserBettingAsp() - weekList.get(0).getNewUserBettingAsp()) * 100, weekList.get(0).getNewUserBettingAsp(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                }
+                resultList.add(getRetentionData(info, parameter, yesList, weekList));
+            }
+            if (tabId.equals(GameDataConstants.OTHER)) {
 
-
-            } else if ("retention".equals(tabId)) {
-                if ("全量次留".equals(parameter)) {
-                    String str = "";
-                    str += info.getOneDayRetention();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getOneDayRetention() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getOneDayRetention() - yesList.get(0).getOneDayRetention()) * 100, yesList.get(0).getOneDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getOneDayRetention() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getOneDayRetention() - weekList.get(0).getOneDayRetention()) * 100, weekList.get(0).getOneDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("全量三留".equals(parameter)) {
-                    String str = "";
-                    str += info.getThreeDayRetention();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getThreeDayRetention() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getThreeDayRetention() - yesList.get(0).getThreeDayRetention()) * 100, yesList.get(0).getThreeDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getThreeDayRetention() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getThreeDayRetention() - weekList.get(0).getThreeDayRetention()) * 100, weekList.get(0).getThreeDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("全量七留".equals(parameter)) {
-                    String str = "";
-                    str += info.getSevenDayRetention();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getSevenDayRetention() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getSevenDayRetention() - yesList.get(0).getSevenDayRetention()) * 100, yesList.get(0).getSevenDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getSevenDayRetention() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getSevenDayRetention() - weekList.get(0).getSevenDayRetention()) * 100, weekList.get(0).getSevenDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("新增次留".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserOneDayRetention();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserOneDayRetention() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserOneDayRetention() - yesList.get(0).getNewUserOneDayRetention()) * 100, yesList.get(0).getNewUserOneDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserOneDayRetention() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserOneDayRetention() - weekList.get(0).getNewUserOneDayRetention()) * 100, weekList.get(0).getNewUserOneDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("新增三留".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserThreeDayRetention();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserThreeDayRetention() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserThreeDayRetention() - yesList.get(0).getNewUserThreeDayRetention()) * 100, yesList.get(0).getNewUserThreeDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserThreeDayRetention() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserThreeDayRetention() - weekList.get(0).getNewUserThreeDayRetention()) * 100, weekList.get(0).getNewUserThreeDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("新增七留".equals(parameter)) {
-                    String str = "";
-                    str += info.getNewUserSevenDayRetention();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getNewUserSevenDayRetention() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserSevenDayRetention() - yesList.get(0).getNewUserSevenDayRetention()) * 100, yesList.get(0).getNewUserSevenDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getNewUserSevenDayRetention() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getNewUserSevenDayRetention() - weekList.get(0).getNewUserSevenDayRetention()) * 100, weekList.get(0).getNewUserSevenDayRetention(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                }
-            } else if ("other".equals(tabId)) {
-                if ("导入率".equals(parameter)) {
-                    String str = "";
-                    str += info.getImportRate();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getImportRate() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getImportRate() - yesList.get(0).getImportRate()) * 100, yesList.get(0).getImportRate(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getImportRate() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getImportRate() - weekList.get(0).getImportRate()) * 100, weekList.get(0).getImportRate(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                } else if ("累计用户数".equals(parameter)) {
-                    String str = "";
-                    str += info.getTotalUserCount();
-                    str += ";";
-                    if (CollectionUtils.isEmpty(yesList)) {
-                        str += "日环比：0%;";
-                    } else {
-                        if (yesList.get(0) == null) {
-                            str += "日环比：0%;";
-                        } else {
-                            if (yesList.get(0).getTotalUserCount() == 0) {
-                                str += "日环比：0%;";
-                            } else {
-                                str += "日环比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getTotalUserCount() - yesList.get(0).getTotalUserCount()) * 100, yesList.get(0).getTotalUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    if (CollectionUtils.isEmpty(weekList)) {
-                        str += "周同比：0%;";
-                    } else {
-                        if (weekList.get(0) == null) {
-                            str += "周同比：0%;";
-                        } else {
-                            if (weekList.get(0).getTotalUserCount() == 0) {
-                                str += "周同比：0%;";
-                            } else {
-                                str += "周同比: ";
-                                str += String.valueOf(BigDecimalUtil.div((info.getTotalUserCount() - weekList.get(0).getTotalUserCount()) * 100, weekList.get(0).getTotalUserCount(), 2));
-                                str += "%; ";
-                            }
-                        }
-                    }
-                    resultList.add(str);
-                }
+                resultList.add(getOtherData(info, parameter, yesList, weekList));
             }
         }
         return resultList;
     }
 
+    private List<Object> getOtherData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
+        List<Object> resultList = Lists.newArrayList();
+
+        if (GameDataConstants.IMPORT_RATE.equals(parameter)) {
+            if (info.getImportRate() == null) {
+                info.setImportRate(0.0);
+            }
+            if (yesList.get(0).getImportRate() == null) {
+                yesList.get(0).setImportRate(0.0);
+            }
+            if (weekList.get(0).getImportRate() == null) {
+                weekList.get(0).setImportRate(0.0);
+            }
+            StringBuffer str = new StringBuffer();
+            str.append(info.getImportRate().toString()).append(";");
+            str.append(getSeriesStr(info.getImportRate(), yesList.get(0).getImportRate(), weekList.get(0).getImportRate()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.TOTAL_USER_COUNT.equals(parameter)) {
+            if (info.getTotalUserCount() == null) {
+                info.setTotalUserCount(0L);
+            }
+            if (yesList.get(0).getTotalUserCount() == null) {
+                yesList.get(0).setTotalUserCount(0L);
+            }
+            if (weekList.get(0).getTotalUserCount() == null) {
+                weekList.get(0).setTotalUserCount(0L);
+            }
+            StringBuffer str = new StringBuffer();
+            str.append(info.getTotalUserCount().toString()).append(";");
+            str.append(getSeriesStr(info.getTotalUserCount().doubleValue(), yesList.get(0).getTotalUserCount().doubleValue(), weekList.get(0).getTotalUserCount().doubleValue()));
+            resultList.add(str);
+        }
+        return resultList;
+    }
+
+    private List<Object> getRetentionData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
+        List<Object> resultList = Lists.newArrayList();
+
+        if (GameDataConstants.ONE_DAY_RETENTION.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getOneDayRetention())).append(";");
+            str.append(getSeriesStr(info.getOneDayRetention(), yesList.get(0).getOneDayRetention(), weekList.get(0).getOneDayRetention()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.THREE_DAY_RETENTION.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getThreeDayRetention())).append(";");
+            str.append(getSeriesStr(info.getThreeDayRetention(), yesList.get(0).getThreeDayRetention(), weekList.get(0).getThreeDayRetention()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.SEVEN_DAY_RETENTION.equals(parameter)) {
+
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getSevenDayRetention())).append(";");
+            str.append(getSeriesStr(info.getSevenDayRetention(), yesList.get(0).getSevenDayRetention(), weekList.get(0).getSevenDayRetention()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_ONE_DAY_RETENTION.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserOneDayRetention())).append(";");
+            str.append(getSeriesStr(info.getNewUserOneDayRetention(), yesList.get(0).getNewUserOneDayRetention(), weekList.get(0).getNewUserOneDayRetention()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_THREE_DAY_RETENTION.equals(parameter)) {
+
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserThreeDayRetention())).append(";");
+            str.append(getSeriesStr(info.getNewUserThreeDayRetention(), yesList.get(0).getNewUserThreeDayRetention(), weekList.get(0).getNewUserThreeDayRetention()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_SEVEN_DAY_RETENTION.equals(parameter)) {
+
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserSevenDayRetention())).append(";");
+            str.append(getSeriesStr(info.getNewUserSevenDayRetention(), yesList.get(0).getNewUserSevenDayRetention(), weekList.get(0).getNewUserSevenDayRetention()));
+
+            resultList.add(str);
+        }
+        return resultList;
+    }
+
+    private List<Object> getNewUsersData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
+        List<Object> resultList = Lists.newArrayList();
+        if (GameDataConstants.NEW_USER_COUNT.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserCount())).append(";");
+            str.append(getSeriesStr(info.getNewUserCount().doubleValue(), yesList.get(0).getNewUserCount().doubleValue(), weekList.get(0).getNewUserCount().doubleValue()));
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_BETTING_USER_COUNT.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserBettingUserCount())).append(";");
+            str.append(getSeriesStr(info.getNewUserBettingUserCount().doubleValue(), yesList.get(0).getNewUserBettingUserCount().doubleValue(), weekList.get(0).getNewUserBettingUserCount().doubleValue()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_BETTING_CONVERSION.equals(parameter)) {
+
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserBettingConversion())).append(";");
+            str.append(getSeriesStr(info.getNewUserBettingConversion(), yesList.get(0).getNewUserBettingConversion(), weekList.get(0).getNewUserBettingConversion()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_BETTING_AMOUNT.equals(parameter)) {
+
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserBettingAmount())).append(";");
+            str.append(getSeriesStr(info.getNewUserBettingAmount(), yesList.get(0).getNewUserBettingAmount(), weekList.get(0).getNewUserBettingAmount()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_DIFF_AMOUNT.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserDiffAmount())).append(";");
+            str.append(getSeriesStr(info.getNewUserDiffAmount(), yesList.get(0).getNewUserDiffAmount(), weekList.get(0).getNewUserDiffAmount()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_RETURN_RATE.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserReturnRate())).append(";");
+            str.append(getSeriesStr(info.getNewUserReturnRate(), yesList.get(0).getNewUserReturnRate(), weekList.get(0).getNewUserReturnRate()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_BETTING_COUNT.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserBettingCount())).append(";");
+            str.append(getSeriesStr(info.getNewUserBettingCount().doubleValue(), yesList.get(0).getNewUserBettingCount().doubleValue(), weekList.get(0).getNewUserBettingCount().doubleValue()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_BETTING_ARPU.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserBettingArpu())).append(";");
+            str.append(getSeriesStr(info.getNewUserBettingArpu(), yesList.get(0).getNewUserBettingArpu(), weekList.get(0).getNewUserBettingArpu()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.NEW_USER_BETTING_ASP.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getNewUserBettingAsp())).append(";");
+            str.append(getSeriesStr(info.getNewUserBettingAsp(), yesList.get(0).getNewUserBettingAsp(), weekList.get(0).getNewUserBettingAsp()));
+            resultList.add(str);
+        }
+        return resultList;
+    }
+
+    private StringBuffer getSeriesStr(Double paramter, Double yesParamter, Double weekParamter) {
+        StringBuffer seriesStr = new StringBuffer();
+        DecimalFormat df = new DecimalFormat("0.00");
+        if (yesParamter.doubleValue() == 0.0) {
+            seriesStr.append("日环比：0%;");
+        } else {
+            seriesStr.append("日环比:")
+                    .append(df.format(BigDecimalUtil.div((paramter - yesParamter.doubleValue()) * 100, yesParamter.doubleValue(), 2)))
+                    .append("%; ");
+        }
+
+        if (weekParamter.doubleValue() == 0.0) {
+            seriesStr.append("周同比：0%;");
+        } else {
+            seriesStr.append("周同比:")
+                    .append(df.format(BigDecimalUtil.div((paramter - weekParamter) * 100, weekParamter, 2)))
+                    .append("%; ");
+        }
+        return seriesStr;
+    }
+
+    private List<Object> getAllUsersData(DatawareFinalGameInfo info, String parameter, List<DatawareFinalGameInfo> yesList, List<DatawareFinalGameInfo> weekList) {
+        List<Object> resultList = Lists.newArrayList();
+        if (CollectionUtils.isEmpty(yesList)) {
+            yesList = Lists.newArrayList();
+            yesList.add(new DatawareFinalGameInfo().init());
+        }
+        if (CollectionUtils.isEmpty(weekList)) {
+            weekList = Lists.newArrayList();
+            weekList.add(new DatawareFinalGameInfo().init());
+        }
+
+        if (GameDataConstants.DAU.equals(parameter)) {
+            StringBuilder str = new StringBuilder();
+            str.append(decimalFormat.format(info.getDau())).append(";");
+            str.append(getSeriesStr(info.getDau().doubleValue(), yesList.get(0).getDau().doubleValue(), weekList.get(0).getDau().doubleValue()));
+            resultList.add(str);
+        }
+        if (GameDataConstants.USER_COUNT.equals(parameter)) {
+            StringBuilder str = new StringBuilder();
+            str.append(decimalFormat.format(info.getBettingUserCount())).append(";");
+            str.append(getSeriesStr(info.getBettingUserCount().doubleValue(), yesList.get(0).getBettingUserCount().doubleValue(), weekList.get(0).getBettingUserCount().doubleValue()));
+            resultList.add(str);
+        }
+        if (GameDataConstants.CONVERSION.equals(parameter)) {
+            StringBuilder str = new StringBuilder();
+            str.append(decimalFormat.format(info.getBettingConversion())).append(";");
+            str.append(getSeriesStr(info.getBettingConversion(), yesList.get(0).getBettingConversion(), weekList.get(0).getBettingConversion()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.BETTING_AMOUNT.equals(parameter)) {
+            StringBuilder str = new StringBuilder();
+            str.append(decimalFormat.format(info.getBettingAmount())).append(";");
+            str.append(getSeriesStr(info.getBettingAmount(), yesList.get(0).getBettingAmount(), weekList.get(0).getBettingAmount()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.DIFF_AMOUNT.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getDiffAmount())).append(";");
+            str.append(getSeriesStr(info.getDiffAmount(), yesList.get(0).getDiffAmount(), weekList.get(0).getDiffAmount()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.RETURN_RATE.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getDiffAmount())).append(";");
+            str.append(getSeriesStr(info.getReturnRate(), yesList.get(0).getReturnRate(), weekList.get(0).getReturnRate()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.BETTING_COUNT.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getBettingCount())).append(";");
+            str.append(getSeriesStr(info.getBettingCount().doubleValue(), yesList.get(0).getBettingCount().doubleValue(), weekList.get(0).getBettingCount().doubleValue()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.BETTING_ARPU.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(decimalFormat.format(info.getBettingArpu())).append(";");
+            str.append(getSeriesStr(info.getBettingArpu(), yesList.get(0).getBettingArpu(), weekList.get(0).getBettingArpu()));
+
+            resultList.add(str);
+        }
+        if (GameDataConstants.BETTING_ASP.equals(parameter)) {
+            StringBuffer str = new StringBuffer();
+            str.append(info.getBettingAsp().toString()).append(";");
+            str.append(getSeriesStr(info.getBettingAsp(), yesList.get(0).getBettingAsp(), weekList.get(0).getBettingAsp()));
+
+            resultList.add(str);
+        }
+        return resultList;
+    }
 
     @RequestMapping("/export")
     public void export(@RequestParam List<Long> parentIds, @RequestParam List<Long> gameTypes, @RequestParam String startTime, @RequestParam String endTime, HttpServletResponse response) {
@@ -1224,30 +664,26 @@ public class GameDataController extends ExtJsController {
             endTime = DateUtils.getYesterdayDate();
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("beginDate", startTime);
-        map.put("endDate", endTime);
+        map.put(GameDataConstants.BEGINDATE, startTime);
+        map.put(GameDataConstants.ENDDATE, endTime);
         map.put("parentIds", parentIds);
         map.put("gameTypes", gameTypes);
         List<DatawareFinalGameInfo> exportList = datawareFinalGameInfoService.findListByDate(map);
         for (DatawareFinalGameInfo info : exportList) {
-            if (info.getParentId() != null) {
-                if (1 == info.getParentId()) {
-                    info.setParentIdName("全部(1)");
-                } else {
-                    ChannelInfo channelInfo = channelInfoService.get(info.getParentId());
-                    if (channelInfo == null) {
-                        channelInfo = new ChannelInfo();
-                    }
-                    info.setParentIdName(channelInfo.getName() + "(" + info.getParentId() + ")");
+            if (1 == info.getParentId()) {
+                info.setParentIdName("全部(1)");
+            } else {
+                ChannelInfo channelInfo = channelInfoService.get(info.getParentId());
+                if (channelInfo == null) {
+                    channelInfo = new ChannelInfo();
                 }
+                info.setParentIdName(channelInfo.getName() + "(" + info.getParentId() + ")");
             }
-            if (null != info.getGameType()){
-                DataDict dict = dataDictService.getDictByValue("game_type", info.getGameType());
-                if (null ==dict){
-                    dict = new DataDict();
-                }
-                info.setGameName(dict.getLabel() + "(" + info.getGameType() + ")");
+            DataDict dict = dataDictService.getDictByValue(GameDataConstants.GAME_TYPE, info.getGameType());
+            if (null == dict) {
+                dict = new DataDict();
             }
+            info.setGameName(dict.getLabel() + "(" + info.getGameType() + ")");
         }
         try {
             String fileName = "游戏数据总览" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";

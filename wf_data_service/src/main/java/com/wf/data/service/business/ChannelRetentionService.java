@@ -79,7 +79,6 @@ public class ChannelRetentionService {
             List<Long> childChannelList = Lists.newArrayList();
             List<Long> parentChannelList = Lists.newArrayList();
 
-
             for (String channelStr : channels) {
                 Long channel = Long.valueOf(channelStr);
                 ChannelInfo channelInfo = channelInfoService.get(channel);
@@ -108,7 +107,6 @@ public class ChannelRetentionService {
             params.put("childChannelList", childChannelList);
             params.put("parentChannelList", parentChannelList);
             dataRetention(params, null, searchDay, 0);
-
 
         } catch (Exception e) {
             logger.error("添加渠道汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
@@ -155,18 +153,16 @@ public class ChannelRetentionService {
         } else {
             retention.setNewUsers(0L);
         }
-        if (retention.getDau() > 0) {
+        if (newUserList != null && dauUserList != null && newUserList.size() != 0 && dauUserList.size() != 0 && retention.getDau() > 0) {
             retention.setUsersRate(BigDecimalUtil.div(newUserList.size() * 100, dauUserList.size(), 2));
         } else {
             retention.setUsersRate(0.00);
         }
 
-
         //次日活跃用户列表
         String searchDay = DateUtils.formatDate(DateUtils.getNextDate(DateUtils.parseDate(businessDate), 1), DateUtils.DATE_PATTERN);
         params.put("businessDate", searchDay);
         List<Long> nextDayDauUserList = datawareBuryingPointDayService.getUserIdListByChannel(params);
-
 
         Collection interColl = CollectionUtils.intersection(newUserList, nextDayDauUserList);
         //新用户且次日活跃的用户

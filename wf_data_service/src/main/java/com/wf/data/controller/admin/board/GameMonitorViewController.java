@@ -1,13 +1,14 @@
 package com.wf.data.controller.admin.board;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wf.core.utils.GfJsonUtil;
+import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
+import com.wf.data.common.constants.GameDataConstants;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.controller.response.GameMonitorExprotResponse;
 import com.wf.data.dao.base.entity.ChannelInfo;
@@ -55,60 +56,41 @@ public class GameMonitorViewController extends ExtJsController {
         Integer gameType = null;
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
-            parentId = data.getLong("parentId");
-            businessDate = data.getString("businessDate");
-            gameType = data.getInteger("gameType");
+            parentId = data.getLong(GameDataConstants.PARENTID);
+            businessDate = data.getString(GameDataConstants.BUSINESSDATE);
+            gameType = data.getInteger(GameDataConstants.GAMETYPE);
         }
-        try {
-            Date now = new Date();
-            if (StringUtils.isBlank(businessDate) || businessDate.equals(DateUtils.formatDate(now))) {
-                businessDate = getDate();
-            } else if (DateUtils.parseDate(businessDate).after(now)) {
-                businessDate = getDate();
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
+        if (StringUtils.isBlank(businessDate)) {
+            businessDate = getDate();
         }
         Map<String, Object> params = new HashMap<>(3);
         if (null == parentId) {
             parentId = 1L;
         }
-        ChannelInfo channelInfo = channelInfoService.get(parentId);
-        if (null != channelInfo) {
-            if (null != channelInfo.getParentId()) {
-                params.put("channelId", parentId);
-            } else {
-                params.put("parentId", parentId);
-            }
-        } else {
-            params.put("parentId", parentId);
-        }
+        params.put(GameDataConstants.PARENTID, parentId);
+
         if (null == gameType) {
             gameType = 0;
         }
-        params.put("gameType", gameType);
+        params.put(GameDataConstants.GAMETYPE, gameType);
         //今天的数据
-        params.put("businessDate", businessDate);
+        params.put(GameDataConstants.BUSINESSDATE, businessDate);
         List<DatawareGameBettingInfoHour> todData = bettingInfoService.getByDateAndHour(params);
         //昨天的数据
-        params.put("businessDate", DateUtils.getPrevDate(businessDate, 1));
+        params.put(GameDataConstants.BUSINESSDATE, DateUtils.getPrevDate(businessDate, 1));
         List<DatawareGameBettingInfoHour> yesData = bettingInfoService.getByDateAndHour(params);
         //计算今天和昨天数据的流水差和返奖率
-        if (CollectionUtils.isNotEmpty(todData)) {
-            for (DatawareGameBettingInfoHour tod : todData) {
-                tod.setHourMoneyGap(tod.getHourBettingAmount() - tod.getHourReturnAmount());
-                tod.setHourReturnRate(calRate(tod.getHourReturnAmount(), tod.getHourBettingAmount()));
-                tod.setMoneyGap(tod.getBettingAmount() - tod.getReturnAmount());
-                tod.setReturnRate(calRate(tod.getReturnAmount(), tod.getBettingAmount()));
-            }
+        for (DatawareGameBettingInfoHour tod : todData) {
+            tod.setHourMoneyGap(tod.getHourBettingAmount() - tod.getHourReturnAmount());
+            tod.setHourReturnRate(calRate(tod.getHourReturnAmount(), tod.getHourBettingAmount()));
+            tod.setMoneyGap(tod.getBettingAmount() - tod.getReturnAmount());
+            tod.setReturnRate(calRate(tod.getReturnAmount(), tod.getBettingAmount()));
         }
-        if (CollectionUtils.isNotEmpty(yesData)) {
-            for (DatawareGameBettingInfoHour yes : yesData) {
-                yes.setHourMoneyGap(yes.getHourBettingAmount() - yes.getHourReturnAmount());
-                yes.setHourReturnRate(calRate(yes.getHourReturnAmount(), yes.getHourBettingAmount()));
-                yes.setMoneyGap(yes.getBettingAmount() - yes.getReturnAmount());
-                yes.setReturnRate(calRate(yes.getReturnAmount(), yes.getBettingAmount()));
-            }
+        for (DatawareGameBettingInfoHour yes : yesData) {
+            yes.setHourMoneyGap(yes.getHourBettingAmount() - yes.getHourReturnAmount());
+            yes.setHourReturnRate(calRate(yes.getHourReturnAmount(), yes.getHourBettingAmount()));
+            yes.setMoneyGap(yes.getBettingAmount() - yes.getReturnAmount());
+            yes.setReturnRate(calRate(yes.getReturnAmount(), yes.getBettingAmount()));
         }
 
         //获取今天最后一条记录
@@ -131,7 +113,7 @@ public class GameMonitorViewController extends ExtJsController {
             String dayReturnRate = cal(lastRecord.getReturnRate(), calRate(yesLastRecord.getReturnAmount(), yesLastRecord.getBettingAmount()));
 
             //获取一周前相同时间点的数据
-            params.put("businessDate", DateUtils.getPrevDate(businessDate, 7));
+            params.put(GameDataConstants.BUSINESSDATE, DateUtils.getPrevDate(businessDate, 7));
             List<DatawareGameBettingInfoHour> weekLastRecordList = bettingInfoService.getByDateAndHour(params);
             DatawareGameBettingInfoHour weekLastRecord = new DatawareGameBettingInfoHour();
             weekLastRecord.init(weekLastRecord);
@@ -169,19 +151,17 @@ public class GameMonitorViewController extends ExtJsController {
         List<DatawareGameBettingInfoHour> historyOriginalList = bettingInfoService.getSumDataByDateAndHour(params);
         List<DatawareGameBettingInfoHour> historyData = new ArrayList<>();
 
-        if (CollectionUtils.isNotEmpty(historyOriginalList)) {
-            for (DatawareGameBettingInfoHour record : historyOriginalList) {
-                DatawareGameBettingInfoHour info = new DatawareGameBettingInfoHour();
-                info.setBusinessHour(record.getBusinessHour());
-                info.setHourDau(record.getHourDau() / 7);
-                info.setHourBettingUserCount(record.getHourBettingUserCount() / 7);
-                info.setHourBettingCount(record.getHourBettingCount() / 7);
-                info.setHourBettingAmount(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourBettingAmount(), 7), 0));
-                info.setHourMoneyGap(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourBettingAmount() - record.getHourReturnAmount(), 7), 0));
-                info.setHourReturnRate(record.getHourBettingAmount() == null || record.getHourBettingAmount() == 0 ? 0 :
-                        BigDecimalUtil.round(BigDecimalUtil.div(record.getHourReturnAmount() * 100, record.getHourBettingAmount()), 2));
-                historyData.add(info);
-            }
+        for (DatawareGameBettingInfoHour record : historyOriginalList) {
+            DatawareGameBettingInfoHour info = new DatawareGameBettingInfoHour();
+            info.setBusinessHour(record.getBusinessHour());
+            info.setHourDau(record.getHourDau() / 7);
+            info.setHourBettingUserCount(record.getHourBettingUserCount() / 7);
+            info.setHourBettingCount(record.getHourBettingCount() / 7);
+            info.setHourBettingAmount(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourBettingAmount(), 7), 0));
+            info.setHourMoneyGap(BigDecimalUtil.round(BigDecimalUtil.div(record.getHourBettingAmount() - record.getHourReturnAmount(), 7), 0));
+            info.setHourReturnRate(record.getHourBettingAmount() == null || record.getHourBettingAmount() == 0 ? 0 :
+                    BigDecimalUtil.round(BigDecimalUtil.div(record.getHourReturnAmount() * 100, record.getHourBettingAmount()), 2));
+            historyData.add(info);
         }
         Map<String, Object> map = new HashMap<>(3);
         map.put("todData", todData);
@@ -204,14 +184,14 @@ public class GameMonitorViewController extends ExtJsController {
         if (null == notlast || 0 == notlast) {
             return "0%";
         }
-        return NumberUtils.format(BigDecimalUtil.div(last - notlast, notlast), "#.##%");
+        return NumberUtils.format(BigDecimalUtil.div(BigDecimalUtil.sub(last, notlast), notlast), "#.##%");
     }
 
     private String cal(Double last, Double notlast) {
         if (null == notlast || 0 == notlast) {
             return "0%";
         }
-        return NumberUtils.format(BigDecimalUtil.div(last - notlast, notlast), "#.##%");
+        return NumberUtils.format(BigDecimalUtil.div(BigDecimalUtil.sub(last, notlast), notlast), "#.##%");
     }
 
     private static double calRate(Double one, Double two) {
@@ -234,36 +214,29 @@ public class GameMonitorViewController extends ExtJsController {
         int gameTypeParam = 0;
         String businessDateParam = null;
 
-        try {
-            Date now = new Date();
-            if (judgeParamIsBank(formatGTMDate(businessDate)) || formatGTMDate(businessDate).equals(DateUtils.formatDate(now))) {
-                businessDateParam = getDate();
-            } else if (DateUtils.parseDate(formatGTMDate(businessDate)).after(now)) {
-                businessDateParam = getDate();
-            } else {
-                businessDateParam = formatGTMDate(businessDate);
-            }
+        Date now = new Date();
+        if (judgeParamIsBank(formatGTMDate(businessDate)) || DateUtils.parseDate(formatGTMDate(businessDate)).after(now)) {
+            businessDateParam = getDate();
+        }  else {
+            businessDateParam = formatGTMDate(businessDate);
+        }
 
-            if (!judgeParamIsBank(gameType)) {
-                gameTypeParam = 0;
-            } else {
-                gameTypeParam = Integer.parseInt(gameType);
-            }
+        if (!judgeParamIsBank(gameType)) {
+            gameTypeParam = 0;
+        } else {
+            gameTypeParam = Integer.parseInt(gameType);
+        }
 
-            if (!judgeParamIsBank(parentId)) {
-                parentIdParam = 1L;
-            } else {
-                parentIdParam = Long.parseLong(parentId);
-            }
-
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(formatGTMDate(businessDate)));
+        if (!judgeParamIsBank(parentId)) {
+            parentIdParam = 1L;
+        } else {
+            parentIdParam = Long.parseLong(parentId);
         }
 
         Map<String, Object> params = new HashMap<>(3);
-        params.put("parentId", parentIdParam);
-        params.put("gameType", gameTypeParam);
-        params.put("businessDate", businessDateParam);
+        params.put(GameDataConstants.PARENTID, parentIdParam);
+        params.put(GameDataConstants.GAMETYPE, gameTypeParam);
+        params.put(GameDataConstants.BUSINESSDATE, businessDateParam);
 
         List<DatawareGameBettingInfoHour> todData = bettingInfoService.getByDateAndHour(params);
         List<GameMonitorExprotResponse> responses = new ArrayList<>();
@@ -275,11 +248,11 @@ public class GameMonitorViewController extends ExtJsController {
                 Long parentIde = gameBettingInfoHour.getParentId();
                 exprotResponse.setParentId(parentIde);
                 //根据parentId获取渠道名称
-                if (new Long(1L).equals(parentIde)){
+                if (parentIde.intValue() == 1) {
                     exprotResponse.setChannelName("全部(1)");
-                }else{
+                } else {
                     ChannelInfo channel = channelInfoService.get(parentIde);
-                    exprotResponse.setChannelName(channel.getName()+"("+parentIde+")");
+                    exprotResponse.setChannelName(channel.getName() + "(" + parentIde + ")");
                 }
                 exprotResponse.setGameType(getGameType(gameBettingInfoHour.getGameType()));
                 exprotResponse.setHourDau(gameBettingInfoHour.getHourDau());
@@ -303,7 +276,7 @@ public class GameMonitorViewController extends ExtJsController {
             String fileName = "游戏小时数据监控" + com.wf.core.utils.type.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
             new ExportExcel("游戏小时数据监控", GameMonitorExprotResponse.class).setDataList(responses).write(response, fileName).dispose();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("数据下载失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
         }
 
     }
@@ -322,8 +295,9 @@ public class GameMonitorViewController extends ExtJsController {
     private boolean judgeParamIsBank(String param) {
         if (param.equals("undefined") || param.equals("null") || StringUtils.isBlank(param)) {
             return true;
+        }else {
+            return false;
         }
-        return false;
     }
 
     /**

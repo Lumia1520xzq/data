@@ -7,7 +7,6 @@ import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.controller.response.DataViewExcelResponse;
 import com.wf.data.controller.response.FilterDataViewExcelResponse;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelConversion;
@@ -101,7 +100,7 @@ public class FilterDataViewController extends ExtJsController {
                     endDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
                 } else {
                     endDateParam = formatGTMDate(searchDate);
-                    beginDateParam = DateUtils.getPrevDate(endDateParam,13);
+                    beginDateParam = DateUtils.getPrevDate(endDateParam, 13);
                 }
             } catch (Exception e) {
                 logger.error("导出核心指标总览数据时查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId());
@@ -126,8 +125,8 @@ public class FilterDataViewController extends ExtJsController {
 
             /*获取数据*/
             List<DatawareFinalChannelConversion> finalChannelConversions = conversionService.getByChannelAndDate(params);
-            if(CollectionUtils.isNotEmpty(finalChannelConversions)) {
-                for(DatawareFinalChannelConversion channelConversion:finalChannelConversions){
+            if (CollectionUtils.isNotEmpty(finalChannelConversions)) {
+                for (DatawareFinalChannelConversion channelConversion : finalChannelConversions) {
                     FilterDataViewExcelResponse excelResponse = new FilterDataViewExcelResponse();
                     excelResponse.setBusinessDate(channelConversion.getBusinessDate());
 
@@ -135,11 +134,11 @@ public class FilterDataViewController extends ExtJsController {
                     excelResponse.setChannelId(channelIde);
 
                     //根据channelId获取渠道名称
-                    if (new Long(1L).equals(channelIde)){
+                    if (1 == channelIde.intValue()) {
                         excelResponse.setChannelName("全部(1)");
-                    }else{
+                    } else {
                         ChannelInfo channel = channelInfoService.get(channelIde);
-                        excelResponse.setChannelName(channel.getName()+"("+channelIde+")");
+                        excelResponse.setChannelName(channel.getName() + "(" + channelIde + ")");
                     }
 
                     excelResponse.setDauCount(channelConversion.getDauCount());

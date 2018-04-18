@@ -92,7 +92,10 @@ public class UserBuryingPointController extends ExtJsController {
 
         int total = behaviorList.size();
         int fromIndex = start;
-        int toIndex = (start / length + 1) * length;
+        int toIndex = 0;
+        if (length > 0){
+            toIndex = (start / length + 1) * length;
+        }
         if (fromIndex > total)
             return null;
         if (toIndex > total)

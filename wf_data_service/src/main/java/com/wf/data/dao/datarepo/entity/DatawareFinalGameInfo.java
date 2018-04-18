@@ -42,6 +42,42 @@ public class DatawareFinalGameInfo extends DataEntity {
     private String parentIdName;
     private String gameName;
 
+
+    public DatawareFinalGameInfo init() {
+        DatawareFinalGameInfo info = new DatawareFinalGameInfo();
+        info.setDau(0L);
+        info.setBettingUserCount(0L);
+        info.setBettingConversion(0.0);
+        info.setBettingAmount(0.0);
+        info.setReturnAmount(0.0);
+        info.setDiffAmount(0.0);
+        info.setReturnRate(0.0);
+        info.setBettingCount(0L);
+        info.setBettingArpu(0.0);
+        info.setBettingAsp(0.0);
+        info.setOneDayRetention(0.0);
+        info.setThreeDayRetention(0.0);
+        info.setSevenDayRetention(0.0);
+        info.setNewUserCount(0L);
+        info.setNewUserBettingUserCount(0L);
+        info.setNewUserBettingConversion(0.0);
+        info.setNewUserReturnAmount(0.0);
+        info.setNewUserBettingAmount(0.0);
+        info.setNewUserDiffAmount(0.0);
+        info.setNewUserReturnRate(0.0);
+        info.setNewUserBettingCount(0L);
+        info.setNewUserBettingArpu(0.0);
+        info.setNewUserBettingAsp(0.0);
+        info.setNewUserOneDayRetention(0.0);
+        info.setNewUserThreeDayRetention(0.0);
+        info.setNewUserSevenDayRetention(0.0);
+        info.setImportRate(0.0);
+        info.setTotalUserCount(0L);
+
+
+        return info;
+    }
+
     @ExcelField(title = "渠道名称", type = 1, align = 2, sort = 2)
     public String getParentIdName() {
         return parentIdName;
