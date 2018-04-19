@@ -47,6 +47,7 @@ public class GameDataController extends ExtJsController {
     private ChannelInfoService channelInfoService;
 
     private final DecimalFormat decimalFormat = new DecimalFormat("##0.00");
+    private final DecimalFormat format = new DecimalFormat("##0");
 
     /**
      * 查询列表
@@ -494,13 +495,13 @@ public class GameDataController extends ExtJsController {
         List<Object> resultList = Lists.newArrayList();
         if (GameDataConstants.NEW_USER_COUNT.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getNewUserCount())).append(";");
+            str.append(format.format(info.getNewUserCount())).append(";");
             str.append(getSeriesStr(info.getNewUserCount().doubleValue(), yesList.get(0).getNewUserCount().doubleValue(), weekList.get(0).getNewUserCount().doubleValue()));
             resultList.add(str);
         }
         if (GameDataConstants.NEW_USER_BETTING_USER_COUNT.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getNewUserBettingUserCount())).append(";");
+            str.append(format.format(info.getNewUserBettingUserCount())).append(";");
             str.append(getSeriesStr(info.getNewUserBettingUserCount().doubleValue(), yesList.get(0).getNewUserBettingUserCount().doubleValue(), weekList.get(0).getNewUserBettingUserCount().doubleValue()));
 
             resultList.add(str);
@@ -516,14 +517,14 @@ public class GameDataController extends ExtJsController {
         if (GameDataConstants.NEW_USER_BETTING_AMOUNT.equals(parameter)) {
 
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getNewUserBettingAmount())).append(";");
+            str.append(format.format(info.getNewUserBettingAmount())).append(";");
             str.append(getSeriesStr(info.getNewUserBettingAmount(), yesList.get(0).getNewUserBettingAmount(), weekList.get(0).getNewUserBettingAmount()));
 
             resultList.add(str);
         }
         if (GameDataConstants.NEW_USER_DIFF_AMOUNT.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getNewUserDiffAmount())).append(";");
+            str.append(format.format(info.getNewUserDiffAmount())).append(";");
             str.append(getSeriesStr(info.getNewUserDiffAmount(), yesList.get(0).getNewUserDiffAmount(), weekList.get(0).getNewUserDiffAmount()));
 
             resultList.add(str);
@@ -537,7 +538,7 @@ public class GameDataController extends ExtJsController {
         }
         if (GameDataConstants.NEW_USER_BETTING_COUNT.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getNewUserBettingCount())).append(";");
+            str.append(format.format(info.getNewUserBettingCount())).append(";");
             str.append(getSeriesStr(info.getNewUserBettingCount().doubleValue(), yesList.get(0).getNewUserBettingCount().doubleValue(), weekList.get(0).getNewUserBettingCount().doubleValue()));
 
             resultList.add(str);
@@ -560,12 +561,11 @@ public class GameDataController extends ExtJsController {
 
     private StringBuffer getSeriesStr(Double paramter, Double yesParamter, Double weekParamter) {
         StringBuffer seriesStr = new StringBuffer();
-        DecimalFormat df = new DecimalFormat("0.00");
         if (yesParamter.doubleValue() == 0.0) {
             seriesStr.append("日环比：0%;");
         } else {
             seriesStr.append("日环比:")
-                    .append(df.format(BigDecimalUtil.div((paramter - yesParamter.doubleValue()) * 100, yesParamter.doubleValue(), 2)))
+                    .append(decimalFormat.format(BigDecimalUtil.div((paramter - yesParamter.doubleValue()) * 100, yesParamter.doubleValue(), 2)))
                     .append("%; ");
         }
 
@@ -573,7 +573,7 @@ public class GameDataController extends ExtJsController {
             seriesStr.append("周同比：0%;");
         } else {
             seriesStr.append("周同比:")
-                    .append(df.format(BigDecimalUtil.div((paramter - weekParamter) * 100, weekParamter, 2)))
+                    .append(decimalFormat.format(BigDecimalUtil.div((paramter - weekParamter) * 100, weekParamter, 2)))
                     .append("%; ");
         }
         return seriesStr;
@@ -592,13 +592,13 @@ public class GameDataController extends ExtJsController {
 
         if (GameDataConstants.DAU.equals(parameter)) {
             StringBuilder str = new StringBuilder();
-            str.append(decimalFormat.format(info.getDau())).append(";");
+            str.append(format.format(info.getDau())).append(";");
             str.append(getSeriesStr(info.getDau().doubleValue(), yesList.get(0).getDau().doubleValue(), weekList.get(0).getDau().doubleValue()));
             resultList.add(str);
         }
         if (GameDataConstants.USER_COUNT.equals(parameter)) {
             StringBuilder str = new StringBuilder();
-            str.append(decimalFormat.format(info.getBettingUserCount())).append(";");
+            str.append(format.format(info.getBettingUserCount())).append(";");
             str.append(getSeriesStr(info.getBettingUserCount().doubleValue(), yesList.get(0).getBettingUserCount().doubleValue(), weekList.get(0).getBettingUserCount().doubleValue()));
             resultList.add(str);
         }
@@ -611,28 +611,28 @@ public class GameDataController extends ExtJsController {
         }
         if (GameDataConstants.BETTING_AMOUNT.equals(parameter)) {
             StringBuilder str = new StringBuilder();
-            str.append(decimalFormat.format(info.getBettingAmount())).append(";");
+            str.append(format.format(info.getBettingAmount())).append(";");
             str.append(getSeriesStr(info.getBettingAmount(), yesList.get(0).getBettingAmount(), weekList.get(0).getBettingAmount()));
 
             resultList.add(str);
         }
         if (GameDataConstants.DIFF_AMOUNT.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getDiffAmount())).append(";");
+            str.append(format.format(info.getDiffAmount())).append(";");
             str.append(getSeriesStr(info.getDiffAmount(), yesList.get(0).getDiffAmount(), weekList.get(0).getDiffAmount()));
 
             resultList.add(str);
         }
         if (GameDataConstants.RETURN_RATE.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getDiffAmount())).append(";");
+            str.append(format.format(info.getReturnRate())).append(";");
             str.append(getSeriesStr(info.getReturnRate(), yesList.get(0).getReturnRate(), weekList.get(0).getReturnRate()));
 
             resultList.add(str);
         }
         if (GameDataConstants.BETTING_COUNT.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(decimalFormat.format(info.getBettingCount())).append(";");
+            str.append(format.format(info.getBettingCount())).append(";");
             str.append(getSeriesStr(info.getBettingCount().doubleValue(), yesList.get(0).getBettingCount().doubleValue(), weekList.get(0).getBettingCount().doubleValue()));
 
             resultList.add(str);
