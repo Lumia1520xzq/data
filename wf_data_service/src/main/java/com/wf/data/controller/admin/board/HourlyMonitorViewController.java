@@ -56,9 +56,7 @@ public class HourlyMonitorViewController extends ExtJsController {
         }
         try {
             Date now = new Date();
-            if (StringUtils.isBlank(businessDate) || businessDate.equals(DateUtils.formatDate(now))) {
-                businessDate = getDate();
-            } else if (DateUtils.parseDate(businessDate).after(now)) {
+            if (StringUtils.isBlank(businessDate) || businessDate.equals(DateUtils.formatDate(now)) || DateUtils.parseDate(businessDate).after(now)) {
                 businessDate = getDate();
             }
         } catch (Exception e) {
