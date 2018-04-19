@@ -99,7 +99,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             items: [{
                 title: '全量用户数据',
                 itemId: 'allUsers',
-                width: "16.5%",
+                width: "10.5%",
                 height: "100%",
                 xtype: "panel",
                 forceFit: true,
@@ -133,7 +133,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             }, {
                 title: '留存数据',
                 itemId: 'retention',
-                width: "16.5%",
+                width: "10.5%",
                 height: "100%",
                 xtype: "panel",
                 forceFit: true,
@@ -149,7 +149,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             }, {
                 title: '其它数据',
                 itemId: 'other',
-                width: "16.5%",
+                width: "10.5%",
                 height: "100%",
                 xtype: "panel",
                 forceFit: true,
@@ -202,6 +202,11 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             for (var i = 0; i < items.length; i++) {
                 me.echarts = echarts.init(Ext.get(items[i].id).dom);
                 var myOption = option;
+                var array = ["投注转化率", "返奖率","新增投注转化率","新增次留","新增三留","新增七留","全量次留","全量三留","全量七留","导入率"];
+
+                if(Ext.Array.contains(array,items[i].id)){
+                    myOption =optionRate;
+                    }
                 myOption.legend.data = data.chartsData.legends;
                 myOption.title.text = data.titles[i];
                 myOption.xAxis = [
@@ -231,8 +236,8 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                         var aa =[];
                         for (var j = 0; j < seriesData[key][i].length; j++) {
                             var str = [];
-                            str = seriesData[key][i][0][0].split(";");
-                            aa.push({value : str[0], name : key+":"+seriesData[key][i][j]})
+                            str = seriesData[key][i][j][0].split(";");
+                            aa.push({value : str[0], name : key+":"+seriesData[key][i][j][0]})
                         }
                         var temp = {
                             name: data.chartsData.legends[i],
@@ -258,6 +263,7 @@ var option = {
     },
     tooltip: {
         trigger: 'axis',
+        position: ['10%', '10%'],
         formatter: function (datas) {
             var str='';
             str +='时间 :'+datas[0].name+'<br/>';
@@ -312,6 +318,76 @@ var option = {
     yAxis: [
         {
             type: 'value'
+        }
+    ],
+    series: []
+};
+
+
+var optionRate = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        position: ['10%', '10%'],
+        formatter: function (datas) {
+            var str='';
+            str +='时间 :'+datas[0].name+'<br/>';
+            for(var i = 0; i < datas.length; i++){
+                if(datas[i].data != undefined && datas[i].data.name != 0)
+                    str += datas[i].seriesName +'<br/>'+datas[i].data.name+'<br/>';
+            }
+            return str;
+        }
+    },
+    grid:{
+        left:'20%',
+        y:'25%'
+    },
+    legend: {
+        orient: 'horizontal',      // 布局方式，默认为水平布局，可选为：
+        x: 'center',               // 水平安放位置，默认为全图居中，可选为：
+                                   // 'center' ¦ 'left' ¦ 'right'
+                                   // ¦ {number}（x坐标，单位px）
+        y: 'top',                  // 垂直安放位置，默认为全图顶端，可选为：
+                                   // 'top' ¦ 'bottom' ¦ 'center'
+                                   // ¦ {number}（y坐标，单位px）
+        width: 350,
+        backgroundColor: 'rgba(0,0,0,0)',
+        borderColor: '#ccc',       // 图例边框颜色
+        borderWidth: 0,            // 图例边框线宽，单位px，默认为0（无边框）
+        padding: 5,                // 图例内边距，单位px，默认各方向内边距为5，
+                                   // 接受数组分别设定上右下左边距，同css
+        itemGap: 10,               // 各个item之间的间隔，单位px，默认为10，
+                                   // 横向布局时为水平间隔，纵向布局时为纵向间隔
+        itemWidth: 5,             // 图例图形宽度
+        itemHeight: 14,            // 图例图形高度
+        textStyle: {
+            color: '#333'          // 图例文字颜色
+        },
+        data: []
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            mark: {show: true},
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: 'category',
+            boundaryGap: false,
+            data: []
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            }
         }
     ],
     series: []
