@@ -174,40 +174,30 @@ public class GameOverViewService {
         List<Long> sevenDayActive = (List<Long>) CollectionUtils.intersection(activeUserIds, sevenDayBeforeActiveUserIds);
         Double sevenDayRelation = division(sevenDayActive.size(), threeDayBeforeActiveUserIds.size());
 
-        /*新增用户投注信息*/
-        //新增用户ID集合
         Map<String, Object> newUserParam = new HashMap<>();
         newUserParam.put("parentId", initParentId);
-        //(搜索日期新用户)
+        newUserParam.put("gameType", gameType);
         newUserParam.put("businessDate", searchDate);
-        List<Long> newUserIds = userInfoService.getNewUserByDate(newUserParam);
-        //(T-1日新用户)
+        //(搜索日)游戏新增用户且活跃用户
+        List<Long> newAndActiveList = buryingPointDayService.getGameNewUserList(newUserParam);
+        //(T-1日)新增用户且活跃用户
         newUserParam.put("businessDate", DateUtils.getPrevDate(searchDate, 1));
-        List<Long> oneDayBeforeNewUserIds = userInfoService.getNewUserByDate(newUserParam);
-        //(T-3日新用户)
+        List<Long> newAndActiveOneList = buryingPointDayService.getGameNewUserList(newUserParam);
+        //(T-3日)新增用户且活跃用户
         newUserParam.put("businessDate", DateUtils.getPrevDate(searchDate, 3));
-        List<Long> threeDayBeforeNewUserIds = userInfoService.getNewUserByDate(newUserParam);
-        //(T-7日新用户)
+        List<Long> newAndActivethreeList = buryingPointDayService.getGameNewUserList(newUserParam);
+        //(T-7日)新增用户且活跃用户
         newUserParam.put("businessDate", DateUtils.getPrevDate(searchDate, 7));
-        List<Long> sevenDayBeforeNewUserIds = userInfoService.getNewUserByDate(newUserParam);
+        List<Long> sevenAndActiveSevenList = buryingPointDayService.getGameNewUserList(newUserParam);
 
         Map<String, Object> newUserBettingParam = new HashMap<>();
         newUserBettingParam.put("searchDate", searchDate);
         newUserBettingParam.put("bettingDate", searchDate);
         newUserBettingParam.put("parentId", initParentId);
         newUserBettingParam.put("gameType", gameType);
-        newUserBettingParam.put("newUserIds", newUserIds);
+        newUserBettingParam.put("newUserIds", newAndActiveList);
         //新增用户投注信息
         DatawareBettingLogDay newUserBettingLogDayInfo = bettingLogDayService.getBettingInfoByDate(newUserBettingParam);
-
-        //(搜索日)新增用户且活跃用户
-        List<Long> newAndActiveList = (List<Long>) CollectionUtils.intersection(newUserIds, activeUserIds);
-        //(T-1日)新增用户且活跃用户
-        List<Long> newAndActiveOneList = (List<Long>) CollectionUtils.intersection(oneDayBeforeNewUserIds, oneDayBeforeActiveUserIds);
-        //(T-3日)新增用户且活跃用户
-        List<Long> newAndActivethreeList = (List<Long>) CollectionUtils.intersection(threeDayBeforeNewUserIds, threeDayBeforeActiveUserIds);
-        //(T-7日)新增用户且活跃用户
-        List<Long> sevenAndActiveSevenList = (List<Long>) CollectionUtils.intersection(sevenDayBeforeNewUserIds, sevenDayBeforeActiveUserIds);
 
         //新增用户次日留存
         List<Long> newUserOnDayActive = (List<Long>) CollectionUtils.intersection(newAndActiveOneList, activeUserIds);
@@ -291,7 +281,7 @@ public class GameOverViewService {
         gameInfo.setNewUserReturnRate(BigDecimalUtil.mul(division(gameInfo.getNewUserReturnAmount(), gameInfo.getNewUserBettingAmount()), 100));
         gameInfo.setNewUserBettingArpu(division(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserBettingUserCount()));
         gameInfo.setNewUserBettingAsp(division(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserBettingCount()));
-        gameInfo.setNewUserBettingConversion(BigDecimalUtil.mul(division(gameInfo.getNewUserBettingUserCount(), Long.parseLong(String.valueOf(newUserIds.size()))), 100));
+        gameInfo.setNewUserBettingConversion(BigDecimalUtil.mul(division(gameInfo.getNewUserBettingUserCount(), Long.parseLong(String.valueOf(newAndActiveList.size()))), 100));
         gameInfo.setNewUserOneDayRetention(0.00);
         gameInfo.setNewUserThreeDayRetention(0.00);
         gameInfo.setNewUserSevenDayRetention(0.00);

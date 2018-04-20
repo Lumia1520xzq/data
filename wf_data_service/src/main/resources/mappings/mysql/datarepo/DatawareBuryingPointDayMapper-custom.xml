@@ -161,15 +161,15 @@
 
     <select id="getFirstActiveDate" resultType="java.lang.String">
         SELECT
-            burying_date
+        burying_date
         FROM
-            `dataware_burying_point_day` t
+        `dataware_burying_point_day` t
         WHERE 1=1
         <if test="userId != null and userId != ''">
             AND t.user_id = #{userId}
         </if>
         ORDER BY
-            t.burying_date ASC
+        t.burying_date ASC
         LIMIT 1;
     </select>
 
@@ -247,16 +247,16 @@
 
     <select id="getActiveUsersInFifteenDay" resultType="java.lang.Long">
         SELECT DISTINCT
-            t.user_id
+        t.user_id
         FROM
-            dataware_burying_point_day t
+        dataware_burying_point_day t
         WHERE
-            t.delete_flag = 0
+        t.delete_flag = 0
         <if test="channelId != null and channelId != ''">
-          AND t.parent_id = #{channelId}
+            AND t.parent_id = #{channelId}
         </if>
         <if test="beginDate != null and beginDate != ''">
-          AND t.burying_date >= #{beginDate}
+            AND t.burying_date >= #{beginDate}
         </if>
         <if test="endDate != null and endDate != ''">
             AND t.burying_date &lt;= #{endDate}
@@ -277,6 +277,39 @@
         <if test="gameType != null">
             AND t.game_type = #{gameType}
         </if>
+    </select>
+
+    <select id="getGameNewUserList" resultType="java.lang.Long">
+        SELECT DISTINCT
+        t.user_id
+        FROM
+        dataware_burying_point_day t
+        WHERE 1=1
+        <if test="businessDate != null and businessDate != ''">
+            AND t.burying_date = #{businessDate}
+        </if>
+        <if test="gameType != null">
+            AND t.game_type = #{gameType}
+        </if>
+        <if test="parentId != null">
+            AND t.channel_id = #{parentId}
+        </if>
+        AND t.user_id NOT IN (
+        SELECT DISTINCT
+        t1.user_id
+        FROM
+        dataware_burying_point_day t1
+        WHERE 1=1
+        <if test="businessDate != null and businessDate != ''">
+            AND t1.burying_date &lt; #{businessDate}
+        </if>
+        <if test="gameType != null">
+            AND t1.game_type = #{gameType}
+        </if>
+        <if test="parentId != null">
+            AND t.channel_id = #{parentId}
+        </if>
+        )
     </select>
 
 </mapper>
