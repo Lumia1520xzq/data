@@ -16,8 +16,12 @@
     },
     tools: [{
         id: 'help',
-        qtip: '用户手册',
         handler: function () {
+            var win = Ext.create("WF.userManual.userManual", {
+                width : 900,
+                y : '100',
+            });
+            win.show();
         }
     }],
     animate: false,

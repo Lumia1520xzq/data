@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.GrowTestDao">
+	
+	<sql id="growTestColumns">
+		t.id,
+		t.point,
+		t.test_type_id,
+		t.doc_url,
+		t.test_channel,
+		t.target,
+		t.user_ids,
+		t.result,
+		t.operation_username,
+		t.create_time,
+		t.update_time,
+		t.delete_flag,
+		t.start_time,
+		t.end_time
+	</sql>
+	
+	<sql id="growTestWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.point != null and p.point != ''">
+			AND t.point LIKE CONCAT('%', #{p.point}, '%')
+		</if>
+		<if test="p.testChannel != null and p.testChannel !=''">
+			AND t.`test_channel` LIKE CONCAT('%', #{p.testChannel}, '%')
+		</if>
+		<if test="p.beginDate != null and p.beginDate !=''">
+			AND t.start_time >= '${p.beginDate}'
+		</if>
+		<if test="p.operationUsername != null and p.operationUsername != ''">
+			AND t.operation_username LIKE CONCAT('%', #{p.operationUsername}, '%')
+		</if>
+	</sql>
+	
+	<sql id="growTestJoins">
+	</sql>
+	
+	<select id="get" resultType="GrowTest">
+		SELECT <include refid="growTestColumns"/> FROM data_grow_note t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="GrowTest">
+		SELECT <include refid="growTestColumns"/> FROM data_grow_note t <include refid="growTestJoins"/>
+		WHERE <include refid="growTestWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM data_grow_note t WHERE <include refid="growTestWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO data_grow_note (
+			id, 
+			point, 
+			test_type_id, 
+			doc_url, 
+			test_channel, 
+			target, 
+			user_ids, 
+			result, 
+			operation_username,
+			create_time, 
+			delete_flag,
+			start_time,
+			end_time 
+		) VALUES (
+			#{id},
+			#{point}, 
+			#{testTypeId}, 
+			#{docUrl}, 
+			#{testChannel}, 
+			#{target}, 
+			#{userIds}, 
+			#{result}, 
+			#{operationUsername},
+			#{createTime}, 
+			#{deleteFlag},
+			#{startTime},
+			#{endTime} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE data_grow_note SET
+			point = #{point}, 
+			test_type_id = #{testTypeId}, 
+			doc_url = #{docUrl}, 
+			test_channel = #{testChannel}, 
+			target = #{target}, 
+			user_ids = #{userIds}, 
+			result = #{result}, 
+			operation_username = #{operationUsername},
+			delete_flag = #{deleteFlag},
+			start_time = #{startTime},
+			end_time = #{endTime} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE data_grow_note SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
