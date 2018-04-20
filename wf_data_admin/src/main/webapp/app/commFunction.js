@@ -253,3 +253,93 @@ function uploadPicture(url, callBack) {
 	});
 	_win.show();
 }
+
+function uploadWord(url, callBack) {
+    var _myform = new Ext.form.FormPanel({
+        buttonAlign : 'center',
+        frame : false,
+        fileUpload : true,
+        layout : {
+            type : 'vbox',
+            align : 'stretch'
+        },
+        items : [{
+            allowBlank : false,
+            xtype : 'fileuploadfield',
+            emptyText : '请选择要导入的WORD文件',
+            fieldLabel : '请选择文件',
+            name : 'wordFile',
+            buttonText : '浏览...',
+            buttonCfg : {
+                iconCls : 'icon-upload'
+            }
+        }],
+        buttons : [{
+            text : '提交',
+            iconCls : 'icon-ok',
+            handler : function() {
+                var fileType='doc,docx';
+                var fileName = this.up('form').down('fileuploadfield[name="wordFile"]').getValue();
+                var fileH = fileName.split('.');
+                var fileHo = fileH[fileH.length - 1];
+                if (fileType != '') {
+                    var items = fileType.split(',');
+                    var a = 0;
+                    for (var i = 0; i < items.length; i++) {
+                        if (fileHo.toUpperCase() == items[i].toUpperCase()) {
+                            a++;
+                        }
+                    }
+                    if (a == 0) {
+                        Ext.MessageBox.show({
+                            title : "错误",
+                            msg : '对不起,文件格式不符合要求,格式只能是['+ fileType+ "]这些格式",
+                            modal : true,
+                            icon : Ext.Msg.ERROR,
+                            buttons : Ext.Msg.OK
+                        });
+                        return;
+                    }
+                }
+                _myform.submit({
+                    url : url,
+                    waitMsg : '正在导入数据...',
+                    success : function(fp, o) {
+                        _win.close();
+                        if (o.result != null)
+                            callBack(o.result);
+                        else
+                            callBack();
+                    },
+                    failure : function() {
+                        Ext.Msg.show({
+                            title : '错误',
+                            msg : '对不起,文件导入失败!',
+                            buttons : Ext.Msg.OK,
+                            icon : Ext.MessageBox.ERROR
+                        });
+                    }
+                });
+            }
+        }, {
+            text : '取消',
+            iconCls : 'icon-undo',
+            handler : function() {
+                _win.close();
+            }
+        }]
+    });
+    var _win = new Ext.Window({
+        title : '选择导入的文件',
+        layout : {
+            type : 'vbox',
+            align : 'stretch'
+        },
+        width : 320,
+        modal : true,
+        resizable : false,
+        closable : true,
+        items : [_myform]
+    });
+    _win.show();
+}

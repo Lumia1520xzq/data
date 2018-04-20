@@ -166,4 +166,14 @@ public interface DataConstants {
     String DATA_DATAWARE_DIMENSION_CLEAN_FLAG = "data_dataware_dimension_clean_flag";
     //游戏数据总览
     String DATA_FINAL_GAME_OPEN = "data_final_game_open";
+
+    /**
+     * 增长测试类型
+     */
+    String TEST_TYPE = "test_type";
+
+    /**
+     * 指标类型
+     */
+    String TARGET_TYPE= "target_type";
 }
