@@ -2,6 +2,8 @@ package com.wf.data.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wf.core.persistence.Page;
+import com.wf.core.utils.file.FastDFSUtils;
+import com.wf.core.utils.type.MapUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -134,6 +137,12 @@ public class CommonDataController extends ExtJsController {
                 dto.setParentId(Long.parseLong(keyword));
             } else {
                 dto.setName(keyword);
+            }
+        }
+        if (data != null) {
+            String channelName = data.getString("name");
+            if(StringUtils.isNotBlank(channelName)){
+                dto.setName(channelName);
             }
         }
         dto.setEnable(1);
@@ -349,5 +358,28 @@ public class CommonDataController extends ExtJsController {
         }
         return inventoryPhyAwardsInfoService.findPage(new Page<>(inventoryPhyAwardsInfo));
     }
+
+    @RequestMapping("/getValueByType")
+    public Object getValueByType() {
+        JSONObject json = getRequestJson();
+        String param = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null) {
+            param = data.getString("type");
+        }
+        List<DataDict> dataDictDtoList = dataDictService.getDictList(param);
+        return dataDictDtoList;
+    }
+
+
+
+    @RequestMapping("/uploadWord")
+    public Object uploadWord(MultipartFile wordFile) {
+        String path = FastDFSUtils.uploadFile(wordFile);
+        String domainUri = FastDFSUtils.getDomainUri(path);
+        System.out.println(path + "------------------" + domainUri);
+        return success(MapUtils.toMap("data", path, "url", FastDFSUtils.getDomainUri(path)));
+    }
+
 
 }
