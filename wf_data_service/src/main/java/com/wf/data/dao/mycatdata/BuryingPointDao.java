@@ -45,4 +45,6 @@ public interface BuryingPointDao extends CrudDao<BuryingPoint> {
 	List<DatawareBuryingPointHour> findBuryingHourList(Map<String,Object> map);
 
 	List<Long> getActiveUserWhinMonth(Map<String, Object> behaviorParams);
+
+    long getCountByDate(Map<String, Object> param);
 }
