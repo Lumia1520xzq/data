@@ -101,4 +101,8 @@ public class BuryingPointService extends CrudService<BuryingPointDao, BuryingPoi
     public List<Long> getActiveUserWhinMonth(Map<String, Object> behaviorParams) {
 		return dao.getActiveUserWhinMonth(behaviorParams);
     }
+
+	public long getCountByDate(Map<String, Object> param) {
+    	return dao.getCountByDate(param);
+	}
 }

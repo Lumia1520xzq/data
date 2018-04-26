@@ -9,10 +9,12 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.common.constants.ChannelConstants;
 import com.wf.data.common.constants.JddTagIdConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
 import com.wf.data.dto.JddUserTagDto;
 import com.wf.data.service.BuryingPointService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicUserService;
+import com.wf.data.service.data.DatawareBettingLogDayService;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -47,6 +49,9 @@ public class SendThirdIdToJddService {
 
     @Autowired
     private TransConvertService transConvertService;
+
+    @Autowired
+    private DatawareBettingLogDayService bettingLogDayService;
 
     @Value("${jdd.baseUrl}")
     private String baseUrl;
@@ -183,11 +188,92 @@ public class SendThirdIdToJddService {
         List<Long> payedUserList = transConvertService.getRechargeUserIdsByDay(convertParams);
 
         //七日内有付费行为
-        convertParams.put("beginDate", DateUtils.getPrevDate(DateUtils.getYesterdayDate(),7));
+        convertParams.put("beginDate", DateUtils.getPrevDate(DateUtils.getYesterdayDate(), 7));
         List<Long> payedUserInLastSevenDayList = transConvertService.getRechargeUserIdsByDay(convertParams);
 
         List<Long> resultUserId = (List<Long>) CollectionUtils.subtract(payedUserList, payedUserInLastSevenDayList);
         getThirdIdByUserIdList(resultUserId, JddTagIdConstants.UNPAY_SEVEN_DAY);
+    }
+
+    /**
+     * 新注册用户7天有活跃且未付费（标签ID=417）
+     */
+    public void pushNewAndUnpayUser() {
+        String yesterday = DateUtils.getYesterdayDate();
+        String lastSevenDay = DateUtils.getPrevDate(DateUtils.getYesterdayDate(), 6);
+
+        //获取T-7天注册用户
+        Map<String, Object> userParam = new HashMap<>();
+        userParam.put("channelId", ChannelConstants.JS_CHANNEL);
+        userParam.put("beginDate", lastSevenDay + " 00:00:00");
+        userParam.put("endDate", lastSevenDay + " 23:59:59");
+        userParam.put("limit", limit);
+        List<Long> conditionUserIdsOne = uicUserService.getUserByDate(userParam);
+
+        //七日内活跃
+        Map<String, Object> Param = new HashMap<>();
+        Param.put("parentId", ChannelConstants.JS_CHANNEL);
+        Param.put("channelId", ChannelConstants.JS_CHANNEL);
+        Param.put("beginDate", lastSevenDay + " 00:00:00");
+        Param.put("endDate", yesterday + " 23:59:59");
+        Param.put("limit", limit);
+        List<Long> conditionUserIdsTwo = buryingPointService.getActiveUserWhinMonth(Param);
+
+        //七日内充值用户
+        List<Long> conditionUserIdsThree = transConvertService.getRechargeUserIdsByDay(Param);
+
+        List<Long> resultUserIds = (List<Long>) CollectionUtils.subtract(CollectionUtils.intersection(conditionUserIdsOne, conditionUserIdsTwo), conditionUserIdsThree);
+        getThirdIdByUserIdList(resultUserIds, JddTagIdConstants.FOUR_ONE_SEVEN);
+    }
+
+    /**
+     * 奖多多渠道7天未活跃用户彩票ID（标签ID=418）
+     */
+    public void pushUnActiveLastSevenDay() {
+        String preEightDay = DateUtils.getPrevDate(DateUtils.getYesterdayDate(), 7);
+        String beginDate = preEightDay + " 00:00:00";
+        String endDate = preEightDay + " 23:59:59";
+
+        //（T-8）天的活跃用户
+        Map<String, Object> param = new HashMap<>();
+        param.put("channelId", ChannelConstants.JS_CHANNEL);
+        param.put("beginDate", beginDate);
+        param.put("endDate", endDate);
+        param.put("limit", limit);
+        List<Long> activeUsersEight = buryingPointService.getActiveUserWhinMonth(param);
+
+        //七天内活跃的用户
+        beginDate = preEightDay + " 23:59:59";
+        endDate = DateUtils.getYesterdayDate() + " 23:59:59";
+        param.put("beginDate", beginDate);
+        param.put("endDate", endDate);
+        param.put("limit", limit);
+        List<Long> activeUsersLastSeven = buryingPointService.getActiveUserWhinMonth(param);
+
+        //（T-8）天活跃且后连续7天内未活跃
+        List<Long> resultUserId = (List<Long>) CollectionUtils.subtract(activeUsersEight, activeUsersLastSeven);
+        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.FOUR_ONE_EIGHT);
+    }
+
+    /**
+     * 10天内有投注用户（标签ID=419）
+     */
+    public void pushActiveAndBettingLastTenDay() {
+        //近十天投注用户
+        Map<String, Object> param = new HashMap<>();
+        param.put("beginDate", DateUtils.getPrevDate(DateUtils.getYesterdayDate(), 6));
+        param.put("endDate", DateUtils.getYesterdayDate());
+        param.put("channelId", ChannelConstants.JS_CHANNEL);
+        List<Long> bettingUsers = bettingLogDayService.getBettingUserIdByDateRange(param);
+
+        //新注册用户
+        param.put("beginDate", DateUtils.getYesterdayDate() + " 00:00:00");
+        param.put("endDate", DateUtils.getYesterdayDate() + " 23:59:59");
+        param.put("limit", limit);
+        List<Long> newUsers = uicUserService.getUserByDate(param);
+
+        List<Long> resultUserIds = (List<Long>) CollectionUtils.subtract(bettingUsers,newUsers);
+        getThirdIdByUserIdList(resultUserIds, JddTagIdConstants.FOUR_ONE_NINE);
     }
 
     /**
@@ -289,4 +375,5 @@ public class SendThirdIdToJddService {
         }
         return totalPage;
     }
+
 }

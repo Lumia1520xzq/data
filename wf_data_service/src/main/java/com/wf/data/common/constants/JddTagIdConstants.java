@@ -30,4 +30,19 @@ public interface JddTagIdConstants {
      * 付费用户，7日内没有付费用户彩票ID
      */
     String UNPAY_SEVEN_DAY = "385";
+
+    /**
+     * 新注册用户7天活跃且未付费
+     */
+    String FOUR_ONE_SEVEN = "417";
+
+    /**
+     * 7天未活跃用户
+     */
+    String FOUR_ONE_EIGHT = "418";
+
+    /**
+     * 10天活跃投注用户
+     */
+    String FOUR_ONE_NINE = "419";
 }

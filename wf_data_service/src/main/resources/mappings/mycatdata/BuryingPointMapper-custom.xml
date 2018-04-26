@@ -78,5 +78,22 @@
         </if>
         LIMIT #{limit};
     </select>
+
+    <select id="getCountByDate" resultType="java.lang.Long">
+        SELECT
+        COUNT(t.user_id)
+        FROM
+        `uic_burying_point` t
+        WHERE 1=1
+        <if test="channelId != null">
+            AND t.channel_id = #{channelId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND t.create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.create_time &lt;= #{endDate}
+        </if>
+    </select>
 </mapper>
 
