@@ -173,7 +173,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                     layout: 'hbox',
                     name: names[i],
                     id: names[i],
-                    width: Ext.ComponentQuery.query('maincontent_center')[0].body.dom.clientWidth * 0.5 - 10,
+                    width: Ext.ComponentQuery.query('maincontent_center')[0].body.dom.clientWidth * 0.31,
                     height: 430,
                     forceFit: true,
                     bodyStyle: 'border-width:0'
@@ -313,7 +313,7 @@ var option = {
         y:'25%'
     },
     legend: {
-        top:20,
+        top:25,
         data: []
     },
     toolbox: {
@@ -361,7 +361,7 @@ var optionRate = {
         y:'25%'
     },
     legend: {
-        top:20,
+        top:25,
         data: []
     },
     toolbox: {
