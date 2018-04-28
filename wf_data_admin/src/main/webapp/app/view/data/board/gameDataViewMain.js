@@ -313,7 +313,7 @@ var option = {
         y:'25%'
     },
     legend: {
-        top:20,
+        top:25,
         data: []
     },
     toolbox: {
@@ -361,7 +361,7 @@ var optionRate = {
         y:'25%'
     },
     legend: {
-        top:20,
+        top:25,
         data: []
     },
     toolbox: {
