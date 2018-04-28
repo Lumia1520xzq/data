@@ -19,12 +19,12 @@ public interface GameDataConstants {
     String NEW_USER_COUNT = "新增用户数";
     String NEW_USER_BETTING_USER_COUNT = "新增投注用户数";
     String NEW_USER_BETTING_CONVERSION = "新增投注转化率";
-    String NEW_USER_BETTING_AMOUNT = "投注流水";
-    String NEW_USER_DIFF_AMOUNT = "流水差";
-    String NEW_USER_RETURN_RATE = "返奖率";
-    String NEW_USER_BETTING_COUNT = "投注笔数";
-    String NEW_USER_BETTING_ARPU = "投注ARPU";
-    String NEW_USER_BETTING_ASP = "投注ASP";
+    String NEW_USER_BETTING_AMOUNT = "新增投注流水";
+    String NEW_USER_DIFF_AMOUNT = "新增流水差";
+    String NEW_USER_RETURN_RATE = "新增返奖率";
+    String NEW_USER_BETTING_COUNT = "新增投注笔数";
+    String NEW_USER_BETTING_ARPU = "新增投注ARPU";
+    String NEW_USER_BETTING_ASP = "新增投注ASP";
 
 
     String NEW_USER_ONE_DAY_RETENTION = "新增次留";
