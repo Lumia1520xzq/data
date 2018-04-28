@@ -625,7 +625,7 @@ public class GameDataController extends ExtJsController {
         }
         if (GameDataConstants.RETURN_RATE.equals(parameter)) {
             StringBuffer str = new StringBuffer();
-            str.append(format.format(info.getReturnRate())).append(";");
+            str.append(decimalFormat.format(info.getReturnRate())).append(";");
             str.append(getSeriesStr(info.getReturnRate(), yesList.get(0).getReturnRate(), weekList.get(0).getReturnRate()));
 
             resultList.add(str);

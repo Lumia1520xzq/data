@@ -1,6 +1,6 @@
 Ext.define('WF.view.data.board.gameDataViewMain', {
     extend: 'Ext.panel.Panel',
-    title: '游戏数据图形分析',
+    title: '游戏数据总览',
     xtype: 'gameDataViewMain',
     closable: true,
     autoScroll: true,
@@ -29,6 +29,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 type: 'game_type'
             }
         });
+        // 查询模块
         me.add({
             border: false,
             store: store,
@@ -60,36 +61,37 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 queryMode: "local",
                 store: parentChannelStore
             },
-                {
-                    name: 'gameType',
-                    fieldLabel: '游戏',
-                    xtype: 'combobox',
-                    store: gameTypeStore,
-                    emptyText: "",
-                    displayField: 'label',
-                    multiSelect: true,
-                    valueField: "value",
-                    editable: false
-                },
-                {
-                    name: 'tabId',
-                    xtype: 'hiddenfield',
-                    value: '',
-                },
-                {
-                    name: 'startTime',
-                    fieldLabel: '开始时间',
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -14), "Y-m-d")
-                }, {
-                    name: 'endTime',
-                    fieldLabel: '结束时间',
-                    xtype: 'datefield',
-                    format: 'Y-m-d',
-                    value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
-                }]
+            {
+                name: 'gameType',
+                fieldLabel: '游戏',
+                xtype: 'combobox',
+                store: gameTypeStore,
+                emptyText: "",
+                displayField: 'label',
+                multiSelect: true,
+                valueField: "value",
+                editable: false
+            },
+            {
+                name: 'tabId',
+                xtype: 'hiddenfield',
+                value: ''
+            },
+            {
+                name: 'startTime',
+                fieldLabel: '开始时间',
+                xtype: 'datefield',
+                format: 'Y-m-d',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -14), "Y-m-d")
+            }, {
+                name: 'endTime',
+                fieldLabel: '结束时间',
+                xtype: 'datefield',
+                format: 'Y-m-d',
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
+            }]
         });
+        // 选项卡模块
         me.add({
             name: 'myTabs',
             xtype: 'tabpanel',
@@ -97,7 +99,7 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
             align: 'stretch',
             bodyStyle: 'border-width:0',
             items: [{
-                title: '全量用户数据',
+                title: '全量用户',
                 itemId: 'allUsers',
                 width: "10.5%",
                 height: "100%",
@@ -110,26 +112,24 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
                         doSearch(tab.items.items);
-
                     }
                 }
             }, {
-                title: '新增用户数据',
+                title: '新增用户',
                 itemId: 'newUsers',
-                width: "16.5%",
+                width: "10.5%",
                 height: "100%",
                 xtype: "panel",
                 forceFit: true,
                 bodyStyle: 'border-color:black',
                 layout: 'column',
-                items: getHtml(["新增用户数","新增投注用户数","新增投注转化率","投注流水","流水差","返奖率","投注笔数","投注ARPU","投注ASP"]),
+                items: getHtml(["新增用户数","新增投注用户数","新增投注转化率","新增投注流水","新增流水差","新增返奖率","新增投注笔数","新增投注ARPU","新增投注ASP"]),
                 listeners: {
                     'activate': function (tab) {
                         me.down(("[name='tabId']")).setValue(tab.itemId);
                         doSearch(tab.items.items);
                     }
                 }
-
             }, {
                 title: '留存数据',
                 itemId: 'retention',
@@ -173,14 +173,14 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                     layout: 'hbox',
                     name: names[i],
                     id: names[i],
-                    width: 550,
-                    height: 300,
+                    width: Ext.ComponentQuery.query('maincontent_center')[0].body.dom.clientWidth * 0.31,
+                    height: 430,
                     forceFit: true,
                     bodyStyle: 'border-width:0'
                 });
             }
             return items;
-        };
+        }
 
         function doSearch(items) {
             var value = {
@@ -188,37 +188,55 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 gameType: me.down("[name='gameType']").value,
                 tabId: me.down("[name='tabId']").value,
                 startTime: Ext.util.Format.date(me.down("[name='startTime']").value, "Y-m-d"),
-                endTime: Ext.util.Format.date(me.down("[name='endTime']").value, "Y-m-d"),
+                endTime: Ext.util.Format.date(me.down("[name='endTime']").value, "Y-m-d")
+            };
+            if (value.tabId==='') {
+                value.tabId = me.down("[name='myTabs']").activeTab.itemId;
             }
             store.load({
                 params: value,
                 callback: function () {
-                    toDoCreateCharts(items, store.getProxy().getReader().jsonData)
+                    toDoCreateCharts(items, store.getProxy().getReader().jsonData);
                 }
             });
         }
 
+        // 比率
+        var _RATE_ARRAY = ["投注转化率", "返奖率", "新增返奖率","新增投注转化率","新增次留","新增三留","新增七留","全量次留","全量三留","全量七留","导入率"];
         function toDoCreateCharts(items, data) {
             for (var i = 0; i < items.length; i++) {
                 me.echarts = echarts.init(Ext.get(items[i].id).dom);
                 var myOption = option;
-                var array = ["投注转化率", "返奖率","新增投注转化率","新增次留","新增三留","新增七留","全量次留","全量三留","全量七留","导入率"];
 
-                if(Ext.Array.contains(array,items[i].id)){
+                if(Ext.Array.contains(_RATE_ARRAY,items[i].id)){
                     myOption =optionRate;
-                    }
+                }
                 myOption.legend.data = data.chartsData.legends;
                 myOption.title.text = data.titles[i];
+                var mdDates = new Array();
+                var mdDate;
+                for (var z = 0; z < data.dateList.length; z++) {
+                    mdDate = data.dateList[z];
+                    if (items[i].id.indexOf("三留") > -1
+                        && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -4), "Y-m-d")) {
+                        break;
+                    }
+                    if (items[i].id.indexOf("七留") > -1
+                        && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -8), "Y-m-d")) {
+                        break;
+                    }
+                    // 截取yyyy-mm-dd格式日期的mm-dd部分
+                    mdDates.push(mdDate.substring(5));
+                }
                 myOption.xAxis = [
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: data.dateList
+                        data: mdDates
                     }
                 ];
 
                 myOption.series = getSeries(data, items[i].id);
-
 
                 me.echarts.setOption(myOption);
             }
@@ -228,6 +246,8 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
         function getSeries(data, item) {
             var series = [];
             var seriesData = [];
+            // 浮点
+            var _FLOAT_ARRAY = ["投注ARPU","投注ASP","新增投注ARPU","新增投注ASP"];
             seriesData = data.chartsData.series;
             for (var key in seriesData) {
                 if (key == item) {
@@ -235,16 +255,30 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                     for (var i = 0; i < seriesData[key].length; i++) {
                         var aa =[];
                         for (var j = 0; j < seriesData[key][i].length; j++) {
+                            if (item.indexOf("三留") > -1
+                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -4), "Y-m-d")) {
+                                break;
+                            }
+                            if (item.indexOf("七留") > -1
+                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -8), "Y-m-d")) {
+                                break;
+                            }
                             var str = [];
-                            str = seriesData[key][i][j][0].split(";");
-                            aa.push({value : str[0], name : key+":"+seriesData[key][i][j][0]})
+                            str = seriesData[key][i][j][0].replace(";", "$").split("$");
+                            aa.push({value : str[0], name : key + ":" +
+                                // 比率加%
+                                (Ext.Array.contains(_RATE_ARRAY, key) ? str[0] + "%" :
+                                    // 浮点格式“0,000.00”
+                                    (Ext.Array.contains(_FLOAT_ARRAY, key) ? Ext.util.Format.number(str[0], "0,000.00") :
+                                        // 整数格式“0,000”
+                                        Ext.util.Format.number(str[0], "0,000"))) + ";" + str[1]});
                         }
                         var temp = {
                             name: data.chartsData.legends[i],
                             type: 'line',
                             // data: seriesData[key][i]
                             data: aa
-                        }
+                        };
                         series.push(temp)
                     }
                 }
@@ -279,32 +313,13 @@ var option = {
         y:'25%'
     },
     legend: {
-        orient: 'horizontal',      // 布局方式，默认为水平布局，可选为：
-        x: 'center',               // 水平安放位置，默认为全图居中，可选为：
-                                   // 'center' ¦ 'left' ¦ 'right'
-                                   // ¦ {number}（x坐标，单位px）
-        y: 'top',                  // 垂直安放位置，默认为全图顶端，可选为：
-                                   // 'top' ¦ 'bottom' ¦ 'center'
-                                   // ¦ {number}（y坐标，单位px）
-        width: 350,
-        backgroundColor: 'rgba(0,0,0,0)',
-        borderColor: '#ccc',       // 图例边框颜色
-        borderWidth: 0,            // 图例边框线宽，单位px，默认为0（无边框）
-        padding: 5,                // 图例内边距，单位px，默认各方向内边距为5，
-                                   // 接受数组分别设定上右下左边距，同css
-        itemGap: 10,               // 各个item之间的间隔，单位px，默认为10，
-                                   // 横向布局时为水平间隔，纵向布局时为纵向间隔
-        itemWidth: 5,             // 图例图形宽度
-        itemHeight: 14,            // 图例图形高度
-        textStyle: {
-            color: '#333'          // 图例文字颜色
-        },
+        top:25,
         data: []
     },
     toolbox: {
         show: true,
         feature: {
-            mark: {show: true},
+            mark: {show: true}
         }
     },
     calculable: true,
@@ -323,7 +338,7 @@ var option = {
     series: []
 };
 
-
+// 比率图表
 var optionRate = {
     title: {
         text: ''
@@ -334,7 +349,7 @@ var optionRate = {
         formatter: function (datas) {
             var str='';
             str +='时间 :'+datas[0].name+'<br/>';
-            for(var i = 0; i < datas.length; i++){
+            for (var i = 0; i < datas.length; i++) {
                 if(datas[i].data != undefined && datas[i].data.name != 0)
                     str += datas[i].seriesName +'<br/>'+datas[i].data.name+'<br/>';
             }
@@ -346,32 +361,13 @@ var optionRate = {
         y:'25%'
     },
     legend: {
-        orient: 'horizontal',      // 布局方式，默认为水平布局，可选为：
-        x: 'center',               // 水平安放位置，默认为全图居中，可选为：
-                                   // 'center' ¦ 'left' ¦ 'right'
-                                   // ¦ {number}（x坐标，单位px）
-        y: 'top',                  // 垂直安放位置，默认为全图顶端，可选为：
-                                   // 'top' ¦ 'bottom' ¦ 'center'
-                                   // ¦ {number}（y坐标，单位px）
-        width: 350,
-        backgroundColor: 'rgba(0,0,0,0)',
-        borderColor: '#ccc',       // 图例边框颜色
-        borderWidth: 0,            // 图例边框线宽，单位px，默认为0（无边框）
-        padding: 5,                // 图例内边距，单位px，默认各方向内边距为5，
-                                   // 接受数组分别设定上右下左边距，同css
-        itemGap: 10,               // 各个item之间的间隔，单位px，默认为10，
-                                   // 横向布局时为水平间隔，纵向布局时为纵向间隔
-        itemWidth: 5,             // 图例图形宽度
-        itemHeight: 14,            // 图例图形高度
-        textStyle: {
-            color: '#333'          // 图例文字颜色
-        },
+        top:25,
         data: []
     },
     toolbox: {
         show: true,
         feature: {
-            mark: {show: true},
+            mark: {show: true}
         }
     },
     calculable: true,

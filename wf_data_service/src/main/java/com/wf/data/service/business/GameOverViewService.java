@@ -265,9 +265,13 @@ public class GameOverViewService {
         gameInfo.setBettingCount(Long.parseLong(bettingLogDayInfo.getBettingCount().toString()));
         gameInfo.setReturnAmount(bettingLogDayInfo.getResultAmount());
         gameInfo.setDiffAmount(BigDecimalUtil.sub(gameInfo.getBettingAmount(), gameInfo.getReturnAmount()));
+        // 返奖率
         gameInfo.setReturnRate(BigDecimalUtil.mul(division(gameInfo.getReturnAmount(), gameInfo.getBettingAmount()), 100));
+        // 投注arpu
         gameInfo.setBettingArpu(division(gameInfo.getBettingAmount(), gameInfo.getBettingUserCount()));
+        // 投注asp
         gameInfo.setBettingAsp(division(gameInfo.getBettingAmount(), gameInfo.getBettingCount()));
+        // 投注转化率
         gameInfo.setBettingConversion(BigDecimalUtil.mul(division(gameInfo.getBettingUserCount(), dau), 100));
         gameInfo.setOneDayRetention(0.00);
         gameInfo.setThreeDayRetention(0.00);
@@ -278,9 +282,13 @@ public class GameOverViewService {
         gameInfo.setNewUserBettingCount(Long.parseLong(newUserBettingLogDayInfo.getBettingCount().toString()));
         gameInfo.setNewUserReturnAmount(newUserBettingLogDayInfo.getResultAmount());
         gameInfo.setNewUserDiffAmount(BigDecimalUtil.sub(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserReturnAmount()));
+        // 新增返奖率
         gameInfo.setNewUserReturnRate(BigDecimalUtil.mul(division(gameInfo.getNewUserReturnAmount(), gameInfo.getNewUserBettingAmount()), 100));
+        // 新增投注arpu
         gameInfo.setNewUserBettingArpu(division(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserBettingUserCount()));
+        // 新增投注asp
         gameInfo.setNewUserBettingAsp(division(gameInfo.getNewUserBettingAmount(), gameInfo.getNewUserBettingCount()));
+        // 新增投注转化率
         gameInfo.setNewUserBettingConversion(BigDecimalUtil.mul(division(gameInfo.getNewUserBettingUserCount(), Long.parseLong(String.valueOf(newAndActiveList.size()))), 100));
         gameInfo.setNewUserOneDayRetention(0.00);
         gameInfo.setNewUserThreeDayRetention(0.00);
@@ -307,7 +315,9 @@ public class GameOverViewService {
                 //新增用户次日留存(当天新增且活跃用户且第二天活跃/当天新增且活跃用户)
                 List<Long> newUserOnDayAfterActive = (List<Long>) CollectionUtils.intersection(newAndActiveList, oneDayAfterActiveUserIds);
                 Double newUserOneDayAfterRelation = division(newUserOnDayAfterActive.size(), newAndActiveList.size());
+                // 全量次留
                 gameInfo.setOneDayRetention(BigDecimalUtil.mul(oneDayafterRelation, 100));
+                // 新增次留
                 gameInfo.setNewUserOneDayRetention(BigDecimalUtil.mul(newUserOneDayAfterRelation, 100));
             }
             if (differDays >= 3) {//更新当前日期的三日留存
@@ -320,7 +330,9 @@ public class GameOverViewService {
                 //新增用户T+3日留存
                 List<Long> newUserThreeDayAfterActive = (List<Long>) CollectionUtils.intersection(newAndActiveList, threeDayAfterActiveUserIds);
                 Double newUserThreeDayAfterRelation = division(newUserThreeDayAfterActive.size(), newAndActiveList.size());
+                // 全量三留
                 gameInfo.setThreeDayRetention(BigDecimalUtil.mul(threeDayafterRelation, 100));
+                // 新增三留
                 gameInfo.setNewUserThreeDayRetention(BigDecimalUtil.mul(newUserThreeDayAfterRelation, 100));
             }
             if (differDays >= 7) {//更新当前日期的七日留存
@@ -333,7 +345,9 @@ public class GameOverViewService {
                 //新增用户T+7日留存
                 List<Long> newUserSevenDayAfterActive = (List<Long>) CollectionUtils.intersection(newAndActiveList, sevenDayAfterActiveUserIds);
                 Double newUserSevenDayAfterRelation = division(newUserSevenDayAfterActive.size(), newAndActiveList.size());
+                // 全量七留
                 gameInfo.setSevenDayRetention(BigDecimalUtil.mul(sevenDayafterRelation, 100));
+                // 新增七留
                 gameInfo.setNewUserSevenDayRetention(BigDecimalUtil.mul(newUserSevenDayAfterRelation, 100));
             }
 
@@ -344,7 +358,7 @@ public class GameOverViewService {
     private double division(Double d1, Double d2) {
         double resulet = 0;
         if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
-            resulet = BigDecimalUtil.div(d1, d2, 2);
+            resulet = BigDecimalUtil.div(d1, d2, 4);
         }
         return resulet;
     }
@@ -360,7 +374,7 @@ public class GameOverViewService {
     private double division(Long d1, Long d2) {
         double resulet = 0;
         if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
-            resulet = BigDecimalUtil.div(d1, d2, 2);
+            resulet = BigDecimalUtil.div(d1, d2, 4);
         }
         return resulet;
     }
@@ -368,7 +382,7 @@ public class GameOverViewService {
     private double division(int d1, int d2) {
         double resulet = 0;
         if (d2 != 0) {
-            resulet = BigDecimalUtil.div(d1, d2, 2);
+            resulet = BigDecimalUtil.div(d1, d2, 4);
         }
         return resulet;
     }
