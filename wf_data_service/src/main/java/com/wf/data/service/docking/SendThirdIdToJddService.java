@@ -283,27 +283,31 @@ public class SendThirdIdToJddService {
      * @param lableId
      */
     private void getThirdIdByUserIdList(List<Long> resultList, String lableId) {
-        String uuid = APIUtils.getUUID();
-        Map<String, Object> params = new HashMap<>();
-        params.put("ids", resultList);
-        params.put("userSource", 2);
-        params.put("start", 0);
-        params.put("length", 100000000);
-        List<String> thirdIdList = uicUserService.getThirdIdList(params);
-        long totalPage = getTotalPage(thirdIdList.size());
-        if (CollectionUtils.isNotEmpty(thirdIdList)) {
+
+        long totalPage = getTotalPage(resultList.size());
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            String uuid = APIUtils.getUUID();
             for (long i = 0; i < totalPage; i++) {
                 long startIndex = i * pageSize;
                 long endIndex = (i + 1) * pageSize;
                 String batchEndFlag = "0";
                 if (i + 1 == totalPage) {
                     batchEndFlag = "1";
-                    endIndex = startIndex + thirdIdList.size() % pageSize;
+                    endIndex = startIndex + resultList.size() % pageSize;
                 }
-                List<String> splitThirdId = thirdIdList.subList((int) startIndex, (int) endIndex);
-                sendThirdId(splitThirdId, uuid, batchEndFlag, lableId);
+                List<Long> splitUserId = resultList.subList((int) startIndex, (int) endIndex);
+
+                Map<String, Object> params = new HashMap<>();
+                params.put("ids", splitUserId);
+                params.put("userSource", 2);
+                params.put("start", 0);
+                params.put("length", 100000000);
+                List<String> thirdIdList = uicUserService.getThirdIdList(params);
+
+                sendThirdId(thirdIdList, uuid, batchEndFlag, lableId);
             }
         }
+
     }
 
     public void sendThirdId(List<String> thirdIdList, String uuid, String batchEndFlag, String tagId) {
