@@ -217,6 +217,10 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 var mdDate;
                 for (var z = 0; z < data.dateList.length; z++) {
                     mdDate = data.dateList[z];
+                    if (items[i].id.indexOf("次留") > -1
+                        && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -2), "Y-m-d")) {
+                        break;
+                    }
                     if (items[i].id.indexOf("三留") > -1
                         && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -4), "Y-m-d")) {
                         break;
@@ -255,6 +259,10 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                     for (var i = 0; i < seriesData[key].length; i++) {
                         var aa =[];
                         for (var j = 0; j < seriesData[key][i].length; j++) {
+                            if (item.indexOf("次留") > -1
+                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -2), "Y-m-d")) {
+                                break;
+                            }
                             if (item.indexOf("三留") > -1
                                 && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -4), "Y-m-d")) {
                                 break;
