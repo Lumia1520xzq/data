@@ -103,8 +103,8 @@ public class SendThirdIdToJddJob {
         }
         logger.info("奖多多渠道7天未活跃用户彩票ID结束。。。。。。。。");
 
-        //10天活跃投注用户
-        logger.info("奖多多渠道10天活跃投注用户彩票ID开始。。。。。。。。");
+        //7天活跃投注用户
+        logger.info("奖多多渠道7天活跃投注用户彩票ID开始。。。。。。。。");
         try {
             if ("true".equals(openFlag[6])) {
                 sendThirdIdToJddService.pushActiveAndBettingLastTenDay();
@@ -112,7 +112,7 @@ public class SendThirdIdToJddJob {
         } catch (Exception e) {
             logger.error("pushActiveAndBettingLastTenDay: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
-        logger.info("奖多多渠道10天活跃投注用户彩票ID结束。。。。。。。。");
+        logger.info("奖多多渠道7天活跃投注用户彩票ID结束。。。。。。。。");
 
     }
 

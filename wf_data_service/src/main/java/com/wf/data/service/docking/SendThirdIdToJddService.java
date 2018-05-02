@@ -9,7 +9,6 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.common.constants.ChannelConstants;
 import com.wf.data.common.constants.JddTagIdConstants;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
 import com.wf.data.dto.JddUserTagDto;
 import com.wf.data.service.BuryingPointService;
 import com.wf.data.service.TransConvertService;
@@ -23,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 定时推送奖多多彩票ID
@@ -65,7 +61,10 @@ public class SendThirdIdToJddService {
 
     private final long limit = 100000000;
 
+    private BitSet thirdIds;
+
     public void toDoAnalysis() {
+        thirdIds = new BitSet();
         //昨日新增用户彩票ID
         Map<String, Object> params = new HashMap<>();
         String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
@@ -105,6 +104,12 @@ public class SendThirdIdToJddService {
                 String batchEndFlag = "0";
                 if (i + 1 == totalPage) {
                     batchEndFlag = "1";
+                }
+                if (JddTagIdConstants.YESTERDAY_NEW_GAME_USER.equals(tagId)) {
+                    for (String thirdId : thirdIdList) {
+                        // 将昨日新增用户的third_Id设置到bitset
+                        thirdIds.set(Integer.valueOf(thirdId));
+                    }
                 }
                 sendThirdId(thirdIdList, uuid, batchEndFlag, tagId);
             }
@@ -154,7 +159,7 @@ public class SendThirdIdToJddService {
         List<Long> payedUserList2 = transConvertService.getRechargeUserIdsByDay(convertParams);
         List<Long> requiredUser2 = (List<Long>) CollectionUtils.subtract(CollectionUtils.intersection(payedUserList2, oldestUser2), activeUsers);
         List<Long> resultList = (List<Long>) CollectionUtils.subtract(CollectionUtils.union(requiredUser1, requiredUser2), CollectionUtils.intersection(requiredUser1, requiredUser2));
-        getThirdIdByUserIdList(resultList, JddTagIdConstants.BACK_FLOW_USER);
+        getThirdIdByUserIdList(resultList, JddTagIdConstants.BACK_FLOW_USER, true);
     }
 
     /**
@@ -175,7 +180,7 @@ public class SendThirdIdToJddService {
 
         List<Long> resultUserId2 = (List<Long>) CollectionUtils.subtract(newUserInTwoDays, payedUserList);
 
-        getThirdIdByUserIdList(resultUserId2, JddTagIdConstants.UNPAY_OLD_USER);
+        getThirdIdByUserIdList(resultUserId2, JddTagIdConstants.UNPAY_OLD_USER, true);
     }
 
     /**
@@ -192,7 +197,7 @@ public class SendThirdIdToJddService {
         List<Long> payedUserInLastSevenDayList = transConvertService.getRechargeUserIdsByDay(convertParams);
 
         List<Long> resultUserId = (List<Long>) CollectionUtils.subtract(payedUserList, payedUserInLastSevenDayList);
-        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.UNPAY_SEVEN_DAY);
+        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.UNPAY_SEVEN_DAY, true);
     }
 
     /**
@@ -211,19 +216,19 @@ public class SendThirdIdToJddService {
         List<Long> conditionUserIdsOne = uicUserService.getUserByDate(userParam);
 
         //七日内活跃
-        Map<String, Object> Param = new HashMap<>();
-        Param.put("parentId", ChannelConstants.JS_CHANNEL);
-        Param.put("channelId", ChannelConstants.JS_CHANNEL);
-        Param.put("beginDate", lastSevenDay + " 00:00:00");
-        Param.put("endDate", yesterday + " 23:59:59");
-        Param.put("limit", limit);
-        List<Long> conditionUserIdsTwo = buryingPointService.getActiveUserWhinMonth(Param);
+        Map<String, Object> param = new HashMap<>();
+        param.put("parentId", ChannelConstants.JS_CHANNEL);
+        param.put("channelId", ChannelConstants.JS_CHANNEL);
+        param.put("beginDate", lastSevenDay + " 00:00:00");
+        param.put("endDate", yesterday + " 23:59:59");
+        param.put("limit", limit);
+        List<Long> conditionUserIdsTwo = buryingPointService.getActiveUserWhinMonth(param);
 
         //七日内充值用户
-        List<Long> conditionUserIdsThree = transConvertService.getRechargeUserIdsByDay(Param);
+        List<Long> conditionUserIdsThree = transConvertService.getRechargeUserIdsByDay(param);
 
         List<Long> resultUserIds = (List<Long>) CollectionUtils.subtract(CollectionUtils.intersection(conditionUserIdsOne, conditionUserIdsTwo), conditionUserIdsThree);
-        getThirdIdByUserIdList(resultUserIds, JddTagIdConstants.FOUR_ONE_SEVEN);
+        getThirdIdByUserIdList(resultUserIds, JddTagIdConstants.FOUR_ONE_SEVEN, false);
     }
 
     /**
@@ -252,14 +257,14 @@ public class SendThirdIdToJddService {
 
         //（T-8）天活跃且后连续7天内未活跃
         List<Long> resultUserId = (List<Long>) CollectionUtils.subtract(activeUsersEight, activeUsersLastSeven);
-        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.FOUR_ONE_EIGHT);
+        getThirdIdByUserIdList(resultUserId, JddTagIdConstants.FOUR_ONE_EIGHT, false);
     }
 
     /**
-     * 10天内有投注用户（标签ID=419）
+     * 7天内有投注用户（标签ID=419）
      */
     public void pushActiveAndBettingLastTenDay() {
-        //近十天投注用户
+        //近7天投注用户
         Map<String, Object> param = new HashMap<>();
         param.put("beginDate", DateUtils.getPrevDate(DateUtils.getYesterdayDate(), 6));
         param.put("endDate", DateUtils.getYesterdayDate());
@@ -273,7 +278,7 @@ public class SendThirdIdToJddService {
         List<Long> newUsers = uicUserService.getUserByDate(param);
 
         List<Long> resultUserIds = (List<Long>) CollectionUtils.subtract(bettingUsers,newUsers);
-        getThirdIdByUserIdList(resultUserIds, JddTagIdConstants.FOUR_ONE_NINE);
+        getThirdIdByUserIdList(resultUserIds, JddTagIdConstants.FOUR_ONE_NINE, false);
     }
 
     /**
@@ -281,29 +286,53 @@ public class SendThirdIdToJddService {
      *
      * @param resultList
      * @param lableId
+     * @param auto ture 直接发送， false: 不直接发送
      */
-    private void getThirdIdByUserIdList(List<Long> resultList, String lableId) {
-        String uuid = APIUtils.getUUID();
-        Map<String, Object> params = new HashMap<>();
-        params.put("ids", resultList);
-        params.put("userSource", 2);
-        params.put("start", 0);
-        params.put("length", 100000000);
-        List<String> thirdIdList = uicUserService.getThirdIdList(params);
-        long totalPage = getTotalPage(thirdIdList.size());
-        if (CollectionUtils.isNotEmpty(thirdIdList)) {
+    private void getThirdIdByUserIdList(List<Long> resultList, String lableId, boolean auto) {
+
+        long totalPage = getTotalPage(resultList.size());
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            String uuid = APIUtils.getUUID();
             for (long i = 0; i < totalPage; i++) {
                 long startIndex = i * pageSize;
                 long endIndex = (i + 1) * pageSize;
                 String batchEndFlag = "0";
                 if (i + 1 == totalPage) {
                     batchEndFlag = "1";
-                    endIndex = startIndex + thirdIdList.size() % pageSize;
+                    endIndex = startIndex + resultList.size() % pageSize;
                 }
-                List<String> splitThirdId = thirdIdList.subList((int) startIndex, (int) endIndex);
-                sendThirdId(splitThirdId, uuid, batchEndFlag, lableId);
+                List<Long> splitUserId = resultList.subList((int) startIndex, (int) endIndex);
+
+                Map<String, Object> params = new HashMap<>();
+                params.put("ids", splitUserId);
+                params.put("userSource", 2);
+                params.put("start", 0);
+                params.put("length", 100000000);
+                List<String> thirdIdList = uicUserService.getThirdIdList(params);
+                if (!auto) {
+                    checkDuplicate(thirdIdList);
+                }
+                if (thirdIdList.isEmpty()) {
+                    continue;
+                }
+                sendThirdId(thirdIdList, uuid, batchEndFlag, lableId);
             }
         }
+
+    }
+
+    private void checkDuplicate(List<String> thirdIdList) {
+            Integer tId;
+            Iterator<String> it = thirdIdList.iterator();
+            while (it.hasNext()) {
+                tId = Integer.valueOf(it.next());
+                // 已经有发送记录的场合,从发送列表中删除
+                if (thirdIds.get(tId)) {
+                    it.remove();
+                } else {
+                    thirdIds.set(tId);
+                }
+            }
     }
 
     public void sendThirdId(List<String> thirdIdList, String uuid, String batchEndFlag, String tagId) {
@@ -367,7 +396,7 @@ public class SendThirdIdToJddService {
      * @return
      */
     private long getTotalPage(long totalRecord) {
-        long totalPage = 0L;
+        long totalPage;
         if (totalRecord % pageSize == 0) {
             totalPage = totalRecord / pageSize;
         } else {
