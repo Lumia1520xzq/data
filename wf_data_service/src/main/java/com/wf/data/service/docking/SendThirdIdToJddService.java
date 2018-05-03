@@ -70,6 +70,7 @@ public class SendThirdIdToJddService {
         String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
         String endDate = DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
         params.put("userSource", 2);
+        params.put("channelId", ChannelConstants.JS_CHANNEL);
         params.put("beginDate", beginDate);
         params.put("endDate", endDate);
         getThirdId(params, JddTagIdConstants.YESTERDAY_NEW_GAME_USER);
