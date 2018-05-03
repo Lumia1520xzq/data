@@ -35,6 +35,9 @@
         <if test="userSource != null and userSource != ''">
             AND t.user_source = #{userSource}
         </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.reg_channel_id = #{channelId}
+        </if>
         <if test="beginDate != null and beginDate != ''">
             AND t.create_time >= #{beginDate}
         </if>
@@ -57,6 +60,9 @@
         AND t.third_id IS NOT NULL
         <if test="userSource != null and userSource != ''">
             AND t.user_source = #{userSource}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND t.reg_channel_id = #{channelId}
         </if>
         <if test="beginDate != null and beginDate != ''">
             AND t.create_time >= #{beginDate}
