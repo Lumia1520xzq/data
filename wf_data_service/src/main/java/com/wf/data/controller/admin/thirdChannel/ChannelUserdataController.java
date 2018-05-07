@@ -66,39 +66,14 @@ public class ChannelUserdataController extends ExtJsController {
         Long parentId = null;
         Long channelId = null;
         Integer userType = null;
-        String beginDate = null;
-        String endDate = null;
 
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             parentId = data.getLong("parentId");
             channelId = data.getLong("channelId");
             userType = data.getInteger("userType");
-            beginDate = data.getString("beginDate");
-            endDate = data.getString("endDate");
         }
-
-        List<String> datelist = Lists.newArrayList();
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
-
-        //获取时间集合（设置默认搜索时间为一周）
-        try {
-            if (StringUtils.isBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
-                endDate = DateUtils.getDate();
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            } else if (StringUtils.isBlank(beginDate) && StringUtils.isNotBlank(endDate)) {
-                beginDate = endDate;
-                datelist.add(beginDate);
-            } else if (StringUtils.isNotBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                endDate = beginDate;
-                datelist.add(endDate);
-            } else {
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
-        }
 
         //DAU
         Long dau = 0L;
@@ -115,7 +90,7 @@ public class ChannelUserdataController extends ExtJsController {
         Double bettingArpu;
         Double bASP;
         String returnRate;
-
+        List<String> datelist = getDateList(data);
         //循环时间段，根据时间获取数据
         for (int i = datelist.size() - 1; i >= 0; i--) {
             UserDataOverviewDto dto = new UserDataOverviewDto();
@@ -238,35 +213,12 @@ public class ChannelUserdataController extends ExtJsController {
         Long parentId = null;
         Long channelId = null;
         Integer userType = null;
-        String beginDate = null;
-        String endDate = null;
 
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             parentId = data.getLong("parentId");
             channelId = data.getLong("channelId");
             userType = data.getInteger("userType");
-            beginDate = data.getString("beginDate");
-            endDate = data.getString("endDate");
-        }
-
-        //获取时间集合（设置默认搜索时间为一周）
-        try {
-            if (StringUtils.isBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
-                endDate = DateUtils.getDate();
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            } else if (StringUtils.isBlank(beginDate) && StringUtils.isNotBlank(endDate)) {
-                beginDate = endDate;
-                datelist.add(beginDate);
-            } else if (StringUtils.isNotBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                endDate = beginDate;
-                datelist.add(endDate);
-            } else {
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
 
         //循环时间段，根据时间获取数据
@@ -379,44 +331,20 @@ public class ChannelUserdataController extends ExtJsController {
      */
     @RequestMapping("/conversion/list")
     public Object conversionListData() {
-        List<String> datelist = Lists.newArrayList();
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
 
         JSONObject json = getRequestJson();
         Long parentId = null;
         Long channelId = null;
         Integer userType = null;
-        String beginDate = null;
-        String endDate = null;
 
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             parentId = data.getLong("parentId");
             channelId = data.getLong("channelId");
             userType = data.getInteger("userType");
-            beginDate = data.getString("beginDate");
-            endDate = data.getString("endDate");
         }
-
-        //获取时间集合（设置默认搜索时间为一周）
-        try {
-            if (StringUtils.isBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
-                endDate = DateUtils.getDate();
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            } else if (StringUtils.isBlank(beginDate) && StringUtils.isNotBlank(endDate)) {
-                beginDate = endDate;
-                datelist.add(beginDate);
-            } else if (StringUtils.isNotBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                endDate = beginDate;
-                datelist.add(endDate);
-            } else {
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
-        }
-
+        List<String> datelist = getDateList(data);
         //循环时间段，根据时间获取数据
         for (int i = datelist.size() - 1; i >= 0; i--) {
             UserDataOverviewDto dto = new UserDataOverviewDto();
@@ -553,43 +481,20 @@ public class ChannelUserdataController extends ExtJsController {
         JSONObject json = getRequestJson();
         Long parentId = null;
         Long channelId = null;
-        String beginDate = null;
-        String endDate = null;
 
         JSONObject data = json.getJSONObject("data");
         if (data != null) {
             parentId = data.getLong("parentId");
             channelId = data.getLong("channelId");
-            beginDate = data.getString("beginDate");
-            endDate = data.getString("endDate");
         }
 
-        List<String> datelist = Lists.newArrayList();
         String currentHour = Integer.toString(LocalTime.now().getHour() - 2);//当前小时
         if (currentHour.length() == 1) {
             currentHour = "0" + currentHour;
         }
         String currentDay = LocalDate.now().toString();//当前日期
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
-
-        //获取时间集合（设置默认搜索时间为一周）
-        try {
-            if (StringUtils.isBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
-                endDate = DateUtils.getDate();
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            } else if (StringUtils.isBlank(beginDate) && StringUtils.isNotBlank(endDate)) {
-                beginDate = endDate;
-                datelist.add(beginDate);
-            } else if (StringUtils.isNotBlank(beginDate) && StringUtils.isBlank(endDate)) {
-                endDate = beginDate;
-                datelist.add(endDate);
-            } else {
-                datelist = DateUtils.getDateList(beginDate, endDate);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
-        }
+        List<String> datelist = getDateList(data);
 
         //循环时间段，根据时间获取数据
         for (int i = datelist.size() - 1; i >= 0; i--) {
@@ -651,5 +556,34 @@ public class ChannelUserdataController extends ExtJsController {
             userParams.put("channelId", channelId);
         }
         return userInfoService.getNewUserByDate(userParams);
+    }
+
+    private List<String> getDateList(JSONObject data) {
+        String beginDate = null;
+        String endDate = null;
+        if (data != null) {
+            beginDate = data.getString("beginDate");
+            endDate = data.getString("endDate");
+        }
+        List<String> datelist = Lists.newArrayList();
+        //获取时间集合（设置默认搜索时间为一周）
+        try {
+            if (StringUtils.isBlank(beginDate) && StringUtils.isBlank(endDate)) {
+                beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
+                endDate = DateUtils.getDate();
+                datelist = DateUtils.getDateList(beginDate, endDate);
+            } else if (StringUtils.isBlank(beginDate) && StringUtils.isNotBlank(endDate)) {
+                beginDate = endDate;
+                datelist.add(beginDate);
+            } else if (StringUtils.isNotBlank(beginDate) && StringUtils.isBlank(endDate)) {
+                endDate = beginDate;
+                datelist.add(endDate);
+            } else {
+                datelist = DateUtils.getDateList(beginDate, endDate);
+            }
+        } catch (Exception e) {
+            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
+        }
+        return datelist;
     }
 }
