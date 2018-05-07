@@ -118,13 +118,13 @@ Ext.define('WF.view.thirdChannel.channelFragmentMain', {
                 name: 'beginDate',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '开始时间',
-                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d H:i:s")
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d 00:00:00")
             }, {
                 xtype: 'datetimefield',
                 name: 'endDate',
                 format: 'Y-m-d H:i:s',
                 fieldLabel: '结束时间',
-                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d H:i:s")
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d 23:59:59")
             }]
         });
 
