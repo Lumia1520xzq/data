@@ -16,13 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * 增长测试管理
@@ -91,7 +85,7 @@ public class GrowTestController extends ExtJsController {
                 growTest.setTestChannel(testChannel);
             }
             if (!beginDate.equals("undefined") && !beginDate.equals("null") && StringUtils.isNotBlank(beginDate)) {
-                growTest.setBeginDate(formatGTMDate(beginDate));
+                growTest.setBeginDate(com.wf.data.common.utils.DateUtils.formatGTMDate(beginDate, "yyyy-MM-dd HH:mm:ss"));
             }
             if (!operationUsername.equals("undefined") && !operationUsername.equals("null") && StringUtils.isNotBlank(operationUsername)) {
                 growTest.setOperationUsername(operationUsername);
@@ -116,26 +110,6 @@ public class GrowTestController extends ExtJsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 格式化GMT时间
-     *
-     * @param date
-     * @return
-     */
-    public String formatGTMDate(String date) {
-        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
-        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
-        Date time = null;
-        try {
-            time = defaultFormat.parse(date);
-            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return gmt.format(time);
     }
 
 
