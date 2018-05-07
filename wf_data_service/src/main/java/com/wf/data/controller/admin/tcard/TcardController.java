@@ -2,10 +2,7 @@ package com.wf.data.controller.admin.tcard;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.wf.core.utils.GfJsonUtil;
-import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
-import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dto.TcardDto;
@@ -57,7 +54,7 @@ public class TcardController extends ExtJsController {
             channelId = data.getLong("channelId");
         }
         Map<String, Object> params = new HashMap<>();
-        for (String searchDate : getDateList(data)) {
+        for (String searchDate : DateUtils.getDateList(data)) {
             params.put("searchDate", searchDate);
             if (null != channelId) {
                 params.put("channelId", channelId);
@@ -162,7 +159,7 @@ public class TcardController extends ExtJsController {
         }
         params.put("bettingType", 1);
         Date standardDate = DateUtils.parseDate(DATE);
-        for (String searchDate : getDateList(data)) {
+        for (String searchDate : DateUtils.getDateList(data)) {
             params.put("searchDate", searchDate);
             TcardDto dto = new TcardDto();
             params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
@@ -226,33 +223,6 @@ public class TcardController extends ExtJsController {
         BigDecimal b1 = new BigDecimal(Double.toString(one));
         BigDecimal b2 = new BigDecimal(two*three);
         return b1.divide(b2, 1, BigDecimal.ROUND_HALF_UP).doubleValue();
-    }
-
-    private List<String> getDateList(JSONObject data) {
-        String startTime = null;
-        String endTime = null;
-        if (data != null) {
-            startTime = data.getString("startTime");
-            endTime = data.getString("endTime");
-        }
-        List<String> datelist = Lists.newArrayList();
-        try {
-            if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
-                endTime = DateUtils.getYesterdayDate();
-                datelist = DateUtils.getDateList(startTime, endTime);
-            } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-                startTime = endTime;
-                datelist.add(startTime);
-            } else if (StringUtils.isNotBlank(startTime) && StringUtils.isBlank(endTime)) {
-                datelist.add(startTime);
-            } else {
-                datelist = DateUtils.getDateList(startTime, endTime);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
-        }
-        return datelist;
     }
 
 }

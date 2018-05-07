@@ -1,5 +1,8 @@
 package com.wf.data.common.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.wf.core.utils.type.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.text.DateFormat;
@@ -659,10 +662,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     public  static String formatGTMDate(String date) {
-        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd");
+        return formatGTMDate(date, "yyyy-MM-dd");
+    }
 
+    /**
+     * 格式化GMT时间
+     *
+     * @param date
+     * @return
+     */
+    public static String formatGTMDate(String date, String patten) {
+        DateFormat gmt = new SimpleDateFormat(patten);
         date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
-
         SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
         Date time = null;
         try {
@@ -673,4 +684,32 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         }
         return gmt.format(time);
     }
+
+    public static List<String> getDateList(JSONObject data) {
+        String startTime = null;
+        String endTime = null;
+        if (data != null) {
+            startTime = data.getString("startTime");
+            endTime = data.getString("endTime");
+        }
+        List<String> datelist = Lists.newArrayList();
+        try {
+            if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
+                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
+                endTime = DateUtils.getYesterdayDate();
+                datelist = DateUtils.getDateList(startTime, endTime);
+            } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+                startTime = endTime;
+                datelist.add(startTime);
+            } else if (StringUtils.isNotBlank(startTime) && StringUtils.isBlank(endTime)) {
+                datelist.add(startTime);
+            } else {
+                datelist = DateUtils.getDateList(startTime, endTime);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return datelist;
+    }
+
 }
