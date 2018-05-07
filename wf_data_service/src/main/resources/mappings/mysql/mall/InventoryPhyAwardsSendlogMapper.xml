@@ -42,7 +42,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			AND t.user_id = #{p.userId}
 		</if>
 		<if test="p.activityType != null">
-			AND t.activity_id = #{p.activityType}
+			AND t.activity_type = #{p.activityType}
 		</if>
 		<if test="p.channelId != null">
 			AND t.channel_id = #{p.channelId}

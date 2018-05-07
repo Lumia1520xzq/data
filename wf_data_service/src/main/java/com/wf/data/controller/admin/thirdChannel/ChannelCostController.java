@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/data/admin/channel/cost")
@@ -161,10 +159,10 @@ public class ChannelCostController extends ExtJsController {
             awardsSendLog.setActivityType(Integer.parseInt(activityType));
         }
         if (StringUtils.isNotBlank(beginDate)) {
-            awardsSendLog.setBeginDate(formatGTMDate(beginDate));
+            awardsSendLog.setBeginDate(com.wf.data.common.utils.DateUtils.formatGTMDate(beginDate, "yyyy-MM-dd HH:mm:ss"));
         }
         if (StringUtils.isNotBlank(endDate)) {
-            awardsSendLog.setEndDate(formatGTMDate(endDate));
+            awardsSendLog.setEndDate(com.wf.data.common.utils.DateUtils.formatGTMDate(beginDate, "yyyy-MM-dd HH:mm:ss"));
         }
         awardsSendLog.setReceiveStatus(3);
         try {
@@ -172,7 +170,6 @@ public class ChannelCostController extends ExtJsController {
             //根据活动类别和活动渠道找到活动的id
             Integer activityTypeIn = awardsSendLog.getActivityType();
             Long channelId = awardsSendLog.getParentId();
-            List<Long> activityIds = activityInfoService.getListByActivityTypeAndChannelId(activityTypeIn, channelId);
             List<InventoryPhyAwardsSendlog> sendlogList = inventoryPhyAwardsSendlogService.findList(awardsSendLog, 99999999);
             /*awardsSendLog.setActivityIds(activityIds);*/
             for (InventoryPhyAwardsSendlog temp : sendlogList) {
@@ -204,23 +201,4 @@ public class ChannelCostController extends ExtJsController {
         }
     }
 
-    /**
-     * 格式化GMT时间
-     *
-     * @param date
-     * @return
-     */
-    public String formatGTMDate(String date) {
-        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
-        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
-        Date time = null;
-        try {
-            time = defaultFormat.parse(date);
-            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return gmt.format(time);
-    }
 }

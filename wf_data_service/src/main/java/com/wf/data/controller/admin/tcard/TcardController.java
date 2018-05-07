@@ -2,10 +2,7 @@ package com.wf.data.controller.admin.tcard;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.wf.core.utils.GfJsonUtil;
-import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
-import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dto.TcardDto;
@@ -50,40 +47,14 @@ public class TcardController extends ExtJsController {
         JSONObject json = getRequestJson();
         Long parentId = null;
         Long channelId = null;
-        String startTime = null;
-        String endTime = null;
-
         List<TcardDto> list = Lists.newArrayList();
         JSONObject data = json.getJSONObject("data");
-        List<String> datelist = Lists.newArrayList();
         if (data != null) {
             parentId = data.getLong("parentId");
             channelId = data.getLong("channelId");
-            startTime = data.getString("startTime");
-            endTime = data.getString("endTime");
-
         }
-
-        try {
-            if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
-                endTime = DateUtils.getYesterdayDate();
-                datelist = DateUtils.getDateList(startTime, endTime);
-            } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-                startTime = endTime;
-                datelist.add(startTime);
-            } else if (StringUtils.isNotBlank(startTime) && StringUtils.isBlank(endTime)) {
-                endTime = startTime;
-                datelist.add(startTime);
-            } else {
-                datelist = DateUtils.getDateList(startTime, endTime);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
-        }
-
         Map<String, Object> params = new HashMap<>();
-        for (String searchDate : datelist) {
+        for (String searchDate : DateUtils.getDateList(data)) {
             params.put("searchDate", searchDate);
             if (null != channelId) {
                 params.put("channelId", channelId);
@@ -173,32 +144,11 @@ public class TcardController extends ExtJsController {
         JSONObject json = getRequestJson();
         Long parentId = null;
         Long channelId = null;
-        String startTime = null;
-        String endTime = null;
         List<TcardDto> list = Lists.newArrayList();
         JSONObject data = json.getJSONObject("data");
-        List<String> datelist = Lists.newArrayList();
         if (data != null) {
             parentId = data.getLong("parentId");
             channelId = data.getLong("channelId");
-            startTime = data.getString("startTime");
-            endTime = data.getString("endTime");
-        }
-        try {
-            if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-                startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -1));
-                endTime = DateUtils.getYesterdayDate();
-                datelist = DateUtils.getDateList(startTime, endTime);
-            } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
-                startTime = endTime;
-                datelist.add(startTime);
-            } else if (StringUtils.isNotBlank(startTime) && StringUtils.isBlank(endTime)) {
-                datelist.add(startTime);
-            } else {
-                datelist = DateUtils.getDateList(startTime, endTime);
-            }
-        } catch (Exception e) {
-            logger.error("查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(data));
         }
         Map<String, Object> params = new HashMap<>();
         if (null != channelId) {
@@ -209,7 +159,7 @@ public class TcardController extends ExtJsController {
         }
         params.put("bettingType", 1);
         Date standardDate = DateUtils.parseDate(DATE);
-        for (String searchDate : datelist) {
+        for (String searchDate : DateUtils.getDateList(data)) {
             params.put("searchDate", searchDate);
             TcardDto dto = new TcardDto();
             params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(searchDate, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
