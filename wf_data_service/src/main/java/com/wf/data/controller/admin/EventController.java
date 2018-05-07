@@ -23,10 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author shihui
@@ -89,7 +88,7 @@ public class EventController extends ExtJsController {
         dataEvent.setEndDate(endDate);
         dataEvent.setContent(content);
 
-        Page<DataEvent> dataEventPage = new Page<>(dataEvent, start, length);
+        Page<DataEvent> dataEventPage;
         dataEventPage = eventService.findPage(dataEvent);
         return dataGrid(dataEventPage);
     }
@@ -215,10 +214,10 @@ public class EventController extends ExtJsController {
                 dataEvent.setEventType(Integer.parseInt(eventType));
             }
             if (!beginDate.equals("undefined") && !beginDate.equals("null") && StringUtils.isNotBlank(beginDate)) {
-                dataEvent.setBeginDate(formatGTMDate(beginDate));
+                dataEvent.setBeginDate(com.wf.data.common.utils.DateUtils.formatGTMDate(beginDate, "yyyy-MM-dd HH:mm:ss"));
             }
             if (!endDate.equals("undefined") && !endDate.equals("null") && StringUtils.isNotBlank(endDate)) {
-                dataEvent.setEndDate(formatGTMDate(endDate));
+                dataEvent.setEndDate(com.wf.data.common.utils.DateUtils.formatGTMDate(beginDate, "yyyy-MM-dd HH:mm:ss"));
             }
             if (!content.equals("undefined") && !content.equals("null") && StringUtils.isNotBlank(content)) {
                 dataEvent.setContent(content);
@@ -245,23 +244,4 @@ public class EventController extends ExtJsController {
         }
     }
 
-    /**
-     * 格式化GMT时间
-     *
-     * @param date
-     * @return
-     */
-    public String formatGTMDate(String date) {
-        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
-        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
-        Date time = null;
-        try {
-            time = defaultFormat.parse(date);
-            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return gmt.format(time);
-    }
 }
