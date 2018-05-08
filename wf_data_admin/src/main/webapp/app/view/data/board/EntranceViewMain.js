@@ -48,6 +48,22 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             fields: ['label', 'value']
         });
 
+        var EVENT_NAMES = ["首页顶部banner","首页顶部banner右侧小图标","发现页活动中心", "发现页多多游戏","我的福利任务——玩游戏","幸运大转盘——金叶子跳转","我的积分商城——金叶子跳转", "强广位", "push","新增广告位"];
+
+        var EVENT_IDS = ["139901", "139902", "139903", "139904", "139905", "139906", "139907", "139908", "139909", "139910"];
+
+        var ENTRANCE_NAMES = {
+            "139901":"首页顶部banner",
+            "139902":"首页顶部banner右侧小图标",
+            "139903":"发现页活动中心",
+            "139904":"发现页多多游戏",
+            "139905":"我的福利任务(玩游戏)",
+            "139906":"幸运大转盘(金叶子跳转)",
+            "139907":"我的积分商城(金叶子跳转)",
+            "139908":"强广位",
+            "139909":"push",
+            "139910":"新增广告位"};
+
         me.add({
             border: false,
             store: store,
@@ -178,14 +194,16 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
         });
 
         function fun1(){
-            var entranceDauRateList = store.getAt(0).get("entranceDauRateList");
+            // var entranceDauRateList = store.getAt(0).get("entranceDauRateList");
             var entranceDauList = store.getAt(0).get("entranceDauList");
+            // 名称
             var eventNameList = store.getAt(0).get("eventNameList");
             var searchDate = store.getAt(0).get("searchDate");
             var yesterday = store.getAt(0).get("yesterday");
             var dateList = store.getAt(0).get("dateList");
             var yesDateList = store.getAt(0).get("yesDateList");
 
+            // DAU
             var duoDuoDauList = store.getAt(0).get("duoDuoDauList");
             var iconDauList = store.getAt(0).get("iconDauList");
             var bannerDauList = store.getAt(0).get("bannerDauList");
@@ -197,6 +215,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var pushDauList = store.getAt(0).get("pushDauList");
             var strongAdvDauList = store.getAt(0).get("strongAdvDauList");
 
+            // DAU占比
             var duoduoDauRate = store.getAt(0).get("duoduoDauRate");
             var iconDauRate = store.getAt(0).get("iconDauRate");
             var bannerDauRate = store.getAt(0).get("bannerDauRate");
@@ -213,6 +232,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var entrancePayRateList = store.getAt(0).get("entrancePayRateList");
             var entranceDayRetentionList = store.getAt(0).get("entranceDayRetentionList");
 
+            // 签到转化率
             var duoduoSignRate = store.getAt(0).get("duoduoSignRate");
             var iconSignRate = store.getAt(0).get("iconSignRate");
             var bannerSignRate = store.getAt(0).get("bannerSignRate");
@@ -224,6 +244,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var pushSignRate = store.getAt(0).get("pushSignRate");
             var strongAdvSignRate = store.getAt(0).get("strongAdvSignRate");
 
+            // 投注转化率
             var duoduoBettingRate = store.getAt(0).get("duoduoBettingRate");
             var iconBettingRate = store.getAt(0).get("iconBettingRate");
             var bannerBettingRate = store.getAt(0).get("bannerBettingRate");
@@ -235,6 +256,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var pushBettingRate = store.getAt(0).get("pushBettingRate");
             var strongAdvBettingRate = store.getAt(0).get("strongAdvBettingRate");
 
+            // 付费渗透率
             var duoduoPayRate = store.getAt(0).get("duoduoPayRate");
             var iconPayRate = store.getAt(0).get("iconPayRate");
             var bannerPayRate = store.getAt(0).get("bannerPayRate");
@@ -246,6 +268,7 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var pushPayRate = store.getAt(0).get("pushPayRate");
             var strongAdvPayRate = store.getAt(0).get("strongAdvPayRate");
 
+            // 次日留存率
             var duoduoRetentionRate = store.getAt(0).get("duoduoRetentionRate");
             var iconRetentionRate = store.getAt(0).get("iconRetentionRate");
             var bannerRetentionRate = store.getAt(0).get("bannerRetentionRate");
@@ -258,137 +281,77 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
             var strongAdvRetentionRate = store.getAt(0).get("strongAdvRetentionRate");
 
 
-            var dauList=[];
-            dauList.push(duoDuoDauList);
-            dauList.push(iconDauList);
+            var dauList= [];
             dauList.push(bannerDauList);
-            dauList.push(advDauList);
+            dauList.push(iconDauList);
+            dauList.push(actCenterDauList);
+            dauList.push(duoDuoDauList);
             dauList.push(gameDauList);
             dauList.push(rollDauList);
             dauList.push(pointDauList);
-            dauList.push(actCenterDauList);
-            dauList.push(pushDauList);
             dauList.push(strongAdvDauList);
+            dauList.push(pushDauList);
+            dauList.push(advDauList);
 
-            var dauRate=[];
-            dauRate.push(duoduoDauRate);
-            dauRate.push(iconDauRate);
+            var dauRate= [];
             dauRate.push(bannerDauRate);
-            dauRate.push(advDauRate);
+            dauRate.push(iconDauRate);
+            dauRate.push(actCenterDauRate);
+            dauRate.push(duoduoDauRate);
             dauRate.push(gameDauRate);
             dauRate.push(rollDauRate);
             dauRate.push(pointDauRate);
-            dauRate.push(actCenterDauRate);
-            dauRate.push(pushDauRate);
             dauRate.push(strongAdvDauRate);
+            dauRate.push(pushDauRate);
+            dauRate.push(advDauRate);
 
             var signRate=[];
-            signRate.push(duoduoSignRate);
-            signRate.push(iconSignRate);
             signRate.push(bannerSignRate);
-            signRate.push(advSignRate);
+            signRate.push(iconSignRate);
+            signRate.push(actCenterSignRate);
+            signRate.push(duoduoSignRate);
             signRate.push(gameSignRate);
             signRate.push(rollSignRate);
             signRate.push(pointSignRate);
-            signRate.push(actCenterSignRate);
-            signRate.push(pushSignRate);
             signRate.push(strongAdvSignRate);
+            signRate.push(pushSignRate);
+            signRate.push(advSignRate);
 
             var bettingRate=[];
-            bettingRate.push(duoduoBettingRate);
-            bettingRate.push(iconBettingRate);
             bettingRate.push(bannerBettingRate);
-            bettingRate.push(advBettingRate);
+            bettingRate.push(iconBettingRate);
+            bettingRate.push(actCenterBettingRate);
+            bettingRate.push(duoduoBettingRate);
             bettingRate.push(gameBettingRate);
             bettingRate.push(rollBettingRate);
             bettingRate.push(pointBettingRate);
-            bettingRate.push(actCenterBettingRate);
-            bettingRate.push(pushBettingRate);
             bettingRate.push(strongAdvBettingRate);
+            bettingRate.push(pushBettingRate);
+            bettingRate.push(advBettingRate);
 
             var payRate=[];
-            payRate.push(duoduoPayRate);
-            payRate.push(iconPayRate);
             payRate.push(bannerPayRate);
-            payRate.push(advPayRate);
+            payRate.push(iconPayRate);
+            payRate.push(actCenterPayRate);
+            payRate.push(duoduoPayRate);
             payRate.push(gamePayRate);
             payRate.push(rollPayRate);
             payRate.push(pointPayRate);
-            payRate.push(actCenterPayRate);
-            payRate.push(pushPayRate);
             payRate.push(strongAdvPayRate);
+            payRate.push(pushPayRate);
+            payRate.push(advPayRate);
 
             var retentionRate=[];
-            retentionRate.push(duoduoRetentionRate);
-            retentionRate.push(iconRetentionRate);
             retentionRate.push(bannerRetentionRate);
-            retentionRate.push(advRetentionRate);
+            retentionRate.push(iconRetentionRate);
+            retentionRate.push(actCenterRetentionRate);
+            retentionRate.push(duoduoRetentionRate);
             retentionRate.push(gameRetentionRate);
             retentionRate.push(rollRetentionRate);
             retentionRate.push(pointRetentionRate);
-            retentionRate.push(actCenterRetentionRate);
-            retentionRate.push(pushRetentionRate);
             retentionRate.push(strongAdvRetentionRate);
-
-            var titleList = [];
-            titleList.push("发现页多多游戏入口--DAU及占比");
-            titleList.push("首页顶部banner右侧小图标入口--DAU及占比");
-            titleList.push("首页顶部banner入口--DAU及占比");
-            titleList.push("新增广告位入口--DAU及占比");
-            titleList.push("我的福利任务(玩游戏)入口--DAU及占比");
-            titleList.push("幸运大转盘(金叶子跳转)入口--DAU及占比");
-            titleList.push("我的积分商城(金叶子跳转)入口--DAU及占比");
-            titleList.push("发现页活动中心入口--DAU及占比");
-            titleList.push("push入口--DAU及占比");
-            titleList.push("强广位入口--DAU及占比");
-
-            var signTitleList = [];
-            signTitleList.push("发现页多多游戏入口--签到转化率");
-            signTitleList.push("首页顶部banner右侧小图标入口--签到转化率");
-            signTitleList.push("首页顶部banner入口--签到转化率");
-            signTitleList.push("新增广告位入口--签到转化率");
-            signTitleList.push("我的福利任务(玩游戏)入口--签到转化率");
-            signTitleList.push("幸运大转盘(金叶子跳转)入口--签到转化率");
-            signTitleList.push("我的积分商城(金叶子跳转)入口--签到转化率");
-            signTitleList.push("发现页活动中心入口--签到转化率");
-            signTitleList.push("push入口--签到转化率");
-            signTitleList.push("强广位入口--签到转化率");
-
-            var bettingTitleList = [];
-            bettingTitleList.push("发现页多多游戏入口--投注转化率");
-            bettingTitleList.push("首页顶部banner右侧小图标入口--投注转化率");
-            bettingTitleList.push("首页顶部banner入口--投注转化率");
-            bettingTitleList.push("新增广告位入口--投注转化率");
-            bettingTitleList.push("我的福利任务(玩游戏)入口--投注转化率");
-            bettingTitleList.push("幸运大转盘(金叶子跳转)入口--投注转化率");
-            bettingTitleList.push("我的积分商城(金叶子跳转)入口--投注转化率");
-            bettingTitleList.push("发现页活动中心入口--投注转化率");
-            bettingTitleList.push("push入口--投注转化率");
-            bettingTitleList.push("强广位入口--投注转化率");
-
-            var payTitleList = [];
-            payTitleList.push("发现页多多游戏入口--付费渗透率");
-            payTitleList.push("首页顶部banner右侧小图标入口--付费渗透率");
-            payTitleList.push("首页顶部banner入口--付费渗透率");
-            payTitleList.push("新增广告位入口--付费渗透率");
-            payTitleList.push("我的福利任务(玩游戏)入口--付费渗透率");
-            payTitleList.push("幸运大转盘(金叶子跳转)入口--付费渗透率");
-            payTitleList.push("我的积分商城(金叶子跳转)入口--付费渗透率");
-            payTitleList.push("发现页活动中心入口--付费渗透率");
-            payTitleList.push("push入口--付费渗透率");
-            payTitleList.push("强广位入口--付费渗透率");
-
-            var retentionTitleList = [];
-            retentionTitleList.push("发现页多多游戏入口--次日留存率");
-            retentionTitleList.push("首页顶部banner右侧小图标入口--次日留存率");
-            retentionTitleList.push("首页顶部banner入口--次日留存率");
-            retentionTitleList.push("新增广告位入口--次日留存率");
-            retentionTitleList.push("我的福利任务(玩游戏)入口--次日留存率");
-            retentionTitleList.push("幸运大转盘(金叶子跳转)入口--次日留存率");
-            retentionTitleList.push("我的积分商城(金叶子跳转)入口--次日留存率");
-            retentionTitleList.push("发现页活动中心入口--次日留存率");
-            retentionTitleList.push("push入口--次日留存率");
-            retentionTitleList.push("强广位入口--次日留存率");
+            retentionRate.push(pushRetentionRate);
+            retentionRate.push(advRetentionRate);
 
             var arrays =[];
             for(var i = 0;i < entranceDauList.length;i++){
@@ -429,48 +392,46 @@ Ext.define('WF.view.data.board.EntranceViewMain', {
                     }
                 ]
             };
-            entranceAndRate(titleList[0],dateList,dauList[0],dauRate[0]);
+            entranceAndRate(ENTRANCE_NAMES[EVENT_IDS[0]] + "入口--DAU及占比",dateList,dauList[0],dauRate[0]);
             me.echarts = echarts.init(Ext.get("entPie").dom);
             me.echarts.setOption(pieOption);
             me.echarts.on("click", eConsole);
 
             transRate(searchDate+"各入口签到转化率",eventNameList,entranceSignRateList,0);
             me.echarts.on('click', function(param) {
-            trendPic(signTitleList[param.dataIndex],dateList,signRate[param.dataIndex],0);
+                var idx = EVENT_NAMES.lastIndexOf(param.name);
+                trendPic(ENTRANCE_NAMES[EVENT_IDS[idx]]+"入口--签到转化率",dateList,signRate[idx],0);
             });
             transRate(searchDate+"各入口投注转化率",eventNameList,entranceBettingRateList,1);
             me.echarts.on('click', function(param) {
-            trendPic(bettingTitleList[param.dataIndex],dateList,bettingRate[param.dataIndex],1);
+                var idx = EVENT_NAMES.lastIndexOf(param.name);
+                trendPic(ENTRANCE_NAMES[EVENT_IDS[idx]] + "入口--投注转化率",dateList,bettingRate[idx],1);
             });
             transRate(searchDate+"各入口付费渗透率",eventNameList,entrancePayRateList,2);
             me.echarts.on('click', function(param) {
-                trendPic(payTitleList[param.dataIndex],dateList,payRate[param.dataIndex],2);
+                var idx = EVENT_NAMES.lastIndexOf(param.name);
+                trendPic(ENTRANCE_NAMES[EVENT_IDS[idx]] + "入口--付费渗透率",dateList,payRate[idx],2);
             });
             transRate(yesterday+"各入口次日留存率",eventNameList,entranceDayRetentionList,3);
             me.echarts.on('click', function(param) {
-                trendPic(retentionTitleList[param.dataIndex],yesDateList,retentionRate[param.dataIndex],3);
+                var idx = EVENT_NAMES.lastIndexOf(param.name);
+                trendPic(ENTRANCE_NAMES[EVENT_IDS[idx]] + "入口--次日留存率",yesDateList,retentionRate[idx],3);
             });
-            trendPic(signTitleList[0],dateList,signRate[0],0);
-            trendPic(bettingTitleList[0],dateList,bettingRate[0],1);
-            trendPic(payTitleList[0],dateList,payRate[0],2);
-            trendPic(retentionTitleList[0],yesDateList,retentionRate[0],3);
+            trendPic(ENTRANCE_NAMES[EVENT_IDS[0]] + "入口--签到转化率",dateList,signRate[0],0);
+            trendPic(ENTRANCE_NAMES[EVENT_IDS[0]] + "入口--投注转化率",dateList,bettingRate[0],1);
+            trendPic(ENTRANCE_NAMES[EVENT_IDS[0]] + "入口--付费渗透率",dateList,payRate[0],2);
+            trendPic(ENTRANCE_NAMES[EVENT_IDS[0]] + "入口--次日留存率",yesDateList,retentionRate[0],3);
 
             // 增加饼图的监听事件
             function eConsole(param) {
-                if (typeof param.seriesIndex != 'undefined') {
-                    if (param.type == 'click') {
-                        var pieLenght= pieOption.legend.data.length;
-                        for(var i=0;i<pieLenght;i++){
-                            everyClick(param,i,pieOption.legend.data[i],titleList[i],dateList,dauList[i],dauRate[i]);
+                if (typeof param.seriesIndex != 'undefined' && param.type == 'click') {
+                    var pieLenght= pieOption.legend.data.length;
+                    for(var i=0;i<pieLenght;i++){
+                        if(param.seriesIndex==0 && param.dataIndex==i) {
+                            var idx = EVENT_NAMES.lastIndexOf(pieOption.legend.data[i]);
+                            entranceAndRate(ENTRANCE_NAMES[EVENT_IDS[idx]] + "入口--DAU及占比", dateList, dauList[idx], dauRate[idx]);
                         }
                     }
-                }
-            }
-
-            //点击饼图每块区域触发的事件
-            function everyClick(param,i,txt,title,dateList,dauList,dauRate){
-                if(param.seriesIndex==0 && param.dataIndex==i){
-                    entranceAndRate(title,dateList,dauList,dauRate);
                 }
             }
         }
