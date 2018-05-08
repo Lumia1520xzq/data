@@ -9,7 +9,6 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
-import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogHour;
 import com.wf.data.dao.datarepo.entity.DatawareConvertHour;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoHour;
@@ -206,7 +205,6 @@ public class ChannelUserdataController extends ExtJsController {
      */
     @RequestMapping("/recharge/list")
     public Object rechargeListData() {
-        List<String> datelist = Lists.newArrayList();
         List<UserDataOverviewDto> overviewDtos = new ArrayList<>();
 
         JSONObject json = getRequestJson();
@@ -220,7 +218,7 @@ public class ChannelUserdataController extends ExtJsController {
             channelId = data.getLong("channelId");
             userType = data.getInteger("userType");
         }
-
+        List<String> datelist = getDateList(data);
         //循环时间段，根据时间获取数据
         for (int i = datelist.size() - 1; i >= 0; i--) {
             UserDataOverviewDto dto = new UserDataOverviewDto();
