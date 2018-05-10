@@ -68,4 +68,8 @@ public interface GameTypeContents {
      * 牛牛
      */
     int GAME_TYPE_NIUNIU = 14;
+    /**
+     * 斗地主
+     */
+    int GAME_TYPE_DOUDIZHU = 15;
 }
