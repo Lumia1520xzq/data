@@ -1,6 +1,5 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.core.email.EmailHander;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
@@ -10,7 +9,6 @@ import com.wf.core.utils.type.NumberUtils;
 import com.wf.data.common.constants.EmailContents;
 import com.wf.data.common.constants.GameTypeContents;
 import com.wf.data.dto.TcardDto;
-import com.wf.data.service.DataConfigService;
 import com.wf.data.service.data.DatawareBettingLogDayService;
 import com.wf.data.service.data.DatawareBuryingPointDayService;
 import com.wf.data.service.elasticsearch.EsUicAllGameService;
@@ -37,8 +35,8 @@ public class AllGameDayReportJob {
     private final EsUicAllGameService gameService = SpringContextHolder.getBean(EsUicAllGameService.class);
     private final DatawareBuryingPointDayService datawareBuryingPointDayService = SpringContextHolder.getBean(DatawareBuryingPointDayService.class);
     private final DatawareBettingLogDayService datawareBettingLogDayService = SpringContextHolder.getBean(DatawareBettingLogDayService.class);
-    private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
+    // private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+    // private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final RabbitTemplate rabbitTemplate = SpringContextHolder.getBean(RabbitTemplate.class);
 
     private final String CONTENT_TEMP_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
@@ -76,6 +74,7 @@ public class AllGameDayReportJob {
                 content.append(buildGameInfo(GameTypeContents.GAME_TYPE_ARROWS, date));
                 content.append(buildGameInfo(GameTypeContents.GAME_TYPE_KINGDOM, date));
                 content.append(buildGameInfo(GameTypeContents.GAME_TYPE_CANDY, date));
+                content.append(buildGameInfo(GameTypeContents.GAME_TYPE_DOUDIZHU, date));
                 content.insert(0, date + "数据如下" + "<br/><br/>");
                 // 发送邮件
                     /*for (String to : receivers.split(COMMA)) {*/
@@ -144,6 +143,9 @@ public class AllGameDayReportJob {
                 break;
             case GameTypeContents.GAME_TYPE_NIUNIU:
                 gameName = "牛牛";
+                break;
+            case GameTypeContents.GAME_TYPE_DOUDIZHU:
+                gameName = "斗地主";
                 break;
             default:
                 gameName = "";

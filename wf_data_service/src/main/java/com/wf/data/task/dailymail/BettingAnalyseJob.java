@@ -1,6 +1,5 @@
 package com.wf.data.task.dailymail;
 
-import com.wf.core.email.EmailHander;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.TraceIdUtils;
 import com.wf.core.utils.core.SpringContextHolder;
@@ -36,7 +35,7 @@ import java.util.Map;
 public class BettingAnalyseJob {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
-    private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
+    // private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final DatawareBettingLogHourService hourBettingService = SpringContextHolder.getBean(DatawareBettingLogHourService.class);
     private final DatawareBuryingPointHourService hourBuryingPointService = SpringContextHolder.getBean(DatawareBuryingPointHourService.class);
     private final RabbitTemplate rabbitTemplate = SpringContextHolder.getBean(RabbitTemplate.class);
@@ -152,6 +151,9 @@ public class BettingAnalyseJob {
                     break;
                 case GameTypeContents.GAME_TYPE_NEW_THREE_KINGDOM:
                     gameName = "真.热血无双";
+                    break;
+                case GameTypeContents.GAME_TYPE_DOUDIZHU:
+                    gameName = "斗地主";
                     break;
                 default:
                     gameName = "";
