@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.BigDataDictDao">
+
+	<select id="findTypeList" resultType="string">
+		SELECT type FROM bigdata_dict WHERE delete_flag = 0
+		GROUP BY type ORDER BY type
+	</select>
+
+	<select id="getDictByValue" resultType="BigDataDict">
+		SELECT
+		<include refid="bigDataDictColumns"/>
+		FROM bigdata_dict t WHERE delete_flag = 0 AND value = #{value} AND type = #{type} LIMIT 1
+	</select>
+
+	<select id="findByCond" resultType="BigDataDict">
+		SELECT
+		<include refid="bigDataDictColumns"/>
+		FROM bigdata_dict t WHERE delete_flag = 0
+		<if test="type != null and type != ''">
+			AND type = #{type}
+		</if>
+		ORDER BY sort asc
+	</select>
+
+	<select id="findListByType" resultType="BigDataDict">
+		SELECT
+		<include refid="bigDataDictColumns"/>
+		FROM bigdata_dict t WHERE 1=1 and delete_flag=0
+		<if test="type != null and type != ''">
+		AND `type` = #{type}
+		</if>
+		order by id asc
+	</select>
+
+</mapper>
+
