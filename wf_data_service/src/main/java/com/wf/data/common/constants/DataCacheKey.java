@@ -33,22 +33,28 @@ public enum DataCacheKey implements CacheKey {
 	DATA_USER_GROUP,
 
 	SYS_DICT_ALL_LIST,
+
+	SYS_BIG_DATA_DICT_ALL_LIST,
 	/**
 	 * type类型的字典集合
 	 */
 	SYS_DICT_BY_TYPE,
+	SYS_BIG_DATA_DICT_BY_TYPE,
 	/**
 	 * 指定值的字典缓存
 	 */
 	SYS_DICT_BY_VALUE,
+	SYS_BIG_DATA_DICT_BY_VALUE,
 	/**
 	 * 字典的value:label 键值对
 	 */
 	SYS_DICT_BY_TYPE_MAP,
+	SYS_BIG_DATA_DICT_BY_TYPE_MAP,
 	/**
 	 * 字典类型type的label集合
 	 */
 	SYS_DICT_TYPE_LABEL_LIST,
+	SYS_BIG_DATA_DICT_TYPE_LABEL_LIST,
 
 	DATA_DATAWARE_UIC_GROUP,
 
