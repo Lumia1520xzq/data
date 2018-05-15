@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.data.BigDataDictDao">
+	
+	<sql id="bigDataDictColumns">
+		t.id,
+		t.label,
+		t.value,
+		t.type,
+		t.description,
+		t.sort,
+		t.create_by,
+		t.update_by,
+		t.remarks,
+		t.delete_flag,
+		t.create_time,
+		t.update_time
+	</sql>
+	
+	<sql id="bigDataDictWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.type != null and p.type != ''">
+			AND type = #{p.type}
+		</if>
+		<if test="p.label != null and p.label != ''">
+			AND label LIKE CONCAT('%', #{p.label}, '%')
+		</if>
+		<if test="p.description != null and p.description != ''">
+			AND description LIKE CONCAT('%', #{p.description}, '%')
+		</if>
+	</sql>
+	
+	<sql id="bigDataDictJoins">
+	</sql>
+	
+	<select id="get" resultType="BigDataDict">
+		SELECT <include refid="bigDataDictColumns"/> FROM bigdata_dict t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="BigDataDict">
+		SELECT <include refid="bigDataDictColumns"/> FROM bigdata_dict t <include refid="bigDataDictJoins"/>
+		WHERE <include refid="bigDataDictWhere"/> ORDER BY id asc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM bigdata_dict t WHERE <include refid="bigDataDictWhere" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO bigdata_dict (
+        id,
+        value,
+        label,
+        type,
+        description,
+        sort,
+        create_by,
+        create_time,
+        remarks,
+        delete_flag
+        ) VALUES (
+        #{id},
+        #{value},
+        #{label},
+        #{type},
+        #{description},
+        #{sort},
+        #{createBy.id},
+        #{createTime},
+        #{remarks},
+        #{deleteFlag}
+        )
+	</insert>
+
+	<update id="update">
+		UPDATE bigdata_dict SET
+			value = #{value},
+        	label = #{label},
+        	type = #{type},
+        	description = #{description},
+        	sort = #{sort},
+        	update_by = #{updateBy.id},
+        	remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE bigdata_dict SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+
