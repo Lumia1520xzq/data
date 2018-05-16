@@ -43,6 +43,110 @@
         </if>
     </select>
 
+    <select id="getRmbAmountByChannelAndActivity" resultType="java.util.HashMap">
+        SELECT t1.activity_type AS activityType,
+        SUM(IFNULL(t2.rmb_amount,0)) AS rmbAmount
+        FROM `inventory_phy_awards_sendlog` t1
+        LEFT JOIN inventory_phy_awards_info t2
+        ON t1.phy_awards_id=t2.id
+        WHERE 1=1
+        AND t1.delete_flag=0
+        AND t1.send_time BETWEEN #{beginDate} AND #{endDate}
+        AND t1.receive_status=3
+        <if test="activityType != null">
+            AND t1.activity_type = #{activityType}
+        </if>
+        <if test="parentId != null">
+            AND t1.channel_id = #{parentId}
+        </if>
+        GROUP BY t1.activity_type
+    </select>
+
+    <select id="getRmbAmountByActivity" resultType="Double">
+        SELECT SUM(IFNULL(t2.rmb_amount,0))
+        FROM `inventory_phy_awards_sendlog` t1
+        LEFT JOIN inventory_phy_awards_info t2
+        ON t1.phy_awards_id=t2.id
+        WHERE 1=1
+        AND t1.delete_flag=0
+        AND t1.send_time BETWEEN #{beginDate} AND #{endDate}
+        AND t1.receive_status=3
+        <if test="activityType != null">
+            AND t1.activity_type= #{activityType}
+        </if>
+    </select>
+
+    <select id="getActivityUsersCount" resultType="Long">
+        SELECT COUNT(DISTINCT(user_id))
+        FROM inventory_phy_awards_sendlog t
+        WHERE  t.delete_flag=0
+        AND t.group_id =10
+        <if test="parentId != null">
+            AND t.channel_id= #{parentId}
+        </if>
+        <if test="activityType != null">
+            AND t.activity_type= #{activityType}
+        </if>
+        <if test="beginDate != null and beginDate !=''">
+            AND t.send_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            AND t.send_time &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="getActivityUsersCountByChannel" resultType="java.util.HashMap">
+        SELECT COUNT(DISTINCT(user_id)) as userCount,
+          t.activity_type as activityType
+        FROM inventory_phy_awards_sendlog t
+        WHERE  t.delete_flag=0
+        AND t.group_id =10
+        <if test="parentId != null">
+            AND t.channel_id= #{parentId}
+        </if>
+        <if test="beginDate != null and beginDate !=''">
+            AND t.send_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            AND t.send_time &lt;= #{endDate}
+        </if>
+        GROUP BY t.activity_type
+    </select>
+
+    <select id="getRmbAmountsByActivity" resultType="java.util.HashMap">
+        SELECT t1.channel_id AS parentId,
+        SUM(IFNULL(t2.rmb_amount,0)) AS rmbAmount
+        FROM `inventory_phy_awards_sendlog` t1
+        LEFT JOIN inventory_phy_awards_info t2
+        ON t1.phy_awards_id=t2.id
+        WHERE 1=1
+        AND t1.delete_flag=0
+        AND t1.send_time BETWEEN #{beginDate} AND #{endDate}
+        AND t1.receive_status=3
+        <if test="activityType != null">
+            AND t1.activity_type = #{activityType}
+        </if>
+        GROUP BY t1.channel_id
+    </select>
+
+    <select id="getChannelUsersCountByActivity" resultType="java.util.HashMap">
+        SELECT COUNT(DISTINCT(user_id)) as userCount,
+        t.channel_id as parentId
+        FROM inventory_phy_awards_sendlog t
+        WHERE  t.delete_flag=0
+        AND t.group_id =10
+        <if test="activityType != null">
+            AND t.activity_type= #{activityType}
+        </if>
+        <if test="beginDate != null and beginDate !=''">
+            AND t.send_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            AND t.send_time &lt;= #{endDate}
+        </if>
+        GROUP BY t.channel_id
+    </select>
+
     <select id="getByUserId" resultType="Double">
         SELECT
         SUM(IFNULL(t2.rmb_amount, 0))

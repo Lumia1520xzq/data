@@ -38,4 +38,12 @@ public class ActivityInfoService extends CrudService<ActivityInfoDao, ActivityIn
     public List<Long> getListByChannelId(Map<String,Object> map) {
         return dao.getListByChannelId(map);
     }
+
+    public List<ActivityInfo> listByChannelId(Map<String,Object> map) {
+        return dao.listByChannelId(map);
+    }
+
+    public List<ActivityInfo> listByActivityType(Map<String, Object> map) {
+        return dao.listByActivityType(map);
+    }
 }

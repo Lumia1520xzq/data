@@ -14,6 +14,12 @@ public class DatawareFinalChannelCost extends DataEntity {
     private Long parentId;
     private Long channelId;
     private String businessDate;
+    private Long dau;
+    private Long activityUsers;
+    private Double activityRate;
+    private Double avrActivityCost;
+    private Integer activityType;
+    private String activityName;
 
     public Double getRechargeAmount() {
         return rechargeAmount;
@@ -85,5 +91,53 @@ public class DatawareFinalChannelCost extends DataEntity {
 
     public void setBusinessDate(String businessDate) {
         this.businessDate = businessDate;
+    }
+
+    public Long getDau() {
+        return dau;
+    }
+
+    public void setDau(Long dau) {
+        this.dau = dau;
+    }
+
+    public Long getActivityUsers() {
+        return activityUsers;
+    }
+
+    public void setActivityUsers(Long activityUsers) {
+        this.activityUsers = activityUsers;
+    }
+
+    public Double getActivityRate() {
+        return activityRate;
+    }
+
+    public void setActivityRate(Double activityRate) {
+        this.activityRate = activityRate;
+    }
+
+    public Double getAvrActivityCost() {
+        return avrActivityCost;
+    }
+
+    public void setAvrActivityCost(Double avrActivityCost) {
+        this.avrActivityCost = avrActivityCost;
+    }
+
+    public Integer getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(Integer activityType) {
+        this.activityType = activityType;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 }

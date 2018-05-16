@@ -38,5 +38,27 @@
         </if>
         ORDER BY t.id ASC
     </select>
+
+    <select id="listByChannelId" resultType="ActivityInfo">
+        SELECT
+        <include refid="activityInfoColumns"/>
+        FROM activity_info t
+        WHERE t.delete_flag = 0 <!--and t.enable=1-->
+        <if test="parentId !=null">
+            and t.channel_id = #{parentId}
+        </if>
+        ORDER BY t.id ASC
+    </select>
+
+    <select id="listByActivityType" resultType="ActivityInfo">
+        SELECT
+        <include refid="activityInfoColumns"/>
+        FROM activity_info t
+        WHERE t.delete_flag = 0 <!--and t.enable=1-->
+        <if test="activityType !=null">
+            and t.activity_type = #{activityType}
+        </if>
+        ORDER BY t.id ASC
+    </select>
 </mapper>
 

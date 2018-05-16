@@ -11,8 +11,10 @@ import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelCost;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
+import com.wf.data.dao.mall.entity.ActivityInfo;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataConfigService;
+import com.wf.data.service.data.DatawareBuryingPointDayService;
 import com.wf.data.service.data.DatawareConvertDayService;
 import com.wf.data.service.data.DatawareFinalChannelCostService;
 import com.wf.data.service.mall.ActivityInfoService;
@@ -21,14 +23,12 @@ import com.wf.data.service.trans.TransFragmentConvertRecordService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author chengsheng.liu
@@ -53,7 +53,8 @@ public class ChannelCostService {
     private TransFragmentConvertRecordService transFragmentConvertRecordService;
     @Autowired
     private InventoryPhyAwardsSendlogService inventoryPhyAwardsSendlogService;
-
+    @Autowired
+    private DatawareBuryingPointDayService datawareBuryingPointDayService;
 
     public void toDoChannelCostAnalysis() {
         logger.info("每天成本汇总开始:traceId={}", TraceIdUtils.getTraceId());
@@ -99,15 +100,18 @@ public class ChannelCostService {
                         map.put("channelId", channel);
                         DatawareFinalChannelCost channelCost = dataCost(map, channelInfo, searchDay);
                         costList.add(channelCost);
+                        // 渠道-出口类型
+                        costList.addAll(dataActivityCost(map, searchDay, channelCost));
                     } else {
                         Map<String, Object> parentMap = new HashMap<>();
                         parentMap.put("businessDate", searchDay);
                         parentMap.put("parentId", channel);
                         DatawareFinalChannelCost channelCost = dataCost(parentMap, channelInfo, searchDay);
                         costList.add(channelCost);
+                        // 渠道-出口类型
+                        costList.addAll(dataActivityCost(parentMap, searchDay, channelCost));
                     }
                 }
-
             }
 
             costList.add(getOtherCost(cost, costList));
@@ -118,11 +122,58 @@ public class ChannelCostService {
         }
     }
 
+    private List<DatawareFinalChannelCost> dataActivityCost(Map<String, Object> params, String businessDate, DatawareFinalChannelCost channelCost) {
+        params.put("beginDate", businessDate + " 00:00:00");
+        params.put("endDate", businessDate + " 23:59:59");
+        // 成本
+        List<Map<String, Object>> rmbAmount= inventoryPhyAwardsSendlogService.getRmbAmountByChannelAndActivity(params);
+        Map<Integer, Double> cost = new HashMap<>();
+        for (Map<String, Object> o : rmbAmount) {
+            cost.put(Integer.valueOf((o.get("activityType").toString())), Double.valueOf(o.get("rmbAmount").toString()));
+        }
+        // 出口人数
+        List<Map<String, Object>> userCounts = inventoryPhyAwardsSendlogService.getActivityUsersCountByChannel(params);
+        Map<Integer, Long> counts = new HashMap<>();
+        for (Map<String, Object> o : userCounts) {
+            counts.put(Integer.valueOf((o.get("activityType").toString())), Long.valueOf(o.get("userCount").toString()));
+        }
+        List<DatawareFinalChannelCost> costs = Lists.newArrayList();
+        DatawareFinalChannelCost acCost;
+        // 成本
+        Double kindCost;
+        // 人数
+        Long users;
+        List<ActivityInfo> types = activityInfoService.listByChannelId(params);
+        Integer type;
+        for (ActivityInfo ac : types) {
+            acCost = new DatawareFinalChannelCost();
+            BeanUtils.copyProperties(channelCost, acCost);
+            type = ac.getActivityType();
+            acCost.setActivityType(type);
+            acCost.setActivityName(ac.getName());
+            kindCost = cost.get(type);
+            if (null == kindCost)
+                kindCost = 0.0;
+            acCost.setKindCost(kindCost);
+            acCost.setTotalCost(kindCost);
+            users = counts.get(type);
+            if (null == users)
+                users = 0L;
+            acCost.setActivityUsers(users);
+            acCost.setCostRate(BigDecimalUtil.mul(division(kindCost, acCost.getRechargeAmount()), 100));
+            acCost.setActivityRate(BigDecimalUtil.mul(division(users, acCost.getDau()), 100));
+            acCost.setAvrActivityCost(division(kindCost, users));
+            costs.add(acCost);
+        }
+        return costs;
+    }
 
     private DatawareFinalChannelCost dataCost(Map<String, Object> params, ChannelInfo channelInfo, String businessDate) {
 
         DatawareFinalChannelCost channelCost = new DatawareFinalChannelCost();
         channelCost.setBusinessDate(businessDate);
+        channelCost.setActivityName("");
+        channelCost.setActivityType(0);
         if (null == channelInfo) {
             channelCost.setChannelId(1L);
             channelCost.setParentId(1L);
@@ -164,9 +215,14 @@ public class ChannelCostService {
             channelCost.setKindCost(0.00);
             channelCost.setTotalCost(0.00);
             channelCost.setCostRate(0.00);
+            channelCost.setDau(0L);
+            channelCost.setActivityRate(0.00);
+            channelCost.setActivityUsers(0L);
+            channelCost.setAvrActivityCost(0.00);
             return channelCost;
         }
         params.put("activityIds", activityIds);
+        // 根据activityIds获取成本（渠道成本）
         Double kindCost = inventoryPhyAwardsSendlogService.getRmbAmountByChannel(params);
         if (null == kindCost) {
             kindCost = 0.00;
@@ -176,13 +232,47 @@ public class ChannelCostService {
         channelCost.setTotalCost(kindCost);
         //成本占比=当日成本/当日充值金额
         if (channelCost.getRechargeAmount() > 0) {
-            channelCost.setCostRate(BigDecimalUtil.div(channelCost.getTotalCost(), channelCost.getRechargeAmount(), 2));
+            channelCost.setCostRate(BigDecimalUtil.mul(division(channelCost.getTotalCost(), channelCost.getRechargeAmount()), 100));
         } else {
             channelCost.setCostRate(0.00);
         }
-
+        // 日活
+        Long dau = datawareBuryingPointDayService.getDauByChannel(params);
+        if (null == dau) dau = 0L;
+        channelCost.setDau(dau);
+        // 出口人数
+        Long activityUsers = inventoryPhyAwardsSendlogService.getActivityUsersCount(params);
+        if (null == activityUsers) activityUsers = 0L;
+        channelCost.setActivityUsers(activityUsers);
+        // 出口率
+        channelCost.setActivityRate(BigDecimalUtil.mul(division(activityUsers, dau), 100));
+        // 人均出口成本
+        channelCost.setAvrActivityCost(division(kindCost, activityUsers));
         return channelCost;
+    }
 
+    private double division(Long d1, Long d2) {
+        double resulet = 0;
+        if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
+            resulet = BigDecimalUtil.div(d1, d2, 4);
+        }
+        return resulet;
+    }
+
+    private double division(Double d1, Long d2) {
+        double resulet = 0;
+        if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
+            resulet = BigDecimalUtil.div(d1, d2, 2);
+        }
+        return resulet;
+    }
+
+    private double division(Double d1, Double d2) {
+        double resulet = 0;
+        if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
+            resulet = BigDecimalUtil.div(d1, d2, 4);
+        }
+        return resulet;
     }
 
     /**
@@ -210,6 +300,13 @@ public class ChannelCostService {
         channelCost.setFragmentCost(BigDecimalUtil.sub(totalchannelCost.getFragmentCost(), fragmentCost));
         channelCost.setKindCost(BigDecimalUtil.sub(totalchannelCost.getKindCost(), kindCost));
         channelCost.setTotalCost(BigDecimalUtil.sub(totalchannelCost.getTotalCost(), totalCost));
+        // TODO
+        channelCost.setDau(0L);
+        channelCost.setActivityUsers(0L);
+        channelCost.setAvrActivityCost(0.00);
+        channelCost.setActivityRate(0.00);
+        channelCost.setActivityType(0);
+        channelCost.setActivityName("");
         if (channelCost.getRechargeAmount() > 0) {
             channelCost.setCostRate(BigDecimalUtil.div(channelCost.getTotalCost() * 100, channelCost.getRechargeAmount(), 2));
         } else {
