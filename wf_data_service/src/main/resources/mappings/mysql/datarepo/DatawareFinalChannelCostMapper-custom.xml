@@ -61,7 +61,7 @@
 
     <select id="findMonthCost" resultType="Double">
         SELECT IFNULL(SUM(total_cost),0) FROM `dataware_final_channel_cost`
-        WHERE 1=1 and t.activity_type=0
+        WHERE 1=1 and activity_type=0
         <if test="month != null and month != ''">
         AND DATE_FORMAT(business_date,'%Y-%m') = #{month}
         </if>
