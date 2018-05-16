@@ -17,6 +17,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.parent_id,
 		t.channel_id,
 		t.business_date,
+		t.dau,
+		t.activity_users,
+		t.activity_rate,
+		t.avr_activity_cost,
+		t.activity_type,
+		t.activity_name,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
@@ -51,8 +57,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			channel_name, 
 			parent_id, 
 			channel_id, 
-			business_date, 
-			create_time, 
+			business_date,
+			dau,
+			activity_users,
+			activity_rate,
+			avr_activity_cost,
+			activity_type,
+			activity_name,
+			create_time,
 			delete_flag 
 		) VALUES (
 			#{id}, 
@@ -64,8 +76,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			#{channelName}, 
 			#{parentId}, 
 			#{channelId}, 
-			#{businessDate}, 
-			#{createTime}, 
+			#{businessDate},
+			#{dau},
+			#{activityUsers},
+			#{activityRate},
+			#{avrActivityCost},
+			#{activityType},
+			#{activityName},
+			#{createTime},
 			#{deleteFlag} 
 		)
 	</insert>
@@ -80,7 +98,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			channel_name = #{channelName}, 
 			parent_id = #{parentId}, 
 			channel_id = #{channelId}, 
-			business_date = #{businessDate}, 
+			business_date = #{businessDate},
+			dau = #{dau},
+			activity_users = #{activityUsers},
+			activity_rate = #{activityRate},
+			avr_activity_cost = #{avrActivityCost},
+			activity_type = #{activityType},
+			activity_name = #{activityName},
 			delete_flag = #{deleteFlag} 
 		WHERE id = #{id}
 	</update>

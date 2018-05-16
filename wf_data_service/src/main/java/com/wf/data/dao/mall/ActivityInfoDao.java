@@ -11,9 +11,13 @@ import java.util.Map;
 @MyBatisDao(tableName = "activity_info")
 public interface ActivityInfoDao extends CrudDao<ActivityInfo> {
 
-    public ActivityInfo getByActivityTypeAndChannelId(@Param("activityType") Integer activityType, @Param("channelId") Long channelId);
+    ActivityInfo getByActivityTypeAndChannelId(@Param("activityType") Integer activityType, @Param("channelId") Long channelId);
 
-    public List<Long> getListByActivityTypeAndChannelId(@Param("activityType") Integer activityType, @Param("channelId") Long channelId);
+    List<Long> getListByActivityTypeAndChannelId(@Param("activityType") Integer activityType, @Param("channelId") Long channelId);
 
     List<Long> getListByChannelId(Map<String,Object> map);
+
+    List<ActivityInfo> listByChannelId(Map<String,Object> map);
+
+    List<ActivityInfo> listByActivityType(Map<String, Object> map);
 }
