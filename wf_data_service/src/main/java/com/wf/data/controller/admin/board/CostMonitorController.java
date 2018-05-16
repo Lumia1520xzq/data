@@ -136,7 +136,7 @@ public class CostMonitorController extends ExtJsController {
         // 人均出口成本
         List<Object> avrActivityCosts = Lists.newArrayList();
         List<DatawareFinalActivityCost> costInfo;
-        if (activityTypes.isEmpty() && parentIds.size() > 1) {
+        if (activityTypes.isEmpty() && parentIds.size() >= 1) {
             // 欢乐套圈
             activityTypes.add(3);
         }
@@ -253,7 +253,7 @@ public class CostMonitorController extends ExtJsController {
         List<Object> activityRates = Lists.newArrayList();
         List<Object> avrActivityCosts = Lists.newArrayList();
         List<DatawareFinalChannelCost> costInfo;
-        if (activityTypes.size() > 1 && parentIds.isEmpty()) {
+        if (activityTypes.size() >= 1 && parentIds.isEmpty()) {
             // 奖多多渠道
             parentIds.add(100001L);
         }
