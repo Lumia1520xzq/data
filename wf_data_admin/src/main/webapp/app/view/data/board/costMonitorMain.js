@@ -210,7 +210,8 @@ Ext.define('WF.view.data.board.costMonitorMain', {
         function getSeries(data, item) {
             var series = [];
             // 浮点
-            var _FLOAT_ARRAY = ["成本","人均出口成本"];
+            var _FLOAT_ARRAY = ["人均出口成本"];
+            var _ONE_FLOAT_ARRAY = ["成本"];
             var seriesData = data.chartsData.series;
             for (var key in seriesData) {
                 if (key == item) {
@@ -223,8 +224,9 @@ Ext.define('WF.view.data.board.costMonitorMain', {
                                 (Ext.Array.contains(_RATE_ARRAY, key) ? str + "%" :
                                     // 浮点格式“0,000.00”
                                     (Ext.Array.contains(_FLOAT_ARRAY, key) ? Ext.util.Format.number(str, "0,000.00") :
+                                        (Ext.Array.contains(_ONE_FLOAT_ARRAY, key) ? Ext.util.Format.number(str, "0,000.0") :
                                         // 整数格式“0,000”
-                                        Ext.util.Format.number(str, "0,000")))});
+                                        Ext.util.Format.number(str, "0,000"))))});
                         }
                         var temp = {
                             name: data.chartsData.legends[i],
