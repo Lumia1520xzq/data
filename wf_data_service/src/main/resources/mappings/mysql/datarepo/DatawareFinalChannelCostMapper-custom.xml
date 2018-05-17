@@ -43,7 +43,7 @@
             AND t.parent_id = #{parentId}
         </if>
         <if test="date != null">
-            AND t.business_date = #{businessDate}
+            AND t.business_date = #{date}
         </if>
     </select>
 

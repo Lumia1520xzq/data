@@ -160,7 +160,7 @@ public class ChannelCostService {
             if (null == users)
                 users = 0L;
             acCost.setActivityUsers(users);
-            acCost.setCostRate(BigDecimalUtil.mul(division(kindCost, acCost.getRechargeAmount()), 100));
+            acCost.setCostRate(division(kindCost, acCost.getRechargeAmount()));
             acCost.setActivityRate(BigDecimalUtil.mul(division(users, acCost.getDau()), 100));
             acCost.setAvrActivityCost(division(kindCost, users));
             costs.add(acCost);
@@ -232,7 +232,7 @@ public class ChannelCostService {
         channelCost.setTotalCost(kindCost);
         //成本占比=当日成本/当日充值金额
         if (channelCost.getRechargeAmount() > 0) {
-            channelCost.setCostRate(BigDecimalUtil.mul(division(channelCost.getTotalCost(), channelCost.getRechargeAmount()), 100));
+            channelCost.setCostRate(division(channelCost.getTotalCost(), channelCost.getRechargeAmount()));
         } else {
             channelCost.setCostRate(0.00);
         }
