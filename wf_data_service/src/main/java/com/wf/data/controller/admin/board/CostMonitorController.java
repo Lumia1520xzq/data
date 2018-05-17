@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
+import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.constants.CostMonitorConstants;
@@ -314,7 +315,7 @@ public class CostMonitorController extends ExtJsController {
         List<Object> rs = Lists.newArrayList();
         for (DatawareFinalChannelCost cost : costs) {
             lString = Lists.newArrayList();
-            lString.add(String.valueOf(cost.getCostRate()));
+            lString.add(String.valueOf(BigDecimalUtil.round(BigDecimalUtil.mul(cost.getCostRate(), 100), 2)));
             rs.add(lString);
         }
         return rs;
