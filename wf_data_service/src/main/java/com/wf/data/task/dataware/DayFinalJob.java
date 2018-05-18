@@ -33,6 +33,7 @@ public class DayFinalJob {
     private final EntranceAnalysisService entranceAnalysisService = SpringContextHolder.getBean(EntranceAnalysisService.class);
     private final DatawareFinalRechargeTagAnalysisService tagAnalysisService = SpringContextHolder.getBean(DatawareFinalRechargeTagAnalysisService.class);
     private final GameOverViewService gameOverViewService = SpringContextHolder.getBean(GameOverViewService.class);
+    private final ActivityCostService activityCostService = SpringContextHolder.getBean(ActivityCostService.class);
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -40,6 +41,11 @@ public class DayFinalJob {
             channelCostService.toDoChannelCostAnalysis();
         } catch (Exception e) {
             logger.error("toDoChannelCostAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        try {
+            activityCostService.toDoActivityCostAnalysis();
+        } catch (Exception e) {
+            logger.error("toDoActivityCostAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
         try {
             channelInfoAllService.toDoChannelInfoAllAnalysis();

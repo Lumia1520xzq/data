@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 历史数据补充
@@ -65,6 +63,8 @@ public class HistoryDataCleanController extends ExtJsController {
     private DatawareFinalRechargeTagAnalysisService tagAnalysisService;
     @Autowired
     private GameOverViewService gameOverViewService;
+    @Autowired
+    private ActivityCostService activityCostService;
 
     /**
      * 清洗channelInfoHour表
@@ -425,9 +425,32 @@ public class HistoryDataCleanController extends ExtJsController {
         if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
             return error("开始时间大于结束时间");
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("bettingDate", startTime);
         channelCostService.dataClean(startTime, endTime);
+        return success("清洗开始执行");
+    }
+
+    /**
+     * 清洗activityCost
+     *
+     * @return
+     */
+    @RequestMapping("/activityCost")
+    @ResponseBody
+    public Object activityCost(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
+
+        if (StringUtil.isBlank(startTime)) {
+            return error("开始时间为空");
+        }
+        if (StringUtil.isBlank(endTime)) {
+            return error("结束时间为空");
+        }
+
+        if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
+            return error("开始时间大于结束时间");
+        }
+        activityCostService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }
 
@@ -452,9 +475,6 @@ public class HistoryDataCleanController extends ExtJsController {
         if (DateUtils.parseDate(startTime).getTime() > DateUtils.parseDate(endTime).getTime()) {
             return error("开始时间大于结束时间");
         }
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("bettingDate", startTime);
         channelRetentionService.dataClean(startTime, endTime);
         return success("清洗开始执行");
     }

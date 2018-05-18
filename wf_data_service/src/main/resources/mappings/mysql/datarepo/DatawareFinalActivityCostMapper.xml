@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalActivityCostDao">
+	
+	<sql id="datawareFinalActivityCostColumns">
+		t.id,
+		t.kind_cost,
+		t.total_cost,
+		t.cost_rate,
+		t.activity_type,
+		t.activity_name,
+		t.activity_users,
+		t.activity_user_rate,
+		t.avr_activity_cost,
+		t.parent_id,
+		t.channel_name,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareFinalActivityCostWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareFinalActivityCostJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareFinalActivityCost">
+		SELECT <include refid="datawareFinalActivityCostColumns"/> FROM dataware_final_activity_cost t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalActivityCost">
+		SELECT <include refid="datawareFinalActivityCostColumns"/> FROM dataware_final_activity_cost t <include refid="datawareFinalActivityCostJoins"/>
+		WHERE <include refid="datawareFinalActivityCostWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_activity_cost t WHERE <include refid="datawareFinalActivityCostWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_final_activity_cost (
+			id,
+			kind_cost,
+			total_cost,
+			cost_rate,
+			activity_type,
+			activity_name,
+			activity_users,
+			activity_user_rate,
+			avr_activity_cost,
+			parent_id,
+			channel_name,
+			business_date,
+			create_time,
+			delete_flag
+		) VALUES (
+			#{id},
+			#{kindCost}, 
+			#{totalCost}, 
+			#{costRate}, 
+			#{activityType},
+			#{activityName},
+			#{activityUsers},
+			#{activityUserRate},
+			#{avrActivityCost},
+			#{parentId},
+			#{channelName},
+			#{businessDate},
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_final_activity_cost SET
+			kind_cost = #{kindCost}, 
+			total_cost = #{totalCost}, 
+			cost_rate = #{costRate}, 
+			activity_type = #{activityType},
+			activity_name = #{activityName},
+			activity_users = #{activityUsers},
+			activity_user_rate = #{activityUserRate},
+			avr_activity_cost = #{avrActivityCost},
+			parent_id = #{parentId},
+			channel_name = #{channelName},
+			business_date = #{businessDate},
+			delete_flag = #{deleteFlag}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_activity_cost SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+

@@ -5,6 +5,7 @@ import com.wf.data.dao.datarepo.DatawareFinalChannelCostDao;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelCost;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,5 +28,17 @@ public class DatawareFinalChannelCostService extends CrudService<DatawareFinalCh
 
     public int deleteByDate(Map<String, Object> params) {
         return dao.deleteByDate(params);
+    }
+
+    public List<DatawareFinalChannelCost> getCostTop5Channel(Map<String, Object> params) {
+        return dao.getCostTop5Channel(params);
+    }
+
+    public List<String> findDateList(Map<String, Object> map) {
+        return dao.findDateList(map);
+    }
+
+    public List<DatawareFinalChannelCost> getCostInfo(Map<String, Object> map) {
+        return dao.getCostInfo(map);
     }
 }

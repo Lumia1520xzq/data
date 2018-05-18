@@ -18,4 +18,28 @@ public class InventoryPhyAwardsSendlogService extends CrudService<InventoryPhyAw
     public Double getRmbAmountByUserId(Map<String, Object> userParam) {
         return dao.getRmbAmountByUserId(userParam);
     }
+
+    public Long getActivityUsersCount(Map<String, Object> map) {
+        return dao.getActivityUsersCount(map);
+    }
+
+    public Double getRmbAmountByActivity(Map<String,Object> params) {
+        return dao.getRmbAmountByActivity(params);
+    }
+
+    public List<Map<String, Object>> getRmbAmountByChannelAndActivity(Map<String, Object> map) {
+        return dao.getRmbAmountByChannelAndActivity(map);
+    }
+
+    public List<Map<String, Object>> getActivityUsersCountByChannel(Map<String, Object> map) {
+        return dao.getActivityUsersCountByChannel(map);
+    }
+
+    public List<Map<String, Object>> getRmbAmountsByActivity(Map<String, Object> params) {
+        return dao.getRmbAmountsByActivity(params);
+    }
+
+    public List<Map<String, Object>> getChannelUsersCountByActivity(Map<String, Object> params) {
+        return dao.getChannelUsersCountByActivity(params);
+    }
 }
