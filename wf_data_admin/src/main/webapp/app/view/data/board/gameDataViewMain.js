@@ -218,15 +218,15 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                 for (var z = 0; z < data.dateList.length; z++) {
                     mdDate = data.dateList[z];
                     if (items[i].id.indexOf("次留") > -1
-                        && mdDate > Ext.util.Format.date(Ext.Date.add(me.down("[name='endTime']").value, Ext.Date.DAY, -2), "Y-m-d")) {
+                        && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -2), "Y-m-d")) {
                         break;
                     }
                     if (items[i].id.indexOf("三留") > -1
-                        && mdDate > Ext.util.Format.date(Ext.Date.add(me.down("[name='endTime']").value, Ext.Date.DAY, -4), "Y-m-d")) {
+                        && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -4), "Y-m-d")) {
                         break;
                     }
                     if (items[i].id.indexOf("七留") > -1
-                        && mdDate > Ext.util.Format.date(Ext.Date.add(me.down("[name='endTime']").value, Ext.Date.DAY, -8), "Y-m-d")) {
+                        && mdDate > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -8), "Y-m-d")) {
                         break;
                     }
                     // 截取yyyy-mm-dd格式日期的mm-dd部分
@@ -260,15 +260,15 @@ Ext.define('WF.view.data.board.gameDataViewMain', {
                         var aa =[];
                         for (var j = 0; j < seriesData[key][i].length; j++) {
                             if (item.indexOf("次留") > -1
-                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(me.down("[name='endTime']").value, Ext.Date.DAY, -2), "Y-m-d")) {
+                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -2), "Y-m-d")) {
                                 break;
                             }
                             if (item.indexOf("三留") > -1
-                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(me.down("[name='endTime']").value, Ext.Date.DAY, -4), "Y-m-d")) {
+                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -4), "Y-m-d")) {
                                 break;
                             }
                             if (item.indexOf("七留") > -1
-                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(me.down("[name='endTime']").value, Ext.Date.DAY, -8), "Y-m-d")) {
+                                && data.dateList[j] > Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -8), "Y-m-d")) {
                                 break;
                             }
                             var str = [];
