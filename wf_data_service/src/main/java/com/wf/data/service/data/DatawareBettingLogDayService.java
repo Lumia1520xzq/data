@@ -5,6 +5,7 @@ import com.wf.data.dao.datarepo.DatawareBettingLogDayDao;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dto.TcardDto;
+import com.wf.data.dto.UserDetailsDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,5 +67,9 @@ public class DatawareBettingLogDayService extends CrudService<DatawareBettingLog
 
     public List<Long> getBettingUserIdByDateRange(Map<String, Object> param) {
         return dao.getBettingUserIdByDateRange(param);
+    }
+
+    public List<UserDetailsDto> getCMUserDetails(Map<String, Object> map) {
+        return dao.getCMUserDetails(map);
     }
 }

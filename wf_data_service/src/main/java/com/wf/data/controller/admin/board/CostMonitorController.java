@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
+import com.wf.core.persistence.Page;
+import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
 import com.wf.core.web.base.ExtJsController;
@@ -13,14 +15,21 @@ import com.wf.data.dao.base.entity.ChannelInfo;
 import com.wf.data.dao.data.entity.DataDict;
 import com.wf.data.dao.datarepo.entity.DatawareFinalActivityCost;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelCost;
+import com.wf.data.dao.mycatuic.entity.UicUser;
+import com.wf.data.dto.UserDetailsDto;
 import com.wf.data.service.ChannelInfoService;
 import com.wf.data.service.DataDictService;
+import com.wf.data.service.UicUserService;
+import com.wf.data.service.data.DatawareBettingLogDayService;
 import com.wf.data.service.data.DatawareFinalActivityCostService;
 import com.wf.data.service.data.DatawareFinalChannelCostService;
+import com.wf.data.service.mall.InventoryPhyAwardsSendlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +51,15 @@ public class CostMonitorController extends ExtJsController {
     @Autowired
     private ChannelInfoService channelInfoService;
 
+    @Autowired
+    private InventoryPhyAwardsSendlogService inventoryPhyAwardsSendlogService;
+
+    @Autowired
+    private DatawareBettingLogDayService datawareBettingLogDayService;
+
+    @Autowired
+    private UicUserService uicUserService;
+
     /**
      * 查询列表
      */
@@ -56,6 +74,10 @@ public class CostMonitorController extends ExtJsController {
         String endTime = null;
         //  主渠道
         List<Long> parentIds = Lists.newArrayList();
+        // 用户ID
+        Long userId = null;
+        Long start = null;
+        Long limit = null;
         // 出口类型
         List<Integer> activityTypes = Lists.newArrayList();
         JSONObject data = json.getJSONObject("data");
@@ -69,13 +91,16 @@ public class CostMonitorController extends ExtJsController {
             parentIds = JSONObject.parseArray(parentIdJs, Long.class);
             startTime = data.getString("startTime");
             endTime = data.getString("endTime");
-        }
-        if (parentIds.size() > 1 && activityTypes.size() > 1) {
-            return error("[主渠道]和[出口类型]不能同时多选！");
+            userId = data.getLong("userId");
+            start = json.getLongValue("start");
+            limit = json.getLongValue("limit");
         }
         Map<String, Object> resultMap;
         // 渠道监控的场合
-        if ("channelMonitor".equals(tabId)) {
+        if (CostMonitorConstants.CHANNELMONITOR.equals(tabId)) {
+            if (parentIds.size() > 1 && activityTypes.size() > 1) {
+                return error("[主渠道]和[出口类型]不能同时多选！");
+            }
             // 没有选择主渠道ID的场合
             if (parentIds.isEmpty() && activityTypes.isEmpty()) {
                 Map<String, Object> params = new HashMap<>(1);
@@ -97,7 +122,10 @@ public class CostMonitorController extends ExtJsController {
             resultMap = getChannelMonitorChartsData(parentIds, activityTypes, map);
             map.put("parentIds", parentIds);
             resultMap.put("dateList", datawareFinalChannelCostService.findDateList(map));
-        } else if ("activityMonitor".equals(tabId)) {// 出口监控的场合
+        } else if (CostMonitorConstants.ACTIVITYMONITOR.equals(tabId)) {// 出口监控的场合
+            if (parentIds.size() > 1 && activityTypes.size() > 1) {
+                return error("[主渠道]和[出口类型]不能同时多选！");
+            }
             if (activityTypes.isEmpty() && parentIds.isEmpty()) {
                 Map<String, Object> params = new HashMap<>(1);
                 // （T-1）日
@@ -117,10 +145,102 @@ public class CostMonitorController extends ExtJsController {
             resultMap = getActivityMonitorChartsData(parentIds, activityTypes, map);
             map.put("activityTypes", activityTypes);
             resultMap.put("dateList", datawareFinalActivityCostService.findDateList(map));
+        } else if (CostMonitorConstants.USERDETAILS.equals(tabId)) {// 用户明细的场合
+            // 如果用户ID为空的场合
+            if (userId ==null) {
+                Map<String, Object> map = new HashMap<>(2);
+                map.put(GameDataConstants.BEGINDATE, endTime + " 00:00:00");
+                map.put(GameDataConstants.ENDDATE, endTime + " 23:59:59");
+                // 获取指定日期实物成本最大的用户
+                userId = inventoryPhyAwardsSendlogService.getMaxCostUserId(map);
+            }
+            Page<UserDetailsDto> p = new Page();
+            p.setStart(start);
+            p.setLength(limit);
+            p.setData(getUserDetails(userId, startTime, endTime));
+            return dataGrid(p);
         } else {
             resultMap = new HashMap<>();
         }
         return resultMap;
+    }
+
+    private List<UserDetailsDto> getUserDetails(Long userId, String startTime, String endTime) {
+        if (userId == null)
+            return Lists.newArrayList();
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put(GameDataConstants.BEGINDATE, startTime + " 00:00:00");
+        params.put(GameDataConstants.ENDDATE, endTime + " 23:59:59");
+        // 投注、盈利、游戏等信息
+        List<UserDetailsDto> cmUserDetails = datawareBettingLogDayService.getCMUserDetails(params);
+        if (null == cmUserDetails)
+            return Lists.newArrayList();
+        // 用户信息
+        UicUser uicUser = uicUserService.get(userId);
+        // 成本信息
+        List<Map<String, Object>> userCosts = inventoryPhyAwardsSendlogService.getUserCostPerDay(params);
+        Map<String, Double> dayCostMap = new HashMap<>();
+        if (null != userCosts) {
+            for (Map<String, Object> userCost : userCosts) {
+                dayCostMap.put(userCost.get("sendDate").toString(), Double.valueOf(userCost.get("rmbAmount").toString()));
+            }
+        }
+        Double kindCost;
+        // 补充成本信息
+        for (UserDetailsDto cmUserDetail : cmUserDetails) {
+            // 用户昵称
+            cmUserDetail.setUserName(uicUser.getNickname());
+            kindCost = dayCostMap.get(cmUserDetail.getBusinessDate());
+            if (kindCost == null) {
+                kindCost = 0.0;
+            }
+            // 成本
+            cmUserDetail.setKindCost(kindCost);
+            // 成本占比(成本/充值金额)
+            cmUserDetail.setCostRate(BigDecimalUtil.mul(division(kindCost, cmUserDetail.getRechargeAmount()), 100));
+            // 返奖率（返奖金额/投注金额）
+            cmUserDetail.setReturnRate(BigDecimalUtil.mul(division(cmUserDetail.getResultAmount(), cmUserDetail.getBettingAmount()), 100));
+            // S3
+            cmUserDetail.setNoUseGoldAmount(division(cmUserDetail.getNoUseGoldAmount(), 1000l));
+        }
+        return cmUserDetails;
+    }
+
+    private double division(Double d1, Double d2) {
+        double resulet = 0;
+        if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
+            resulet = BigDecimalUtil.div(d1, d2, 4);
+        }
+        return resulet;
+    }
+
+    private double division(Double d1, Long d2) {
+        double resulet = 0;
+        if (d1 != null && d1 != 0 && d2 != null && d2 != 0) {
+            resulet = BigDecimalUtil.div(d1, d2, 2);
+        }
+        return resulet;
+    }
+
+    /**
+     * 导出数据
+     *
+     * @return
+     */
+    @RequestMapping(value = "export")
+    public void exportFile(@RequestParam String tabId, @RequestParam String userId,
+                           @RequestParam String startTime, @RequestParam String endTime, HttpServletResponse response) {
+        // 用户明细的场合
+        if (CostMonitorConstants.USERDETAILS.equals(tabId)) {
+            List<UserDetailsDto> list = getUserDetails(Long.valueOf(userId), startTime, endTime);
+            try {
+                String fileName = "用户明细" + com.wf.data.common.utils.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+                new ExportExcel("成本监控--用户明细表", UserDetailsDto.class).setDataList(list).write(response, fileName).dispose();
+            } catch (Exception e) {
+                logger.error("导出失败：" + e.getMessage());
+            }
+        }
     }
 
     private Map<String, Object> getActivityMonitorChartsData(List<Long> parentIds, List<Integer> activityTypes, Map<String, Object> map) {
