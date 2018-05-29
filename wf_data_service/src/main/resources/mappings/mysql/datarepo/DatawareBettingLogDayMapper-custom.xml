@@ -272,6 +272,75 @@
         </if>
     </select>
 
+    <select id="getCMUserDetails" resultType="com.wf.data.dto.UserDetailsDto">
+        select aa.userId,
+        aa.bettingDate businessDate,
+        IFNULL(cc.rechargeAmount, 0) rechargeAmount,
+        aa.bettingCount,
+        aa.bettingAmount,
+        aa.resultAmount,
+        aa.gameNames as games,
+        aa.channelId,
+        IFNULL(bb.profitAmount, 0) profitAmount,
+        IFNULL(bb.noUseGoldAmount, 0) noUseGoldAmount
+        from (
+        SELECT
+        sum(a.betting_count) bettingCount,
+        sum(a.betting_amount) bettingAmount,
+        sum(a.result_amount) resultAmount,
+        a.betting_date bettingDate,
+        a.user_id userId,
+        a.channel_id channelId,
+        CAST(GROUP_CONCAT(a.game_name) as char) gameNames
+        FROM
+        dataware_betting_log_day a
+        WHERE 1=1
+        <if test="userId != null">
+            AND a.user_id = #{userId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND a.betting_date >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND a.betting_date &lt;= #{endDate}
+        </if>
+        group by a.betting_date, a.user_id, a.channel_id) aa
+        LEFT JOIN
+        (SELECT
+        IFNULL(SUM(c.third_amount),0.0) AS rechargeAmount,
+        c.convert_date convertDate
+        FROM
+        dataware_convert_day c
+        WHERE 1=1
+        <if test="userId != null">
+            AND c.user_id = #{userId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND c.convert_date >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND c.convert_date &lt;= #{endDate}
+        </if>
+        GROUP BY c.convert_date) cc
+        ON
+        aa.bettingDate = cc.convertDate
+        LEFT JOIN
+        (SELECT
+        b.user_id userId,
+        s.profit_amount profitAmount,
+        b.no_use_gold_amount noUseGoldAmount
+        FROM
+        dataware_user_info_extend_base b
+        LEFT JOIN
+        `dataware_user_info_extend_statistics` s
+        ON s.user_id = b.user_id
+        WHERE 1=1
+        <if test="userId != null">
+            AND b.user_id = #{userId}
+        </if>) bb
+        ON aa.userId = bb.userId
+        ORDER BY aa.bettingDate DESC
+    </select>
 
 </mapper>
 

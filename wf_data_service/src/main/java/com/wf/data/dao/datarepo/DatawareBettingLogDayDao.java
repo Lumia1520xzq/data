@@ -6,6 +6,7 @@ import com.wf.core.persistence.MyBatisDao;
 import com.wf.data.dao.datarepo.entity.DatawareBettingLogDay;
 import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
 import com.wf.data.dto.TcardDto;
+import com.wf.data.dto.UserDetailsDto;
 
 import java.util.List;
 import java.util.Map;
@@ -38,4 +39,6 @@ public interface DatawareBettingLogDayDao extends CrudDao<DatawareBettingLogDay>
     DatawareBettingLogDay getBettingInfoByDate(Map<String, Object> bettingParam);
 
     List<Long> getBettingUserIdByDateRange(Map<String, Object> param);
+
+    List<UserDetailsDto> getCMUserDetails(Map<String, Object> map);
 }

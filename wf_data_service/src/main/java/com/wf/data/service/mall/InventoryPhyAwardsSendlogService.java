@@ -42,4 +42,13 @@ public class InventoryPhyAwardsSendlogService extends CrudService<InventoryPhyAw
     public List<Map<String, Object>> getChannelUsersCountByActivity(Map<String, Object> params) {
         return dao.getChannelUsersCountByActivity(params);
     }
+
+    public Long getMaxCostUserId(Map<String,Object> map) {
+        return dao.getMaxCostUserId(map);
+    }
+
+    public List<Map<String, Object>> getUserCostPerDay(Map<String, Object> params) {
+        return dao.getUserCostPerDay(params);
+    }
+
 }

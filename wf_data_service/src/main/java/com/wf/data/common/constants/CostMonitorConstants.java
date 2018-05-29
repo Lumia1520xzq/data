@@ -1,6 +1,10 @@
 package com.wf.data.common.constants;
 
 public interface CostMonitorConstants {
+    // 标签页名称
+    String USERDETAILS = "userDetails";
+    String ACTIVITYMONITOR = "activityMonitor";
+    String CHANNELMONITOR = "channelMonitor";
 
     String COST = "成本";
     String COSTRATE = "成本占比";
