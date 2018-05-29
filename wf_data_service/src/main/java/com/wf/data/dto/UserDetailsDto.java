@@ -9,6 +9,7 @@ public class UserDetailsDto implements Serializable {
     private String userName;
     private String businessDate;
     private Long channelId;
+    private String channelName;
     private Double kindCost;
     private Double rechargeAmount;
     private Double costRate;
@@ -47,13 +48,21 @@ public class UserDetailsDto implements Serializable {
         this.businessDate = businessDate;
     }
 
-    @ExcelField(title = "渠道", type = 1, align = 2, sort = 4)
     public Long getChannelId() {
         return channelId;
     }
 
     public void setChannelId(Long channelId) {
         this.channelId = channelId;
+    }
+
+    @ExcelField(title = "渠道", type = 1, align = 2, sort = 4)
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
     @ExcelField(title = "成本", type = 1, align = 2, sort = 5)

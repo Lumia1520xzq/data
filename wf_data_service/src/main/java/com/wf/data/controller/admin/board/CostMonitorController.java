@@ -234,6 +234,12 @@ public class CostMonitorController extends ExtJsController {
         // 用户明细的场合
         if (CostMonitorConstants.USERDETAILS.equals(tabId)) {
             List<UserDetailsDto> list = getUserDetails(Long.valueOf(userId), startTime, endTime);
+            if (!list.isEmpty()) {
+                ChannelInfo cInfo = channelInfoService.get(list.get(0).getChannelId());
+                for (UserDetailsDto dto : list) {
+                    dto.setChannelName(cInfo.getName() + "(" + cInfo.getId() + ")");
+                }
+            }
             try {
                 String fileName = "用户明细" + com.wf.data.common.utils.DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
                 new ExportExcel("成本监控--用户明细表", UserDetailsDto.class).setDataList(list).write(response, fileName).dispose();
