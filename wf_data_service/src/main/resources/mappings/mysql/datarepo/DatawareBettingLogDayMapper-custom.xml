@@ -280,7 +280,7 @@
         aa.bettingAmount,
         aa.resultAmount,
         aa.gameNames as games,
-        bb.channelId,
+        aa.channelId,
         IFNULL(bb.profitAmount, 0) profitAmount,
         IFNULL(bb.noUseGoldAmount, 0) noUseGoldAmount
         from (
@@ -290,6 +290,7 @@
         sum(a.result_amount) resultAmount,
         a.betting_date bettingDate,
         a.user_id userId,
+        a.channel_id channelId,
         CAST(GROUP_CONCAT(a.game_name) as char) gameNames
         FROM
         dataware_betting_log_day a
@@ -303,7 +304,7 @@
         <if test="endDate != null and endDate != ''">
             AND a.betting_date &lt;= #{endDate}
         </if>
-        group by a.betting_date, a.user_id) aa
+        group by a.betting_date, a.user_id, a.channel_id) aa
         LEFT JOIN
         (SELECT
         IFNULL(SUM(c.third_amount),0.0) AS rechargeAmount,
@@ -326,7 +327,6 @@
         LEFT JOIN
         (SELECT
         b.user_id userId,
-        b.channel_id channelId,
         s.profit_amount profitAmount,
         b.no_use_gold_amount noUseGoldAmount
         FROM
