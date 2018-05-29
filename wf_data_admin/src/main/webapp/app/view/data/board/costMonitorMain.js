@@ -44,7 +44,7 @@ Ext.define('WF.view.data.board.costMonitorMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 3,
+            columns: 2,
             buildField: "Manual",
             forceFit: false,
             todoReload: function () {
@@ -88,7 +88,7 @@ Ext.define('WF.view.data.board.costMonitorMain', {
                 store: activityTypeStore
             },
             {
-                colspan: 1,
+                colspan: 2,
                 name: 'userId',
                 id: 'userId',
                 xtype: 'searchfield',
@@ -320,12 +320,18 @@ Ext.define('WF.view.data.board.costMonitorMain', {
             var user = Ext.getCmp("userId");
             if (b) {
                 channel.enable();
+                channel.show();
                 activity.enable();
+                activity.show();
                 user.disable();
+                user.hide();
             } else {
                 channel.disable();
+                channel.hide();
                 activity.disable();
+                activity.hide();
                 user.enable();
+                user.show();
             }
         }
 

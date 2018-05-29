@@ -8,6 +8,7 @@ import com.wf.core.persistence.Page;
 import com.wf.core.utils.excel.ExportExcel;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.DateUtils;
+import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.constants.CostMonitorConstants;
 import com.wf.data.common.constants.GameDataConstants;
@@ -148,11 +149,7 @@ public class CostMonitorController extends ExtJsController {
         } else if (CostMonitorConstants.USERDETAILS.equals(tabId)) {// 用户明细的场合
             // 如果用户ID为空的场合
             if (userId ==null) {
-                Map<String, Object> map = new HashMap<>(2);
-                map.put(GameDataConstants.BEGINDATE, endTime + " 00:00:00");
-                map.put(GameDataConstants.ENDDATE, endTime + " 23:59:59");
-                // 获取指定日期实物成本最大的用户
-                userId = inventoryPhyAwardsSendlogService.getMaxCostUserId(map);
+                userId = getMaxCostUserIdByDate(endTime);
             }
             Page<UserDetailsDto> p = new Page();
             p.setStart(start);
@@ -163,6 +160,20 @@ public class CostMonitorController extends ExtJsController {
             resultMap = new HashMap<>();
         }
         return resultMap;
+    }
+
+    /**
+     * 获取某天成本最大的用户的userId
+     * @param date
+     * @return
+     */
+    private Long getMaxCostUserIdByDate(String date) {
+        Long userId;Map<String, Object> map = new HashMap<>(2);
+        map.put(GameDataConstants.BEGINDATE, date + " 00:00:00");
+        map.put(GameDataConstants.ENDDATE, date + " 23:59:59");
+        // 获取指定日期实物成本最大的用户
+        userId = inventoryPhyAwardsSendlogService.getMaxCostUserId(map);
+        return userId;
     }
 
     private List<UserDetailsDto> getUserDetails(Long userId, String startTime, String endTime) {
@@ -178,6 +189,8 @@ public class CostMonitorController extends ExtJsController {
             return Lists.newArrayList();
         // 用户信息
         UicUser uicUser = uicUserService.get(userId);
+        if (null == uicUser)
+            return Lists.newArrayList();
         // 成本信息
         List<Map<String, Object>> userCosts = inventoryPhyAwardsSendlogService.getUserCostPerDay(params);
         Map<String, Double> dayCostMap = new HashMap<>();
@@ -233,7 +246,7 @@ public class CostMonitorController extends ExtJsController {
                            @RequestParam String startTime, @RequestParam String endTime, HttpServletResponse response) {
         // 用户明细的场合
         if (CostMonitorConstants.USERDETAILS.equals(tabId)) {
-            List<UserDetailsDto> list = getUserDetails(Long.valueOf(userId), startTime, endTime);
+            List<UserDetailsDto> list = getUserDetails(StringUtils.isBlank(userId) ? getMaxCostUserIdByDate(endTime) : Long.valueOf(userId), startTime, endTime);
             if (!list.isEmpty()) {
                 ChannelInfo cInfo = channelInfoService.get(list.get(0).getChannelId());
                 for (UserDetailsDto dto : list) {
