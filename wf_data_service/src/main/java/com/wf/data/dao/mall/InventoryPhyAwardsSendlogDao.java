@@ -29,4 +29,8 @@ public interface InventoryPhyAwardsSendlogDao extends CrudDao<InventoryPhyAwards
     List<Map<String,Object>> getRmbAmountsByActivity(Map<String, Object> params);
 
     List<Map<String,Object>> getChannelUsersCountByActivity(Map<String, Object> params);
+
+    Long getMaxCostUserId(Map<String,Object> map);
+
+    List<Map<String, Object>> getUserCostPerDay(Map<String, Object> params);
 }

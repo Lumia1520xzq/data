@@ -161,4 +161,48 @@
             AND t1.user_id = #{userId}
         </if>
     </select>
+
+    <select id="getMaxCostUserId" resultType="Long">
+      SELECT
+        t.user_id
+      FROM
+        inventory_phy_awards_sendlog t
+      LEFT JOIN inventory_phy_awards_info i
+       ON t.phy_awards_id = i.id
+      WHERE
+        t.delete_flag = 0
+        AND t.receive_status = 3
+        <if test="beginDate != null and beginDate !=''">
+          AND t.send_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+          AND t.send_time &lt;= #{endDate}
+        </if>
+      GROUP BY
+        t.user_id
+       ORDER BY
+        SUM(IFNULL(i.rmb_amount, 0)) DESC
+      LIMIT 1
+    </select>
+
+    <select id="getUserCostPerDay" resultType="java.util.HashMap">
+        SELECT
+          SUM(IFNULL(i.rmb_amount,0)) rmbAmount,
+          DATE_FORMAT(t.send_time,'%Y-%m-%d') sendDate
+        FROM inventory_phy_awards_sendlog t
+        LEFT JOIN inventory_phy_awards_info i
+          ON t.phy_awards_id = i.id
+        WHERE t.delete_flag=0
+          AND t.receive_status=3
+        <if test="userId != null and userId != ''">
+            AND t.user_id = #{userId}
+        </if>
+        <if test="beginDate != null and beginDate !=''">
+            AND t.send_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            AND t.send_time &lt;= #{endDate}
+        </if>
+        GROUP BY DATE_FORMAT(t.send_time,'%Y-%m-%d')
+    </select>
 </mapper>
