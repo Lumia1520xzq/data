@@ -20,6 +20,9 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Double userBettingRate;
 	private Double payArpu;
 	private Double payArppu;
+	private Long newRechargeCount;
+	private Long newPayCovCycle;
+	private Double rechargeRepRate;
 	private String channelName;
 	private Long parentId;
 	private Long channelId;
@@ -108,6 +111,13 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 	private Long hisRegistered;
 	private Double hisRecharge;
 	private Double userLtv;
+
+	private String dayNewRechargeCount;
+	private String weekNewRechargeCount;
+	private String dayNewPayCovCycle;
+	private String weekNewPayCovCycle;
+	private String dayRechargeRepRate;
+	private String weekRechargeRepRate;
 
 	public void init(DatawareFinalChannelInfoAll info) {
 		if(null == info){
@@ -723,5 +733,77 @@ public class DatawareFinalChannelInfoAll extends DataEntity {
 
 	public void setWeekWeekRechargeRate(String weekWeekRechargeRate) {
 		this.weekWeekRechargeRate = weekWeekRechargeRate;
+	}
+
+	public Long getNewRechargeCount() {
+		return newRechargeCount;
+	}
+
+	public void setNewRechargeCount(Long newRechargeCount) {
+		this.newRechargeCount = newRechargeCount;
+	}
+
+	public Long getNewPayCovCycle() {
+		return newPayCovCycle;
+	}
+
+	public void setNewPayCovCycle(Long newPayCovCycle) {
+		this.newPayCovCycle = newPayCovCycle;
+	}
+
+	public Double getRechargeRepRate() {
+		return rechargeRepRate;
+	}
+
+	public void setRechargeRepRate(Double rechargeRepRate) {
+		this.rechargeRepRate = rechargeRepRate;
+	}
+
+	public String getDayNewRechargeCount() {
+		return dayNewRechargeCount;
+	}
+
+	public void setDayNewRechargeCount(String dayNewRechargeCount) {
+		this.dayNewRechargeCount = dayNewRechargeCount;
+	}
+
+	public String getWeekNewRechargeCount() {
+		return weekNewRechargeCount;
+	}
+
+	public void setWeekNewRechargeCount(String weekNewRechargeCount) {
+		this.weekNewRechargeCount = weekNewRechargeCount;
+	}
+
+	public String getDayNewPayCovCycle() {
+		return dayNewPayCovCycle;
+	}
+
+	public void setDayNewPayCovCycle(String dayNewPayCovCycle) {
+		this.dayNewPayCovCycle = dayNewPayCovCycle;
+	}
+
+	public String getWeekNewPayCovCycle() {
+		return weekNewPayCovCycle;
+	}
+
+	public void setWeekNewPayCovCycle(String weekNewPayCovCycle) {
+		this.weekNewPayCovCycle = weekNewPayCovCycle;
+	}
+
+	public String getDayRechargeRepRate() {
+		return dayRechargeRepRate;
+	}
+
+	public void setDayRechargeRepRate(String dayRechargeRepRate) {
+		this.dayRechargeRepRate = dayRechargeRepRate;
+	}
+
+	public String getWeekRechargeRepRate() {
+		return weekRechargeRepRate;
+	}
+
+	public void setWeekRechargeRepRate(String weekRechargeRepRate) {
+		this.weekRechargeRepRate = weekRechargeRepRate;
 	}
 }

@@ -22,6 +22,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 'firstRechargeRate','weekRechargeRate',
                 'usersDayRetention','sevenRetention','dayRetention',
                 'rechargeCount','payArpu','payArppu',
+                'newRechargeCount','newPayCovCycle','rechargeRepRate',
                 'totalCost','costRate',
                 'userCount', 'bettingAmount','resultRate','moneyGap',
 
@@ -42,6 +43,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 "dayRechargeCountRate", "weekRechargeCountRate",
                 "dayPayArpuRate", "weekPayArpuRate",
                 "dayPayArppuRate", "weekPayArppuRate",
+                'dayNewRechargeCount','weekNewRechargeCount',
+                'dayNewPayCovCycle','weekNewPayCovCycle',
+                'dayRechargeRepRate','weekRechargeRepRate',
                 "dayTotalCost", "weekTotalCost",
                 "dayCostRate", "weekCostRate",
                 "dayUserCountRate", "weekUserCountRate",
@@ -112,7 +116,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
                                     {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"31.33%",height:60,html:'<h2>DAU</h2>',bodyStyle:'border-width:0'},
+                                    {width:"31.33%",height:60,html:'<h2 title="当日活跃用户，去重统计">DAU</h2>',bodyStyle:'border-width:0'},
                                     {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -137,7 +141,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
                                     {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"31.33%",height:60,html:'<h2>充值金额</h2>',bodyStyle:'border-width:0'},
+                                    {width:"31.33%",height:60,html:'<h2 title="充值金额">充值金额</h2>',bodyStyle:'border-width:0'},
                                     {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -167,7 +171,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="投注用户/活跃用户">投注转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -192,7 +196,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>DAU付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="DAU付费转化率">DAU付费转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -217,7 +221,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>投注付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="投注付费转化率">投注付费转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -247,7 +251,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新增用户</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，新注册的用户数（注册：新用户首次点击平台入口即为注册成功）">新增用户</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -272,7 +276,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新用户占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户/DAU">新用户占比</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -297,7 +301,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新用户投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新用户，投注用户/新增用户">新用户投注转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -327,7 +331,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>首日付费率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新用户，首日付费用户/当日新增用户">首日付费率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -352,7 +356,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>7日付费率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新用户，在第7日付费用户/新增用户">7日付费率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -382,7 +386,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新用户次留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户在第二日的活跃用户/新增用户">新用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -407,7 +411,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>新用户七留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户在第七日的活跃用户（含当日）/新增用户">新用户七留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -432,7 +436,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>全量用户次留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="全量活跃用户在第二日的活跃/当日活跃用户（DAU）">全量用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -463,7 +467,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>充值人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，付费用户数，去重统计">充值人数</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -488,7 +492,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>DARPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="DARPU">DARPU</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -513,7 +517,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>DARPPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="DARPPU">DARPPU</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -536,6 +540,86 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                     ]
                 },
                 {
+                    align:'stretch',height:300,width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
+                    items:[
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计日，新增的付费用户数">新增充值人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date22',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'newRechargeCount',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayNewRechargeCount',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekNewRechargeCount',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi22"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计日，新增付费用户从首次投注到首次充值的平均天数">新增付费转化周期</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date23',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'newPayCovCycle',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayNewPayCovCycle',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekNewPayCovCycle', width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi23"}
+                            ]
+                        },
+                        {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
+                            items:[
+                                {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
+                                    items:[
+                                        {width:"2%",height:60,bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计日，充值2次及以上的用户占比">复购率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:10,bodyStyle:'border-width:0'},
+                                                {id:'date24',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'rechargeRepRate',width:"100%",height:30,bodyStyle:'border-width:0'}
+                                            ]
+                                        },
+                                        {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
+                                            items:[
+                                                {width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'dayRechargeRepRate',width:"100%",height:20,bodyStyle:'border-width:0'},
+                                                {id:'weekRechargeRepRate',width:"100%",height:20,bodyStyle:'border-width:0'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {width:"100%",height:240,id:"kpi24"}
+                            ]
+                        }
+                    ]
+                },
+                {
                     title: '成本数据',collapsible: true,height:300,align:'stretch', width:"100%",xtype:"panel",layout:'hbox',forceFit:true,bodyStyle:'border-width:0 0 0 0;',
                     items:[
                         {width:"33.33%",height:300,xtype:"panel",layout:'vbox',forceFit:true,bodyStyle:'border-width:0',
@@ -543,7 +627,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>成本</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="出口成本">成本</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -568,7 +652,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>成本占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="成本/充值金额">成本占比</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -598,7 +682,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>投注人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，进行投注的用户，去重统计">投注人数</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -623,7 +707,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>投注流水</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，用户的投注流水（金叶子）">投注流水</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -648,7 +732,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>返奖率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="返奖流水/投注流水">返奖率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -678,7 +762,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2>流水差</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="投注流水-返奖流水">流水差</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -739,6 +823,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
             var payArpu=[];
             var payArppu=[];
 
+            var newRechargeCount=[];
+            var newPayCovCycle=[];
+            var rechargeRepRate=[];
+
             var totalCost=[];
             var costRate=[];
 
@@ -774,6 +862,10 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 rechargeCount[i]=re.get('rechargeCount');
                 payArpu[i]=re.get('payArpu');
                 payArppu[i]=re.get('payArppu');
+
+                newRechargeCount[i]=re.get('newRechargeCount');
+                newPayCovCycle[i]=re.get('newPayCovCycle');
+                rechargeRepRate[i]=re.get('rechargeRepRate');
 
                 totalCost[i]=re.get('totalCost');
                 costRate[i]=re.get('costRate');
@@ -1686,6 +1778,123 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                         smooth:true,
                         data:weekRechargeRate
                     }]
+                },
+                {
+                    // title: {text: '新增充值人数'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '新增充值人数',
+                        type: 'line',
+                        smooth:true,
+                        data: newRechargeCount
+                    }]
+                },
+                {
+                    // title: {text: '新增付费转化周期'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }},
+                    series: [{
+                        name: '新增付费转化周期',
+                        type: 'line',
+                        smooth:true,
+                        data: newPayCovCycle
+                    }]
+                },
+                {
+                    // title: {text: '复购率'},
+                    tooltip: {trigger: 'axis',
+                        formatter: function (params) {
+                            var str='';
+                            for(var i = 0; i < params.length; i++){
+                                str += '日期:'+params[i].name+'<br/>'+ params[i].seriesName +':' + params[i].value;
+                            }
+                            return str;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                        }
+                    },
+                    calculable : true,
+                    grid:{
+                        left:'11%',
+                        y:'2.8%'
+                    },
+                    xAxis: {
+                        type : 'category',
+                        boundaryGap : false,
+                        data: businessDate
+                    },
+                    yAxis: {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}%'
+                        }},
+                    series: [{
+                        name: '复购率',
+                        type: 'line',
+                        smooth:true,
+                        itemStyle: {normal: {}},
+                        data: rechargeRepRate
+                    }]
                 }
             ];
             for (var j=0;j<option.length;j++){
@@ -1715,6 +1924,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('rechargeCount').dom.innerHTML = "";
                 Ext.get('payArpu').dom.innerHTML = "";
                 Ext.get('payArppu').dom.innerHTML = "";
+                Ext.get('newRechargeCount').dom.innerHTML = "";
+                Ext.get('newPayCovCycle').dom.innerHTML = "";
+                Ext.get('rechargeRepRate').dom.innerHTML = "";
                 Ext.get('totalCost').dom.innerHTML = "";
                 Ext.get('costRate').dom.innerHTML = "";
                 Ext.get('userCount').dom.innerHTML = "";
@@ -1756,6 +1968,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekPayArpuRate').dom.innerHTML = "";
                 Ext.get('dayPayArppuRate').dom.innerHTML = "";
                 Ext.get('weekPayArppuRate').dom.innerHTML = "";
+                Ext.get('dayNewRechargeCount').dom.innerHTML = "";
+                Ext.get('weekNewRechargeCount').dom.innerHTML = "";
+                Ext.get('dayNewPayCovCycle').dom.innerHTML = "";
+                Ext.get('weekNewPayCovCycle').dom.innerHTML = "";
+                Ext.get('dayRechargeRepRate').dom.innerHTML = "";
+                Ext.get('weekRechargeRepRate').dom.innerHTML = "";
                 Ext.get('dayTotalCost').dom.innerHTML = "";
                 Ext.get('weekTotalCost').dom.innerHTML = "";
                 Ext.get('dayCostRate').dom.innerHTML = "";
@@ -1812,6 +2030,9 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('rechargeCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeCount') + "</strong></div>";
                 Ext.get('payArpu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArpu') + "</strong></div>";
                 Ext.get('payArppu').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('payArppu') + "</strong></div>";
+                Ext.get('newRechargeCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('newRechargeCount') + "</strong></div>";
+                Ext.get('newPayCovCycle').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('newPayCovCycle') + "</strong></div>";
+                Ext.get('rechargeRepRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('rechargeRepRate') + "%</strong></div>";
                 Ext.get('totalCost').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('totalCost') + "</strong></div>";
                 Ext.get('costRate').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('costRate') + "%</strong></div>";
                 Ext.get('userCount').dom.innerHTML = "<div align='center'><strong style='font-size:24px;color:#3c94db'>" + r.get('userCount') + "</strong></div>";
@@ -1853,6 +2074,12 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                 Ext.get('weekPayArpuRate').dom.innerHTML = "周同比：" + r.get('weekPayArpuRate');
                 Ext.get('dayPayArppuRate').dom.innerHTML = "日环比：" + r.get('dayPayArppuRate');
                 Ext.get('weekPayArppuRate').dom.innerHTML = "周同比：" + r.get('weekPayArppuRate');
+                Ext.get('dayNewRechargeCount').dom.innerHTML = "日环比：" + r.get('dayNewRechargeCount');
+                Ext.get('weekNewRechargeCount').dom.innerHTML = "周同比：" + r.get('weekNewRechargeCount');
+                Ext.get('dayNewPayCovCycle').dom.innerHTML = "日环比：" + r.get('dayNewPayCovCycle');
+                Ext.get('weekNewPayCovCycle').dom.innerHTML = "周同比：" + r.get('weekNewPayCovCycle');
+                Ext.get('dayRechargeRepRate').dom.innerHTML = "日环比：" + r.get('dayRechargeRepRate');
+                Ext.get('weekRechargeRepRate').dom.innerHTML = "周同比：" + r.get('weekRechargeRepRate');
                 Ext.get('dayTotalCost').dom.innerHTML = "日环比：" + r.get('dayTotalCost');
                 Ext.get('weekTotalCost').dom.innerHTML = "周同比：" + r.get('weekTotalCost');
                 Ext.get('dayCostRate').dom.innerHTML = "日环比：" + r.get('dayCostRate');
