@@ -311,6 +311,7 @@ public class BettingLogHourService {
             String dbName = "fish";
             dbName = dbName + day;
             getBettingLogFromFish(params, dbName, uicGroupList);
+            getAppBettingLogFromFish(params, dbName, uicGroupList);
         } else {
             for (String dat : datelist) {
                 if (datelist.get(0) == dat) {
@@ -320,6 +321,7 @@ public class BettingLogHourService {
                     String dbName = "fish";
                     dbName = dbName + day;
                     getBettingLogFromFish(params, dbName, uicGroupList);
+                    getAppBettingLogFromFish(params, dbName, uicGroupList);
                 } else if (dat == datelist.get(datelist.size() - 1)) {
                     params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(endTime), "yyyy-MM-dd HH:mm:ss"));
                     params.put("endDate", endDate);
@@ -327,6 +329,7 @@ public class BettingLogHourService {
                     String dbName = "fish";
                     dbName = dbName + day;
                     getBettingLogFromFish(params, dbName, uicGroupList);
+                    getAppBettingLogFromFish(params, dbName, uicGroupList);
                 } else {
                     params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(dat, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
                     params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(dat, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
@@ -334,6 +337,7 @@ public class BettingLogHourService {
                     String dbName = "fish";
                     dbName = dbName + day;
                     getBettingLogFromFish(params, dbName, uicGroupList);
+                    getAppBettingLogFromFish(params, dbName, uicGroupList);
                 }
             }
 
@@ -350,6 +354,40 @@ public class BettingLogHourService {
     private void getBettingLogFromFish(Map<String, Object> params, String dbName, List<Long> uicGroupList) {
         try {
             List<DatawareBettingLogHour> bettingLogHourList = roomFishInfoService.getGameBettingRecord(params, dbName);
+            for (DatawareBettingLogHour logHour : bettingLogHourList) {
+                logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
+                logHour.setGameType(10);
+                DataDict dataDict = dataDictService.getDictByValue("game_type", logHour.getGameType());
+                if (null != dataDict) {
+                    logHour.setGameName(dataDict.getLabel());
+                }
+                if (null != logHour.getChannelId()) {
+                    ChannelInfo channelInfo = channelInfoService.get(logHour.getChannelId());
+                    if (null != channelInfo) {
+                        if (null == channelInfo.getParentId()) {
+                            logHour.setParentId(logHour.getChannelId());
+                        } else {
+                            logHour.setParentId(channelInfo.getParentId());
+                        }
+                    }
+                }
+            }
+            try {
+                if (CollectionUtils.isNotEmpty(bettingLogHourList)) {
+                    datawareBettingLogHourService.batchSave(bettingLogHourList);
+                }
+            } catch (Exception e) {
+                logger.error("FromFish添加汇总记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+            }
+        } catch (Exception e) {
+            logger.error("FromFish获取记录失败: traceId={}, ex={}", TraceIdUtils.getTraceId(), LogExceptionStackTrace.erroStackTrace(e));
+        }
+
+    }
+
+    private void getAppBettingLogFromFish(Map<String, Object> params, String dbName, List<Long> uicGroupList) {
+        try {
+            List<DatawareBettingLogHour> bettingLogHourList = roomFishInfoService.getFishAppGameBettingRecord(params, dbName);
             for (DatawareBettingLogHour logHour : bettingLogHourList) {
                 logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
                 logHour.setGameType(10);

@@ -19,17 +19,23 @@
     <bean class="com.wf.core.utils.core.SpringContextHolder"/>
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
-        <constructor-arg index="0" value="${es.ips}" />
-        <constructor-arg index="1" value="${es.clusterName}" />
-        <constructor-arg index="2" value="${es.port}" />
-        <constructor-arg index="3" value="${es.nodeName}" />
+        <constructor-arg index="0" value="${es.ips}"/>
+        <constructor-arg index="1" value="${es.clusterName}"/>
+        <constructor-arg index="2" value="${es.port}"/>
+        <constructor-arg index="3" value="${es.nodeName}"/>
     </bean>
 
     <bean id="dbConfig" class="com.wf.data.common.config.DbConfig">
-        <constructor-arg index="0" value="${src.host}" />
-        <constructor-arg index="1" value="${src.username}" />
-        <constructor-arg index="2" value="${src.password}" />
-        <constructor-arg index="3" value="${src.port}" />
+        <constructor-arg index="0" value="${src.host}"/>
+        <constructor-arg index="1" value="${src.username}"/>
+        <constructor-arg index="2" value="${src.password}"/>
+        <constructor-arg index="3" value="${src.port}"/>
+    </bean>
+    <bean id="fishDbConfig" class="com.wf.data.common.config.FishDbConfig">
+        <constructor-arg index="0" value="${src.apphost}"/>
+        <constructor-arg index="1" value="${src.appusername}"/>
+        <constructor-arg index="2" value="${src.apppassword}"/>
+        <constructor-arg index="3" value="${src.appport}"/>
     </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
@@ -61,18 +67,18 @@
     <import resource="app-dubbo-consumer.xml"/>
     <import resource="app-jms-data.xml"/>
 
-    <import resource="app-db-mycat-data.xml" />
-    <import resource="app-db-mysql-data.xml" />
-    <import resource="app-db-mysql-trans.xml" />
-    <import resource="app-db-mysql-uic.xml" />
-    <import resource="app-db-mysql-base.xml" />
-    <import resource="app-db-mycat-uic.xml" />
-    <import resource="app-db-mysql-tcard.xml" />
-    <import resource="app-db-mysql-platform.xml" />
-    <import resource="app-db-mysql-mall.xml" />
-    <import resource="app-db-mysql-datarepo.xml" />
+    <import resource="app-db-mycat-data.xml"/>
+    <import resource="app-db-mysql-data.xml"/>
+    <import resource="app-db-mysql-trans.xml"/>
+    <import resource="app-db-mysql-uic.xml"/>
+    <import resource="app-db-mysql-base.xml"/>
+    <import resource="app-db-mycat-uic.xml"/>
+    <import resource="app-db-mysql-tcard.xml"/>
+    <import resource="app-db-mysql-platform.xml"/>
+    <import resource="app-db-mysql-mall.xml"/>
+    <import resource="app-db-mysql-datarepo.xml"/>
     <import resource="app-db-mycat-trans.xml"/>
     <import resource="app-db-mysql-wars.xml"/>
-    <import resource="app-db-mysql-taurus.xml" />
+    <import resource="app-db-mysql-taurus.xml"/>
 
 </beans>

@@ -61,6 +61,12 @@
         <constructor-arg index="2" value="${src.password}"/>
         <constructor-arg index="3" value="${src.port}"/>
     </bean>
+    <bean id="fishDbConfig" class="com.wf.data.common.config.FishDbConfig">
+        <constructor-arg index="0" value="${src.apphost}" />
+        <constructor-arg index="1" value="${src.appusername}" />
+        <constructor-arg index="2" value="${src.apppassword}" />
+        <constructor-arg index="3" value="${src.appport}" />
+    </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
     <context:component-scan base-package="com.wf.data" use-default-filters="false">
