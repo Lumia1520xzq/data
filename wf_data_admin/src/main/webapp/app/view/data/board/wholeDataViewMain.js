@@ -141,7 +141,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                             {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                 items:[
                                     {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                    {width:"31.33%",height:60,html:'<h2 title="充值金额">充值金额</h2>',bodyStyle:'border-width:0'},
+                                    {width:"31.33%",height:60,html:'<h2 title="充值金额（元）">充值金额</h2>',bodyStyle:'border-width:0'},
                                     {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                         items:[
                                             {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -196,7 +196,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="DAU付费转化率">DAU付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="付费用户/活跃用户">DAU付费转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -221,7 +221,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="投注付费转化率">投注付费转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="付费用户/投注用户">投注付费转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -251,7 +251,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，新注册的用户数（注册：新用户首次点击平台入口即为注册成功）">新增用户</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新注册的用户（注册：新用户首次点击平台入口即为注册成功）">新增用户</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -301,7 +301,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="新用户，投注用户/新增用户">新用户投注转化率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户中，投注用户/新增用户">新用户投注转化率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -331,7 +331,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="新用户，首日付费用户/当日新增用户">首日付费率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户中，付费用户/新增用户">首日付费率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -356,7 +356,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="新用户，在第7日付费用户/新增用户">7日付费率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户中，在7日内有付费的用户占比">7日内付费率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -386,7 +386,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="新增用户在第二日的活跃用户/新增用户">新用户次留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户的次日留存率">新用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -411,7 +411,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="新增用户在第七日的活跃用户（含当日）/新增用户">新用户七留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增用户的第七日留存率">新用户七留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -436,7 +436,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="全量活跃用户在第二日的活跃/当日活跃用户（DAU）">全量用户次留</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="全量用户的次日留存率">全量用户次留</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -467,7 +467,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，付费用户数，去重统计">充值人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="付费用户，去重统计">充值人数</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -492,7 +492,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="DARPU">DARPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="每用户平均收入，充值金额/活跃用户">DARPU</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -517,7 +517,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="DARPPU">DARPPU</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="每付费用户平均收入，充值金额/付费用户">DARPPU</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -547,7 +547,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计日，新增的付费用户数">新增充值人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="首次充值用户">新增充值人数</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -572,7 +572,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计日，新增付费用户从首次投注到首次充值的平均天数">新增付费转化周期</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="新增付费用户从首次投注到首次充值的平均天数">新增付费转化周期</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -597,7 +597,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计日，充值2次及以上的用户占比">复购率</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="充值2次及以上的用户占比">复购率</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -627,7 +627,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="出口成本">成本</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="实物成本（元）">成本</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -652,7 +652,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="成本/充值金额">成本占比</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="成本金额/充值金额">成本占比</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -682,7 +682,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，进行投注的用户，去重统计">投注人数</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="投注的用户，去重统计">投注人数</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
@@ -707,7 +707,7 @@ Ext.define('WF.view.data.board.wholeDataViewMain', {
                                 {width:"100%",height:60,layout:'hbox',forceFit:true,bodyStyle:'border-width:0',
                                     items:[
                                         {width:"2%",height:60,bodyStyle:'border-width:0'},
-                                        {width:"31.33%",height:60,html:'<h2 title="统计期内，用户的投注流水（金叶子）">投注流水</h2>',bodyStyle:'border-width:0'},
+                                        {width:"31.33%",height:60,html:'<h2 title="投注流水（金叶子）">投注流水</h2>',bodyStyle:'border-width:0'},
                                         {width:"33.33%",height:60,layout:'vbox',bodyStyle:'border-width:0',
                                             items:[
                                                 {width:"100%",height:10,bodyStyle:'border-width:0'},
