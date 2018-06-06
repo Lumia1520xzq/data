@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareFinalRechargeStatisticDao">
+
+	<sql id="datawareFinalRechargeStatisticColumns">
+		t.id,
+		t.parent_id,
+		t.channel_id,
+		t.new_recharge_count,
+		t.new_pay_cov_cycle,
+		t.recharge_rep_rate,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+
+	<sql id="datawareFinalRechargeStatisticWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="FinalRechargeStatisticJoins">
+	</sql>
+
+	<select id="get" resultType="DatawareFinalRechargeStatistic">
+		SELECT <include refid="datawareFinalRechargeStatisticColumns"/> FROM dataware_final_recharge_statistic t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareFinalRechargeStatistic">
+		SELECT <include refid="datawareFinalRechargeStatisticColumns"/> FROM dataware_final_recharge_statistic t <include refid="FinalRechargeStatisticJoins"/>
+		WHERE <include refid="datawareFinalRechargeStatisticWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_final_recharge_statistic t WHERE <include refid="datawareFinalRechargeStatisticWhere" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dataware_final_recharge_statistic (
+		id,
+		parent_id,
+		channel_id,
+		new_recharge_count,
+		new_pay_cov_cycle,
+		recharge_rep_rate,
+		business_date,
+		create_time,
+		delete_flag
+		) VALUES (
+		#{id},
+		#{parentId},
+		#{channelId},
+		#{newRechargeCount},
+		#{newPayCovCycle},
+		#{rechargeRepRate},
+		#{businessDate},
+		#{createTime},
+		#{deleteFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dataware_final_recharge_statistic SET
+		parent_id = #{parentId},
+		channel_id = #{channelId},
+		new_recharge_count = #{newRechargeCount},
+		new_pay_cov_cycle = #{newPayCovCycle},
+		recharge_rep_rate = #{rechargeRepRate},
+		business_date = #{businessDate},
+		delete_flag = #{createTime}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_final_recharge_statistic SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+

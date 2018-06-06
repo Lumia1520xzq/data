@@ -11,15 +11,9 @@ import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.controller.response.DataViewExcelResponse;
 import com.wf.data.dao.base.entity.ChannelInfo;
-import com.wf.data.dao.datarepo.entity.DatawareFinalChannelCost;
-import com.wf.data.dao.datarepo.entity.DatawareFinalChannelInfoAll;
-import com.wf.data.dao.datarepo.entity.DatawareFinalChannelRetention;
-import com.wf.data.dao.datarepo.entity.DatawareFinalRegisteredRetention;
+import com.wf.data.dao.datarepo.entity.*;
 import com.wf.data.service.ChannelInfoService;
-import com.wf.data.service.data.DatawareFinalChannelCostService;
-import com.wf.data.service.data.DatawareFinalChannelInfoAllService;
-import com.wf.data.service.data.DatawareFinalChannelRetentionService;
-import com.wf.data.service.data.DatawareFinalRegisteredRetentionService;
+import com.wf.data.service.data.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +45,8 @@ public class WholeDataViewController extends ExtJsController {
     private DatawareFinalChannelCostService datawareFinalChannelCostService;
     @Autowired
     private DatawareFinalRegisteredRetentionService datawareFinalRegisteredRetentionService;
+    @Autowired
+    private DatawareFinalRechargeStatisticService datawareFinalRechargeStatisticService;
 
     /**
      * 整体数据概览
@@ -131,6 +127,13 @@ public class WholeDataViewController extends ExtJsController {
             }
             //流水差
             info.setMoneyGap(info.getBettingAmount() - info.getResultAmount());
+            DatawareFinalRechargeStatistic rechargeStatistic = datawareFinalRechargeStatisticService.findByDate(params);
+            // 新增充值人数
+            info.setNewRechargeCount(rechargeStatistic.getNewRechargeCount());
+            // 新增付费转化周期
+            info.setNewPayCovCycle(Long.valueOf(NumberUtils.format(rechargeStatistic.getNewPayCovCycle(), "##0")));
+            // 复购率
+            info.setRechargeRepRate(rechargeStatistic.getRechargeRepRate());
         }
         if (CollectionUtils.isNotEmpty(allList)) {
             //获取最后一条记录
@@ -143,6 +146,7 @@ public class WholeDataViewController extends ExtJsController {
             params.put("date", beforeDate);
             DatawareFinalChannelInfoAll lastButOneInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
             DatawareFinalChannelCost lastButOneCost = datawareFinalChannelCostService.findByDate(params);
+            DatawareFinalRechargeStatistic lastRechargeStatistic = datawareFinalRechargeStatisticService.findByDate(params);
             //1、日环比
             if (null != lastButOneInfoAll) {
                 String dayDauRate = cal(lastInfoAll.getDau(), lastButOneInfoAll.getDau());
@@ -161,6 +165,9 @@ public class WholeDataViewController extends ExtJsController {
                 String dayUsersRate = cal(calRate(lastInfoAll.getNewUsers(), lastInfoAll.getDau()), calRate(lastButOneInfoAll.getNewUsers(), lastButOneInfoAll.getDau()));
                 String dayMoneyGapRate = cal(lastInfoAll.getMoneyGap(), lastButOneInfoAll.getBettingAmount() - lastButOneInfoAll.getResultAmount());
                 String dayFirstRechargeRate = cal(lastInfoAll.getFirstRechargeRate(), lastButOneInfoAll.getFirstRechargeRate());
+                String dayNewRechargeCount = cal(lastInfoAll.getNewRechargeCount(), lastRechargeStatistic.getNewRechargeCount());
+                String dayNewPayCovCycle = cal(lastInfoAll.getNewPayCovCycle(), Long.valueOf(NumberUtils.format(lastRechargeStatistic.getNewPayCovCycle(), "##0")));
+                String dayRechargeRepRate = cal(lastInfoAll.getRechargeRepRate(), lastRechargeStatistic.getRechargeRepRate());
                 //比较最后一天和昨天
                 Date yesterday = DateUtils.parseDate(DateUtils.getYesterdayDate());
                 if (DateUtils.parseDate(endDate).before(yesterday)) {
@@ -252,6 +259,9 @@ public class WholeDataViewController extends ExtJsController {
                 lastInfoAll.setDayUsersRate(dayUsersRate);
                 lastInfoAll.setDayMoneyGapRate(dayMoneyGapRate);
                 lastInfoAll.setDayFirstRechargeRate(dayFirstRechargeRate);
+                lastInfoAll.setDayNewRechargeCount(dayNewRechargeCount);
+                lastInfoAll.setDayNewPayCovCycle(dayNewPayCovCycle);
+                lastInfoAll.setDayRechargeRepRate(dayRechargeRepRate);
             }
             //一周前的日期
             String weekBeforeDate = DateUtils.formatDate(DateUtils.getPrevDate(DateUtils.parseDate(endDate), 7));
@@ -259,6 +269,7 @@ public class WholeDataViewController extends ExtJsController {
             params.put("date", weekBeforeDate);
             DatawareFinalChannelInfoAll weekInfoAll = datawareFinalChannelInfoAllService.findByDate(params);
             DatawareFinalChannelCost weekCost = datawareFinalChannelCostService.findByDate(params);
+            DatawareFinalRechargeStatistic weekRecharge = datawareFinalRechargeStatisticService.findByDate(params);
             //1、周同比
             if (null != weekInfoAll) {
                 String weekDauRate = cal(lastInfoAll.getDau(), weekInfoAll.getDau());
@@ -277,6 +288,9 @@ public class WholeDataViewController extends ExtJsController {
                 String weekUsersRate = cal(calRate(lastInfoAll.getNewUsers(), lastInfoAll.getDau()), calRate(weekInfoAll.getNewUsers(), weekInfoAll.getDau()));
                 String weekMoneyGapRate = cal(lastInfoAll.getMoneyGap(), weekInfoAll.getBettingAmount() - weekInfoAll.getResultAmount());
                 String weekFirstRechargeRate = cal(lastInfoAll.getFirstRechargeRate(), weekInfoAll.getFirstRechargeRate());
+                String weekNewRechargeCount = cal(lastInfoAll.getNewRechargeCount(), weekRecharge.getNewRechargeCount());
+                String weekNewPayCovCycle = cal(lastInfoAll.getNewPayCovCycle(), Long.valueOf(NumberUtils.format(weekRecharge.getNewPayCovCycle(), "##0")));
+                String weekRechargeRepRate = cal(lastInfoAll.getRechargeRepRate(), weekRecharge.getRechargeRepRate());
                 //比较最后一天和昨天
                 Date yesterday = DateUtils.parseDate(DateUtils.getYesterdayDate());
                 if (DateUtils.parseDate(endDate).before(yesterday)) {
@@ -368,7 +382,9 @@ public class WholeDataViewController extends ExtJsController {
                 lastInfoAll.setWeekUsersRate(weekUsersRate);
                 lastInfoAll.setWeekMoneyGapRate(weekMoneyGapRate);
                 lastInfoAll.setWeekFirstRechargeRate(weekFirstRechargeRate);
-
+                lastInfoAll.setWeekNewRechargeCount(weekNewRechargeCount);
+                lastInfoAll.setWeekNewPayCovCycle(weekNewPayCovCycle);
+                lastInfoAll.setWeekRechargeRepRate(weekRechargeRepRate);
             }
         }
         return allList;
@@ -417,12 +433,12 @@ public class WholeDataViewController extends ExtJsController {
                     beginDateParam = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -14));
                     endDateParam = DateUtils.getYesterdayDate();
                 } else if (judgeParamIsBank(startTime) && !judgeParamIsBank(endTime)) {
-                    beginDateParam = formatGTMDate(endTime);
+                    beginDateParam = DateUtils.formatGTMDate(endTime);
                 } else if (!judgeParamIsBank(startTime) && judgeParamIsBank(endTime)) {
-                    endDateParam = formatGTMDate(startTime);
+                    endDateParam = DateUtils.formatGTMDate(startTime);
                 }else {
-                    beginDateParam = formatGTMDate(startTime);
-                    endDateParam = formatGTMDate(endTime);
+                    beginDateParam = DateUtils.formatGTMDate(startTime);
+                    endDateParam = DateUtils.formatGTMDate(endTime);
                 }
             } catch (Exception e) {
                 logger.error("导出核心指标总览数据时查询条件转换失败: traceId={}, data={}", TraceIdUtils.getTraceId());
@@ -515,6 +531,16 @@ public class WholeDataViewController extends ExtJsController {
                 }
                 //流水差
                 excelResponse.setMoneyGap(info.getBettingAmount() - info.getResultAmount());
+                DatawareFinalRechargeStatistic rechargeStatistic = datawareFinalRechargeStatisticService.findByDate(params);
+                if (null != rechargeStatistic) {
+                    excelResponse.setNewRechargeCount(rechargeStatistic.getNewRechargeCount());
+                    excelResponse.setNewPayCovCycle(Long.valueOf(NumberUtils.format(rechargeStatistic.getNewPayCovCycle(), "##0")));
+                    excelResponse.setRechargeRepRate(rechargeStatistic.getRechargeRepRate());
+                } else {
+                    excelResponse.setNewRechargeCount(0L);
+                    excelResponse.setNewPayCovCycle(0L);
+                    excelResponse.setRechargeRepRate(0.0);
+                }
                 responses.add(excelResponse);
             }
 
@@ -530,24 +556,6 @@ public class WholeDataViewController extends ExtJsController {
             return true;
         }
         return false;
-    }
-
-    /**
-     * 格式化GMT时间
-     *
-     */
-    public String formatGTMDate(String date) {
-        DateFormat gmt = new SimpleDateFormat("yyyy-MM-dd");
-        date = date.replace("GMT 0800", "GMT +08:00").replace("GMT 0800", "GMT+0800").replaceAll("\\(.*\\)", "");
-        SimpleDateFormat defaultFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", Locale.US);
-        Date time = null;
-        try {
-            time = defaultFormat.parse(date);
-            gmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return gmt.format(time);
     }
 
 }

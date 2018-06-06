@@ -1305,5 +1305,60 @@ Ext.define('WF.view.sys.execute.historyDataCleanMain', {
 
             }]
         });
+
+        me.add({
+            border: false,
+            store: store,
+            xtype: 'searchpanel',
+            title: '补全rechargeStatistic',
+            collapsible: true,
+            collapsed: false,
+            columns: 2,
+            buildField: "Manual",
+            forceFit: true,
+            todoExec: function () {
+                Ext.Msg.confirm("确认", "确定要补全rechargeStatistic历史数据吗?", function (button) {
+                    if (button == "yes") {
+                        var data = {
+                            startTime: Ext.util.Format.date(me.down("[name='regStatStart']").getValue(), 'Y-m-d'),
+                            endTime: Ext.util.Format.date(me.down("[name='regStatEnd']").getValue(), 'Y-m-d')
+                        };
+                        callapi("data/admin/dataClean/rechargeStatistic.do", data, function (result) {
+                            if (result.success) {
+                                Ext.Msg.show({
+                                    title: "提示",
+                                    msg: result.data.msg,
+                                    modal: true,
+                                    icon: Ext.Msg.INFO,
+                                    buttons: Ext.Msg.OK
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title: '错误',
+                                    msg: result.data.msg,
+                                    buttons: Ext.Msg.OK,
+                                    icon: Ext.Msg.ERROR,
+                                    modal: true
+                                });
+                            }
+                        }, null, null, false);
+                    }
+                });
+
+            },
+            items: [{
+                name: 'regStatStart',
+                fieldLabel: '开始日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }, {
+                name: 'regStatEnd',
+                fieldLabel: '结束日期',
+                xtype: 'datefield',
+                format: 'Y-m-d'
+
+            }]
+        });
     }
 });
