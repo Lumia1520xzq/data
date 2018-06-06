@@ -78,4 +78,16 @@ public class DatawareConvertDayService extends CrudService<DatawareConvertDayDao
     public List<Long> getUsersByRechargeType(Map<String, Object> convertParams) {
         return dao.getUsersByRechargeType(convertParams);
     }
+
+    public Long getNewRechargeCount(Map<String, Object> map) {
+        return dao.getNewRechargeCount(map);
+    }
+
+    public Double getNewPayCovCycle(Map<String, Object> map) {
+        return dao.getNewPayCovCycle(map);
+    }
+
+    public Double getRechargeRepRate(Map<String, Object> map) {
+        return dao.getRechargeRepRate(map);
+    }
 }

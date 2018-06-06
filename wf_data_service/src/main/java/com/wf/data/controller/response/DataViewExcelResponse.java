@@ -35,6 +35,9 @@ public class DataViewExcelResponse extends DataEntity {
     private Double bettingAmount;
     private Double resultRate;
     private Double moneyGap;
+    private Long newRechargeCount;
+    private Long newPayCovCycle;
+    private Double rechargeRepRate;
 
     @ExcelField(title = "日期", type = 0, align = 1, sort = 10)
     public String getBusinessDate() {
@@ -201,6 +204,33 @@ public class DataViewExcelResponse extends DataEntity {
     @ExcelField(title = "DARPPU", type = 0, align = 1, sort = 190)
     public Double getPayArppu() {
         return payArppu;
+    }
+
+    @ExcelField(title = "新增充值用户", type = 0, align = 1, sort = 191)
+    public Long getNewRechargeCount() {
+        return newRechargeCount;
+    }
+
+    public void setNewRechargeCount(Long newRechargeCount) {
+        this.newRechargeCount = newRechargeCount;
+    }
+
+    @ExcelField(title = "新增付费转化周期", type = 0, align = 1, sort = 192)
+    public Long getNewPayCovCycle() {
+        return newPayCovCycle;
+    }
+
+    public void setNewPayCovCycle(Long newPayCovCycle) {
+        this.newPayCovCycle = newPayCovCycle;
+    }
+
+    @ExcelField(title = "复购率", type = 0, align = 1, sort = 193)
+    public Double getRechargeRepRate() {
+        return rechargeRepRate;
+    }
+
+    public void setRechargeRepRate(Double rechargeRepRate) {
+        this.rechargeRepRate = rechargeRepRate;
     }
 
     public void setPayArppu(Double payArppu) {

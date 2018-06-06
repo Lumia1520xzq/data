@@ -2,6 +2,7 @@ Ext.define('WF.userManual.targetDefine', {
     extend : 'Ext.panel.Panel',
     title : '指标定义',
     plain : true,
+    height:600,
     layout : {
         type : 'vbox',
         align : 'stretch'

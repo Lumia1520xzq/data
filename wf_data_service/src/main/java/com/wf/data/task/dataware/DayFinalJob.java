@@ -34,6 +34,7 @@ public class DayFinalJob {
     private final DatawareFinalRechargeTagAnalysisService tagAnalysisService = SpringContextHolder.getBean(DatawareFinalRechargeTagAnalysisService.class);
     private final GameOverViewService gameOverViewService = SpringContextHolder.getBean(GameOverViewService.class);
     private final ActivityCostService activityCostService = SpringContextHolder.getBean(ActivityCostService.class);
+    private final RechargeStatisticService rechargeStatisticService = SpringContextHolder.getBean(RechargeStatisticService.class);
 
     public void execute() {
         logger.info("每日任务调度总job开始:traceId={}", TraceIdUtils.getTraceId());
@@ -114,6 +115,11 @@ public class DayFinalJob {
             }
         } catch (Exception e) {
             logger.error("toDoGameOverViewAnalysis调度失败: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        try {
+            rechargeStatisticService.toDoRechargeStatisticAnalysis();
+        } catch (Exception e) {
+            logger.error("toDoRechargeStatisticAnalysis: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
         }
 
         logger.info("每日任务调度总job结束:traceId={}", TraceIdUtils.getTraceId());
