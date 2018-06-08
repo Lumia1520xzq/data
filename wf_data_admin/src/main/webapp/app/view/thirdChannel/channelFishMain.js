@@ -15,8 +15,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/appfish/list.do',
-            fields: ['dates', 'channelName', 'activenum', 'regmemnum', 'lognum', 'newlogmem', 'betamt', 'paymemnum',
-                'payamount', 'exchangeamount', 'bettingRate', 'bettingArpu', 'resultRate', 'bettingDiff', 'newsecondretent', 'allsecondretent'],
+            fields: ['dates', 'channelName', 'activenum', 'regmemnum', 'lognum', 'newlogmem', 'paymemnum',
+                'payamount', 'exchangeamount', 'newsecondretent', 'allsecondretent'],
             baseParams: {
                 parentId: me.parameters
             }
@@ -59,7 +59,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 if (endDate == null || endDate === undefined) {
                     endDate = '';
                 }
-                var url = 'data/admin/appfish/export.do?parentId=' + parentId + '&channelId=' + channelId + '&beginDate=' + beginDate + '&endDate=' + endDate;
+                var url = 'data/admin/appfish/channelExportFile.do?parentId=' + parentId + '&channelId=' + channelId + '&beginDate=' + beginDate + '&endDate=' + endDate;
                 window.location.href = url;
             },
             items: [{
@@ -170,19 +170,6 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                     }
                 }
             }, {
-                text: '投注金额',
-                width: 30,
-                dataIndex: 'betamt',
-                menuDisabled: true,
-                sortable: false,
-                renderer: function (value) {
-                    if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.0");
-                    } else {
-                        return 0.00;
-                    }
-                }
-            }, {
                 text: '充值人数',
                 width: 30,
                 dataIndex: 'paymemnum',
@@ -212,58 +199,6 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '成本',
                 width: 30,
                 dataIndex: 'exchangeamount',
-                menuDisabled: true,
-                sortable: false,
-                renderer: function (value) {
-                    if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.00");
-                    } else {
-                        return 0.00;
-                    }
-                }
-            }, {
-                text: '投注转化率',
-                width: 30,
-                dataIndex: 'bettingRate',
-                menuDisabled: true,
-                sortable: false,
-                renderer: function (value) {
-                    if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.00") + "%";
-                    } else {
-                        return 0.00 + "%";
-                    }
-                }
-            }, {
-                text: 'ARPU',
-                width: 30,
-                dataIndex: 'bettingArpu',
-                menuDisabled: true,
-                sortable: false,
-                renderer: function (value) {
-                    if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.00");
-                    } else {
-                        return 0.00;
-                    }
-                }
-            }, {
-                text: '返奖率',
-                width: 30,
-                dataIndex: 'resultRate',
-                menuDisabled: true,
-                sortable: false,
-                renderer: function (value) {
-                    if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.00") + "%";
-                    } else {
-                        return 0.00 + "%";
-                    }
-                }
-            }, {
-                text: '流水差',
-                width: 30,
-                dataIndex: 'bettingDiff',
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
