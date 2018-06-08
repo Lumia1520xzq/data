@@ -35,6 +35,7 @@
 	<import resource="app-db-mysql-mall.xml" />
 	<import resource="app-db-mysql-datarepo.xml" />
 	<import resource="app-db-mysql-wars.xml"/>
+	<import resource="app-db-mysql-appuic.xml"/>
 	<import resource="app-jms-data.xml"/>
 
 	<import resource="classpath*:schedule/app-scheduler.xml" />

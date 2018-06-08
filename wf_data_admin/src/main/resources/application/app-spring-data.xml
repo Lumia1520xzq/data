@@ -40,6 +40,7 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
     <import resource="app-db-mysql-mall.xml"/>
     <import resource="app-db-mysql-datarepo.xml"/>
     <import resource="app-db-mysql-wars.xml"/>
+    <import resource="app-db-mysql-appuic.xml"/>
 
     <import resource="classpath*:wf/spring-redis.xml"/>
     <import resource="classpath*:wf/spring-ehcache.xml"/>

@@ -35,7 +35,7 @@
 	<import resource="app-db-mycat-trans.xml" />
 	<import resource="app-db-mysql-taurus.xml" />
 	<import resource="app-db-mysql-wars.xml" />
-
+	<import resource="app-db-mysql-appuic.xml"/>
 
 
 	<import resource="classpath*:wf/spring-redis.xml"/>
