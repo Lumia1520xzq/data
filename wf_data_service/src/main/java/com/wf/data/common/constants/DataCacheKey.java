@@ -18,6 +18,8 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_IP_USER,
 
+	DATA_APP_FISH_LIST,
+
 	DATA_RISK_FLAG,
 
 	DATA_IP_LOCK,
@@ -26,7 +28,11 @@ public enum DataCacheKey implements CacheKey {
 
 	DATA_CHANNEL_INFO_BY_ID,
 
+	DATA_APPUIC_CHANNEL_INFO_BY_ID,
+
 	DATA_CHANNEL_INFO_ALL,
+
+	DATA_APPUIC_CHANNEL_INFO_ALL,
 
 	DATA_UIC_USER_BY_ID,
 

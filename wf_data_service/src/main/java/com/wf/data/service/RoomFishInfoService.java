@@ -5,6 +5,7 @@ package com.wf.data.service;
 import com.google.common.collect.Lists;
 import com.wf.core.utils.core.SpringContextHolder;
 import com.wf.core.utils.type.StringUtils;
+import com.wf.data.common.utils.FishJdbcUtils;
 import com.wf.data.common.utils.JdbcUtils;
 import com.wf.data.dao.data.entity.ReportFishBettingInfo;
 import com.wf.data.dao.data.entity.ReportGameInfo;
@@ -22,6 +23,7 @@ import java.util.Map;
 @Service
 public class RoomFishInfoService {
     private final JdbcUtils jdbcUtils = SpringContextHolder.getBean(JdbcUtils.class);
+    private final FishJdbcUtils fishJdbcUtils = SpringContextHolder.getBean(FishJdbcUtils.class);
 
     public ReportGameInfo findBettingInfoByDate(Map<String, Object> params, String dbName) {
         List<ReportGameInfo> infoList = new ArrayList<>();
@@ -219,6 +221,60 @@ public class RoomFishInfoService {
         }
         return list;
     }
+
+    public List<DatawareBettingLogHour> getFishAppGameBettingRecord(Map<String, Object> params, String dbName) {
+
+        List<DatawareBettingLogHour> list = Lists.newArrayList();
+        String sql = " SELECT\n" +
+                "\t\tuser_id userId,\n" +
+                "\t\tchannel_id channelId,\n" +
+                " \t\tCOUNT(1) bettingCount,\n" +
+                "\t\tSUM(amount) bettingAmount,\n" +
+                "\t\tSUM(return_amount) resultAmount,\n" +
+                "\t\tDATE_FORMAT(create_time,'%Y-%m-%d') bettingDate,\n" +
+                "\t\tDATE_FORMAT(create_time,'%H') bettingHour\n" +
+                "\t\tFROM `room_fish_info`\n" +
+                "\t\tWHERE 1=1";
+
+        String beginDate = "";
+        String endDate = "";
+        if (null != params.get("beginDate")) {
+            beginDate = (String) params.get("beginDate");
+        }
+        if (null != params.get("endDate")) {
+            endDate = (String) params.get("endDate");
+        }
+
+        if (StringUtils.isNotBlank(beginDate) && StringUtils.isNotBlank(endDate)) {
+            sql = sql + "\t\tAND create_time BETWEEN  '" + beginDate + "' AND '" + endDate + "'\n";
+        }
+        sql = sql + "\t\tGROUP BY user_id,channel_id,DATE_FORMAT(create_time,'%Y-%m-%d'),DATE_FORMAT(create_time,'%H')\n";
+        sql = sql + "\t\tORDER BY DATE_FORMAT(create_time,'%Y-%m-%d'),DATE_FORMAT(create_time,'%H')";
+
+
+        List<Map<String, Object>> resultList = fishJdbcUtils.query(sql, dbName);
+
+        for (Map<String, Object> map : resultList) {
+            DatawareBettingLogHour info = new DatawareBettingLogHour();
+            if (null != map.get("userId"))
+                info.setUserId(Long.valueOf(map.get("userId").toString()));
+            if (null != map.get("channelId"))
+                info.setChannelId(Long.valueOf(map.get("channelId").toString()));
+            if (null != map.get("bettingCount"))
+                info.setBettingCount(Integer.valueOf(map.get("bettingCount").toString()));
+            if (null != map.get("bettingAmount"))
+                info.setBettingAmount(Double.valueOf(map.get("bettingAmount").toString()));
+            if (null != map.get("resultAmount"))
+                info.setResultAmount(Double.valueOf(map.get("resultAmount").toString()));
+            if (null != map.get("bettingDate"))
+                info.setBettingDate(map.get("bettingDate").toString());
+            if (null != map.get("bettingHour"))
+                info.setBettingHour(map.get("bettingHour").toString());
+            list.add(info);
+        }
+        return list;
+    }
+
 
     public List<DatawareBettingLogHour> getGameBettingRecord(Map<String, Object> params, String dbName) {
 

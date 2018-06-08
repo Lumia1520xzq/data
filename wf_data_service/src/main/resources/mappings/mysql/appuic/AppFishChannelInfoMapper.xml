@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.appuic.AppUicChannelInfoDao">
+	
+	<sql id="channelInfoColumns">
+		t.id,
+		t.parent_id,
+		t.code,
+		t.name,
+		t.description,
+		t.enable,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="channelInfoWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+		<if test="p.enable != null and p.enable !=''">
+			AND t.enable = #{p.enable}
+		</if>
+		<if test="p.parentId != null and p.parentId !=''">
+			AND t.parent_id = #{p.parentId}
+		</if>
+		<if test="p.id != null and p.id !=''">
+			AND t.id  LIKE CONCAT('%', #{p.id}, '%')
+		</if>
+		<if test="p.name != null and p.name !=''">
+			AND t.name  LIKE CONCAT('%', #{p.name}, '%')
+		</if>
+		<if test="p.mainChannel != null">
+			AND t.parent_id is null
+		</if>
+	</sql>
+	
+	<sql id="channelInfoJoins">
+	</sql>
+	
+	<select id="get" resultType="AppUicChannelInfo">
+		SELECT <include refid="channelInfoColumns"/> FROM channel_info t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="AppUicChannelInfo">
+		SELECT <include refid="channelInfoColumns"/> FROM channel_info t <include refid="channelInfoJoins"/>
+		WHERE <include refid="channelInfoWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM channel_info t WHERE <include refid="channelInfoWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO channel_info (
+			id, 
+			parent_id, 
+			code, 
+			name, 
+			description, 
+			enable, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{parentId}, 
+			#{code}, 
+			#{name}, 
+			#{description}, 
+			#{enable}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE channel_info SET
+			parent_id = #{parentId}, 
+			code = #{code}, 
+			name = #{name}, 
+			description = #{description}, 
+			enable = #{enable}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE channel_info SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+
