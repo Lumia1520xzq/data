@@ -13,4 +13,5 @@
     <dubbo:reference id="channelRpcService" interface="com.wf.base.rpc.ChannelRpcService"/>
     <dubbo:reference id="userRpcService" interface="com.wf.uic.rpc.UserRpcService"/>
     <dubbo:reference id="userGroupRpcService" interface="com.wf.uic.rpc.UserGroupRpcService"/>
+    <dubbo:reference id="datawareUserLabelService" interface="com.wf.data.rpc.DatawareUserLabelService"/>
 </beans>
