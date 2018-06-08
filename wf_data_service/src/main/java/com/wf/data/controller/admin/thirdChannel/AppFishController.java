@@ -16,6 +16,7 @@ import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.appuic.entity.AppUicChannelInfo;
 import com.wf.data.dto.FishDto;
+import com.wf.data.dto.FishInOut;
 import com.wf.data.service.appuic.AppUicChannelInfoService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,52 @@ public class AppFishController extends ExtJsController {
     }
 
 
+    /**
+     * 导出用户数据
+     *
+     * @return
+     */
+    @RequestMapping(value = "channelExportFile")
+    public void channelExportFile(@RequestParam String parentId, @RequestParam String channelId, @RequestParam String beginDate,
+                                  @RequestParam String endDate, HttpServletResponse response) {
+
+        if (StringUtils.isNotBlank(beginDate)) {
+            beginDate = DateUtils.formatGTMDate(beginDate, "yyyy-MM-dd");
+        }
+
+
+        if (StringUtils.isNotBlank(endDate)) {
+            endDate = DateUtils.formatGTMDate(endDate, "yyyy-MM-dd");
+        }
+        //设置默认搜索时间为昨天
+        if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
+            beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+            endDate = DateUtils.getYesterdayDate();
+        } else {
+
+        }
+        Long cId = null;
+        Long pId = null;
+
+        if (StringUtils.isNotBlank(parentId)) {
+            pId = new Long(parentId);
+        }
+        if (StringUtils.isNotBlank(channelId)) {
+            cId = new Long(channelId);
+        }
+
+        try {
+            List<FishDto> resultList = getFishRecord(cId, pId, beginDate, endDate);
+            String fileName = "捕鱼数据报表" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            new ExportExcel("捕鱼数据报表", FishInOut.class).setDataList(resultList).write(response, fileName).dispose();
+        } catch (Exception e) {
+            logger.error("导出失败：" + e.getMessage());
+        }
+
+
+    }
+
+
     private List<FishDto> getFishRecord(Long channelId, Long parentId, String beginDate, String endDate) {
         List<FishDto> resultList = Lists.newArrayList();
 
@@ -183,11 +230,11 @@ public class AppFishController extends ExtJsController {
         } else {
             dto.setBettingRate(BigDecimalUtil.div(dto.getBetmem() * 100, dto.getLognum(), 2));
         }
-        //ARPU=投注流水/投注人数
-        if (dto.getBetmem() == 0) {
+        //ARPU=充值金额/DAU
+        if (dto.getLognum() == 0) {
             dto.setBettingArpu(0.00);
         } else {
-            dto.setBettingArpu(BigDecimalUtil.div(dto.getBetamt(), dto.getBetmem(), 2));
+            dto.setBettingArpu(BigDecimalUtil.div(dto.getPayamount().doubleValue(), dto.getLognum(), 2));
 
         }
 
