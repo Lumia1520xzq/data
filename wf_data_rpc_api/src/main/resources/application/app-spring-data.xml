@@ -47,6 +47,7 @@
     <import resource="app-db-mycat-trans.xml"/>
     <import resource="app-db-mysql-wars.xml"/>
     <import resource="app-db-mysql-taurus.xml" />
+    <import resource="app-db-mysql-appuic.xml"/>
 
     <bean id="esBean" class="com.wf.data.common.utils.elasticsearch.EsBean">
         <constructor-arg index="0" value="${es.ips}"/>
@@ -60,6 +61,12 @@
         <constructor-arg index="1" value="${src.username}"/>
         <constructor-arg index="2" value="${src.password}"/>
         <constructor-arg index="3" value="${src.port}"/>
+    </bean>
+    <bean id="fishDbConfig" class="com.wf.data.common.config.FishDbConfig">
+        <constructor-arg index="0" value="${src.apphost}" />
+        <constructor-arg index="1" value="${src.appusername}" />
+        <constructor-arg index="2" value="${src.apppassword}" />
+        <constructor-arg index="3" value="${src.appport}" />
     </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
