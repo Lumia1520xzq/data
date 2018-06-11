@@ -271,7 +271,7 @@ public class AppFishController extends ExtJsController {
                 }
 
                 list = GfJsonUtil.parseArray(body, FishDto.class);
-                cacheHander.set(DataCacheKey.DATA_APP_FISH_LIST.key(DateUtils.formatCurrentDateYMD()), list, CacheKey.MINUTE_30);
+                cacheHander.set(DataCacheKey.DATA_APP_FISH_LIST.key(DateUtils.formatCurrentDateYMD()), list, CacheKey.MINUTE_10);
 
             } else {
                 list.addAll(fishList);
