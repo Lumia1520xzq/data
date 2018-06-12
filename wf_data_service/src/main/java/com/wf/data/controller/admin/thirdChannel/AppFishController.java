@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -63,7 +62,7 @@ public class AppFishController extends ExtJsController {
         }
         //设置默认搜索时间为昨天
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
-            beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
+            beginDate = DateUtils.getYesterdayDate();
             endDate = DateUtils.getDate();
         }
         return getFishRecord(channelId, parentId, beginDate, endDate);
@@ -89,7 +88,7 @@ public class AppFishController extends ExtJsController {
         }
         //设置默认搜索时间为昨天
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
-            beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+            beginDate = DateUtils.getYesterdayDate();
             endDate = DateUtils.getYesterdayDate();
         } else {
 
@@ -135,7 +134,7 @@ public class AppFishController extends ExtJsController {
         }
         //设置默认搜索时间为昨天
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
-            beginDate = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -7));
+            beginDate = DateUtils.getYesterdayDate();
             endDate = DateUtils.getYesterdayDate();
         } else {
 
@@ -166,7 +165,7 @@ public class AppFishController extends ExtJsController {
         List<FishDto> resultList = Lists.newArrayList();
 
         List<FishDto> list = request();
-
+        logger.info("json:{}",list.toString());
 
         for (FishDto dto : list) {
             if (StringUtils.isNotBlank(beginDate)) {
@@ -271,7 +270,7 @@ public class AppFishController extends ExtJsController {
                 }
 
                 list = GfJsonUtil.parseArray(body, FishDto.class);
-                cacheHander.set(DataCacheKey.DATA_APP_FISH_LIST.key(DateUtils.formatCurrentDateYMD()), list, CacheKey.MINUTE_10);
+                cacheHander.set(DataCacheKey.DATA_APP_FISH_LIST.key(DateUtils.formatCurrentDateYMD()), list, CacheKey.MINUTE_1);
 
             } else {
                 list.addAll(fishList);
