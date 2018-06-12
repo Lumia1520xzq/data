@@ -316,5 +316,38 @@ public class FishDto implements Serializable {
         this.allwithinseven = allwithinseven;
     }
 
-
+    @Override
+    public String toString() {
+        return "FishDto{" +
+                "dates='" + dates + '\'' +
+                ", channel=" + channel +
+                ", activenum=" + activenum +
+                ", regmemnum=" + regmemnum +
+                ", lognum=" + lognum +
+                ", betmem=" + betmem +
+                ", betcnt=" + betcnt +
+                ", betamt=" + betamt +
+                ", resultamt=" + resultamt +
+                ", subpaymem=" + subpaymem +
+                ", paymemnum=" + paymemnum +
+                ", payamount=" + payamount +
+                ", exchangemem=" + exchangemem +
+                ", exchangeamount=" + exchangeamount +
+                ", newlogmem=" + newlogmem +
+                ", firstdaypaymem=" + firstdaypaymem +
+                ", first7daypaymem=" + first7daypaymem +
+                ", firstdaybetmem=" + firstdaybetmem +
+                ", newsecondretent=" + newsecondretent +
+                ", newsevenretent=" + newsevenretent +
+                ", newwithinseven=" + newwithinseven +
+                ", allsecondretent=" + allsecondretent +
+                ", allsevenretent=" + allsevenretent +
+                ", allwithinseven=" + allwithinseven +
+                ", channelName='" + channelName + '\'' +
+                ", bettingRate=" + bettingRate +
+                ", bettingArpu=" + bettingArpu +
+                ", resultRate=" + resultRate +
+                ", bettingDiff=" + bettingDiff +
+                '}';
+    }
 }

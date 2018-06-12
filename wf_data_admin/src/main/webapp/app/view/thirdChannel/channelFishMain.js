@@ -38,7 +38,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 2,
+            columns: 3,
             buildField: "Manual",
             forceFit: false,
             export: function () {
@@ -82,7 +82,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 name: 'beginDate',
                 format: 'Y-m-d',
                 fieldLabel: '开始时间',
-                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -6), "Y-m-d")
+                value: Ext.util.Format.date(Ext.Date.add(new Date(), Ext.Date.DAY, -1), "Y-m-d")
             }, {
                 xtype: 'datefield',
                 name: 'endDate',
@@ -98,6 +98,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
             store: store,
             buildField: "Manual",
             forceFit: true,
+            showPaging:false,
             columns: [{
                 text: '日期',
                 dataIndex: 'dates',
