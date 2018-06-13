@@ -3,7 +3,6 @@ package com.wf.data.controller.admin.thirdChannel;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wf.core.cache.CacheHander;
-import com.wf.core.cache.CacheKey;
 import com.wf.core.log.LogExceptionStackTrace;
 import com.wf.core.utils.GfJsonUtil;
 import com.wf.core.utils.TraceIdUtils;
@@ -12,13 +11,11 @@ import com.wf.core.utils.http.HttpClientUtils;
 import com.wf.core.utils.type.BigDecimalUtil;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
-import com.wf.data.common.constants.DataCacheKey;
 import com.wf.data.common.utils.DateUtils;
 import com.wf.data.dao.appuic.entity.AppUicChannelInfo;
 import com.wf.data.dto.FishDto;
 import com.wf.data.dto.FishInOut;
 import com.wf.data.service.appuic.AppUicChannelInfoService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -165,7 +162,7 @@ public class AppFishController extends ExtJsController {
         List<FishDto> resultList = Lists.newArrayList();
 
         List<FishDto> list = request();
-        logger.info("json:{}",list.toString());
+        logger.info("json:{}", list.toString());
 
         for (FishDto dto : list) {
             if (StringUtils.isNotBlank(beginDate)) {
@@ -249,6 +246,20 @@ public class AppFishController extends ExtJsController {
         Long bettingDiff = dto.getBetamt() - dto.getResultamt();
         dto.setBettingDiff(bettingDiff);
 
+
+        //allsecondretent --全量次日留存人数 -- 除以登陆lognum
+        if (dto.getLognum().longValue() == 0) {
+            dto.setAllsecondretentRate(0.00);
+        } else {
+            dto.setAllsecondretentRate(BigDecimalUtil.div(dto.getAllsecondretent() * 100, dto.getLognum(), 2));
+        }
+        // newsecondretent --新增次日留存人数 --- 除以新增登陆newlogmem
+        if (dto.getNewlogmem().longValue() == 0) {
+            dto.setNewsecondretentRate(0.00);
+        } else {
+            dto.setNewsecondretentRate(BigDecimalUtil.div(dto.getNewsecondretent() * 100, dto.getNewlogmem(), 2));
+        }
+
         return dto;
     }
 
@@ -262,7 +273,7 @@ public class AppFishController extends ExtJsController {
         String uri = "http://10.103.5.201:8088/appfish/record";
         List<FishDto> list = Lists.newArrayList();
         try {
-            List<FishDto> fishList = cacheHander.get(DataCacheKey.DATA_APP_FISH_LIST.key(DateUtils.formatCurrentDateYMD()));
+            /*List<FishDto> fishList = cacheHander.get(DataCacheKey.DATA_APP_FISH_LIST.key(DateUtils.formatCurrentDateYMD()));
             if (CollectionUtils.isEmpty(fishList)) {
                 String body = HttpClientUtils.post(uri, logger);
                 if (StringUtils.isBlank(body)) {
@@ -274,8 +285,13 @@ public class AppFishController extends ExtJsController {
 
             } else {
                 list.addAll(fishList);
+            }*/
+            String body = HttpClientUtils.post(uri, logger);
+            if (StringUtils.isBlank(body)) {
+                throw new RuntimeException("send HTTP Request to get app fish data failed. request:" + uri);
             }
 
+            list = GfJsonUtil.parseArray(body, FishDto.class);
 
         } catch (Exception e) {
             logger.error("请求数据异常:uri={}, ex={}, traceId={}", GfJsonUtil.toJSONString(uri), LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
