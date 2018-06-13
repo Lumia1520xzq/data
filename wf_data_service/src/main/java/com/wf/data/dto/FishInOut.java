@@ -74,6 +74,27 @@ public class FishInOut implements Serializable {
     private Double resultRate;
     //流水差
     private Long bettingDiff;
+    //全量次日留存率
+    private Double allsecondretentRate;
+    private Double newsecondretentRate;
+
+    @ExcelField(title = "新用户次留(%)", type = 1, align = 2, sort = 15)
+    public Double getNewsecondretentRate() {
+        return newsecondretentRate;
+    }
+
+    public void setNewsecondretentRate(Double newsecondretentRate) {
+        this.newsecondretentRate = newsecondretentRate;
+    }
+
+    @ExcelField(title = "全量次留(%)", type = 1, align = 2, sort = 16)
+    public Double getAllsecondretentRate() {
+        return allsecondretentRate;
+    }
+
+    public void setAllsecondretentRate(Double allsecondretentRate) {
+        this.allsecondretentRate = allsecondretentRate;
+    }
 
     @ExcelField(title = "渠道", type = 1, align = 2, sort = 2)
     public String getChannelName() {
@@ -83,6 +104,7 @@ public class FishInOut implements Serializable {
     public void setChannelName(String channelName) {
         this.channelName = channelName;
     }
+
     public Double getBettingRate() {
         return bettingRate;
     }
@@ -90,6 +112,7 @@ public class FishInOut implements Serializable {
     public void setBettingRate(Double bettingRate) {
         this.bettingRate = bettingRate;
     }
+
     public Double getBettingArpu() {
         return bettingArpu;
     }
@@ -206,6 +229,7 @@ public class FishInOut implements Serializable {
     public void setPaymemnum(Long paymemnum) {
         this.paymemnum = paymemnum;
     }
+
     @ExcelField(title = "充值金额", type = 1, align = 2, sort = 8)
     public BigDecimal getPayamount() {
         return payamount;
@@ -222,6 +246,7 @@ public class FishInOut implements Serializable {
     public void setExchangemem(Long exchangemem) {
         this.exchangemem = exchangemem;
     }
+
     @ExcelField(title = "成本", type = 1, align = 2, sort = 9)
     public BigDecimal getExchangeamount() {
         return exchangeamount;
@@ -288,6 +313,7 @@ public class FishInOut implements Serializable {
     public void setNewwithinseven(Long newwithinseven) {
         this.newwithinseven = newwithinseven;
     }
+
     @ExcelField(title = "全量次留(%)", type = 1, align = 2, sort = 11)
     public Long getAllsecondretent() {
         return allsecondretent;
