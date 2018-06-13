@@ -1,9 +1,11 @@
 package com.wf.data.dao.datarepo.entity;
 
+import com.wf.core.persistence.DataEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class DatawareUserLabel implements Serializable{
+public class DatawareUserLabel extends DataEntity implements Serializable{
 	private static final long serialVersionUID = -1;
 	private String uuid;
 	private Long userId;
