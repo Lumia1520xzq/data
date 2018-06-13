@@ -55,12 +55,17 @@ public class FishDto implements Serializable {
 
     //新增次日留存人数
     private Long newsecondretent;
+
+    private Double newsecondretentRate;
     //新增7日留存人数
     private Long newsevenretent;
     //新增7日内留存人数
     private Long newwithinseven;
     //全量次日留存人数
     private Long allsecondretent;
+    //全量次日留存率
+    private Double allsecondretentRate;
+
     //全量7日留存人数
     private Long allsevenretent;
     //全量7日内留存人数
@@ -75,6 +80,24 @@ public class FishDto implements Serializable {
     //流水差
     private Long bettingDiff;
 
+    @ExcelField(title = "新用户次留(%)", type = 1, align = 2, sort = 15)
+    public Double getNewsecondretentRate() {
+        return newsecondretentRate;
+    }
+
+    public void setNewsecondretentRate(Double newsecondretentRate) {
+        this.newsecondretentRate = newsecondretentRate;
+    }
+
+    @ExcelField(title = "全量次留(%)", type = 1, align = 2, sort = 16)
+    public Double getAllsecondretentRate() {
+        return allsecondretentRate;
+    }
+
+    public void setAllsecondretentRate(Double allsecondretentRate) {
+        this.allsecondretentRate = allsecondretentRate;
+    }
+
     @ExcelField(title = "渠道", type = 1, align = 2, sort = 2)
     public String getChannelName() {
         return channelName;
@@ -83,6 +106,7 @@ public class FishDto implements Serializable {
     public void setChannelName(String channelName) {
         this.channelName = channelName;
     }
+
     @ExcelField(title = "投注转化率(%)", type = 1, align = 2, sort = 11)
     public Double getBettingRate() {
         return bettingRate;
@@ -91,6 +115,7 @@ public class FishDto implements Serializable {
     public void setBettingRate(Double bettingRate) {
         this.bettingRate = bettingRate;
     }
+
     @ExcelField(title = "ARPU", type = 1, align = 2, sort = 12)
     public Double getBettingArpu() {
         return bettingArpu;
@@ -99,6 +124,7 @@ public class FishDto implements Serializable {
     public void setBettingArpu(Double bettingArpu) {
         this.bettingArpu = bettingArpu;
     }
+
     @ExcelField(title = "返奖率(%)", type = 1, align = 2, sort = 13)
     public Double getResultRate() {
         return resultRate;
@@ -107,6 +133,7 @@ public class FishDto implements Serializable {
     public void setResultRate(Double resultRate) {
         this.resultRate = resultRate;
     }
+
     @ExcelField(title = "流水差", type = 1, align = 2, sort = 14)
     public Long getBettingDiff() {
         return bettingDiff;
@@ -209,6 +236,7 @@ public class FishDto implements Serializable {
     public void setPaymemnum(Long paymemnum) {
         this.paymemnum = paymemnum;
     }
+
     @ExcelField(title = "充值金额", type = 1, align = 2, sort = 9)
     public BigDecimal getPayamount() {
         return payamount;
@@ -225,6 +253,7 @@ public class FishDto implements Serializable {
     public void setExchangemem(Long exchangemem) {
         this.exchangemem = exchangemem;
     }
+
     @ExcelField(title = "成本", type = 1, align = 2, sort = 10)
     public BigDecimal getExchangeamount() {
         return exchangeamount;
@@ -267,7 +296,7 @@ public class FishDto implements Serializable {
         this.firstdaybetmem = firstdaybetmem;
     }
 
-    @ExcelField(title = "新用户次留(%)", type = 1, align = 2, sort = 15)
+
     public Long getNewsecondretent() {
         return newsecondretent;
     }
@@ -291,7 +320,7 @@ public class FishDto implements Serializable {
     public void setNewwithinseven(Long newwithinseven) {
         this.newwithinseven = newwithinseven;
     }
-    @ExcelField(title = "全量次留(%)", type = 1, align = 2, sort = 16)
+
     public Long getAllsecondretent() {
         return allsecondretent;
     }
