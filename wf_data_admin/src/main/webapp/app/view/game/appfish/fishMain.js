@@ -16,7 +16,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
             autoLoad: true,
             url: 'data/admin/appfish/list.do',
             fields: ['dates', 'channelName', 'activenum', 'regmemnum', 'lognum', 'newlogmem', 'betamt', 'paymemnum',
-                'payamount', 'exchangeamount', 'bettingRate', 'bettingArpu', 'resultRate', 'bettingDiff', 'newsecondretent', 'allsecondretent'],
+                'payamount', 'exchangeamount', 'bettingRate', 'bettingArpu', 'resultRate', 'bettingDiff', 'newsecondretentRate', 'allsecondretentRate'],
         });
 
         var parentChannelStore = Ext.create('DCIS.Store', {
@@ -151,7 +151,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
                     } else {
-                        return 0.00;
+                        return 0;
                     }
                 }
             }, {
@@ -164,7 +164,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
                     } else {
-                        return 0.00;
+                        return 0;
                     }
                 }
             }, {
@@ -177,7 +177,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
                     } else {
-                        return 0.00;
+                        return 0;
                     }
                 }
             }, {
@@ -188,9 +188,9 @@ Ext.define('WF.view.game.appfish.fishMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.0");
+                        return Ext.util.Format.number(value, "0,000");
                     } else {
-                        return 0.00;
+                        return 0;
                     }
                 }
             }, {
@@ -201,7 +201,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.0");
+                        return Ext.util.Format.number(value, "0,000.00");
                     } else {
                         return 0.00;
                     }
@@ -214,9 +214,9 @@ Ext.define('WF.view.game.appfish.fishMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000.0");
+                        return Ext.util.Format.number(value, "0,000");
                     } else {
-                        return 0.00;
+                        return 0;
                     }
                 }
             }, {
@@ -227,7 +227,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
                 sortable: false,
                 renderer: function (value) {
                     if (value != null) {
-                        return Ext.util.Format.number(value, "0,000");
+                        return Ext.util.Format.number(value, "0,000.00");
                     } else {
                         return 0.00;
                     }
@@ -300,7 +300,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
             }, {
                 text: '新用户次留',
                 width: 30,
-                dataIndex: 'newsecondretent',
+                dataIndex: 'newsecondretentRate',
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
@@ -313,7 +313,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
             }, {
                 text: '全量次留',
                 width: 30,
-                dataIndex: 'allsecondretent',
+                dataIndex: 'allsecondretentRate',
                 menuDisabled: true,
                 sortable: false,
                 renderer: function (value) {
