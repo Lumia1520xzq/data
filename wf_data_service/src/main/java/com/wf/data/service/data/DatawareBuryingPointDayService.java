@@ -72,4 +72,12 @@ public class DatawareBuryingPointDayService extends CrudService<DatawareBuryingP
     public List<Long> getGameNewUserList(Map<String, Object> newUserParam) {
         return dao.getGameNewUserList(newUserParam);
     }
+
+    public List<Long> getNotActiveUsersByDateAndChannel(Map<String, Object> map) {
+        return dao.getNotActiveUsersByDateAndChannel(map);
+    }
+
+    public List<Long> getOldPredictionLostUsers(Map<String, Object> map) {
+        return dao.getOldPredictionLostUsers(map);
+    }
 }
