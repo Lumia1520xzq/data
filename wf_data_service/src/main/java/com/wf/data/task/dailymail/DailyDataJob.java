@@ -9,16 +9,18 @@ import com.wf.core.utils.type.DateUtils;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.data.common.constants.DataConstants;
+import com.wf.data.common.constants.EmailContents;
 import com.wf.data.dao.trans.entity.TransChangeNote;
 import com.wf.data.service.DataConfigService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.elasticsearch.EsUicBuryingPointService;
 import com.wf.data.service.elasticsearch.EsUicPlatformService;
+import com.wf.email.mq.SendEmailDto;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import javax.mail.MessagingException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -36,6 +38,7 @@ public class DailyDataJob {
     private final EsUicPlatformService platService = SpringContextHolder.getBean(EsUicPlatformService.class);
     private final EmailHander emailHander = SpringContextHolder.getBean(EmailHander.class);
     private final DataConfigService dataConfigService = SpringContextHolder.getBean(DataConfigService.class);
+    private final RabbitTemplate rabbitTemplate = SpringContextHolder.getBean(RabbitTemplate.class);
 
     private final String CONTENT_ONE = "<table border='1' style='text-align: center ; border-collapse: collapse' >"
 
@@ -83,14 +86,25 @@ public class DailyDataJob {
                     content.insert(0, today + "数据如下" + "<br/><br/>");
                     content.append(connectContents(yesterday, today));
                     // 发送邮件
-                    for (String to : receivers.split(",")) {
+                   /* for (String to : receivers.split(",")) {
                         try {
                             emailHander.sendHtml(to, String.format("付费项数据分析汇总(%s)", DateUtils.getDate()),
                                     content.toString());
                         } catch (MessagingException e) {
                             logger.error("付费项数据分析邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                         }
+                    }*/
+                    try {
+                        SendEmailDto sendEmailDto = new SendEmailDto();
+                        sendEmailDto.setTitle(String.format("付费项数据分析汇总(%s)", DateUtils.getDate()));
+                        sendEmailDto.setContent(content.toString());
+                        sendEmailDto.setType("html");
+                        sendEmailDto.setAlias(EmailContents.DAILY_PAYMENT_ANALYSE);
+                        rabbitTemplate.convertAndSend(EmailContents.EMAIL_RABBITMQ_NAME, sendEmailDto);
+                    } catch (Exception e) {
+                        logger.error("付费项数据分析邮件发送失败，ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
                     }
+
                 } else {
                     logger.error("付费项数据分析邮件未设置收件人，traceId={}", TraceIdUtils.getTraceId());
                 }
@@ -424,7 +438,7 @@ public class DailyDataJob {
     //
     private List<Long> countUserIds(List<Long> activeUserIds, List<Long> rechargeUserIds) {
         List<Long> list = new ArrayList<Long>();
-        if (activeUserIds == null){
+        if (activeUserIds == null) {
             return new ArrayList<>();
         }
 
@@ -453,7 +467,7 @@ public class DailyDataJob {
 
     private List<TransChangeNote> countRechargeSums(List<TransChangeNote> transList, List<Long> rechargeUserIds) {
         List<TransChangeNote> list = new ArrayList<TransChangeNote>();
-        if (transList == null){
+        if (transList == null) {
             return new ArrayList<>();
         }
 
