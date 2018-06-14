@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareTagUserLogDao">
+
+	<sql id="datawareTagUserLogColumns">
+		t.id,
+		t.third_id,
+		t.parent_id,
+		t.tag_id,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+
+	<sql id="datawareTagUserLogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="TagUserLogJoins">
+	</sql>
+
+	<select id="get" resultType="DatawareTagUserLog">
+		SELECT <include refid="datawareTagUserLogColumns"/> FROM dataware_tag_user_log t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareTagUserLog">
+		SELECT <include refid="datawareTagUserLogColumns"/> FROM dataware_tag_user_log t <include refid="TagUserLogJoins"/>
+		WHERE <include refid="datawareTagUserLogWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_tag_user_log t WHERE <include refid="datawareTagUserLogWhere" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dataware_tag_user_log (
+		id,
+		third_id,
+		parent_id,
+		tag_id,
+		business_date,
+		create_time,
+		delete_flag
+		) VALUES (
+		#{id},
+		#{thirdId},
+		#{parentId},
+		#{tagId},
+		#{businessDate},
+		#{createTime},
+		#{deleteFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dataware_tag_user_log SET
+		third_id = #{thirdId},
+		parent_id = #{parentId},
+		tag_id = #{tagId},
+		business_date = #{businessDate},
+		delete_flag = #{createTime}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_tag_user_log SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+

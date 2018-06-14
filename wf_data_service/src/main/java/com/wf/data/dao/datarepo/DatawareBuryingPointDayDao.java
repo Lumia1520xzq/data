@@ -37,7 +37,11 @@ public interface DatawareBuryingPointDayDao extends CrudDao<DatawareBuryingPoint
 
     List<Long> getActiveUsersInFifteenDay(Map<String, Object> activeUserParam);
 
-    String getMinActiveDate(Map<String,Object> params);
+    String getMinActiveDate(Map<String, Object> params);
 
     List<Long> getGameNewUserList(Map<String, Object> newUserParam);
+
+    List<Long> getNotActiveUsersByDateAndChannel(Map<String, Object> map);
+
+    List<Long> getOldPredictionLostUsers(Map<String, Object> map);
 }
