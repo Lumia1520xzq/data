@@ -114,6 +114,76 @@ public class SendThirdIdToJddJob {
         }
         logger.info("奖多多渠道7天活跃投注用户彩票ID结束。。。。。。。。");
 
+        String tDate = DateUtils.getDate();
+        String businessDate = DateUtils.getPrevDate(tDate, 1);
+        String activeDate = DateUtils.getPrevDate(tDate, 30);
+        String registeredDate = DateUtils.getPrevDate(tDate, 7);
+        //奖多多渠道老用户未付费预测流失用户
+        logger.info("奖多多渠道【老用户未付费预测流失】用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[7])) {
+                sendThirdIdToJddService.pushOldPredictionLostUsers(activeDate, registeredDate, businessDate, 0);
+            }
+        } catch (Exception e) {
+            logger.error("pushNewUser: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道【老用户未付费预测流失】用户彩票ID结束。。。。。。。。");
+
+        //奖多多渠道老用户小户预测流失用户
+        logger.info("奖多多渠道【老用户小户预测流失】用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[8])) {
+                sendThirdIdToJddService.pushOldPredictionLostUsers(activeDate, registeredDate, businessDate, 1);
+            }
+        } catch (Exception e) {
+            logger.error("pushActiveAndBettingLastTenDay: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道【老用户小户预测流失】用户彩票ID结束。。。。。。。。");
+
+        //奖多多渠道老用户中户预测流失用户
+        logger.info("奖多多渠道【老用户中户预测流失】用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[9])) {
+                sendThirdIdToJddService.pushOldPredictionLostUsers(activeDate, registeredDate, businessDate, 2);
+            }
+        } catch (Exception e) {
+            logger.error("pushNewUser: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道【老用户中户预测流失】用户彩票ID结束。。。。。。。。");
+
+        //奖多多渠道老用户大户预测流失用户
+        logger.info("奖多多渠道【老用户大户预测流失】用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[10])) {
+                sendThirdIdToJddService.pushOldPredictionLostUsers(activeDate, registeredDate, businessDate, 3);
+            }
+        } catch (Exception e) {
+            logger.error("pushNewUser: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道【老用户大户预测流失】用户彩票ID结束。。。。。。。。");
+
+        //奖多多渠道近14日未活跃用户
+        logger.info("奖多多渠道【近14日未活跃】用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[11])) {
+                sendThirdIdToJddService.pushNotActiveUsers(15);
+            }
+        } catch (Exception e) {
+            logger.error("pushNewUser: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道【近14日未活跃】用户彩票ID结束。。。。。。。。");
+
+        //奖多多渠道近30天未活跃用户
+        logger.info("奖多多渠道【近30天未活跃】用户彩票ID开始。。。。。。。。");
+        try {
+            if ("true".equals(openFlag[12])) {
+                sendThirdIdToJddService.pushNotActiveUsers(31);
+            }
+        } catch (Exception e) {
+            logger.error("pushNewUser: traceId={},date={}, ex={}", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(DateUtils.getYesterdayDate()), LogExceptionStackTrace.erroStackTrace(e));
+        }
+        logger.info("奖多多渠道【近30天未活跃】用户彩票ID结束。。。。。。。。");
+
     }
 
 }

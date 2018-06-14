@@ -1,5 +1,6 @@
 package com.wf.data.service.docking;
 
+import com.google.common.collect.Lists;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.wf.core.log.LogExceptionStackTrace;
@@ -9,11 +10,14 @@ import com.wf.core.utils.TraceIdUtils;
 import com.wf.data.common.constants.ChannelConstants;
 import com.wf.data.common.constants.JddTagIdConstants;
 import com.wf.data.common.utils.DateUtils;
+import com.wf.data.dao.datarepo.entity.DatawareTagUserLog;
 import com.wf.data.dto.JddUserTagDto;
 import com.wf.data.service.BuryingPointService;
 import com.wf.data.service.TransConvertService;
 import com.wf.data.service.UicUserService;
 import com.wf.data.service.data.DatawareBettingLogDayService;
+import com.wf.data.service.data.DatawareBuryingPointDayService;
+import com.wf.data.service.data.DatawareTagUserLogService;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -49,6 +53,12 @@ public class SendThirdIdToJddService {
     @Autowired
     private DatawareBettingLogDayService bettingLogDayService;
 
+    @Autowired
+    private DatawareBuryingPointDayService datawareBuryingPointDayService;
+
+    @Autowired
+    private DatawareTagUserLogService datawareTagUserLogService;
+
     @Value("${jdd.baseUrl}")
     private String baseUrl;
 
@@ -65,6 +75,13 @@ public class SendThirdIdToJddService {
 
     public void toDoAnalysis() {
         thirdIds = new BitSet();
+        try {
+            Map<String, Object> delMap = new HashMap<>();
+            delMap.put("businessDate", DateUtils.getPrevDate(DateUtils.getYesterdayDate(), 30));
+            datawareTagUserLogService.deleteByDate(delMap);
+        } catch (Exception e) {
+            logger.error("删除标签用户记录失败", e);
+        }
         //昨日新增用户彩票ID
         Map<String, Object> params = new HashMap<>();
         String beginDate = DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.getNextDate(new Date(), -1)), DateUtils.DATE_TIME_PATTERN);
@@ -283,6 +300,36 @@ public class SendThirdIdToJddService {
     }
 
     /**
+     * 推送近(n-1)天内未活跃用户
+     * 第n天活跃，近n-1天内未活跃
+     * @Param dayInterval 仅支持15、31
+     */
+    public void pushNotActiveUsers(int dayInterval) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("businessDate", DateUtils.getPrevDate(DateUtils.getDate(), dayInterval));
+        param.put("parentId", ChannelConstants.JS_CHANNEL);
+        List<Long> users = datawareBuryingPointDayService.getNotActiveUsersByDateAndChannel(param);
+        getThirdIdByUserIdList(users, dayInterval == 15 ? JddTagIdConstants.SIX_FIVE_NINE : JddTagIdConstants.SIX_SIX_ZERO, false);
+    }
+
+    /**
+     * 推送老用户预测流失用户
+     * 近30内天有活跃（含30天），且注册天数大于7，且是预测流失的用户
+     * @param userLevel 累充等级
+     */
+    public void pushOldPredictionLostUsers(String activeDate, String registeredDate, String businessDate, int userLevel) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("activeDate", activeDate);
+        param.put("registeredDate", registeredDate);
+        param.put("businessDate", businessDate);
+        param.put("userLevel", userLevel);
+        List<Long> users = datawareBuryingPointDayService.getOldPredictionLostUsers(param);
+        getThirdIdByUserIdList(users, userLevel == 0 ? JddTagIdConstants.SIX_FOUR_SIX :
+                (userLevel == 1 ? JddTagIdConstants.SIX_FOUR_SEVEN :
+                        (userLevel == 2 ? JddTagIdConstants.SIX_FOUR_EIGHT : JddTagIdConstants.SIX_FOUR_NINE)), false);
+    }
+
+    /**
      * 根据userIdList获取三方ID
      *
      * @param resultList
@@ -346,7 +393,30 @@ public class SendThirdIdToJddService {
         dto.setFrom("game");
         dto.setTagId(tagId);
         logger.info("奖多多推送接口参数：batchId:" + uuid + ";");
+        // 保存推送记录
+        saveTagUserLog(thirdIdList, tagId, ChannelConstants.JS_CHANNEL);
         request(baseUrl + url, dto);
+    }
+
+    private void saveTagUserLog(List<String> thirdIdList, String tagId, Long parentId) {
+        String businessDate = DateUtils.getDate();
+        Date date = new Date();
+        DatawareTagUserLog log;
+        List<DatawareTagUserLog> logs = Lists.newArrayList();
+        for (String thirdId : thirdIdList) {
+            log = new DatawareTagUserLog();
+            log.setThirdId(thirdId);
+            log.setParentId(parentId);
+            log.setTagId(tagId);
+            log.setBusinessDate(businessDate);
+            log.setCreateTime(date);
+            logs.add(log);
+        }
+        try {
+            datawareTagUserLogService.batchSave(logs);
+        } catch (Exception e) {
+            logger.error("保存标签用户记录失败", e);
+        }
     }
 
     /**

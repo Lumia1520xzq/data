@@ -45,4 +45,34 @@ public interface JddTagIdConstants {
      * 10天活跃投注用户
      */
     String FOUR_ONE_NINE = "419";
+
+    /**
+     * 老用户未付费预测流失
+     */
+    String SIX_FOUR_SIX = "646";
+
+    /**
+     * 老用户小户预测流失
+     */
+    String SIX_FOUR_SEVEN = "647";
+
+    /**
+     * 老用户中户预测流失
+     */
+    String SIX_FOUR_EIGHT = "648";
+
+    /**
+     * 老用户大户预测流失
+     */
+    String SIX_FOUR_NINE = "649";
+
+    /**
+     * 近14日未活跃用户
+     */
+    String SIX_FIVE_NINE = "659";
+
+    /**
+     * 近30日未活跃用户
+     */
+    String SIX_SIX_ZERO = "660";
 }
