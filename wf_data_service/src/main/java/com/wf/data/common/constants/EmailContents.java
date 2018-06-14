@@ -24,6 +24,12 @@ public interface EmailContents {
     String CHANNEL_DATA_ALIAS = "wf_data_task_dailyColorDataForAllChannel";
 
 
+
+    /**
+     * 付费项数据分析邮件
+     */
+    String DAILY_PAYMENT_ANALYSE = "wf_data_task_dailyPaymentAnalyse";
+
     /**
      * 游戏数据日报表分析汇总
      */
