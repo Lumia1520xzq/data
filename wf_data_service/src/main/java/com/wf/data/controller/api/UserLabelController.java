@@ -19,7 +19,7 @@ public class UserLabelController extends DataBaseController {
     @Autowired
     private DatawareUserLabelService userLabelService;
 
-    @RequestMapping(value = "/getAllLabels", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAllLabels", method = RequestMethod.GET)
     public String getAllLabels(@RequestParam String userId) {
         DatawareUserLabel userLabel  =userLabelService.getUserLabelByUserId(Long.parseLong(userId));
 
