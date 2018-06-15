@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareUserLabelDao">
+	
+	<sql id="datawareUserLabelColumns">
+		t.uuid,
+		t.user_id,
+		t.prediction,
+		t.user_level,
+		t.R,
+		t.F,
+		t.M,
+		t.business_date,
+		t.create_time,
+		t.update_time
+	</sql>
+
+	<select id="getLabelsByUserId" resultType="com.wf.data.dao.datarepo.entity.DatawareUserLabel">
+		SELECT
+			t.user_id,
+			t.prediction,
+			t.user_level,
+			t.R,
+			t.F,
+			t.M,
+			t.business_date
+		FROM dataware_user_label t
+		WHERE t.user_id = #{userId} AND t.business_date = #{businessDate}
+	</select>
+</mapper>
+
