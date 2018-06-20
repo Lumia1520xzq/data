@@ -310,8 +310,10 @@ public class BettingLogHourService {
             String day = DateUtils.formatDate(startTime, DateUtils.YYYYMMDD_PATTERN);
             String dbName = "fish";
             dbName = dbName + day;
+            String appDbName = "appfish";
+            appDbName = appDbName + day;
             getBettingLogFromFish(params, dbName, uicGroupList);
-            getAppBettingLogFromFish(params, dbName, uicGroupList);
+            getAppBettingLogFromFish(params, appDbName, uicGroupList);
         } else {
             for (String dat : datelist) {
                 if (datelist.get(0) == dat) {
@@ -320,8 +322,10 @@ public class BettingLogHourService {
                     String day = DateUtils.formatDate(startTime, DateUtils.YYYYMMDD_PATTERN);
                     String dbName = "fish";
                     dbName = dbName + day;
+                    String appDbName = "appfish";
+                    appDbName = appDbName + day;
                     getBettingLogFromFish(params, dbName, uicGroupList);
-                    getAppBettingLogFromFish(params, dbName, uicGroupList);
+                    getAppBettingLogFromFish(params, appDbName, uicGroupList);
                 } else if (dat == datelist.get(datelist.size() - 1)) {
                     params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(endTime), "yyyy-MM-dd HH:mm:ss"));
                     params.put("endDate", endDate);
@@ -329,7 +333,9 @@ public class BettingLogHourService {
                     String dbName = "fish";
                     dbName = dbName + day;
                     getBettingLogFromFish(params, dbName, uicGroupList);
-                    getAppBettingLogFromFish(params, dbName, uicGroupList);
+                    String appDbName = "appfish";
+                    appDbName = appDbName + day;
+                    getAppBettingLogFromFish(params, appDbName, uicGroupList);
                 } else {
                     params.put("beginDate", DateUtils.formatDate(DateUtils.getDayStartTime(DateUtils.parseDate(dat, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
                     params.put("endDate", DateUtils.formatDate(DateUtils.getDayEndTime(DateUtils.parseDate(dat, "yyyy-MM-dd")), "yyyy-MM-dd HH:mm:ss"));
@@ -337,7 +343,9 @@ public class BettingLogHourService {
                     String dbName = "fish";
                     dbName = dbName + day;
                     getBettingLogFromFish(params, dbName, uicGroupList);
-                    getAppBettingLogFromFish(params, dbName, uicGroupList);
+                    String appDbName = "appfish";
+                    appDbName = appDbName + day;
+                    getAppBettingLogFromFish(params, appDbName, uicGroupList);
                 }
             }
 
