@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.landlords.LandlordsUserAmountLogDao">
+	
+	<sql id="landlordsUserAmountLogColumns">
+		t.id,
+		t.desk_type,
+		t.desk_id,
+		t.phase,
+		t.user_id,
+		t.type,
+		t.amount,
+		t.return_amount,
+		t.channel_id,
+		t.status,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="landlordsUserAmountLogWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="landlordsUserAmountLogJoins">
+	</sql>
+	
+	<select id="get" resultType="LandlordsUserAmountLog">
+		SELECT <include refid="landlordsUserAmountLogColumns"/> FROM landlords_user_amount_log t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="LandlordsUserAmountLog">
+		SELECT <include refid="landlordsUserAmountLogColumns"/> FROM landlords_user_amount_log t <include refid="landlordsUserAmountLogJoins"/>
+		WHERE <include refid="landlordsUserAmountLogWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM landlords_user_amount_log t WHERE <include refid="landlordsUserAmountLogWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO landlords_user_amount_log (
+			id, 
+			desk_type, 
+			desk_id, 
+			phase, 
+			user_id, 
+			type, 
+			amount, 
+			return_amount, 
+			channel_id, 
+			status, 
+			create_time, 
+			delete_flag 
+		) VALUES (
+			#{id}, 
+			#{deskType}, 
+			#{deskId}, 
+			#{phase}, 
+			#{userId}, 
+			#{type}, 
+			#{amount}, 
+			#{returnAmount}, 
+			#{channelId}, 
+			#{status}, 
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE landlords_user_amount_log SET
+			desk_type = #{deskType}, 
+			desk_id = #{deskId}, 
+			phase = #{phase}, 
+			user_id = #{userId}, 
+			type = #{type}, 
+			amount = #{amount}, 
+			return_amount = #{returnAmount}, 
+			channel_id = #{channelId}, 
+			status = #{status}, 
+			delete_flag = #{deleteFlag} 
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE landlords_user_amount_log SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+</mapper>
+

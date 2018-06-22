@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="landlordsReadDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.landlords.url}" />
+		<property name="username" value="${jdbc.landlords.username}" />
+		<property name="password" value="${jdbc.landlords.password}" />
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="10" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="select 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="filters" value="stat" />
+	</bean>
+
+	<bean id="landlordsMultipleDataSource" class="com.wf.core.db.MultipleDataSource">
+		<!-- 默认数据库是写的数据库 -->
+		<property name="defaultTargetDataSource" ref="landlordsReadDataSource" />
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="landlordsReadDataSource" key="dataSourceRead" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="landlordsSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="landlordsMultipleDataSource" />
+		<property name="typeAliasesPackage" value="com.wf.data.dao.landlords.entity" />
+		<property name="typeAliasesSuperType" value="com.wf.core.persistence.BaseEntity" />
+		<property name="mapperLocations" value="classpath*:mappings/mysql/landlords/*.xml" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+	</bean>
+	<bean id="landlordsMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="landlordsSqlSessionFactory" />
+		<property name="basePackage" value="com.wf.data.dao.landlords" />
+		<property name="annotationClass" value="com.wf.core.persistence.MyBatisDao" />
+	</bean>
+
+	<bean id="landlordsTractionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="landlordsMultipleDataSource" />
+	</bean>
+</beans>
