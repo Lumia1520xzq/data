@@ -81,4 +81,5 @@
     <import resource="app-db-mysql-wars.xml"/>
     <import resource="app-db-mysql-taurus.xml"/>
     <import resource="app-db-mysql-appuic.xml"/>
+    <import resource="app-db-mysql-landlords.xml"/>
 </beans>
