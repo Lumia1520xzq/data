@@ -11,13 +11,36 @@ import java.util.Map;
 @MyBatisDao(tableName = "channel_info")
 public interface AppUicChannelInfoDao extends CrudDao<AppUicChannelInfo> {
 
+    /**
+     * 获取所有主渠道
+     * @return
+     */
     List<AppUicChannelInfo> findMainChannel();
 
+    /**
+     * 获取子渠道详情
+     * @param parentId
+     * @return
+     */
     List<AppUicChannelInfo> findSubChannel(Long parentId);
 
+    /**
+     * 获取所有渠道
+     * @return
+     */
     List<AppUicChannelInfo> findAll();
 
+    /**
+     * 获取渠道名称
+     * @param params
+     * @return
+     */
     String findChannelNameById(Map<String, Object> params);
 
+    /**
+     * 捕鱼APP根据父渠道获取所有子渠道
+     * @param parentId
+     * @return
+     */
     List<Long> findSubChannelIds(@Param("parentId") Long parentId);
 }

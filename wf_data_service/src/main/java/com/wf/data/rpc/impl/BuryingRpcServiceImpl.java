@@ -17,6 +17,11 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
     @Autowired
     private BuryingPointService buryingPointService;
 
+    /**
+     * 保存埋点
+     * @param buryingPointDto
+     * @return
+     */
     @Override
     public JsonResult save(BuryingPointDto buryingPointDto) {
 
@@ -27,6 +32,12 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
         return JsonResultUtils.markSuccessResult();
     }
 
+    /**
+     * 获取最后一次游戏埋点
+     * @param userId
+     * @param gameType
+     * @return
+     */
     @Override
     public BuryingPointDto findLastGameLoading(Long userId, Integer gameType) {
         BuryingPoint point = buryingPointService.findLastGameLoading(userId, gameType);
@@ -39,6 +50,13 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
         return null;
     }
 
+    /**
+     * 获取list
+     * @param userId
+     * @param num
+     * @param channelId
+     * @return
+     */
     @Override
     public List<BuryingPointDto> getUserLastPlayGame(Long userId, Integer num, Long channelId) {
         List<BuryingPointDto> list = Lists.newArrayList();
@@ -53,6 +71,13 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
         return list;
     }
 
+    /**
+     * 根据条件获取买点信息
+     * @param gameType
+     * @param buryingType
+     * @param userId
+     * @return
+     */
     @Override
     public BuryingPointDto getByGameTypeAndBuryingType(Integer gameType, Integer buryingType, Long userId) {
         BuryingPoint point = buryingPointService.getByGameTypeAndBuryingType(gameType, buryingType, userId);
@@ -65,6 +90,12 @@ public class BuryingRpcServiceImpl implements BuryingRpcService {
         return null;
     }
 
+    /**
+     * 获取最后一次埋点
+     * @param userId
+     * @param buryingType
+     * @return
+     */
     @Override
     public Date getLastLoginWealTime(Long userId, Integer buryingType) {
         return buryingPointService.getLastLoginWealTime(userId,buryingType);

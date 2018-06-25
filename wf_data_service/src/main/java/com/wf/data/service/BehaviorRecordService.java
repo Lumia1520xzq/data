@@ -12,6 +12,10 @@ import java.util.Map;
 @Service
 public class BehaviorRecordService extends CrudService<BehaviorRecordDao, BehaviorRecord> {
 
+	/**
+	 * 埋点保存
+	 * @param entity
+	 */
 	@Async
 	@Override
 	public void save(BehaviorRecord entity) {
@@ -21,6 +25,11 @@ public class BehaviorRecordService extends CrudService<BehaviorRecordDao, Behavi
 		super.save(entity);
 	}
 
+	/**
+	 * 获取某埋点的userId
+	 * @param dauParams
+	 * @return
+	 */
 	public List<Long> getUserIdsByEntrance(Map<String, Object> dauParams) {
 		return dao.getUserIdsByEntrance(dauParams);
 	}
