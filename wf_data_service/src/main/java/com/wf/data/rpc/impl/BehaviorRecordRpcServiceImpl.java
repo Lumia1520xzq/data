@@ -19,6 +19,11 @@ public class BehaviorRecordRpcServiceImpl implements BehaviorRecordRpcService {
     @Autowired
     private BehaviorTypeService behaviorTypeService;
 
+    /**
+     * 新埋点保存
+     * @param behaviorRecordDto
+     * @return
+     */
     @Override
     public JsonResult<String> save(BehaviorRecordDto behaviorRecordDto) {
 

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author  lcs
+ * @author lcs
  */
 @Component
 public class FishJdbcUtils {
@@ -25,6 +25,15 @@ public class FishJdbcUtils {
     @Autowired
     private FishDbConfig fishDbConfig;
 
+    /**
+     * 捕鱼APP
+     * Connection
+     *
+     * @param config
+     * @param dbName
+     * @return
+     * @throws SQLException
+     */
     private Connection createConnection(FishDbConfig config, String dbName) throws SQLException {
         StringBuilder sb = new StringBuilder();
         sb.append("jdbc:mysql://");
@@ -37,34 +46,51 @@ public class FishJdbcUtils {
         return DriverManager.getConnection(sb.toString(), config.getAppusername(), config.getApppassword());
     }
 
-
+    /**
+     * 根据dbname获取连接
+     *
+     * @param dbName
+     * @return
+     */
     private Connection createConnection(String dbName) {
         Connection conn = null;
         try {
             conn = createConnection(fishDbConfig, dbName);
-        } catch (SQLException e) {
+        } catch (Exception e) {
+
             try {
                 conn.close();
-            } catch (Exception e1) {
+            } catch (SQLException e1) {
                 logger.error("关闭连接失败,ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
             }
             e.printStackTrace();
             logger.error("无法连接到源数据库,ex={}，traceId={}", LogExceptionStackTrace.erroStackTrace(e), TraceIdUtils.getTraceId());
-            throw new RuntimeException("无法连接到源数据库:" + dbName + "," + fishDbConfig);
         }
-
         return conn;
+
+
     }
 
+    /**
+     * 获取查询结果
+     *
+     * @param sql
+     * @param dbName
+     * @return
+     */
     public List<Map<String, Object>> query(String sql, String dbName) {
-        logger.info("执行sql: traceId={}, sql={},", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(sql));
+        logger.info("执行sql: traceId={}, sql={},", TraceIdUtils.getTraceId(), sql);
+        List<Map<String, Object>> resultList = new ArrayList<>();
         Connection connection = createConnection(dbName);
         PreparedStatement ps = null;
         try {
+            if (null == connection) {
+                return resultList;
+            }
             ps = connection.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
-            List<Map<String, Object>> resultList = new ArrayList<>();
+
             ResultSetMetaData rsd = rs.getMetaData();
             int count = rsd.getColumnCount();
             String[] names = new String[count];
@@ -79,16 +105,15 @@ public class FishJdbcUtils {
                 }
                 resultList.add(data);
             }
-            return resultList;
         } catch (SQLException e) {
             e.printStackTrace();
             logger.info("执行查询错误: traceId={}, sql={},", TraceIdUtils.getTraceId(), GfJsonUtil.toJSONString(sql));
-            throw new RuntimeException("执行查询错误:" + sql);
         } finally {
             if (null != ps) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
+                    logger.error("ps close error");
                 }
             }
 
@@ -96,11 +121,12 @@ public class FishJdbcUtils {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-
+                    logger.error("connection close error");
                 }
             }
 
 
         }
+        return resultList;
     }
 }
