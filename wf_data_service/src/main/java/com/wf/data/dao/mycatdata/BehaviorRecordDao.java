@@ -10,5 +10,10 @@ import java.util.Map;
 @MyBatisDao(tableName = "uic_behavior_record")
 public interface BehaviorRecordDao extends CrudDao<BehaviorRecord> {
 
+    /**
+     * 获取用户id
+     * @param dauParams
+     * @return
+     */
     List<Long> getUserIdsByEntrance(Map<String, Object> dauParams);
 }
