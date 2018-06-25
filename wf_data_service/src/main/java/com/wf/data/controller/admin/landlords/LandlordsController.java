@@ -59,7 +59,7 @@ public class LandlordsController extends ExtJsController {
         }
 
         if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-            startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -6));
+            startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
             endTime = DateUtils.getYesterdayDate();
         } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
             startTime = endTime;
@@ -104,7 +104,7 @@ public class LandlordsController extends ExtJsController {
                     dto.setBettingAmount(bettingDto.getBettingAmount());
                     dto.setResultAmount(bettingDto.getResultAmount());
                     if (dto.getDauCount() != null && dto.getDauCount() != 0) {
-                        dto.setConversionRate(BigDecimalUtil.div(bettingDto.getUserCount(), dto.getDauCount(), 2) + "%");
+                        dto.setConversionRate(BigDecimalUtil.div(bettingDto.getUserCount() * 100, dto.getDauCount(), 2) + "%");
                     }
 
                     if (dto.getBettingAmount() != 0) {
@@ -125,8 +125,8 @@ public class LandlordsController extends ExtJsController {
                 Integer gameTimes = landlordsUserAmountLogService.getGameTimes(landMap);
                 dto.setGameTimes(gameTimes);
 
-                if (null != dto.getDauCount() && dto.getDauCount() != 0) {
-                    dto.setAvgGameTimes(BigDecimalUtil.div(dto.getGameTimes(), dto.getDauCount(), 2));
+                if (null != dto.getUserCount() && dto.getUserCount() != 0) {
+                    dto.setAvgGameTimes(BigDecimalUtil.div(dto.getGameTimes(), dto.getUserCount(), 2));
                 }
 
                 if (null != dto.getGameTimes() && dto.getGameTimes() != 0) {
@@ -179,8 +179,8 @@ public class LandlordsController extends ExtJsController {
                     landlordsDto.setAmountDiffArpu(BigDecimalUtil.div(amount, landlordsDto.getUserCount(), 2));
                 }
 
-                if (null != landlordsDto.getDauCount() && landlordsDto.getDauCount() != 0) {
-                    landlordsDto.setAvgGameTimes(BigDecimalUtil.div(landlordsDto.getGameTimes(), landlordsDto.getDauCount(), 2));
+                if (null != landlordsDto.getUserCount() && landlordsDto.getUserCount() != 0) {
+                    landlordsDto.setAvgGameTimes(BigDecimalUtil.div(landlordsDto.getGameTimes(), landlordsDto.getUserCount(), 2));
                 }
 
                 if (null != landlordsDto.getGameTimes() && landlordsDto.getGameTimes() != 0) {

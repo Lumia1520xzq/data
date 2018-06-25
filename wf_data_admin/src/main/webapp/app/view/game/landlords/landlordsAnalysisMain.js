@@ -260,9 +260,9 @@ Ext.define('WF.view.game.landlords.landlordsAnalysisMain', {
                     flex: 1,
                     renderer: function (value) {
                         if (value != null) {
-                            return Ext.util.Format.number(value, "0,000");
+                            return Ext.util.Format.number(value, "0,000.00");
                         } else {
-                            return 0;
+                            return 0.00;
                         }
                     }
                 },
