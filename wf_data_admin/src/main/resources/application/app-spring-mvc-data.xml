@@ -42,6 +42,13 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.wf.data.interceptor.LoginInInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
 	<!-- 配置结果页面 前缀和后缀 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="order" value="10"/>
