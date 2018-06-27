@@ -17,8 +17,25 @@ public interface LandlordsUserAmountLogDao extends CrudDao<LandlordsUserAmountLo
 
     LandlordsDto getBettingInfo(Map<String, Object> map);
 
+    /**
+     * 获取桌费，减去返回桌费
+     * @param map
+     * @return
+     */
     Double getTableAmount(Map<String, Object> map);
 
+    /**
+     * 获取道具金额
+     * @param map
+     * @return
+     */
+    Double getToolsAmount(Map<String, Object> map);
+
+    /**
+     * 获取局数
+     * @param map
+     * @return
+     */
     Integer getGameTimes(Map<String, Object> map);
 
 }

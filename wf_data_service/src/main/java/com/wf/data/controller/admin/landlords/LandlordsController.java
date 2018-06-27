@@ -59,8 +59,8 @@ public class LandlordsController extends ExtJsController {
         }
 
         if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
-            startTime = DateUtils.formatDate(DateUtils.getNextDate(new Date(), -2));
-            endTime = DateUtils.getYesterdayDate();
+            startTime = DateUtils.getYesterdayDate();
+            endTime = startTime;
         } else if (StringUtils.isBlank(startTime) && StringUtils.isNotBlank(endTime)) {
             startTime = endTime;
         } else if (StringUtils.isNotBlank(startTime) && StringUtils.isBlank(endTime)) {
@@ -70,6 +70,10 @@ public class LandlordsController extends ExtJsController {
         if (CollectionUtils.isEmpty(deskTypes)) {
             deskTypes = Lists.newArrayList();
             deskTypes.add(0);
+            deskTypes.add(1);
+            deskTypes.add(2);
+            deskTypes.add(3);
+            deskTypes.add(4);
         }
 
         List<String> dateList = DateUtils.getDateList(startTime, endTime);
@@ -103,24 +107,27 @@ public class LandlordsController extends ExtJsController {
                     dto.setUserCount(bettingDto.getUserCount());
                     dto.setBettingAmount(bettingDto.getBettingAmount());
                     dto.setResultAmount(bettingDto.getResultAmount());
+                    dto.setToolsAmount(bettingDto.getToolsAmount());
                     if (dto.getDauCount() != null && dto.getDauCount() != 0) {
                         dto.setConversionRate(BigDecimalUtil.div(bettingDto.getUserCount() * 100, dto.getDauCount(), 2) + "%");
                     }
 
-                    if (dto.getBettingAmount() != 0) {
+                    if (null != dto.getBettingAmount() && dto.getBettingAmount() != 0) {
                         dto.setReturnRate(BigDecimalUtil.div(dto.getResultAmount() * 100, dto.getBettingAmount(), 2) + "%");
                     }
 
-                    if (dto.getUserCount() != 0) {
+                    if (null != dto.getUserCount() && dto.getUserCount() != 0) {
                         dto.setBettingArpu(BigDecimalUtil.div(dto.getBettingAmount(), dto.getUserCount(), 2));
-                    }
-
-                    if (dto.getUserCount() != 0) {
                         Double amount = dto.getBettingAmount() - dto.getResultAmount();
                         dto.setAmountDiffArpu(BigDecimalUtil.div(amount, dto.getUserCount(), 2));
                     }
 
                 }
+
+
+                Double toolsAmount = landlordsUserAmountLogService.getToolsAmount(landMap);
+
+                dto.setToolsAmount(toolsAmount);
 
                 Integer gameTimes = landlordsUserAmountLogService.getGameTimes(landMap);
                 dto.setGameTimes(gameTimes);
@@ -160,26 +167,22 @@ public class LandlordsController extends ExtJsController {
                     landlordsDto.setDeskTypeName("中级场");
                 } else if (landlordsDto.getDeskType() == 4) {
                     landlordsDto.setDeskTypeName("高级场");
+                } else {
+                    landlordsDto.setDeskTypeName(String.valueOf(landlordsDto.getDeskType()));
                 }
 
                 if (landlordsDto.getDauCount() != null && landlordsDto.getDauCount() != 0) {
                     landlordsDto.setConversionRate(BigDecimalUtil.div(landlordsDto.getUserCount(), landlordsDto.getDauCount(), 2) + "%");
                 }
 
-                if (landlordsDto.getBettingAmount() != 0) {
+                if (null != landlordsDto.getBettingAmount() && landlordsDto.getBettingAmount() > 0) {
                     landlordsDto.setReturnRate(BigDecimalUtil.div(landlordsDto.getResultAmount() * 100, landlordsDto.getBettingAmount(), 2) + "%");
                 }
 
-                if (landlordsDto.getUserCount() != 0) {
+                if (null != landlordsDto.getUserCount() && landlordsDto.getUserCount() != 0) {
                     landlordsDto.setBettingArpu(BigDecimalUtil.div(landlordsDto.getBettingAmount(), landlordsDto.getUserCount(), 2));
-                }
-
-                if (landlordsDto.getUserCount() != 0) {
                     Double amount = landlordsDto.getBettingAmount() - landlordsDto.getResultAmount();
                     landlordsDto.setAmountDiffArpu(BigDecimalUtil.div(amount, landlordsDto.getUserCount(), 2));
-                }
-
-                if (null != landlordsDto.getUserCount() && landlordsDto.getUserCount() != 0) {
                     landlordsDto.setAvgGameTimes(BigDecimalUtil.div(landlordsDto.getGameTimes(), landlordsDto.getUserCount(), 2));
                 }
 
