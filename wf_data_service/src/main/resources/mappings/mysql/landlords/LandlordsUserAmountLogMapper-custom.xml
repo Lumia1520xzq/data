@@ -25,15 +25,16 @@
             AND channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
         AND status=1
+        AND type not IN (5,6,7)
         AND delete_flag=0
         GROUP BY
         DATE_FORMAT(create_time, '%Y-%m-%d');
     </select>
 
-
+    <!--桌费减去返还桌费-->
     <select id="getTableAmount" resultType="Double">
         SELECT
-        IFNULL(SUM(t.amount),0) tableAmount
+        IFNULL(SUM(CASE WHEN type =1 THEN t.amount ELSE 0 END ), 0) - IFNULL(SUM(CASE WHEN type =4 THEN t.return_amount ELSE 0 END ), 0) tableAmount
         FROM
         `landlords_user_amount_log` t
         WHERE 1=1
@@ -46,7 +47,6 @@
         <if test="parentId != null and parentId != ''">
             AND t.channel_id LIKE CONCAT(#{parentId}, '%')
         </if>
-        AND t.type =1
         AND t.status=1
         AND t.delete_flag=0
     </select>
@@ -71,16 +71,37 @@
         AND t.delete_flag=0
     </select>
 
+    <select id="getToolsAmount" resultType="Double">
+        SELECT
+        IFNULL(SUM(t.amount),0) toolsAmount
+        FROM
+        `landlords_user_amount_log` t
+        WHERE 1=1
+        <if test="beginDate != null and beginDate != ''">
+            AND t.create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.create_time &lt;= #{endDate}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        AND t.type IN (5,6,7)
+        AND t.status=1
+        AND t.delete_flag=0
+    </select>
+
 
     <select id="getLandlordList" resultType="com.wf.data.dto.LandlordsDto">
         SELECT
         aa.searchDate,
         aa.desk_type,
-        aa.userCount,
-        aa.bettingAmount,
-        aa.resultAmount,
-        bb.tableAmount,
-        cc.gameTimes
+        IFNULL(aa.userCount, 0) userCount,
+        IFNULL(aa.bettingAmount, 0) bettingAmount,
+        IFNULL(aa.resultAmount, 0) resultAmount,
+        IFNULL(bb.tableAmount, 0) tableAmount,
+        IFNULL(cc.gameTimes, 0) gameTimes,
+        IFNULL(dd.toolsAmount, 0) toolsAmount
         FROM
         (
         SELECT
@@ -107,6 +128,7 @@
                 #{item}
             </foreach>
         </if>
+        AND type not IN (5,6,7)
         AND STATUS = 1
         AND delete_flag = 0
         GROUP BY desk_type, DATE_FORMAT(create_time, '%Y-%m-%d')
@@ -115,7 +137,7 @@
         SELECT
         DATE_FORMAT(create_time, '%Y-%m-%d') searchDate,
         desk_type,
-        IFNULL(SUM(t.amount), 0) tableAmount
+        IFNULL(SUM(CASE WHEN type =1 THEN t.amount ELSE 0 END ), 0) - IFNULL(SUM(CASE WHEN type =4 THEN t.return_amount ELSE 0 END ), 0) tableAmount
         FROM
         `landlords_user_amount_log` t
         WHERE 1 = 1
@@ -134,7 +156,6 @@
                 #{item}
             </foreach>
         </if>
-        AND t.type = 1
         AND t. STATUS = 1
         AND t.delete_flag = 0
         GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d'), desk_type
@@ -167,7 +188,39 @@
         AND t. STATUS = 1
         AND t.delete_flag = 0
         GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d'), desk_type
-        ) cc ON aa.searchDate = cc.searchDate AND aa.desk_type = cc.desk_type;
+        ) cc ON aa.searchDate = cc.searchDate AND aa.desk_type = cc.desk_type
+        LEFT JOIN (
+        SELECT
+        DATE_FORMAT(create_time, '%Y-%m-%d') searchDate,
+        desk_type,
+        IFNULL(SUM(t.amount), 0) toolsAmount
+        FROM
+        `landlords_user_amount_log` t
+        WHERE
+        1 = 1
+        <if test="beginDate != null and beginDate != ''">
+            AND t.create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.create_time &lt;= #{endDate}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            AND t.channel_id LIKE CONCAT(#{parentId}, '%')
+        </if>
+        <if test="deskTypes.size()!=0">
+            AND t.desk_type in
+            <foreach collection="deskTypes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND t.type IN (5,6,7)
+        AND t. STATUS = 1
+        AND t.delete_flag = 0
+        GROUP BY
+        DATE_FORMAT(create_time, '%Y-%m-%d'),
+        desk_type
+        ) dd ON aa.searchDate = dd.searchDate
+        AND aa.desk_type =dd.desk_type
     </select>
 </mapper>
 

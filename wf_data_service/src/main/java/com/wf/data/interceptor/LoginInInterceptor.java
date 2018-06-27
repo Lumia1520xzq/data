@@ -64,7 +64,7 @@ public class LoginInInterceptor implements HandlerInterceptor {
         try {
             HandlerMethod h = (HandlerMethod) handler;
             String requestClass = h.getBean().getClass().getName();
-            List<String> ignoreUrlList = Arrays.asList("com.wf.data.controller.admin.CommonDataController", "com.wf.data.controller.admin.HomeController");
+            List<String> ignoreUrlList = Arrays.asList("com.wf.data.controller.admin.CommonDataController", "com.wf.data.controller.admin.HomeController","com.wf.data.controller.admin.DataDictController");
             if (ignoreUrlList.contains(requestClass)) {
                 return;
             }
