@@ -398,7 +398,7 @@ public class BettingLogHourService {
             List<DatawareBettingLogHour> bettingLogHourList = roomFishInfoService.getFishAppGameBettingRecord(params, dbName);
             for (DatawareBettingLogHour logHour : bettingLogHourList) {
                 logHour.setUserGroup(getUserGroup(logHour.getUserId(), uicGroupList));
-                logHour.setGameType(10);
+                logHour.setGameType(10000);
                 DataDict dataDict = dataDictService.getDictByValue("game_type", logHour.getGameType());
                 if (null != dataDict) {
                     logHour.setGameName(dataDict.getLabel());
