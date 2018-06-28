@@ -24,9 +24,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			t.user_id,
 			t.prediction,
 			t.user_level,
-			t.R,
-			t.F,
-			t.M,
+			t.user_value_hierarchy,
 			t.business_date
 		FROM dataware_user_label t
 		WHERE t.user_id = #{userId} AND t.business_date = #{businessDate}

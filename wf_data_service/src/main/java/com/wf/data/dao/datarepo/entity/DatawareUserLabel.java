@@ -14,6 +14,7 @@ public class DatawareUserLabel extends DataEntity implements Serializable{
 	private String r;
 	private String f;
 	private String m;
+	private String userValueHierarchy;
 	private String businessDate;
     private Date createTime;
     private Date updateTime;
@@ -72,6 +73,14 @@ public class DatawareUserLabel extends DataEntity implements Serializable{
 
 	public void setM(String m) {
 		this.m = m;
+	}
+
+	public String getUserValueHierarchy() {
+		return userValueHierarchy;
+	}
+
+	public void setUserValueHierarchy(String userValueHierarchy) {
+		this.userValueHierarchy = userValueHierarchy;
 	}
 
 	public String getBusinessDate() {
