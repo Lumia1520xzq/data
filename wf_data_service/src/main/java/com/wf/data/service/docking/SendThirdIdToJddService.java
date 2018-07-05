@@ -393,8 +393,11 @@ public class SendThirdIdToJddService {
         dto.setFrom("game");
         dto.setTagId(tagId);
         logger.info("奖多多推送接口参数：batchId:" + uuid + ";");
-        // 保存推送记录
-        saveTagUserLog(thirdIdList, tagId, ChannelConstants.JS_CHANNEL);
+        // 标签ID不是全量用户的场合
+        if (!JddTagIdConstants.ALL_GAME_USER.equals(tagId)) {
+            // 保存推送记录
+            saveTagUserLog(thirdIdList, tagId, ChannelConstants.JS_CHANNEL);
+        }
         request(baseUrl + url, dto);
     }
 

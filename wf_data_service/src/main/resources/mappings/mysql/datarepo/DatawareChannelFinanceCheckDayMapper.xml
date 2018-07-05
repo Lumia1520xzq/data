@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareChannelFinanceCheckDayDao">
+	<sql id="datawareChannelFinanceCheckDayColumns">
+		t.id,
+		t.user_id,
+		t.channel_id,
+		t.sycee_amount_rmb,
+		t.recharge_amount_rmb,
+		t.recharge_presented_amount,
+		t.otherways_gold_amount,
+		t.consume_amount,
+		t.return_amount,
+		t.diff_amount,
+		t.surplus_amount,
+		t.business_date,
+		t.create_time,
+		t.update_time,
+		t.delete_flag
+	</sql>
+	
+	<sql id="datawareChannelFinanceCheckDayWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+	
+	<sql id="datawareChannelFinanceCheckDayJoins">
+	</sql>
+	
+	<select id="get" resultType="DatawareChannelFinanceCheckDay">
+		SELECT <include refid="datawareChannelFinanceCheckDayColumns"/> FROM dataware_channel_finance_check_day t WHERE id = #{id}
+	</select>
+	<select id="findList" resultType="DatawareChannelFinanceCheckDay">
+		SELECT <include refid="datawareChannelFinanceCheckDayColumns"/> FROM dataware_channel_finance_check_day t <include refid="datawareChannelFinanceCheckDayJoins"/>
+		WHERE <include refid="datawareChannelFinanceCheckDayWhere"/> ORDER BY id desc LIMIT #{start}, #{length}
+	</select>
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM dataware_channel_finance_check_day t WHERE <include refid="datawareChannelFinanceCheckDayWhere" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dataware_channel_finance_check_day (
+			id,
+			user_id,
+			channel_id,
+			sycee_amount_rmb,
+			recharge_amount_rmb,
+			recharge_presented_amount,
+			otherways_gold_amount,
+			consume_amount,
+			return_amount,
+			diff_amount,
+			surplus_amount,
+			business_date,
+			create_time,
+			delete_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{channelId},
+			#{syceeAmountRmb},
+			#{rechargeAmountRmb},
+			#{rechargePresentedAmount},
+			#{otherwaysGoldAmount},
+			#{consumeAmount},
+			#{returnAmount},
+			#{diffAmount},
+			#{surplusAmount},
+			#{businessDate},
+			#{createTime}, 
+			#{deleteFlag} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dataware_channel_finance_check_day SET
+			user_id = #{userId},
+			channel_id = #{channelId},
+			sycee_amount_rmb = #{syceeAmountRmb},
+			recharge_amount_rmb = #{rechargeAmountRmb},
+			recharge_presented_amount = #{rechargePresentedAmount},
+			otherways_gold_amount = #{otherwaysGoldAmount},
+			consume_amount = #{consumeAmount},
+			return_amount = #{returnAmount},
+			diff_amount = #{diffAmount},
+			surplus_amount = #{surplusAmount},
+			business_date = #{businessDate},
+			delete_flag = #{deleteFlag}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		UPDATE dataware_channel_finance_check_day SET delete_flag = 1 WHERE ID = #{id}
+	</delete>
+</mapper>
+
