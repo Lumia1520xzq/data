@@ -112,13 +112,17 @@ Ext.define('WF.view.business.leafDailyMain', {
                     displayField: 'name',
                     valueField: "value",
                     editable: false,
-                    allowBlank: false,
                     queryMode: "local",
                     store: showChannelStore,
                     listeners: {
                         afterRender: function (obj) {
                             // 默认显示渠道
                             obj.setValue(1);
+                        },
+                        change: function (obj, nv, ov) {
+                            if (nv === null) {
+                                obj.setValue(ov);
+                            }
                         }
                     }
                 }, {
@@ -128,13 +132,17 @@ Ext.define('WF.view.business.leafDailyMain', {
                     displayField: 'name',
                     valueField: "value",
                     editable: false,
-                    allowBlank: false,
                     queryMode: "local",
                     store: showTypeStore,
                     listeners: {
                         afterRender: function (obj) {
                             // 默认按天查询
                             obj.setValue(0);
+                        },
+                        change: function (obj, nv, ov) {
+                            if (nv === null) {
+                                obj.setValue(ov);
+                            }
                         }
                     }
                 }, {

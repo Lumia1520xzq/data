@@ -2,7 +2,6 @@ package com.wf.data.controller.admin.business;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.common.collect.Lists;
 import com.wf.core.extjs.data.DataGrid;
 import com.wf.core.persistence.Page;
 import com.wf.core.utils.excel.ExportExcel;
@@ -123,18 +122,18 @@ public class LeafDailyController extends ExtJsController {
      * @param response
      */
     @RequestMapping("/export")
-    public void export(@RequestParam List<Long> parentId, @RequestParam String showChannel,
-                       @RequestParam String searchType, @RequestParam String endDate,
+    public void export(@RequestParam List<Long> parentId, @RequestParam Integer showChannel,
+                       @RequestParam Integer searchType, @RequestParam String endDate,
                        @RequestParam String beginDate, @RequestParam String tabId, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<>();
         map.put("parentId", parentId);
         map.put("beginDate", beginDate);
         map.put("endDate", endDate);
-        map.put("showChannel", showChannel);
+        // 渠道'全部'的场合, 不显示渠道
+        map.put("showChannel", parentId.isEmpty() ? 0 : showChannel);
         map.put("searchType", searchType);
         try {
             List<DatawareChannelFinanceCheckDay > leafDailyList = datawareChannelFinanceCheckDayService.getLeafDailyList(map);
-            ChannelInfo cInfo;
             String fileName;
             // 充值
             if ("rechargeTab".equals(tabId)) {
@@ -145,8 +144,9 @@ public class LeafDailyController extends ExtJsController {
                     recharge.setBusinessDate(item.getBusinessDate());
                     recharge.setRechargeAmountRmb(item.getRechargeAmountRmb());
                     recharge.setRechargePresentedAmount(item.getRechargePresentedAmount());
-                    cInfo = channelInfoService.get(item.getChannelId());
-                    recharge.setChannelName(cInfo.getName() + "(" + cInfo.getId() + ")");
+                    getChannelName(parentId, showChannel, item);
+                    // 渠道名称
+                    recharge.setChannelName(getChannelName(parentId, showChannel, item));
                     recharges.add(recharge);
                 }
                 fileName = "金叶子流转数据报表（充值）" + DateUtils.getDate(DATETIME_PATTEN) +EXCEL_SUFFIX;
@@ -161,8 +161,8 @@ public class LeafDailyController extends ExtJsController {
                     flow.setDiffAmount(item.getDiffAmount());
                     flow.setOtherwaysGoldAmount(item.getOtherwaysGoldAmount());
                     flow.setReturnAmount(item.getReturnAmount());
-                    cInfo = channelInfoService.get(item.getChannelId());
-                    flow.setChannelName(cInfo.getName() + "(" + cInfo.getId() + ")");
+                    // 渠道名称
+                    flow.setChannelName(getChannelName(parentId, showChannel, item));
                     flows.add(flow);
                 }
                 fileName = "金叶子流转数据报表（流转）" + DateUtils.getDate(DATETIME_PATTEN) + EXCEL_SUFFIX;
@@ -174,8 +174,8 @@ public class LeafDailyController extends ExtJsController {
                     surplusDto = new LeafReportSurplusDto();
                     surplusDto.setBusinessDate(item.getBusinessDate());
                     surplusDto.setSurplusAmount(item.getSurplusAmount());
-                    cInfo = channelInfoService.get(item.getChannelId());
-                    surplusDto.setChannelName(cInfo.getName() + "(" + cInfo.getId() + ")");
+                    // 渠道名称
+                    surplusDto.setChannelName(getChannelName(parentId, showChannel, item));
                     surplusDtos.add(surplusDto);
                 }
                 fileName = "金叶子流转数据报表（存量）" + DateUtils.getDate(DATETIME_PATTEN) + EXCEL_SUFFIX;
@@ -185,4 +185,25 @@ public class LeafDailyController extends ExtJsController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 获取渠道名称
+     * @param parentId
+     * @param showChannel
+     * @param item
+     * @return
+     */
+    private String getChannelName(List<Long> parentId, Integer showChannel, DatawareChannelFinanceCheckDay item) {
+        ChannelInfo cInfo;
+        // 渠道选择“全部”的场合
+        if (parentId.isEmpty()) {
+            return "全部";
+        } else if (showChannel == 1) {// 显示渠道
+            cInfo = channelInfoService.get(item.getChannelId());
+            return cInfo.getName() + "(" + cInfo.getId() + ")";
+        } else {
+            return "汇总";
+        }
+    }
+
 }
