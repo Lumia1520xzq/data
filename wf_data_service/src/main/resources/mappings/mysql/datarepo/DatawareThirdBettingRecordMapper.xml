@@ -20,6 +20,10 @@
 		t.channel_name,
 		t.channel_id,
 		t.business_date,
+		t.new_user_second_retention,
+		t.all_second_retention,
+		t.new_user_three_day_retention,
+		t.three_day_retention,
 		t.create_time,
 		t.update_time,
 		t.delete_flag
@@ -78,6 +82,10 @@
 			channel_name,
 			channel_id,
 			business_date,
+			new_user_second_retention,
+			all_second_retention,
+			new_user_three_day_retention,
+			three_day_retention,
 			create_time,
 			delete_flag
 		) VALUES (
@@ -94,6 +102,10 @@
 			#{channelName},
 			#{channelId},
 			#{businessDate},
+			#{newUserSecondRetention},
+			#{allSecondRetention},
+			#{newUserThreeDayRetention},
+			#{threeDayRetention},
 			#{createTime},
 			#{deleteFlag}
 		)
@@ -112,7 +124,11 @@
 			game_type = #{gameType},
 			channel_name = #{channelName}, 
 			channel_id = #{channelId}, 
-			business_date = #{businessDate}, 
+			business_date = #{businessDate},
+			new_user_second_retention = #{newUserSecondRetention},
+			all_second_retention = #{allSecondRetention},
+			new_user_three_day_retention = #{newUserThreeDayRetention},
+			three_day_retention = #{threeDayRetention},
 			delete_flag = #{deleteFlag} 
 		WHERE id = #{id}
 	</update>

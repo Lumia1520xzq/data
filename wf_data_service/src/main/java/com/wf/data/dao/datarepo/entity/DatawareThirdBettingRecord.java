@@ -18,6 +18,22 @@ public class DatawareThirdBettingRecord extends DataEntity {
     private String businessDate;
     private Long dau;
 
+    /**
+     * 新增次留
+     */
+    private Double newUserSecondRetention;
+    /**
+     * 全量次留
+     */
+    private Double allSecondRetention;
+    /**
+     * 新增三日次留
+     */
+    private Double newUserThreeDayRetention;
+    /**
+     * 全量三日次留
+     */
+    private Double threeDayRetention;
 
     private String startTime;
     private String endTime;
@@ -132,5 +148,38 @@ public class DatawareThirdBettingRecord extends DataEntity {
 
     public void setBusinessDate(String businessDate) {
         this.businessDate = businessDate;
+    }
+
+
+    public Double getNewUserSecondRetention() {
+        return newUserSecondRetention;
+    }
+
+    public void setNewUserSecondRetention(Double newUserSecondRetention) {
+        this.newUserSecondRetention = newUserSecondRetention;
+    }
+
+    public Double getAllSecondRetention() {
+        return allSecondRetention;
+    }
+
+    public void setAllSecondRetention(Double allSecondRetention) {
+        this.allSecondRetention = allSecondRetention;
+    }
+
+    public Double getNewUserThreeDayRetention() {
+        return newUserThreeDayRetention;
+    }
+
+    public void setNewUserThreeDayRetention(Double newUserThreeDayRetention) {
+        this.newUserThreeDayRetention = newUserThreeDayRetention;
+    }
+
+    public Double getThreeDayRetention() {
+        return threeDayRetention;
+    }
+
+    public void setThreeDayRetention(Double threeDayRetention) {
+        this.threeDayRetention = threeDayRetention;
     }
 }

@@ -25,6 +25,11 @@ public class DatawareThirdBettingRecordService extends CrudService<DatawareThird
             record.setBettingArpu(entity.getBettingArpu());
             record.setBettingAsp(entity.getBettingAsp());
             record.setDau(entity.getDau());
+            record.setNewUserSecondRetention(entity.getNewUserSecondRetention());
+            record.setAllSecondRetention(entity.getAllSecondRetention());
+            record.setNewUserThreeDayRetention(entity.getNewUserThreeDayRetention());
+            record.setThreeDayRetention(entity.getThreeDayRetention());
+
             super.save(record);
         } else {
             super.save(entity);
