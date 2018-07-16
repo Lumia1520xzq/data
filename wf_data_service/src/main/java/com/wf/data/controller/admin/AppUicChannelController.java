@@ -1,6 +1,7 @@
 package com.wf.data.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wf.core.utils.type.NumberUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 通用数据接口
@@ -130,6 +133,38 @@ public class AppUicChannelController extends ExtJsController {
         return list;
     }
 
+
+    /**
+     * 获取子渠道
+     *
+     * @return
+     */
+    @RequestMapping("/listChildChannel")
+    public Object listChildChannel() {
+        JSONObject json = getRequestJson();
+
+        List<Long> parentId = null;
+        JSONObject data = json.getJSONObject("data");
+        if (data != null) {
+            String js = JSONObject.toJSONString(data.getJSONArray("parentId"),
+                    SerializerFeature.WriteClassName);
+            parentId = JSONObject.parseArray(js, Long.class);
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("parentIds", parentId);
+        List<AppUicChannelInfo> list = appUicChannelInfoService.listSubChannel(params);
+        if (null != parentId && !parentId.isEmpty()) {
+            for (Long pId : parentId) {
+                AppUicChannelInfo info = appUicChannelInfoService.get(pId);
+                list.add(0, info);
+            }
+        }
+        for (AppUicChannelInfo cInfo : list) {
+            cInfo.setName(cInfo.getName() + "(" + cInfo.getId() + ")");
+        }
+
+        return list;
+    }
 
 
 

@@ -1,6 +1,7 @@
 package com.wf.data.controller.admin.thirdChannel;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
 import com.wf.core.cache.CacheHander;
 import com.wf.core.log.LogExceptionStackTrace;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -46,14 +48,18 @@ public class AppFishController extends ExtJsController {
     public Object listData() {
         JSONObject json = getRequestJson();
         JSONObject data = json.getJSONObject("data");
-        Long channelId = null;
-        Long parentId = null;
+        List<Long> channelId = new ArrayList<>();
+        List<Long> parentId = new ArrayList<>();
         String beginDate = null;
         String endDate = null;
 
         if (data != null) {
-            channelId = data.getLong("channelId");
-            parentId = data.getLong("parentId");
+            String cs = JSONObject.toJSONString(data.getJSONArray("channelId"),
+                    SerializerFeature.WriteClassName);
+            channelId = JSONObject.parseArray(cs, Long.class);
+            String js = JSONObject.toJSONString(data.getJSONArray("parentId"),
+                    SerializerFeature.WriteClassName);
+            parentId = JSONObject.parseArray(js, Long.class);
             beginDate = data.getString("beginDate");
             endDate = data.getString("endDate");
         }
@@ -72,7 +78,7 @@ public class AppFishController extends ExtJsController {
      * @return
      */
     @RequestMapping(value = "export")
-    public void exportFile(@RequestParam String parentId, @RequestParam String channelId, @RequestParam String beginDate,
+    public void exportFile(@RequestParam List<Long> parentId, @RequestParam List<Long> channelId, @RequestParam String beginDate,
                            @RequestParam String endDate, HttpServletResponse response) {
 
         if (StringUtils.isNotBlank(beginDate)) {
@@ -90,18 +96,9 @@ public class AppFishController extends ExtJsController {
         } else {
 
         }
-        Long cId = null;
-        Long pId = null;
-
-        if (StringUtils.isNotBlank(parentId)) {
-            pId = new Long(parentId);
-        }
-        if (StringUtils.isNotBlank(channelId)) {
-            cId = new Long(channelId);
-        }
 
         try {
-            List<FishDto> resultList = getFishRecord(cId, pId, beginDate, endDate);
+            List<FishDto> resultList = getFishRecord(channelId, parentId, beginDate, endDate);
             String fileName = "捕鱼数据报表" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
             new ExportExcel("捕鱼数据报表", FishDto.class).setDataList(resultList).write(response, fileName).dispose();
         } catch (Exception e) {
@@ -118,7 +115,7 @@ public class AppFishController extends ExtJsController {
      * @return
      */
     @RequestMapping(value = "channelExportFile")
-    public void channelExportFile(@RequestParam String parentId, @RequestParam String channelId, @RequestParam String beginDate,
+    public void channelExportFile(@RequestParam List<Long> parentId, @RequestParam List<Long> channelId, @RequestParam String beginDate,
                                   @RequestParam String endDate, HttpServletResponse response) {
 
         if (StringUtils.isNotBlank(beginDate)) {
@@ -136,18 +133,9 @@ public class AppFishController extends ExtJsController {
         } else {
 
         }
-        Long cId = null;
-        Long pId = null;
-
-        if (StringUtils.isNotBlank(parentId)) {
-            pId = new Long(parentId);
-        }
-        if (StringUtils.isNotBlank(channelId)) {
-            cId = new Long(channelId);
-        }
 
         try {
-            List<FishDto> resultList = getFishRecord(cId, pId, beginDate, endDate);
+            List<FishDto> resultList = getFishRecord(channelId, parentId, beginDate, endDate);
             String fileName = "捕鱼数据报表" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
             new ExportExcel("捕鱼数据报表", FishInOut.class).setDataList(resultList).write(response, fileName).dispose();
         } catch (Exception e) {
@@ -158,7 +146,7 @@ public class AppFishController extends ExtJsController {
     }
 
 
-    private List<FishDto> getFishRecord(Long channelId, Long parentId, String beginDate, String endDate) {
+    private List<FishDto> getFishRecord(List<Long> channelId, List<Long> parentId, String beginDate, String endDate) {
         List<FishDto> resultList = Lists.newArrayList();
 
         List<FishDto> list = request();
@@ -175,15 +163,18 @@ public class AppFishController extends ExtJsController {
                     continue;
                 }
             }
-            if (channelId != null) {
-                if (channelId.longValue() == dto.getChannel().longValue()) {
-
-                    resultList.add(calculate(dto));
+            if (channelId != null && !channelId.isEmpty()) {
+                for (Long cId : channelId) {
+                    if (dto.getChannel().equals(cId)) {
+                        resultList.add(calculate(dto));
+                    }
                 }
             } else {
-                if (parentId != null) {
-                    if (dto.getChannel().toString().startsWith(parentId.toString())) {
-                        resultList.add(calculate(dto));
+                if (parentId != null && !parentId.isEmpty()) {
+                    for (Long pId : parentId) {
+                        if (dto.getChannel().toString().startsWith(pId.toString())) {
+                            resultList.add(calculate(dto));
+                        }
                     }
                 } else {
                     resultList.add(calculate(dto));
