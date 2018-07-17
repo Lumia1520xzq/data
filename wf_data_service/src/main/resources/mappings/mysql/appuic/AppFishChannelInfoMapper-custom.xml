@@ -17,6 +17,18 @@
         from channel_info t where t.parent_id = #{parentId}
     </select>
 
+    <select id="listSubChannel" resultType="AppUicChannelInfo">
+        select
+        <include refid="channelInfoColumns"/>
+        from channel_info t where 1=1
+        <if test="parentIds != null and  parentIds.size() != 0">
+            AND t.parent_id IN
+            <foreach collection="parentIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
     <select id="findAll" resultType="AppUicChannelInfo">
         select
         <include refid="channelInfoColumns"/>

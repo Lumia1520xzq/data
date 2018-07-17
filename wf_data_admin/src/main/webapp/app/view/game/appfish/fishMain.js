@@ -34,7 +34,7 @@ Ext.define('WF.view.game.appfish.fishMain', {
 
         var childChannelStore = Ext.create('DCIS.Store', {
             autoLoad: true,
-            url: 'data/admin/appuic/channel/getChildChannels.do',
+            url: 'data/admin/appuic/channel/listChildChannel.do',
             fields: ['id', 'name']
         });
 
@@ -73,10 +73,11 @@ Ext.define('WF.view.game.appfish.fishMain', {
                 name: 'parentId',
                 fieldLabel: '主渠道',
                 xtype: 'combo',
-                emptyText: "--请选择--",
+                // emptyText: "--请选择--",
                 displayField: 'name',
                 valueField: "id",
                 editable: true,
+                multiSelect: true,
                 queryMode: "local",
                 store: parentChannelStore,
                 listeners: {
@@ -94,10 +95,11 @@ Ext.define('WF.view.game.appfish.fishMain', {
                 name: 'channelId',
                 fieldLabel: '子渠道',
                 xtype: 'combo',
-                emptyText: "--请选择--",
+                // emptyText: "--请选择--",
                 displayField: 'name',
                 valueField: "id",
                 editable: true,
+                multiSelect: true,
                 queryMode: "local",
                 store: childChannelStore
             }, {

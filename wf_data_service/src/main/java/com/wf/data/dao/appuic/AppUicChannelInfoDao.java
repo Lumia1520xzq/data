@@ -43,4 +43,6 @@ public interface AppUicChannelInfoDao extends CrudDao<AppUicChannelInfo> {
      * @return
      */
     List<Long> findSubChannelIds(@Param("parentId") Long parentId);
+
+    List<AppUicChannelInfo> listSubChannel(Map<String, Object> params);
 }
