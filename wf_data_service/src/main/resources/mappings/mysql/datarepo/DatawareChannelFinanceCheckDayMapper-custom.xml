@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareChannelFinanceCheckDayDao">
+    <select id="getLeafDailyList" resultType="com.wf.data.dao.datarepo.entity.DatawareChannelFinanceCheckDay">
+        SELECT
+        <if test="searchType == 0">
+            t.business_date AS businessDate,
+        </if>
+        <if test="searchType == 1">
+            DATE_FORMAT(t.business_date,'%Y-%m') AS businessDate,
+        </if>
+        <if test="showChannel == 1">
+            t.channel_id AS channelId,
+        </if>
+        IFNULL(SUM(t.recharge_amount_rmb),0) AS rechargeAmountRmb,
+        IFNULL(SUM(t.recharge_presented_amount),0) AS rechargePresentedAmount,
+        IFNULL(SUM(t.otherways_gold_amount),0) AS otherwaysGoldAmount,
+        IFNULL(SUM(t.consume_amount),0) AS consumeAmount,
+        IFNULL(SUM(t.return_amount),0) AS returnAmount,
+        IFNULL(SUM(t.diff_amount),0) AS diffAmount,
+        IFNULL(SUM(t.surplus_amount),0) AS surplusAmount
+        FROM dataware_channel_finance_check_day t
+        WHERE 1 = 1
+        <if test="parentId != null and  parentId.size() != 0">
+            AND t.channel_id IN
+            <foreach collection="parentId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND t.business_date >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND t.business_date &lt;= #{endDate}
+        </if>
+        GROUP BY
+        <if test="showChannel == 1">
+            t.channel_id,
+        </if>
+        <if test="searchType == 0">
+            t.business_date
+        </if>
+        <if test="searchType == 1">
+            DATE_FORMAT(t.business_date, '%Y-%m')
+        </if>
+        ORDER BY
+        <if test="searchType == 0">
+            t.business_date
+        </if>
+        <if test="searchType == 1">
+            DATE_FORMAT(t.business_date, '%Y-%m')
+        </if>
+        <if test="showChannel == 1">
+            , t.channel_id
+        </if>
+    </select>
+</mapper>
+
