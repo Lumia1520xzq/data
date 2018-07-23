@@ -33,7 +33,7 @@ public class LeafReportSurplusDto implements Serializable {
 
     @ExcelField(title = "用户金叶子存量", type = 0, align = 1, sort = 3)
     public Double getSurplusAmount() {
-        return surplusAmount * 1000;
+        return surplusAmount;
     }
 
     public void setSurplusAmount(Double surplusAmount) {
