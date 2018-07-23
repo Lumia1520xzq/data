@@ -36,7 +36,7 @@ public class LeafReportFlowDto implements Serializable {
 
     @ExcelField(title = "金叶子其他来源", type = 0, align = 1, sort = 3)
     public Double getOtherwaysGoldAmount() {
-        return otherwaysGoldAmount * 1000;
+        return otherwaysGoldAmount;
     }
 
     public void setOtherwaysGoldAmount(Double otherwaysGoldAmount) {
@@ -45,7 +45,7 @@ public class LeafReportFlowDto implements Serializable {
 
     @ExcelField(title = "金叶子消耗", type = 0, align = 1, sort = 4)
     public Double getConsumeAmount() {
-        return consumeAmount * 1000;
+        return consumeAmount;
     }
 
     public void setConsumeAmount(Double consumeAmount) {
@@ -54,7 +54,7 @@ public class LeafReportFlowDto implements Serializable {
 
     @ExcelField(title = "返奖金叶子", type = 0, align = 1, sort = 5)
     public Double getReturnAmount() {
-        return returnAmount * 1000;
+        return returnAmount;
     }
 
     public void setReturnAmount(Double returnAmount) {
@@ -63,7 +63,7 @@ public class LeafReportFlowDto implements Serializable {
 
     @ExcelField(title = "投注流水差", type = 0, align = 1, sort = 6)
     public Double getDiffAmount() {
-        return diffAmount * 1000;
+        return diffAmount;
     }
 
     public void setDiffAmount(Double diffAmount) {
