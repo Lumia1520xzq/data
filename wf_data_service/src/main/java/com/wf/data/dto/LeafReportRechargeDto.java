@@ -43,7 +43,7 @@ public class LeafReportRechargeDto implements Serializable {
 
     @ExcelField(title = "充值赠送", type = 0, align = 1, sort = 4)
     public Double getRechargePresentedAmount() {
-        return rechargePresentedAmount * 1000;
+        return rechargePresentedAmount;
     }
 
     public void setRechargePresentedAmount(Double rechargePresentedAmount) {

@@ -232,7 +232,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value * 1000, '0,000');
                                 }
                             },
                             {
@@ -242,7 +242,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value, '0,000');
                                 }
                             }
                         ]
@@ -295,7 +295,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value, '0,000');
                                 }
                             },
                             {
@@ -305,7 +305,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value, '0,000');
                                 }
                             },
                             {
@@ -315,7 +315,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value, '0,000');
                                 }
                             },
                             {
@@ -325,7 +325,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value, '0,000');
                                 }
                             }
                         ]
@@ -378,7 +378,7 @@ Ext.define('WF.view.business.leafDailyMain', {
                                 menuDisabled: true,
                                 sortable: false,
                                 renderer: function (value) {
-                                    return value * 1000;
+                                    return Ext.util.Format.number(value, '0,000');
                                 }
                             }
                         ]
