@@ -16,7 +16,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
             autoLoad: true,
             url: 'data/admin/appfish/list.do',
             fields: ['dates', 'channelName', 'activenum', 'regmemnum', 'lognum', 'newlogmem', 'paymemnum',
-                'payamount', 'exchangeamount', 'newsecondretentRate', 'allsecondretentRate'],
+                'payamount', /*'exchangeamount',*/ 'newsecondretentRate', 'allsecondretentRate'],
             baseParams: {
                 parentId: [me.parameters]
             }
@@ -197,7 +197,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                         return 0;
                     }
                 }
-            }, {
+            }, /*{
                 text: '成本',
                 width: 30,
                 dataIndex: 'exchangeamount',
@@ -210,7 +210,7 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                         return 0.00;
                     }
                 }
-            }, {
+            },*/ {
                 text: '新用户次留',
                 width: 30,
                 dataIndex: 'newsecondretentRate',
