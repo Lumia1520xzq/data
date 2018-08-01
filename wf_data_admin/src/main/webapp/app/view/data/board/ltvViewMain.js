@@ -15,11 +15,14 @@ Ext.define('WF.view.data.board.ltvViewMain', {
         var store= Ext.create('DCIS.Store', {
             url:'data/ltv/view/getList.do',
             autoload:false,
-            fields:["1","100001","100006",
-                   "100015","100016","100018",
-                   "200001","300001","100002",
-                    "channelNames","ltv","endDate"
+            fields:["channelDataMap","channelNames","ltv","endDate"
             ]
+        });
+
+        var parentChannelStore = Ext.create('DCIS.Store', {
+            url: 'data/admin/common/data/getViewChannels.do',
+            autoLoad: true,
+            fields: ['id', 'name']
         });
 
         me.add({
@@ -33,6 +36,19 @@ Ext.define('WF.view.data.board.ltvViewMain', {
             buildField: "Manual",
             forceFit: true,
             items: [
+                {
+                    name: 'parentId',
+                    fieldLabel: '主渠道',
+                    xtype: 'combo',
+                    // emptyText: "--请选择--",
+                    displayField: 'name',
+                    valueField: "id",
+                    editable: true,
+                    multiSelect: true,
+                    queryMode: "local",
+                    width:275,
+                    store: parentChannelStore
+                },
                 {
                     name: 'startTime',
                     fieldLabel: '开始时间',
@@ -179,50 +195,14 @@ Ext.define('WF.view.data.board.ltvViewMain', {
 
             me.echarts = echarts.init(Ext.get("ltvBoard0").dom);
             me.echarts.setOption(option);
-
-            var total = store.getAt(0).get("1");
-            var jinshan = store.getAt(0).get("100001");
-            var okooo = store.getAt(0).get("100006");
-            var quanmin = store.getAt(0).get("100015");
-            var woqu = store.getAt(0).get("100016");
-            var zhuazhuale = store.getAt(0).get("100018");
-            var android = store.getAt(0).get("200001");
-            var ios = store.getAt(0).get("300001");
-            var doyo = store.getAt(0).get("100002");
-            // var pptv = store.getAt(0).get("100019");
-
+            var map = store.getAt(0).get("channelDataMap");
             var data=[];
+            for(var key in map){
+                if(judge(map[key])){
+                    data.push(map[key]);
+                }
+            }
 
-            if(judge(total)){
-               data.push(total);
-            }
-            if(judge(jinshan)){
-                data.push(jinshan);
-            }
-            if(judge(okooo)){
-                data.push(okooo);
-            }
-            if(judge(quanmin)){
-                data.push(quanmin);
-            }
-            if(judge(woqu)){
-                data.push(woqu);
-            }
-            if(judge(zhuazhuale)){
-                data.push(zhuazhuale);
-            }
-            if(judge(android)){
-                data.push(android);
-            }
-            if(judge(ios)){
-                data.push(ios);
-            }
-            if(judge(doyo)){
-                data.push(doyo);
-            }
-            // if(judge(pptv)){
-            //     data.push(pptv);
-            // }
             var businessDate = [];
             if (data.length !=0) {
                 var val = data[0];
