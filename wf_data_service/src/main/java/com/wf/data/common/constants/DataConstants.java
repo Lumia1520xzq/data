@@ -176,4 +176,7 @@ public interface DataConstants {
      * 指标类型
      */
     String TARGET_TYPE= "target_type";
+
+
+    String DATA_LTV_DEFAULT_CHANNELS="data_ltv_default_channels";
 }
