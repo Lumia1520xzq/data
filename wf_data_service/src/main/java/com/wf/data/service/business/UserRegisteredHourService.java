@@ -120,7 +120,7 @@ public class UserRegisteredHourService {
             for (DatawareUserInfo item : userInfoList) {
                 item.setUserGroup(getUserGroup(item.getUserId(), uicGroupList));
                 if (null != item.getChannelId()) {
-                    if (item.getChannelId() == 100001) {
+                    if (item.getChannelId().intValue() == 100001) {
                         if (StringUtils.isNotEmpty(item.getThirdId())) {
                             String thirdId = new String(Base64.decodeBase64(item.getThirdId().getBytes("UTF-8")));
                             item.setThirdId(thirdId);
