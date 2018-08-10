@@ -22,6 +22,23 @@ public class DatawareThirdBettingRecordDto implements Serializable {
 
     private Long dau;
 
+    /**
+     * 新增次留
+     */
+    private Double newUserSecondRetention;
+    /**
+     * 全量次留
+     */
+    private Double allSecondRetention;
+    /**
+     * 新增三日次留
+     */
+    private Double newUserThreeDayRetention;
+    /**
+     * 全量三日次留
+     */
+    private Double threeDayRetention;
+
     private Date createTime;    // 创建日期
     private Date updateTime;    // 更新日期
     private int deleteFlag;    // 删除标记（0：正常；1：删除；2：审核）
@@ -154,5 +171,37 @@ public class DatawareThirdBettingRecordDto implements Serializable {
         DatawareThirdBettingRecordDto dto = new DatawareThirdBettingRecordDto();
         BeanUtils.copyProperties(object, dto);
         return dto;
+    }
+
+    public Double getNewUserSecondRetention() {
+        return newUserSecondRetention;
+    }
+
+    public void setNewUserSecondRetention(Double newUserSecondRetention) {
+        this.newUserSecondRetention = newUserSecondRetention;
+    }
+
+    public Double getAllSecondRetention() {
+        return allSecondRetention;
+    }
+
+    public void setAllSecondRetention(Double allSecondRetention) {
+        this.allSecondRetention = allSecondRetention;
+    }
+
+    public Double getNewUserThreeDayRetention() {
+        return newUserThreeDayRetention;
+    }
+
+    public void setNewUserThreeDayRetention(Double newUserThreeDayRetention) {
+        this.newUserThreeDayRetention = newUserThreeDayRetention;
+    }
+
+    public Double getThreeDayRetention() {
+        return threeDayRetention;
+    }
+
+    public void setThreeDayRetention(Double threeDayRetention) {
+        this.threeDayRetention = threeDayRetention;
     }
 }

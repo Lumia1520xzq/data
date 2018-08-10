@@ -13,7 +13,9 @@ Ext.define('WF.view.platform.thirdBettingMain', {
         var store = Ext.create('DCIS.Store', {
             autoLoad: true,
             url: 'data/admin/platform/record/getList.do',
-            fields: ['businessDate', 'channelName', 'gameType','dau', 'userCount', 'bettingCount', 'bettingAmount', 'bettingArpu', 'bettingAsp', 'resultAmount', 'resultRate']
+            fields: ['businessDate', 'channelName', 'gameType','dau', 'userCount', 'bettingCount',
+                'bettingAmount', 'bettingArpu', 'bettingAsp', 'resultAmount', 'resultRate',
+                'newUserSecondRetention','allSecondRetention','newUserThreeDayRetention','threeDayRetention']
         });
 
         var gameChannelStore = Ext.create('DCIS.Store', {
@@ -136,7 +138,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             }, {
                 text: '投注人数',
                 dataIndex: 'userCount',
-                width: 100,
+                width: 80,
                 menuDisabled: true,
                 sortable: false,
                 renderer:function (value) {
@@ -149,7 +151,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             }, {
                 text: 'dau',
                 dataIndex: 'dau',
-                width: 100,
+                width: 80,
                 menuDisabled: true,
                 sortable: false,
                 renderer:function (value) {
@@ -162,7 +164,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             }, {
                 text: '投注笔数',
                 dataIndex: 'bettingCount',
-                width: 100,
+                width: 80,
                 menuDisabled: true,
                 sortable: false,
                 renderer:function (value) {
@@ -188,7 +190,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             }, {
                 text: '投注ARPU',
                 dataIndex: 'bettingArpu',
-                width: 100,
+                width: 80,
                 menuDisabled: true,
                 sortable: false,
                 renderer:function (value) {
@@ -201,7 +203,7 @@ Ext.define('WF.view.platform.thirdBettingMain', {
             }, {
                 text: '投注ASP',
                 dataIndex: 'bettingAsp',
-                width: 100,
+                width: 80,
                 menuDisabled: true,
                 sortable: false,
                 renderer:function (value) {
@@ -230,7 +232,43 @@ Ext.define('WF.view.platform.thirdBettingMain', {
                 renderer: function (value) {
                     return value + "%"
                 },
-                width: 100,
+                width: 80,
+                menuDisabled: true,
+                sortable: false
+            }, {
+                text: '新增次留',
+                dataIndex: 'newUserSecondRetention',
+                renderer: function (value) {
+                    return value + "%"
+                },
+                width: 80,
+                menuDisabled: true,
+                sortable: false
+            }, {
+                text: '全量次留',
+                dataIndex: 'allSecondRetention',
+                renderer: function (value) {
+                    return value + "%"
+                },
+                width: 80,
+                menuDisabled: true,
+                sortable: false
+            }, {
+                text: '新增3日留存',
+                dataIndex: 'newUserThreeDayRetention',
+                renderer: function (value) {
+                    return value + "%"
+                },
+                width: 80,
+                menuDisabled: true,
+                sortable: false
+            }, {
+                text: '3日留存',
+                dataIndex: 'threeDayRetention',
+                renderer: function (value) {
+                    return value + "%"
+                },
+                width: 80,
                 menuDisabled: true,
                 sortable: false
             }]
