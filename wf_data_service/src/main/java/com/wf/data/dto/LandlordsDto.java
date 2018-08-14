@@ -26,10 +26,11 @@ public class LandlordsDto implements Serializable {
     private Integer userCount;
     //投注转化率
     private String conversionRate;
-    //投注流水
-    private Double bettingAmount;
     //返奖流水
+    private Double bettingAmount;
     private Double resultAmount;
+    //道具
+    private Double toolsAmount;
     //桌费
     private Double tableAmount;
     //返奖率
@@ -44,6 +45,14 @@ public class LandlordsDto implements Serializable {
     private Double avgGameTimes;
     //投注ASP
     private Double bettingAsp;
+
+    public Double getToolsAmount() {
+        return toolsAmount;
+    }
+
+    public void setToolsAmount(Double toolsAmount) {
+        this.toolsAmount = toolsAmount;
+    }
 
     public Long getParentId() {
         return parentId;

@@ -18,11 +18,27 @@ public class LandlordsUserAmountLogService extends CrudService<LandlordsUserAmou
     public LandlordsDto getBettingInfo(Map<String, Object> map) {
         return dao.getBettingInfo(map);
     }
-
+    /**
+     * 获取桌费，减去返回桌费
+     * @param map
+     * @return
+     */
     public Double getTableAmount(Map<String, Object> map) {
         return dao.getTableAmount(map);
     }
-
+    /**
+     * 获取道具金额
+     * @param map
+     * @return
+     */
+    public Double getToolsAmount(Map<String, Object> map) {
+        return dao.getToolsAmount(map);
+    }
+    /**
+     * 获取局数
+     * @param map
+     * @return
+     */
     public Integer getGameTimes(Map<String, Object> map) {
         return dao.getGameTimes(map);
     }

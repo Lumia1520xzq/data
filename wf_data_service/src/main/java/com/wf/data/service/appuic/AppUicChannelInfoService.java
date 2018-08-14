@@ -67,4 +67,8 @@ public class AppUicChannelInfoService extends CrudService<AppUicChannelInfoDao, 
     public List<Long> findSubChannelIds(Long parentId) {
         return dao.findSubChannelIds(parentId);
     }
+
+    public List<AppUicChannelInfo> listSubChannel(Map<String, Object> params) {
+        return dao.listSubChannel(params);
+    }
 }

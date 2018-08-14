@@ -247,7 +247,7 @@ public class FishInOut implements Serializable {
         this.exchangemem = exchangemem;
     }
 
-    @ExcelField(title = "成本", type = 1, align = 2, sort = 9)
+//    @ExcelField(title = "成本", type = 1, align = 2, sort = 9)
     public BigDecimal getExchangeamount() {
         return exchangeamount;
     }

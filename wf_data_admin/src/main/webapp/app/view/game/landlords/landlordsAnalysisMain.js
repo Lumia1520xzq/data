@@ -14,7 +14,7 @@ Ext.define('WF.view.game.landlords.landlordsAnalysisMain', {
             autoLoad: true,
             url: 'data/admin/landlords/getList.do',
             fields: ['searchDate', 'deskTypeName', 'dauCount', 'userCount',
-                'conversionRate', 'bettingAmount', 'resultAmount', 'tableAmount',
+                'conversionRate', 'bettingAmount', 'resultAmount', 'tableAmount','toolsAmount',
                 'returnRate', 'bettingArpu', 'amountDiffArpu', 'gameTimes', 'avgGameTimes', 'bettingAsp']
         });
 
@@ -66,18 +66,20 @@ Ext.define('WF.view.game.landlords.landlordsAnalysisMain', {
                 editable: true,
                 queryMode: "local",
                 store: deskTypeStore,
-                value: 0
+                value: [0,1,2,3,4]
             }, {
                 name: 'startTime',
                 fieldLabel: '开始时间',
                 xtype: 'datefield',
-                format: 'Y-m-d'
+                format: 'Y-m-d',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
 
             }, {
                 name: 'endTime',
                 fieldLabel: '结束时间',
                 xtype: 'datefield',
-                format: 'Y-m-d'
+                format: 'Y-m-d',
+                value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")
 
             }]
         });
@@ -155,7 +157,7 @@ Ext.define('WF.view.game.landlords.landlordsAnalysisMain', {
                     }
                 },
                 {
-                    text: '投注流水',
+                    text: '投注流水(不含道具)',
                     dataIndex: 'bettingAmount',
                     menuDisabled: true,
                     sortable: false,
@@ -197,7 +199,21 @@ Ext.define('WF.view.game.landlords.landlordsAnalysisMain', {
                     }
                 },
                 {
-                    text: '返奖率',
+                    text: '道具',
+                    dataIndex: 'toolsAmount',
+                    menuDisabled: true,
+                    sortable: false,
+                    flex: 1,
+                    renderer: function (value) {
+                        if (value != null) {
+                            return Ext.util.Format.number(value, "0,000");
+                        } else {
+                            return 0.00;
+                        }
+                    }
+                },
+                {
+                    text: '返奖率(不含道具)',
                     dataIndex: 'returnRate',
                     menuDisabled: true,
                     sortable: false,
