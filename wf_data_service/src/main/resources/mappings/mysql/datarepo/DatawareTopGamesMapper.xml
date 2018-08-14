@@ -90,8 +90,7 @@
 		<include refid="datawareTopGamesColumns"/>
 		FROM
 		  `dataware_top_games` t
-		WHERE t.statistical_date_s = #{businessDate}
-		ORDER BY t.`heat_value_n` DESC
+		ORDER BY t.`statistical_date_s` DESC, t.`heat_value_n` DESC
 		LIMIT 2
 	</select>
 </mapper>

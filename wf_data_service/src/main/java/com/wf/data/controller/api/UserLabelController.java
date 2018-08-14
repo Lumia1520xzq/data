@@ -46,8 +46,7 @@ public class UserLabelController extends DataBaseController {
     public String getRecommendationGameId(@RequestParam String userId) {
         String yesterDateString = DateUtils.getYesterdayDate();
         RecommendationGameDto dto = new RecommendationGameDto();
-        dto.setUserId(Long.parseLong(userId));
-        dto.setBusinessDate(yesterDateString);
+
 
         if (StringUtils.isEmpty(userId)) {
             return "";
@@ -59,19 +58,25 @@ public class UserLabelController extends DataBaseController {
         if (recommendation != null && recommendation.getGameBn() != null) {
             dto.setGameId(recommendation.getGameBn().toString());
             dto.setRecommendType(1);
+            dto.setUserId(recommendation.getUserIdN());
+            dto.setBusinessDate(recommendation.getStatisticalDateS());
         } else {//取出最热门的两个游戏
             StringBuilder gameIds = new StringBuilder();
+            String businessDate = "";
             List<DatawareTopGames> top2Games = topGamesService.getTop2Games(yesterDateString);
 
             for (int i = 0; i < top2Games.size(); i++) {
                 if (i == top2Games.size() - 1) {
                     gameIds.append(top2Games.get(i).getGameTypeN());
+                    businessDate = top2Games.get(i).getStatisticalDateS();
                 } else {
                     gameIds.append(top2Games.get(i).getGameTypeN()).append(";");
                 }
             }
             dto.setRecommendType(2);
             dto.setGameId(gameIds.toString());
+            dto.setBusinessDate(businessDate);
+            dto.setUserId(Long.parseLong(userId));
         }
         return JSONArray.toJSONString(dto);
     }

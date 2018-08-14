@@ -80,8 +80,9 @@
 		  `statistical_date_s`
 		FROM
 		  dataware_game_recommendation
-		WHERE `statistical_date_s` = #{businessDate}
-		  AND `user_id_n` = #{userId}
+		  WHERE `user_id_n` = #{userId}
+		ORDER BY `statistical_date_s` DESC
+		limit 1
 	</select>
 </mapper>
 
