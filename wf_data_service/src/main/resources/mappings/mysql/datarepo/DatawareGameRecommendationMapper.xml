@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.wf.data.dao.datarepo.DatawareGameRecommendationDao">
+
+    <sql id="datawareGameRecommendationColumns">
+		t.id_n,
+		t.user_id_n,
+		t.game_a_n,
+		t.game_b_n,
+		t.similarity_n,
+		t.statistical_date_s
+	</sql>
+
+    <sql id="datawareGameRecommendationWhere">
+		t.delete_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+    <sql id="datawareGameRecommendationJoins">
+    </sql>
+
+    <select id="get" resultType="DatawareGameRecommendation">
+        SELECT
+        <include refid="datawareGameRecommendationColumns"/>
+        FROM dataware_game_recommendation t WHERE id = #{id}
+    </select>
+    <select id="findList" resultType="DatawareGameRecommendation">
+        SELECT
+        <include refid="datawareGameRecommendationColumns"/>
+        FROM dataware_game_recommendation t
+        <include refid="datawareGameRecommendationJoins"/>
+        WHERE
+        <include refid="datawareGameRecommendationWhere"/>
+        ORDER BY id desc LIMIT #{start}, #{length}
+    </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM dataware_game_recommendation t WHERE
+        <include refid="datawareGameRecommendationWhere"/>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO dataware_game_recommendation (
+			id_n, 
+			user_id_n, 
+			game_a_n, 
+			game_b_n, 
+			similarity_n, 
+			statistical_date_s 
+		) VALUES (
+			#{idN}, 
+			#{userIdN}, 
+			#{gameAn}, 
+			#{gameBn}, 
+			#{similarityN}, 
+			#{statisticalDateS} 
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE dataware_game_recommendation SET
+			user_id_n = #{userIdN}, 
+			game_a_n = #{gameAn}, 
+			game_b_n = #{gameBn}, 
+			similarity_n = #{similarityN}, 
+			statistical_date_s = #{statisticalDateS} 
+		WHERE id = #{id}
+	</update>
+
+    <delete id="delete">
+		UPDATE dataware_game_recommendation SET delete_flag = 1 WHERE ID = #{id} 
+	</delete>
+
+    <select id="getRecommendationGameIdByUser" resultType="DatawareGameRecommendation">
+		SELECT
+		  `user_id_n`,
+		  `game_b_n`,
+		  `statistical_date_s`
+		FROM
+		  dataware_game_recommendation
+		  WHERE `user_id_n` = #{userId}
+		ORDER BY `statistical_date_s` DESC
+		limit 1
+	</select>
+</mapper>
+
