@@ -1,6 +1,8 @@
 package com.wf.data.controller.admin.business;
 
 import com.wf.core.persistence.Page;
+import com.wf.core.utils.type.MapUtils;
+import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.dao.mycatuic.entity.UicUser;
 import com.wf.data.dao.trans.entity.TransConvert;
@@ -31,7 +33,15 @@ public class ConvertController extends ExtJsController {
     @RequestMapping("/sumData")
     public Object sumData(@RequestBody Map<String, Object> dataParam) {
         Double data = transConvertService.sumDataByConds(dataParam);
-        return data == null ? 0D : data;
+        data = data == null ? 0D : data;
+        Double leaf = 0D;
+        if (StringUtils.EMPTY.equals(dataParam.get("merchantCode"))) {
+            dataParam.put("merchantCode", "h5gameuseleaf");
+            leaf = transConvertService.sumDataByConds(dataParam);
+        } else if ("h5gameuseleaf".equals(dataParam.get("merchantCode"))) {
+            leaf = data;
+        }
+        return MapUtils.toMap("sumData",data,"sumLeaf",leaf,"sumRmb",data-leaf);
     }
 
     /**
