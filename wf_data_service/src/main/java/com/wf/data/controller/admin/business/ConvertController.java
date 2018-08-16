@@ -38,6 +38,7 @@ public class ConvertController extends ExtJsController {
         if (StringUtils.EMPTY.equals(dataParam.get("merchantCode"))) {
             dataParam.put("merchantCode", "h5gameuseleaf");
             leaf = transConvertService.sumDataByConds(dataParam);
+            leaf = leaf == null ? 0D : leaf;
         } else if ("h5gameuseleaf".equals(dataParam.get("merchantCode"))) {
             leaf = data;
         }
