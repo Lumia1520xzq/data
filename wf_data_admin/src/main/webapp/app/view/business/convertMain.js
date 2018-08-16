@@ -51,12 +51,14 @@ Ext.define('WF.view.business.convertMain', {
             title: '查询',
             collapsible: true,
             collapsed: false,
-            columns: 2,
+            columns: 3,
             buildField: "Manual",
             forceFit: false,
             sumData: function () {
                 callapi("data/admin/business/convert/sumData.do", me.down('dataform').form.getValues(), function (response) {
-                    me.down("[name='sumData']").setValue(Ext.util.Format.number(response, "0,000.00") + " 元");
+                    me.down("[name='sumData']").setValue(Ext.util.Format.number(response.sumData, "0,000.00") + " 元");
+                    me.down("[name='sumDataRmb']").setValue(Ext.util.Format.number(response.sumRmb, "0,000.00") + " 元");
+                    me.down("[name='sumDataLeaf']").setValue(Ext.util.Format.number(response.sumLeaf, "0,000.00") + " 元");
                 });
             },
             items: [{
@@ -134,10 +136,25 @@ Ext.define('WF.view.business.convertMain', {
         me.add({
             items: [{
                 xtype: 'displayfield',
+                name: 'sumDataRmb',
+                value: 0,
+                fieldLabel: '<span style="font-size:14px;font-weight:bold;">RMB合计：</span>',
+                padding: 10,
+                labelWidth:100
+            },{
+                xtype: 'displayfield',
+                name: 'sumDataLeaf',
+                value: 0,
+                fieldLabel: '<span style="font-size:14px;font-weight:bold">金叶子合计：</span>',
+                padding: 10,
+                labelWidth:110
+            },{
+                xtype: 'displayfield',
                 name: 'sumData',
                 value: 0,
-                fieldLabel: '<span style="font-size:14px;font-weight:bold">充值金额合计：</span>',
-                padding: 5
+                fieldLabel: '<span style="font-size:14px;font-weight:bold;color: red">总计：</span>',
+                padding: 10,
+                labelWidth:100
             }],
             layout: 'hbox'
         });
