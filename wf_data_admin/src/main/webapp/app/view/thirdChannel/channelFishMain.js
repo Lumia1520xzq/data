@@ -110,8 +110,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '渠道名称',
                 width: 30,
                 dataIndex: 'channelName',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return value;
@@ -123,8 +123,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '激活',
                 width: 30,
                 dataIndex: 'activenum',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
@@ -136,8 +136,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '注册',
                 width: 30,
                 dataIndex: 'regmemnum',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
@@ -149,8 +149,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '登陆',
                 width: 30,
                 dataIndex: 'lognum',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
@@ -162,8 +162,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '新增登陆',
                 width: 30,
                 dataIndex: 'newlogmem',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
@@ -175,8 +175,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '充值人数',
                 width: 30,
                 dataIndex: 'paymemnum',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000");
@@ -188,8 +188,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '充值金额',
                 width: 30,
                 dataIndex: 'payamount',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000.00");
@@ -214,8 +214,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '新用户次留',
                 width: 30,
                 dataIndex: 'newsecondretentRate',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000.00") + "%";
@@ -227,8 +227,8 @@ Ext.define('WF.view.thirdChannel.channelFishMain', {
                 text: '全量次留',
                 width: 30,
                 dataIndex: 'allsecondretentRate',
-                menuDisabled: true,
-                sortable: false,
+                // menuDisabled: true,
+                // sortable: false,
                 renderer: function (value) {
                     if (value != null) {
                         return Ext.util.Format.number(value, "0,000.00") + "%";
