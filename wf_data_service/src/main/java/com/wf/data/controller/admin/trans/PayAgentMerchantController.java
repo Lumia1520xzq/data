@@ -1,6 +1,7 @@
 package com.wf.data.controller.admin.trans;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wf.core.utils.type.MapUtils;
 import com.wf.core.utils.type.StringUtils;
 import com.wf.core.web.base.ExtJsController;
 import com.wf.data.common.utils.DateUtils;
@@ -70,7 +71,17 @@ public class PayAgentMerchantController extends ExtJsController {
         mapParam.put("endTime",transConvert.getEndTime());
         mapParam.put("merchantCode",transConvert.getMerchantCode());
         Double data = transConvertService.sumDataByConds(mapParam);
-        return data == null ? 0D : data;
-    }
 
+
+        data = data == null ? 0D : data;
+        Double leaf = 0D;
+        if (StringUtils.EMPTY.equals(transConvert.getMerchantCode())) {
+            mapParam.put("merchantCode", "h5gameuseleaf");
+            leaf = transConvertService.sumDataByConds(mapParam);
+            leaf = leaf == null ? 0D : leaf;
+        } else if ("h5gameuseleaf".equals(transConvert.getMerchantCode())) {
+            leaf = data;
+        }
+        return MapUtils.toMap("sumData",data,"sumLeaf",leaf,"sumRmb",data-leaf);
+    }
 }
