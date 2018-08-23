@@ -46,25 +46,28 @@ public class UserLabelController extends DataBaseController {
     public String getRecommendationGameId(@RequestParam String userId) {
         String yesterDateString = DateUtils.getYesterdayDate();
         RecommendationGameDto dto = new RecommendationGameDto();
-
-
         if (StringUtils.isEmpty(userId)) {
             return "";
         }
 
         //推荐表不为空，返回类型为猜你喜欢
-        DatawareGameRecommendation recommendation = datawareGameRecommendationService
+        List<DatawareGameRecommendation> recommendation = datawareGameRecommendationService
                 .getRecommendationGameIdByUser(Long.parseLong(userId), yesterDateString);
-        if (recommendation != null && recommendation.getGameBn() != null) {
-            dto.setGameId(recommendation.getGameBn().toString());
+        StringBuilder gameIds = new StringBuilder();
+        String businessDate = "";
+        if (recommendation != null && recommendation.size() > 0) {
             dto.setRecommendType(1);
-            dto.setUserId(recommendation.getUserIdN());
-            dto.setBusinessDate(recommendation.getStatisticalDateS());
+            for (int i = 0; i < recommendation.size(); i++) {
+                if (i == recommendation.size() - 1) {
+                    gameIds.append(recommendation.get(i).getGameBn());
+                    businessDate = recommendation.get(i).getStatisticalDateS();
+                } else {
+                    gameIds.append(recommendation.get(i).getGameBn()).append(";");
+                }
+            }
         } else {//取出最热门的两个游戏
-            StringBuilder gameIds = new StringBuilder();
-            String businessDate = "";
+            dto.setRecommendType(2);
             List<DatawareTopGames> top2Games = topGamesService.getTop2Games(yesterDateString);
-
             for (int i = 0; i < top2Games.size(); i++) {
                 if (i == top2Games.size() - 1) {
                     gameIds.append(top2Games.get(i).getGameTypeN());
@@ -73,11 +76,10 @@ public class UserLabelController extends DataBaseController {
                     gameIds.append(top2Games.get(i).getGameTypeN()).append(";");
                 }
             }
-            dto.setRecommendType(2);
-            dto.setGameId(gameIds.toString());
-            dto.setBusinessDate(businessDate);
-            dto.setUserId(Long.parseLong(userId));
         }
+        dto.setGameId(gameIds.toString());
+        dto.setBusinessDate(businessDate);
+        dto.setUserId(Long.parseLong(userId));
         return JSONArray.toJSONString(dto);
     }
 

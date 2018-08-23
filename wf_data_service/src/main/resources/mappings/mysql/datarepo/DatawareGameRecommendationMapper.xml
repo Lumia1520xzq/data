@@ -82,7 +82,7 @@
 		  dataware_game_recommendation
 		  WHERE `user_id_n` = #{userId}
 		ORDER BY `statistical_date_s` DESC
-		limit 1
+		limit 2
 	</select>
 </mapper>
 
