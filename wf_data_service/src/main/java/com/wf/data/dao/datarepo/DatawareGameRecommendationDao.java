@@ -7,10 +7,12 @@ import com.wf.data.dao.datarepo.entity.DatawareGameRecommendation;
 
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @MyBatisDao(tableName = "dataware_game_recommendation")
 public interface DatawareGameRecommendationDao extends CrudDao<DatawareGameRecommendation> {
 
-    DatawareGameRecommendation getRecommendationGameIdByUser
+    List<DatawareGameRecommendation> getRecommendationGameIdByUser
             (@Param("userId") long userId,
              @Param("businessDate") String businessDate);
 }

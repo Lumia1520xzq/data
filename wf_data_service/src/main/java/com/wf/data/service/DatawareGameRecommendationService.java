@@ -6,6 +6,8 @@ import com.wf.data.dao.datarepo.entity.DatawareGameRecommendation;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author shihui
  * @date 2018/8/14
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatawareGameRecommendationService extends
         CrudService<DatawareGameRecommendationDao, DatawareGameRecommendation> {
-    public DatawareGameRecommendation getRecommendationGameIdByUser(long userId, String yesterDateString) {
+    public List<DatawareGameRecommendation> getRecommendationGameIdByUser(long userId, String yesterDateString) {
         return dao.getRecommendationGameIdByUser(userId, yesterDateString);
     }
 }
