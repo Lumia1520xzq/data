@@ -81,7 +81,7 @@
 		FROM
 		  dataware_game_recommendation
 		  WHERE `user_id_n` = #{userId}
-		ORDER BY `statistical_date_s` DESC
+		ORDER BY `statistical_date_s` DESC, similarity_n DESC
 		limit 2
 	</select>
 </mapper>
