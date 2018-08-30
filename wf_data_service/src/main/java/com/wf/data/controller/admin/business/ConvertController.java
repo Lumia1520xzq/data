@@ -35,14 +35,14 @@ public class ConvertController extends ExtJsController {
         Double data = transConvertService.sumDataByConds(dataParam);
         data = data == null ? 0D : data;
         Double leaf = 0D;
-        if (StringUtils.EMPTY.equals(dataParam.get("merchantCode"))) {
+        if (dataParam.get("merchantCode") == null || StringUtils.EMPTY.equals(dataParam.get("merchantCode"))) {
             dataParam.put("merchantCode", "h5gameuseleaf");
             leaf = transConvertService.sumDataByConds(dataParam);
             leaf = leaf == null ? 0D : leaf;
         } else if ("h5gameuseleaf".equals(dataParam.get("merchantCode"))) {
             leaf = data;
         }
-        return MapUtils.toMap("sumData",data,"sumLeaf",leaf,"sumRmb",data-leaf);
+        return MapUtils.toMap("sumData", data, "sumLeaf", leaf, "sumRmb", data - leaf);
     }
 
     /**
